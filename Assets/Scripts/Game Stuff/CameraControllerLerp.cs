@@ -40,7 +40,7 @@ public class CameraControllerLerp : MonoBehaviour
     [SerializeField]
     private LayerMask groundLayer;
 
-    private Camera cam;
+    //private Camera cam;
 
     //#if !UNITY_EDITOR
     [SerializeField]
@@ -58,7 +58,7 @@ public class CameraControllerLerp : MonoBehaviour
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();
+        //cam = GetComponent<Camera>();
 
         //#if !UNITY_EDITOR
         screenWidth = Screen.width;
@@ -81,7 +81,7 @@ public class CameraControllerLerp : MonoBehaviour
     private void Zoom(InputAction.CallbackContext context)
     {
         float wheelMovement = MasterSingleton.Instance.InputManager.mouseWheelAction.ReadValue<float>();
-        Vector3 cameraZoomMovement = cam.transform.forward * wheelMovement * zoomSpeed * Time.deltaTime;
+        Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * zoomSpeed * Time.deltaTime;
         float modifiedLocalZ = rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
 
         // Clamp zoom between min and max distances
@@ -107,8 +107,8 @@ public class CameraControllerLerp : MonoBehaviour
         {
             //--------------------------------------------------------
             // GET CAMERA VECTORS
-            forward = cam.transform.forward;
-            right = cam.transform.right;
+            forward = /*cam.*/transform.forward;
+            right = /*cam.*/transform.right;
 
             // Project the forward and right vectors onto the horizontal plane (y = 0)
             forward.y = 0f;

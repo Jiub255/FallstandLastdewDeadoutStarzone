@@ -4,6 +4,9 @@ using UnityEngine;
 
 // Something like: transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero, speed * Time.deltaTime)
 // Do it like this instead though:
+    // But what if the target keeps moving?
+/*    float lerpTime = 1f;
+    float currentLerpTime;*/
 // float perc = currentLerpTime / lerpTime;
 // transform.position = Vector3.Lerp(startPos, endPos, perc);
 // Or:
@@ -13,15 +16,21 @@ using UnityEngine;
 
 public class CameraControllerFollower : MonoBehaviour
 {
-    // But what if the target keeps moving?
-    float lerpTime = 1f;
-    float currentLerpTime;
+    [SerializeField]
+    private Transform cameraLeader;
 
     [SerializeField]
-    private float speed = 5f;
+    private Transform rotationOrigin;
+
+    [SerializeField]
+    private float smoothTime = 0.3f;
+
+    private Vector3 velocity = Vector3.zero;
 
     private void Update()
     {
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero, speed * Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, cameraLeader.position, ref velocity, smoothTime);
+        transform.LookAt(rotationOrigin);
+        //transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero, speed * Time.deltaTime);
     }
 }

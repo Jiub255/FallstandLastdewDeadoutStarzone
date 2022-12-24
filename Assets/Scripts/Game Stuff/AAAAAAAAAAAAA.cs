@@ -8,7 +8,6 @@ public class AAAAAAAAAAAAA
 
 ---------------------------------------------------------------------------------------------------------
 
-    GET GITHUB WORKING
 
     BUILDING
         Finish build system
@@ -48,6 +47,7 @@ public class AAAAAAAAAAAAA
 
     FIX TRANSPARENCY ISSUES
         Fade is a little twitchy sometimes
+            Maybe need to stop some fade coroutines if the cursor/PC isn't blocked anymore
 
     FINISH CAMERA CONTROLLER
         Change setup to empty parent with camera and rotation origin as separate children,
