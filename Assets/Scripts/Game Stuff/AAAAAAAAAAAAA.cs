@@ -10,10 +10,15 @@ public class AAAAAAAAAAAAA
 
     GET GITHUB WORKING
 
+    BUILDING
+        Finish build system
+            Build menu
+            Building follow mouse/placement
+            Build cost in materials per building
+                Building materials, probably SO's
+
     INPUT
-        Switch to new InputManager system. Use InputManager.whateverAction. 
-        Instead of setting it up in each script individually, just set it up with static variables in this class
-        Make it a singleton? Probably
+        Figure out action maps fully
     
     COMBAT
         Finish combat system
@@ -21,6 +26,11 @@ public class AAAAAAAAAAAAA
             Make PlayerShoot and Bullet
         Auto aim like the Last Stand, or free aim shooting? Free aim might be funner
         Make combat more actiony than the Last Stand
+        Use unique weapons/traps. Not just guns and shit.
+            Ropes and nets to stop stupid enemies (ie zombies)
+            Gas and fire to make a fire wall to block enemies
+            Knock over big things like shelves onto enemies
+            Hit them with vehicles if there's outdoor levels
 
     INVENTORY
         Make items sortable. Custom or by name, type, etc.
@@ -46,12 +56,9 @@ public class AAAAAAAAAAAAA
             object instantaneously like it moves the camera now. Then just have the camera lerp towards it (position and rotation wise). 
             Have it ease in and out of movement
             Can any of this be done using Cinemachine?
-        Limit up/down rotation from slightly above the ground to 90 degree top down view (might need to use like 89.9 or something)
+        Make a focus on currently selected PC button. 
+            Centers camera on PC, and resets angles and zoom to default
         Redo a bit based off "Strategy Game Camera: Unity's New Input System"
-        Fix zooming while moving issue
-            changes rotation origin's relative to camera somehow, I think.
-                Maybe disable zooming while moving? 
-                Rather fix it a better way, and allow zooming while moving
         Make WASD/Arrow key movement smooth.
             Like GetAxis (not Raw) but with new input system
         Keep edge scrolling area pretty close to the edge of the screen
