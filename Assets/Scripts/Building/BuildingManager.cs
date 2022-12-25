@@ -41,8 +41,8 @@ public class BuildingManager : MonoBehaviour
 
         sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
 
-        MakeInstance();
-
+        // Just for testing
+        //MakeInstance();
         started = true;
     }
 
@@ -54,7 +54,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentBuildingInstance != null)
+        if (currentBuildingInstance != null && inBuildMode)
         {
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
@@ -82,9 +82,9 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void ToggleBuildMode(GameStateSO newState)
+    private void ToggleBuildMode(GameStateSO oldState, GameStateSO newState)
     {
-        if (newState.name == buildState.name && sceneStateAllower.allowedGameStates.Contains(newState))
+        if (newState.name == buildState.name)
         {
             inBuildMode = true;
         }
@@ -112,7 +112,9 @@ public class BuildingManager : MonoBehaviour
 
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
-        if (CanBuildHere())
+        if (CanBuildHere() && 
+            currentBuildingInstance != null &&
+            inBuildMode)
         {
             currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);

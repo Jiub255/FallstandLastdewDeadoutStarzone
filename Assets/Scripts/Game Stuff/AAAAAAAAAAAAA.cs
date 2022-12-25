@@ -8,23 +8,31 @@ public class AAAAAAAAAAAAA
 
 ---------------------------------------------------------------------------------------------------------
 
+    FIRST!!
+        Check for SceneStateAllower on OpenWhateverMenu() in UIManager.
+            It's getting checked later, but needs to be checked here since this is
+                where the whole process starts.
 
-    MOUSE CLICK MANAGER?
-        Have a script that only raycasts from mouse clicks/position.
-        It sends different events out depending on what you're over/leaving/clicked on.
-        
-    LOOTING/SCAVENGING
-        Have a dust kicked up effect while looting, then it pops when done kinda thing
-            instead of a boring old timer
-
-    GAME STATE/ACTION MAP/SCENE
-        Each scene allows certain game states, and each game state allows one action map.
-        SceneStateAllower handles which states are allowed in each scene.
-        GameStateSO handles which action map to use, and which game states you can transition to.
 
     UI/MENUS
-        Have base class for menuUI, then have each type (inv, build, equip, craft, etc) inherit from it?
-        Have one signal sent from UIManager when any menu is opened? Or separate ones for each menu type?
+        Keep game states 1:1 with UI's. 
+        Do one fullscreen menu UI with tabs. 
+            (for inv, equip, build, craft, etc. Might be easier, can always change it later)
+            I opens to inv, B to build, C to craft, etc. 
+                (rebindable and other control schemes eventually)
+            Button corresponding to current tab (ie. I for inv) or escape key exits to play mode.
+        (SceneStateAllower + UI) --> Game State --> Action Maps
+            ex: (HomeScene + Build UI open) --> Build Game State --> Gameplay & Build Action Maps
+        Have subtabs on the inv tab, like usable items, equipment, materials, etc.
+        Same idea on the other tabs
+        Make items sortable. Custom or by name, type, etc.
+
+    GAME STATE/ACTION MAP/SCENE
+        Each scene allows certain game states, and each game state allows certain action maps.
+        SceneStateAllower handles which states are allowed in each scene 
+        GameStateSO handles which action map to use, and which game states you can transition to.
+        So the game state is determined by which UI is open, 
+            which is controlled by the SceneStateAllower and the current game state.
 
     BUILDING
         Finish build system
@@ -43,8 +51,14 @@ public class AAAAAAAAAAAAA
             Build cost in materials per building
                 Building materials, probably SO's
 
-    SCENES
-        In every scene, have a simple script that says which game states are allowed in that scene.
+    MOUSE CLICK MANAGER?
+        Have a script that only raycasts from mouse clicks/position.
+        It sends different events out depending on what you're over/leaving/clicked on.
+    
+    LOOTING/SCAVENGING
+        Have a dust kicked up effect while looting, then it pops when done kinda thing
+            instead of a boring old timer
+        Disable left click while looting, or have it immediately end looting and move.
 
     PCs
         Make survivor AI for when they're idling at base. 
@@ -65,9 +79,6 @@ public class AAAAAAAAAAAAA
             Knock over big things like shelves onto enemies
             Hit them with vehicles if there's outdoor levels
 
-    INVENTORY
-        Make items sortable. Custom or by name, type, etc.
-        
     MAP/SCAVENGING LOCATION SELECTION
         Make "world map" where you can choose where to scavenge next, click and it will take you there.
 
@@ -130,10 +141,8 @@ public class AAAAAAAAAAAAA
             Use the one from Better RPG, for now at least
 
     MAKE/GET PROTOTYPE ASSETS
-        characters/animations
-        enemies
-        buildings/walls/roofs/floors
-        decoration stuff
+        characters/animations from Mixamo for now
+        buildings/walls/roofs/floors/decoration stuff from itch.io and Unity Store
         
         
 ---------------------------------------------------------------------------------------------------------
@@ -217,4 +226,5 @@ public class AAAAAAAAAAAAA
      
      
      
-*/}
+*/
+}

@@ -22,10 +22,6 @@ public class LootAction : MonoBehaviour
     [SerializeField]
     private InventorySO inventorySO;
 
-/*    private PlayerInput playerInput;
-
-    private InputAction mouseRightAction;*/
-
     // Timer stuff
     [SerializeField]
     private AnimationClip lootAnimation;
@@ -54,7 +50,7 @@ public class LootAction : MonoBehaviour
 
         // [PLAYERHEALTHSCRIPT].onGotHit += ResetLootingState;
 
-        S.I.InputManager.dragCameraAction.performed += ResetLootingState;
+        S.I.InputManager.stopLootingAction.performed += ResetLootingState;
     }
 
     private void OnDisable()
@@ -63,18 +59,15 @@ public class LootAction : MonoBehaviour
 
         // [PLAYERHEALTHSCRIPT].onGotHit -= ResetLootingState;
 
-        S.I.InputManager.dragCameraAction.performed -= ResetLootingState;
+        S.I.InputManager.stopLootingAction.performed -= ResetLootingState;
     }
 
     public void AssignLootContainer(Transform playerTransform, Transform newLootContainer)
     {
-        //Debug.Log("Loot container assigned: " + playerTransform.GetInstanceID()
-        //    + ", " + newLootContainer.GetInstanceID());
-
         if (transform == playerTransform)
         {
             lootContainerTransform = newLootContainer;
-            lootingState = LootingState.WalkingTowards;
+            ChangeLootingState(LootingState.WalkingTowards);
         }
     }
 
@@ -122,7 +115,7 @@ public class LootAction : MonoBehaviour
     private void StartLooting()
     {
         // Set state to looting
-        lootingState = LootingState.Looting;
+        ChangeLootingState(LootingState.Looting);
 
         // Freeze Movement
         S.I.InputManager.selectAction.Disable();
@@ -147,9 +140,9 @@ public class LootAction : MonoBehaviour
         {
             // Check to see if you already have an itemAmount that matches the item,
             //    then add however many
-            if (inventorySO.HasItem(itemAmount.item) != null)
+            if (inventorySO.ItemToItemAmount(itemAmount.item) != null)
             {
-                inventorySO.HasItem(itemAmount.item).amount += itemAmount.amount;
+                inventorySO.ItemToItemAmount(itemAmount.item).amount += itemAmount.amount;
             }
             else
             {
@@ -162,14 +155,10 @@ public class LootAction : MonoBehaviour
 
     private bool HaveReachedLoot()
     {
-        //Debug.Log("Distance to loot: " + Vector3.Distance(transform.position, lootContainerTransform.position));
-
         if (Vector3.Distance(transform.position, lootContainerTransform.position) < lootDistance)
         {
-            //Debug.Log("Within range of loot");
             return true;
         }
-        //Debug.Log("NOT within range of loot");
         return false;
     }
 
@@ -178,10 +167,31 @@ public class LootAction : MonoBehaviour
     {
         if (lootingState != LootingState.NotLooting)
         {
-            lootingState = LootingState.NotLooting;
+            ChangeLootingState(LootingState.NotLooting);
             animator.SetTrigger("StopLooting");
             timerObject.SetActive(false);
             timer = animationLength;
+        }
+    }
+
+    private void ChangeLootingState(LootingState newLootingState)
+    {
+        lootingState = newLootingState;
+
+        // If looting or walking towards loot, make left and right buttons cancel looting
+            // instead of select and drag camera.
+        if (newLootingState != LootingState.NotLooting)
+        {
+            S.I.InputManager.dragCameraAction.Disable();
+            S.I.InputManager.selectAction.Disable();
+            S.I.InputManager.stopLootingAction.Enable();
+        }
+        // Otherwise set them back to normal.
+        else
+        {
+            S.I.InputManager.dragCameraAction.Enable();
+            S.I.InputManager.selectAction.Enable();
+            S.I.InputManager.stopLootingAction.Disable();
         }
     }
 }

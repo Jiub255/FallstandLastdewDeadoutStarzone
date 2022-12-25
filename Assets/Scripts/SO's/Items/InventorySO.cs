@@ -6,7 +6,7 @@ public class InventorySO : ScriptableObject
 {
     public List<ItemAmount> itemAmounts = new List<ItemAmount>();
 
-    public ItemAmount HasItem(Item item)
+    public ItemAmount ItemToItemAmount(Item item)
     {
         foreach (ItemAmount itemAmount in itemAmounts)
         {

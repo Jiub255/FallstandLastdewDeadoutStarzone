@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da42462f8b6bb44d9c7698ce9acdc8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: 5
+  zoomSpeed: 7.5
   zoomMinDist: 3
   zoomMaxDist: 50
   movementSpeed: 10
@@ -654,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6360fbce2a9de8c40ae35fcda95ffc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasesObject: {fileID: 0}
   inventoryCanvas: {fileID: 607268864}
   buildCanvas: {fileID: 209101454}
   buildState: {fileID: 11400000, guid: fb6d47430b89e0a43af681d27e8d2b83, type: 2}
@@ -1087,11 +1088,29 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  mouseDeltaAction:
+    m_Name: Mouse Delta
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f52bad22-90d7-41c4-ae6c-1d97c389d6fd
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   moveCameraAction:
     m_Name: Move Camera
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 806291e0-93dc-4104-971c-b5995ec45fc9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  dragCameraAction:
+    m_Name: Drag Camera
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 167abe52-6d2f-476e-9b3c-a7deae61e400
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1105,38 +1124,20 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  mouseDeltaAction:
-    m_Name: Mouse Delta
+  zoomAction:
+    m_Name: Zoom
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: f52bad22-90d7-41c4-ae6c-1d97c389d6fd
+    m_Id: db90546e-ee0b-42c3-99ac-67c87aec2055
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  mouseWheelAction:
-    m_Name: Mouse Wheel
+  selectAction:
+    m_Name: Select
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 4efec5fd-840f-4a3b-a7c0-b0c8f9d46657
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  mouseLeftAction:
-    m_Name: Mouse Left
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 4505c0b2-1fc8-44f2-b333-f8af2764f08c
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  mouseRightAction:
-    m_Name: Mouse Right
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: cbcfeef0-88c3-4f85-9b5a-54ed609ad5af
+    m_Id: a674a821-e459-4f3d-9512-0521261d7162
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1155,6 +1156,15 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 2738e165-62ca-43db-ac32-92eef0a15f5c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  stopLootingAction:
+    m_Name: Stop Looting
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 9033a824-fd99-43a8-9ac4-f6c1b568aa76
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1227,7 +1237,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard and Mouse
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -2054,7 +2064,6 @@ GameObject:
   - component: {fileID: 6615656582886001877}
   - component: {fileID: 2038249836}
   - component: {fileID: 6615656582886001874}
-  - component: {fileID: 6615656582886001875}
   - component: {fileID: 6615656582886001878}
   m_Layer: 0
   m_Name: Main Camera
@@ -4141,21 +4150,6 @@ MonoBehaviour:
   lootContainerLayer:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &6615656582886001875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2038249831}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e1749c9871920f458f1a7e13615aef7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
-  inventorySlot: {fileID: 6706476965916629080, guid: b0570de248acf0442b506aa85eed04e7, type: 3}
-  inventoryContent: {fileID: 2010566414}
 --- !u!114 &6615656582886001877
 MonoBehaviour:
   m_ObjectHideFlags: 0

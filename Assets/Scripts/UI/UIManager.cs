@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     [Header("Canvases")]
     [SerializeField]
+    private Transform canvasesObject;
+    [SerializeField]
     private Canvas inventoryCanvas;
     [SerializeField]
     private Canvas buildCanvas;
@@ -32,17 +34,22 @@ public class UIManager : MonoBehaviour
     {
         S.I.InputManager.openInventoryAction.performed += OpenInventory;
        // S.I.InputManager.openInventoryAction.performed += OpenInventory;
-        S.I.InputManager.closeInventoryAction.performed += CloseInventory;
+        S.I.InputManager.closeInventoryAction.performed += CloseUI;
     }
 
     private void OnDisable()
     {
         S.I.InputManager.openInventoryAction.performed -= OpenInventory;
-        S.I.InputManager.closeInventoryAction.performed -= CloseInventory;
+        S.I.InputManager.closeInventoryAction.performed -= CloseUI;
     }
 
+    // Need to decide which combos of which UI's being open correspond to which
+        // game states. Also need to consider SceneStateAllower.
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
+        // TODO: Need to check for SceneStateAllower here, not later.
+            // Since this is where the whole transition starts.
+
         // Open build canvas
         buildCanvas.gameObject.SetActive(true);
 
@@ -77,11 +84,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void CloseInventory(InputAction.CallbackContext context)
+    private void CloseUI(InputAction.CallbackContext context)
     {
-        inventoryCanvas.gameObject.SetActive(false);
-
-        // TheSingleton.Instance.InputManager.ChangeActionMap("Gameplay");
+        foreach (Transform canvas in canvasesObject)
+        {
+            canvas.gameObject.SetActive(false);
+        }
 
         S.I.GameStateMachine.ChangeStateAndActionMap(homeState);
        
