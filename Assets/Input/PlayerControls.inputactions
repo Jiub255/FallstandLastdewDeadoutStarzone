@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "MouseDelta",
+                    "type": "Value",
+                    "id": "a58ac3f4-56d5-400d-b22d-ad57fe463cc9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "MoveCamera",
                     "type": "Value",
                     "id": "9edbcbaa-872b-49b3-8825-d02ca337afa4",
@@ -22,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "DragCamera",
+                    "type": "Button",
+                    "id": "7ed4e6b1-7839-4a1e-ab98-968cfd4e3099",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "RotateCamera",
@@ -33,16 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseDelta",
-                    "type": "Value",
-                    "id": "a58ac3f4-56d5-400d-b22d-ad57fe463cc9",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "MouseWheel",
+                    "name": "Zoom",
                     "type": "Value",
                     "id": "bb0e4603-0de6-42ce-ba19-eaf2b5787807",
                     "expectedControlType": "Axis",
@@ -51,18 +60,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MouseLeft",
+                    "name": "Select",
                     "type": "Button",
                     "id": "9d2993b3-caac-4f6e-8ca8-8b784359a708",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseRight",
-                    "type": "Button",
-                    "id": "7ed4e6b1-7839-4a1e-ab98-968cfd4e3099",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -75,6 +75,24 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenBuildMenu",
+                    "type": "Button",
+                    "id": "4ca30969-c28a-49f8-918b-959303038e41",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StopLooting",
+                    "type": "Button",
+                    "id": "5746b396-c95c-470e-b5b6-6493379e7f7f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 }
             ],
@@ -213,23 +231,12 @@
                 },
                 {
                     "name": "",
-                    "id": "deccd75d-f5fc-4f59-8420-48591e6d9f6e",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseDelta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7d72546c-6a14-444f-adc3-8b626933c906",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MouseWheel",
+                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -240,18 +247,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MouseLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5ee9ef05-1559-4d7b-8484-e9fb8b2fc9d0",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseRight",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -263,6 +259,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49c566ae-11a2-4eae-9e0c-0d2fe72a1c72",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "deccd75d-f5fc-4f59-8420-48591e6d9f6e",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5ee9ef05-1559-4d7b-8484-e9fb8b2fc9d0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DragCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92b917b5-adc4-492a-b957-bc306220f4a5",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StopLooting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -366,6 +406,15 @@
                     "name": "CloseInventory",
                     "type": "Button",
                     "id": "da773435-6846-4ed8-80e5-f9b8415966f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenBuildMenu",
+                    "type": "Button",
+                    "id": "3ff804b6-4168-4ec7-8c6f-fe76c755aae2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -812,6 +861,17 @@
                     "action": "CloseInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df6aed4b-d3f8-4487-bd2b-017049f99597",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -820,45 +880,18 @@
             "id": "e1054432-fc96-4adc-90c2-a02c236d23ad",
             "actions": [
                 {
-                    "name": "OpenInventory",
-                    "type": "Button",
-                    "id": "b53b23fa-98ca-4ded-a667-6edb1ceac7e4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseRight",
-                    "type": "Button",
-                    "id": "8f7d05fe-e375-4b20-8de8-29d4be7bf4e0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseLeft",
-                    "type": "Button",
-                    "id": "f5b08bd8-738c-4813-bd52-3610e3bb301c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseWheel",
+                    "name": "MousePosition",
                     "type": "Value",
-                    "id": "98c07603-f5d6-45cc-aaac-fff60156ba34",
-                    "expectedControlType": "Axis",
+                    "id": "8fdd02d8-3aba-4012-850e-fa0e518eddf4",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MouseDelta",
+                    "name": "MoveCamera",
                     "type": "Value",
-                    "id": "47e1b5e0-1a72-41e8-985f-3c8b23db1971",
+                    "id": "8f45f93e-a42e-411c-bde6-cdb263e5ec4d",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -874,22 +907,67 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MoveCamera",
+                    "name": "MouseDelta",
                     "type": "Value",
-                    "id": "8f45f93e-a42e-411c-bde6-cdb263e5ec4d",
+                    "id": "47e1b5e0-1a72-41e8-985f-3c8b23db1971",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MousePosition",
+                    "name": "MouseWheel",
                     "type": "Value",
-                    "id": "8fdd02d8-3aba-4012-850e-fa0e518eddf4",
-                    "expectedControlType": "Vector2",
+                    "id": "98c07603-f5d6-45cc-aaac-fff60156ba34",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MouseLeft",
+                    "type": "Button",
+                    "id": "f5b08bd8-738c-4813-bd52-3610e3bb301c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseRight",
+                    "type": "Button",
+                    "id": "8f7d05fe-e375-4b20-8de8-29d4be7bf4e0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenInventory",
+                    "type": "Button",
+                    "id": "b53b23fa-98ca-4ded-a667-6edb1ceac7e4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateBuilding",
+                    "type": "Value",
+                    "id": "240fca0e-9abb-40ba-9db0-3a5d316839ff",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "CloseBuildMenu",
+                    "type": "Button",
+                    "id": "7154093c-2ce0-4f7f-831e-88a73304e669",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -901,6 +979,105 @@
                     "processors": "",
                     "groups": "",
                     "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "QE",
+                    "id": "5b1603ab-56fa-4469-ad39-5616d89b28b7",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateBuilding",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "c7fd7c82-1e2d-494b-b944-8b548b65763d",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "174ff64a-9ba8-44bd-83bd-1f4e386850a4",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "42f55bf6-8854-463e-bb3f-5c085d43c30a",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b19f405-a6c0-4b03-8362-f4cd08092020",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f527cafa-133b-411d-be8b-524f6c3ffefe",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a6055a1f-9bc2-4df3-8650-32786668cb2c",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseWheel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a391687-0541-48d9-bd83-9c15456b7704",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5dbc1a49-2b9c-46c2-b514-1aa53e4e7715",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1016,67 +1193,12 @@
                 },
                 {
                     "name": "",
-                    "id": "5dbc1a49-2b9c-46c2-b514-1aa53e4e7715",
-                    "path": "<Mouse>/middleButton",
+                    "id": "50ca54eb-52d4-4a54-b403-8e84b990b7fc",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6a391687-0541-48d9-bd83-9c15456b7704",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseDelta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a6055a1f-9bc2-4df3-8650-32786668cb2c",
-                    "path": "<Mouse>/scroll/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseWheel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f527cafa-133b-411d-be8b-524f6c3ffefe",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1b19f405-a6c0-4b03-8362-f4cd08092020",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "42f55bf6-8854-463e-bb3f-5c085d43c30a",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenInventory",
+                    "action": "CloseBuildMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

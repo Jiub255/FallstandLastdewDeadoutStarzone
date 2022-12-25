@@ -44,24 +44,26 @@ public class LootAction : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         animationLength = lootAnimation.length;
-
-/*        playerInput = GetComponent<PlayerInput>();
-        mouseRightAction = playerInput.actions["MouseRight"];*/
+        timer = animationLength;
     }
 
-    // listen for event from LootContainer (event will pass character and container transforms)
     private void Start()
     {
+        // listen for event from LootContainer (event will pass character and container transforms)
         LootCommand.onClickedLoot += AssignLootContainer;
+
         // [PLAYERHEALTHSCRIPT].onGotHit += ResetLootingState;
-        MasterSingleton.Instance.InputManager.mouseRightAction.performed += ResetLootingState;
+
+        S.I.InputManager.dragCameraAction.performed += ResetLootingState;
     }
 
     private void OnDisable()
     {
         LootCommand.onClickedLoot -= AssignLootContainer;
+
         // [PLAYERHEALTHSCRIPT].onGotHit -= ResetLootingState;
-        MasterSingleton.Instance.InputManager.mouseRightAction.performed -= ResetLootingState;
+
+        S.I.InputManager.dragCameraAction.performed -= ResetLootingState;
     }
 
     public void AssignLootContainer(Transform playerTransform, Transform newLootContainer)
@@ -82,27 +84,22 @@ public class LootAction : MonoBehaviour
 
         if (lootingState == LootingState.WalkingTowards)
         {
-            if (CheckDistanceToLoot())
+            if (HaveReachedLoot())
             {
-                // Set state to looting
-                lootingState = LootingState.Looting;
                 StartLooting();
                 // Activate timer game object
                 timerObject.SetActive(true);
-                // Set timer to animation length
-                timer = animationLength;
             }
         }
         else if (lootingState == LootingState.Looting)
         {
-            // Timer UI 
-
-            // Increment timer
             timer -= Time.deltaTime;
 
+            // If finished looting
             if (timer <= 0)
             {
-                timerObject.SetActive(false);
+                // Calls ResetLootingState, which resets timer and animation, and deactivates timer object.
+                AddLoot();
             }
             else
             {
@@ -113,7 +110,7 @@ public class LootAction : MonoBehaviour
                     percentTime, 
                     fillBarTransform.localScale.y, 
                     fillBarTransform.localScale.z);
-                // Move fill bar along x axis
+                // Move fill bar along x axis, so it stays anchored on one side
                 fillBarTransform.localPosition = new Vector3(
                     0.55f * (1 - percentTime), 
                     fillBarTransform.localPosition.y, 
@@ -124,15 +121,20 @@ public class LootAction : MonoBehaviour
 
     private void StartLooting()
     {
-        //Debug.Log("Started Looting");
+        // Set state to looting
+        lootingState = LootingState.Looting;
+
+        // Freeze Movement
+        S.I.InputManager.selectAction.Disable();
+
         // Face the loot container
         transform.LookAt(lootContainerTransform);
+
         // Play loot animation/timer
         //    Have Loot animation get called from trigger
         //    How to make it cancellable if you get hit/push cancel
         animator.SetTrigger("Looting");
-        // When timer up, add loot to inventory
-        //    Animation event at the end of loot animation calls AddLoot method
+        // When timer up, call AddLoot.
     }
 
     // Called by animation event at the end of the loot animation.
@@ -158,7 +160,7 @@ public class LootAction : MonoBehaviour
         ResetLootingState();
     }
 
-    private bool CheckDistanceToLoot()
+    private bool HaveReachedLoot()
     {
         //Debug.Log("Distance to loot: " + Vector3.Distance(transform.position, lootContainerTransform.position));
 
@@ -174,8 +176,12 @@ public class LootAction : MonoBehaviour
     // Listens for event onHit or right mouse button to reset looting state to NotLooting
     private void ResetLootingState(InputAction.CallbackContext context = new InputAction.CallbackContext())
     {
-        lootingState = LootingState.NotLooting;
-        animator.SetTrigger("StopLooting");
-        timerObject.SetActive(false);
+        if (lootingState != LootingState.NotLooting)
+        {
+            lootingState = LootingState.NotLooting;
+            animator.SetTrigger("StopLooting");
+            timerObject.SetActive(false);
+            timer = animationLength;
+        }
     }
 }

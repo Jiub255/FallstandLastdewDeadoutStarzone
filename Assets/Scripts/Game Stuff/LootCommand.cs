@@ -27,13 +27,13 @@ public class LootCommand : MonoBehaviour
 
     private void Start()
     {
-        MasterSingleton.Instance.InputManager.mouseLeftAction.performed += LeftClick;
+        S.I.InputManager.selectAction.performed += LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter += ChangeCurrentCharacter;
     }
 
     private void OnDisable()
     {
-        MasterSingleton.Instance.InputManager.mouseLeftAction.performed -= LeftClick;
+        S.I.InputManager.selectAction.performed -= LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter -= ChangeCurrentCharacter;
     }
 
@@ -42,7 +42,7 @@ public class LootCommand : MonoBehaviour
         if (currentlySelectedPC != null)
         {
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
-                MasterSingleton.Instance.InputManager.mousePositionAction.ReadValue<Vector2>()), 
+                S.I.InputManager.mousePositionAction.ReadValue<Vector2>()), 
                 100, 
                 lootContainerLayer);
 

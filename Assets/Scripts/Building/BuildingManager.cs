@@ -18,69 +18,179 @@ public class BuildingManager : MonoBehaviour
         // Use a game state machine?
 
     [SerializeField]
-    private GameObject currentBuilding;
+    private GameObject currentBuildingPrefab;
+
+    private GameObject currentBuildingInstance;
 
     [SerializeField]
     private LayerMask groundLayer;
 
-/*    private PlayerInput playerInput;
+    [SerializeField]
+    private GameStateSO buildState;
+    private bool inBuildMode = false;
 
-    private InputAction mousePositionAction;*/
+    // For debug gizmos, so they dont draw in editor mode.
+    private bool started;
 
-    private void Awake()
+    private SceneStateAllower sceneStateAllower;
+
+    private void Start()
     {
-/*        playerInput = GetComponent<PlayerInput>();
-        mousePositionAction = playerInput.actions["MousePosition"];*/
+        S.I.InputManager.selectAction.performed += PlaceBuilding;
+        S.I.GameStateMachine.onChangedState += ToggleBuildMode;
+
+        sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
+
+        MakeInstance();
+
+        started = true;
+    }
+
+    private void OnDisable()
+    {
+        S.I.InputManager.selectAction.performed -= PlaceBuilding;
+        S.I.GameStateMachine.onChangedState -= ToggleBuildMode;
     }
 
     private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(
-            MasterSingleton.Instance.InputManager.mousePositionAction.ReadValue<Vector2>());
-        RaycastHit hitData;
-        if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
+        if (currentBuildingInstance != null)
         {
-            // Make sure to make buildings have their "pivot" on the bottom center, that is,
-            // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
-            currentBuilding.transform.position = hitData.point;
+            // Move building to current mouse position on ground
+            Ray ray = Camera.main.ScreenPointToRay(
+                S.I.InputManager.mousePositionAction.ReadValue<Vector2>());
+            RaycastHit hitData;
+            if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
+            {
+                // Make sure to make buildings have their "pivot" on the bottom center, that is,
+                // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
+                currentBuildingInstance.transform.position = hitData.point;
 
-            if (CanBuildHere())
-            {
-                // Green highlight, allowed to build here
+                if (CanBuildHere())
+                {
+                    // Green highlight, allowed to build here
+                    currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+                }
+                else
+                {
+                    // Red highlight, can't build here
+                    currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                    currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                }
             }
-            else
+        }
+    }
+
+    private void ToggleBuildMode(GameStateSO newState)
+    {
+        if (newState.name == buildState.name && sceneStateAllower.allowedGameStates.Contains(newState))
+        {
+            inBuildMode = true;
+        }
+        else
+        {
+            inBuildMode = false;
+        }
+    }
+
+    private void MakeInstance()
+    {
+        if (currentBuildingPrefab != null)
+        {
+            if (currentBuildingInstance != null)
             {
-                // Red highlight, can't build here
-            }
+                Destroy(currentBuildingInstance);
+            } 
+
+            currentBuildingInstance = Instantiate(currentBuildingPrefab);
+
+            // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
+            currentBuildingInstance.transform.position = Vector3.forward * 100000f;
+        }
+    }
+
+    private void PlaceBuilding(InputAction.CallbackContext context)
+    {
+        if (CanBuildHere())
+        {
+            currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            currentBuildingInstance = null;
+            MakeInstance();
         }
     }
 
     // Gets called from a button in build menu
     private void ChangeCurrentBuilding(GameObject newBuilding)
     {
-        if (currentBuilding != null)
+        if (currentBuildingInstance != null)
         {
-            Destroy(currentBuilding);
+            Destroy(currentBuildingInstance);
         }
 
-        currentBuilding = Instantiate(newBuilding);
+        currentBuildingPrefab = newBuilding;
+        currentBuildingInstance = Instantiate(currentBuildingPrefab);
 
         // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
-        currentBuilding.transform.position = Vector3.forward * 100000f;
+        currentBuildingInstance.transform.position = Vector3.forward * 100000f;
+    }
+
+    private void DeselectCurrentBuilding()
+    {
+        if (currentBuildingPrefab != null)
+        {
+            currentBuildingPrefab = null;
+        }
+        if (currentBuildingInstance != null)
+        {
+            Destroy(currentBuildingInstance);
+            currentBuildingInstance = null;
+        }
+    }
+
+    private void RotateBuilding()
+    {
+
     }
 
     private bool CanBuildHere()
     {
-        BoxCollider boxCollider = currentBuilding.GetComponent<BoxCollider>();
+        BoxCollider boxCollider = currentBuildingInstance.GetComponentInChildren<BoxCollider>();
 
-        if (Physics.OverlapBox(
-            currentBuilding.transform.position, boxCollider.bounds.size, Quaternion.identity) != null)
+        Collider[] colliders = Physics.OverlapBox(
+            currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), 
+            boxCollider.bounds.size / 2, 
+            Quaternion.identity, 
+            ~groundLayer);
+
+        foreach (Collider collider in colliders)
         {
-            return false;
+            Debug.Log(collider.gameObject.name);
+        }
+
+        // collides with itself for now, cheap hack fix
+        if (colliders.Length == 1)
+        {
+            return true;
         }
         else
         {
-            return true;
+            return false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (currentBuildingInstance != null)
+        {
+            BoxCollider boxCollider = currentBuildingInstance.GetComponentInChildren<BoxCollider>();
+
+            Gizmos.color = Color.red;
+            if (started)
+            {
+                Gizmos.DrawWireCube(currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size);
+            }
         }
     }
 }

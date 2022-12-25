@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 
+// Could probably use this for the BuildUI too. Just make a new build inventorySlot prefab with whatever button function on it.
+// I suppose crafting too, and equipment. Just set up the slot/button prefabs and the scroll views correctly.
+// At least can do an abstract class and inherit for each type of UI
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField]
@@ -16,18 +19,19 @@ public class InventoryUI : MonoBehaviour
 
     private void OnEnable()
     {
-        UIManager.onOpenedInventory += PopulateInventory;
+        UIManager.onOpenedMenu += PopulateInventory;
     }
 
     private void OnDisable()
     {
-        UIManager.onOpenedInventory -= PopulateInventory;
+        UIManager.onOpenedMenu -= PopulateInventory;
     }
 
     private void PopulateInventory()
     {
         ClearInventory();
 
+        // Put this part in inherited classes
         foreach (ItemAmount itemAmount in inventorySO.itemAmounts)
         {
             GameObject slot = Instantiate(inventorySlot, inventoryContent);

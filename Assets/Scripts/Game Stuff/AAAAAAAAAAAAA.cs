@@ -9,12 +9,46 @@ public class AAAAAAAAAAAAA
 ---------------------------------------------------------------------------------------------------------
 
 
+    MOUSE CLICK MANAGER?
+        Have a script that only raycasts from mouse clicks/position.
+        It sends different events out depending on what you're over/leaving/clicked on.
+        
+    LOOTING/SCAVENGING
+        Have a dust kicked up effect while looting, then it pops when done kinda thing
+            instead of a boring old timer
+
+    GAME STATE/ACTION MAP/SCENE
+        Each scene allows certain game states, and each game state allows one action map.
+        SceneStateAllower handles which states are allowed in each scene.
+        GameStateSO handles which action map to use, and which game states you can transition to.
+
+    UI/MENUS
+        Have base class for menuUI, then have each type (inv, build, equip, craft, etc) inherit from it?
+        Have one signal sent from UIManager when any menu is opened? Or separate ones for each menu type?
+
     BUILDING
         Finish build system
             Build menu
+                Have thin-ish menu on right side with buildings to select/category tabs
+                Have a collapse/expand button so you can see more if you want
+                Click on a building button in the UI to change currently selected prefab,
+                    destroy old building instance, and instantiate the new one
+            Make undo button on each building placed during each build session
+                Clicking button refunds all materials and destroys building
+                Buildings are locked in after leaving build mode
+                You can "sell" them for some of the materials back anytime after leaving build mode
             Building follow mouse/placement
+                Check to see if space already occupied
+                    Make box cast larger so that there's room between buildings
             Build cost in materials per building
                 Building materials, probably SO's
+
+    SCENES
+        In every scene, have a simple script that says which game states are allowed in that scene.
+
+    PCs
+        Make survivor AI for when they're idling at base. 
+        Assign different AI's for PC's with different tasks (gardening, defense, etc...)
 
     INPUT
         Figure out action maps fully
@@ -46,21 +80,16 @@ public class AAAAAAAAAAAAA
             Maybe not actually. Custom script seems easier at this point.
 
     FIX TRANSPARENCY ISSUES
-        Fade is a little twitchy sometimes
-            Maybe need to stop some fade coroutines if the cursor/PC isn't blocked anymore
+        Maybe tweak the lerp in fade coroutine to be a bit smoother?
+        Like the comments from CameraControllerFollower
 
     FINISH CAMERA CONTROLLER
-        Change setup to empty parent with camera and rotation origin as separate children,
-            or camera as a child of rotation object.
-        LERP: Have camera be a child of an empty parent (not the same parent as above) and have the camera controller script move that
-            object instantaneously like it moves the camera now. Then just have the camera lerp towards it (position and rotation wise). 
-            Have it ease in and out of movement
-            Can any of this be done using Cinemachine?
+        Fix issue with drag movement being a little fast and clunky
+            My high mouse sensitivity is part of the problem, but the camera seems to catch up too fast strangely
+            Maybe have the smoothTime be lowered while holding mouseRight?
         Make a focus on currently selected PC button. 
             Centers camera on PC, and resets angles and zoom to default
         Redo a bit based off "Strategy Game Camera: Unity's New Input System"
-        Make WASD/Arrow key movement smooth.
-            Like GetAxis (not Raw) but with new input system
         Keep edge scrolling area pretty close to the edge of the screen
         Make edge scrolling smooth
             Smooth it by distance from edge
