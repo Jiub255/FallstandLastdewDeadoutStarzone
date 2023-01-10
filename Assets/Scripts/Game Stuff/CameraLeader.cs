@@ -71,17 +71,17 @@ public class CameraLeader : MonoBehaviour
 
     private void Start()
     {
-        S.I.InputManager.playerControls.World.Zoom.performed += Zoom;
+        S.I.IM.PC.World.Zoom.performed += Zoom;
     }
 
     private void OnDisable()
     {
-        S.I.InputManager.playerControls.World.Zoom.performed -= Zoom;
+        S.I.IM.PC.World.Zoom.performed -= Zoom;
     }
 
     private void Zoom(InputAction.CallbackContext context)
     {
-        float wheelMovement = S.I.InputManager.playerControls.World.Zoom.ReadValue<float>();
+        float wheelMovement = S.I.IM.PC.World.Zoom.ReadValue<float>();
         Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * zoomSpeed * Time.deltaTime;
         float modifiedLocalZ = rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
 
@@ -104,7 +104,7 @@ public class CameraLeader : MonoBehaviour
     {
         // Zoom overrides everything else. Not really noticeable since this action gets called only during
         // isolated frames, but it helps resolve some issues with moving while zooming.
-        if (!S.I.InputManager.playerControls.World.Zoom.WasPerformedThisFrame())
+        if (!S.I.IM.PC.World.Zoom.WasPerformedThisFrame())
         {
             //--------------------------------------------------------
 
@@ -125,7 +125,7 @@ public class CameraLeader : MonoBehaviour
             // MOVE CAMERA USING WASD/ARROW KEYS
             // Get input
             Vector2 movement =
-                S.I.InputManager.playerControls.World.MoveCamera.ReadValue<Vector2>();
+                S.I.IM.PC.World.MoveCamera.ReadValue<Vector2>();
 
             // Translate movement vector to world space
             Vector3 keyboardMovement = (forward * movement.y) + (right * movement.x);
@@ -137,16 +137,16 @@ public class CameraLeader : MonoBehaviour
 
             // DRAG CAMERA WHILE RIGHT MOUSE BUTTON HELD DOWN
             // But not when rotate is held too. Rotate overrides drag.
-            if (S.I.InputManager.playerControls.World.DragCamera.IsPressed() &&
-                !S.I.InputManager.playerControls.World.RotateCamera.IsPressed())
+            if (S.I.IM.PC.World.DragCamera.IsPressed() &&
+                !S.I.IM.PC.World.RotateCamera.IsPressed())
             {
                 Ray ray = Camera.main.ScreenPointToRay(
-                    S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>());
+                    S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
                 RaycastHit hitData;
                 // If you click on ground (as in not off screen/off the terrain), ...
                 if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
                 {
-                    if (S.I.InputManager.playerControls.World.DragCamera.WasPressedThisFrame())
+                    if (S.I.IM.PC.World.DragCamera.WasPressedThisFrame())
                     {
                         // Get the point on the ground where you originally clicked.
                         // Only happens the first frame you click.
@@ -163,11 +163,11 @@ public class CameraLeader : MonoBehaviour
             //--------------------------------------------------------
 
             // ROTATE CAMERA WHILE MOUSE WHEEL BUTTON HELD DOWN
-            if (S.I.InputManager.playerControls.World.RotateCamera.IsPressed())
+            if (S.I.IM.PC.World.RotateCamera.IsPressed())
             {
                 // Rotation around y-axis
                 float deltaX =
-                    S.I.InputManager.playerControls.World.MouseDelta.ReadValue<Vector2>().x *
+                    S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().x *
                     rotationSpeed;
 
                 transform.RotateAround(rotationOrigin.position, Vector3.up, deltaX);
@@ -180,7 +180,7 @@ public class CameraLeader : MonoBehaviour
                     Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.y));
 
                 float deltaY =
-                    S.I.InputManager.playerControls.World.MouseDelta.ReadValue<Vector2>().y *
+                    S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().y *
                     rotationSpeed;
 
                 // Clamp x-rotation between min and max values (at most 0 - 90).

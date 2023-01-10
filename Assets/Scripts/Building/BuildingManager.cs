@@ -28,7 +28,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Start()
     {
-        S.I.InputManager.playerControls.World.Select.performed += PlaceBuilding;
+        S.I.IM.PC.World.Select.performed += PlaceBuilding;
 
         sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
 
@@ -39,7 +39,7 @@ public class BuildingManager : MonoBehaviour
 
     private void OnDisable()
     {
-        S.I.InputManager.playerControls.World.Select.performed -= PlaceBuilding;
+        S.I.IM.PC.World.Select.performed -= PlaceBuilding;
     }
 
     private void Update()
@@ -48,7 +48,7 @@ public class BuildingManager : MonoBehaviour
         {
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
-                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>());
+                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
             {

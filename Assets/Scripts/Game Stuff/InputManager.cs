@@ -1,20 +1,22 @@
 using UnityEngine;
 
+// IM = InputManager
 public class InputManager : MonoBehaviour
 {
     // From generated C# class
         // Might be easier to use this instead of PlayerInput and every action individually with strings.
         // Just re-generated C# class whenever you change PlayerControl Input Action Asset.
-    public PlayerControls playerControls/* = new PlayerControls()*/;
+    // PC is for PlayerControls
+    public PlayerControls PC/* = new PlayerControls()*/;
 
     private void Awake()
     {
-        playerControls = new PlayerControls();
+        PC = new PlayerControls();
 
         // Enable "Home" and "Gameplay" as default action maps
-        playerControls.Disable();
-        playerControls.World.Enable();
-        playerControls.Home.Enable();
+        PC.Disable();
+        PC.World.Enable();
+        PC.Home.Enable();
     }
 
     // Menu -> Action Maps (UI automatically used with canvas stuff, through event system

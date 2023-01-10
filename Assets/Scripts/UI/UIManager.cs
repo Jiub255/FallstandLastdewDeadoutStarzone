@@ -20,26 +20,33 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        S.I.InputManager.playerControls.Home.OpenInventory.performed += OpenInventory;
-        S.I.InputManager.playerControls.Home.OpenBuildMenu.performed += OpenBuildMenu;
-        S.I.InputManager.playerControls.Inventory.CloseInventory.performed += CloseUI;
+        S.I.IM.PC.Home.OpenInventory.performed += OpenInventory;
+        S.I.IM.PC.Home.OpenBuildMenu.performed += OpenBuildMenu;
+        S.I.IM.PC.Inventory.CloseInventory.performed += CloseUI;
+        S.I.IM.PC.Inventory.OpenBuildMenu.performed += OpenBuildMenu;
+        S.I.IM.PC.Build.CloseBuildMenu.performed += CloseUI;
+        S.I.IM.PC.Build.OpenInventory.performed += OpenInventory;
     }
 
     private void OnDisable()
     {
-        S.I.InputManager.playerControls.Home.OpenInventory.performed -= OpenInventory;
-        S.I.InputManager.playerControls.Home.OpenBuildMenu.performed -= OpenBuildMenu;
-        S.I.InputManager.playerControls.Inventory.CloseInventory.performed -= CloseUI;
+        S.I.IM.PC.Home.OpenInventory.performed -= OpenInventory;
+        S.I.IM.PC.Home.OpenBuildMenu.performed -= OpenBuildMenu;
+        S.I.IM.PC.Inventory.CloseInventory.performed -= CloseUI;
+        S.I.IM.PC.Inventory.OpenBuildMenu.performed -= OpenBuildMenu;
+        S.I.IM.PC.Build.CloseBuildMenu.performed -= CloseUI;
+        S.I.IM.PC.Build.OpenInventory.performed -= OpenInventory;
     }
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.InputManager.playerControls.Disable();
-        S.I.InputManager.playerControls.World.Enable();
-        S.I.InputManager.playerControls.Build.Enable();
+        S.I.IM.PC.Disable();
+        S.I.IM.PC.World.Enable();
+        S.I.IM.PC.Build.Enable();
 
         // Open build canvas
+        CloseAllMenus();
         buildCanvas.gameObject.SetActive(true);
 
         // BuildMenuUI listens to initialize display
@@ -55,10 +62,11 @@ public class UIManager : MonoBehaviour
     private void OpenInventory(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.InputManager.playerControls.Disable();
-        S.I.InputManager.playerControls.Inventory.Enable();
+        S.I.IM.PC.Disable();
+        S.I.IM.PC.Inventory.Enable();
 
         // Open inventory canvas
+        CloseAllMenus();
         inventoryCanvas.gameObject.SetActive(true);
 
         // InventoryUI listens to initialize display
@@ -74,18 +82,23 @@ public class UIManager : MonoBehaviour
     private void CloseUI(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.InputManager.playerControls.Disable();
-        S.I.InputManager.playerControls.World.Enable();
-        S.I.InputManager.playerControls.Home.Enable();
+        S.I.IM.PC.Disable();
+        S.I.IM.PC.World.Enable();
+        S.I.IM.PC.Home.Enable();
 
-        foreach (Transform canvas in canvasesObject)
-        {
-            canvas.gameObject.SetActive(false);
-        }
+        CloseAllMenus();
        
         if (gamePaused)
         {
             UnpauseGame();
+        }
+    }
+
+    private void CloseAllMenus()
+    {
+        foreach (Transform canvas in canvasesObject)
+        {
+            canvas.gameObject.SetActive(false);
         }
     }
 

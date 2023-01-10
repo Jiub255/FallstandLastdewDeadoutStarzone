@@ -49,7 +49,7 @@ public class Transparentizer : MonoBehaviour
         // Hits from mouse position
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(
-                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>()),
+                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
             100, 
             transparentableLayer);
 

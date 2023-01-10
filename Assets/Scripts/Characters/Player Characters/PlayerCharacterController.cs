@@ -17,14 +17,14 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void Start()
     {
-        S.I.InputManager.playerControls.World.Select.performed += LeftClick;
-        S.I.InputManager.playerControls.World.DragCamera.performed += RightClick;
+        S.I.IM.PC.World.Select.performed += LeftClick;
+        S.I.IM.PC.World.DragCamera.performed += RightClick;
     }
 
     private void OnDisable()
     {
-        S.I.InputManager.playerControls.World.Select.performed -= LeftClick;
-        S.I.InputManager.playerControls.World.DragCamera.performed -= RightClick;
+        S.I.IM.PC.World.Select.performed -= LeftClick;
+        S.I.IM.PC.World.DragCamera.performed -= RightClick;
     }
 
     private void LeftClick(InputAction.CallbackContext context)
@@ -34,7 +34,7 @@ public class PlayerCharacterController : MonoBehaviour
         // ~transparentable makes the raycast ignore objects in Transparentable layer,
         //      so you can click on the other side of walls
         if (Physics.Raycast(Camera.main.ScreenPointToRay(
-                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>()), 
+                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 
                 out hit, 
                 100, 
                 ~transparentable))
