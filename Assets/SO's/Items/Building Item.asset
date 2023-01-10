@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2cffa793a4749439dada2bbd3854e8, type: 3}
   m_Name: Building Item
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 0}
-  description: 
+  itemIcon: {fileID: 21300000, guid: dae33700bd23f76409a80bf78fdb8a42, type: 3}
+  description: oihbv jio

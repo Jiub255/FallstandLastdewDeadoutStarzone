@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class InventoryUI : UIRefresher
+public class BuildUI : UIRefresher
 {
     [SerializeField]
-    private InventorySO inventorySO;
+    private BuildInventorySO buildInventorySO;
 
     private void OnEnable()
     {
@@ -19,11 +19,11 @@ public class InventoryUI : UIRefresher
     {
         base.PopulateInventory();
 
-        foreach (ItemAmount itemAmount in inventorySO.itemAmounts)
+        foreach (BuildingItem buildingItem in buildInventorySO.buildItems)
         {
             GameObject slotInstance = Instantiate(slotPrefab, content);
             
-            slotInstance.transform.GetComponent<InventorySlot>().SetupSlot(itemAmount);
+            slotInstance.transform.GetComponent<BuildSlot>().SetupSlot(buildingItem);
         }
     }
 }

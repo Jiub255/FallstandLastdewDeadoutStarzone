@@ -26,23 +26,25 @@ public class AAAAAAAAAAAAA
 
 
     UI/MENUS/GAME STATE/ACTION MAP/SCENE
-        DONT USE STATES
-            Just have SceneMenuAllower -> Menu -> Action Maps
 
         Have the current menu/menu combination BE the state? Why add another layer?
-            How to allow menus? Have a single-action action map for each menu. Then load each allowed menu's 
+            Have a single-action action map for each menu. Then load each allowed menu's 
                 action map as you load a scene. Map, Inv, Craft, Build, Equip, about 5, not too bad. 
-            Or just enable/disable the action openWhateverMenu?
             Really only two types of scenes anyway: 
                 Home Scene: No Menu, Inv, Equip, Craft, Build, Map, Team Status, etc.
                 Scavenging Run Scene: No Menu, Inv (usable items only), Character Status, more?
-            So have two "main gameplay" action maps, one for each. And those action maps will determine which
-                menus can be opened, and those menus determine the currently active action maps.
+            So have a world camera controller/object selector action map, and Home and Scavenging ones. And those action maps 
+                will determine which menus can be opened, and those menus determine the currently active action maps.
 
-        I have an event system component on each canvas right now, to have different "first selected"s.
+        ??? I have an event system component on each canvas right now, to have different "first selected"s.
             How to have a slot that was instantiated at runtime be the first selected?
                 Do: public Button button; void Start(){ button.Select(); }
                 Then only need one event system? Can I put it back with the input manager game object?
+
+        Have InventoryItem, BuildItem, CraftItem, and EquipmentItem all inherit from ItemSO.
+            InventoryItem will store amount, etc. So I can use InventorySO for all menus.
+            Inventory menu will only show InventoryItems (usable items),
+                Build menu will only show BuildItems, same for craft and equip menus. 
 
                                                                                         Keep game states 1:1 with UI's. 
                                                                                         (SceneStateAllower + UI) --> Game State --> Action Maps
@@ -64,9 +66,7 @@ public class AAAAAAAAAAAAA
         Equip Shows all equipment on one side, team member on the other (or all team members?). 
             Can scroll through team members here obviously. 
         Craft shows what you can craft, categorized of course.
-            Maybe show inv here too?
         Build shows what you can build, categorized of course. 
-            Maybe show inv here too?
         Map shows the areas you can scavenge/explore. 
             Not sure about this part yet. 
 
@@ -144,9 +144,20 @@ public class AAAAAAAAAAAAA
             Gas and fire to make a fire wall to block enemies
             Knock over big things like shelves onto enemies
             Hit them with vehicles if there's outdoor levels
+        Have injury and pain bars
+            They go up together, but pain actually affects your stats (speed, aim, etc)
+            Alcohol/drugs/pain killers/medical equipment can lower pain so you can fight longer, but you need to rest to recover injury bar
+            Pain can only go as low as a certain percentage of injury bar
 
     MAP/SCAVENGING LOCATION SELECTION
         Make "world map" where you can choose where to scavenge next, click and it will take you there.
+        Maybe have fog covered map to begin with, then you explore in a kind of mini game.
+            Uncover fog as you walk around wherever you want.
+            Find grocery stores, gun shops, police stations, hospitals, hardware stores, other useful locations.
+            Search any building you want, different building types will have different types of items. 
+        Can get vehicles eventually for faster travel.
+        Can fast travel to any uncovered location.
+        Have random ambushes while traveling? Would that be fun or just annoying?
 
     SCAVENGING LOCATIONS    
         Make enemies spawn, more and more enemies as time goes on until you have to leave or be overwhelmed and die.
@@ -190,8 +201,10 @@ public class AAAAAAAAAAAAA
         
         
 ---------------------------------------------------------------------------------------------------------
+
                                              GAME OVERVIEW
                                              -------------
+
     The Last Stand: Dead Zone / Stardew Valley / Fallout inspired
     Post-apocalyptic setting
     Base-building (Home base)

@@ -19,6 +19,8 @@ public class InputManager : MonoBehaviour
         PC.Home.Enable();
     }
 
+    // TODO: Need to deactivate player movement/currentlySelectedPC when going into build mode.
+
     // Menu -> Action Maps (UI automatically used with canvas stuff, through event system
 //-----------------------------
     // HOME
