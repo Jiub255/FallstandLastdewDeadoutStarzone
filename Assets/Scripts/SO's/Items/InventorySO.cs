@@ -6,11 +6,11 @@ public class InventorySO : ScriptableObject
 {
     public List<ItemAmount> itemAmounts = new List<ItemAmount>();
 
-    public ItemAmount ItemToItemAmount(ItemSO item)
+    public ItemAmount GetItemAmount(InventoryItemSO inventoryItemSO)
     {
         foreach (ItemAmount itemAmount in itemAmounts)
         {
-            if (itemAmount.item == item)
+            if (itemAmount.inventoryItemSO == inventoryItemSO)
             {
                 return itemAmount;
             }
@@ -26,12 +26,12 @@ public class InventorySO : ScriptableObject
 [System.Serializable]
 public class ItemAmount
 {
-    public ItemSO item;
+    public InventoryItemSO inventoryItemSO;
     public int amount;
 
-    public ItemAmount(ItemSO item, int amount)
+    public ItemAmount(InventoryItemSO inventoryItemSO, int amount)
     {
-        this.item = item;
+        this.inventoryItemSO = inventoryItemSO;
         this.amount = amount;
     }
 }

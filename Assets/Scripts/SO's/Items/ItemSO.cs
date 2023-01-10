@@ -5,5 +5,11 @@ using UnityEngine;
 public class ItemSO : ScriptableObject
 {
     public Sprite itemIcon;
+    [TextArea(3,20)]
     public string description;
+
+    public virtual void Use()
+    {
+        Debug.Log("Using " + name);
+    }
 }

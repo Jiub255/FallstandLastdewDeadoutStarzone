@@ -14,13 +14,13 @@ public class LootCommand : MonoBehaviour
 
     private void Start()
     {
-        S.I.IM.PC.World.Select.performed += LeftClick;
+        S.I.IM.PC.Scavenge.Select.performed += LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter += ChangeCurrentCharacter;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.World.Select.performed -= LeftClick;
+        S.I.IM.PC.Scavenge.Select.performed -= LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter -= ChangeCurrentCharacter;
     }
 

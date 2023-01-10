@@ -28,7 +28,8 @@ public class BuildingManager : MonoBehaviour
 
     private void Start()
     {
-        S.I.IM.PC.World.Select.performed += PlaceBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
+        BuildingItemSO.onSelectBuilding += ChangeCurrentBuilding;
 
         sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
 
@@ -39,7 +40,8 @@ public class BuildingManager : MonoBehaviour
 
     private void OnDisable()
     {
-        S.I.IM.PC.World.Select.performed -= PlaceBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
+        BuildingItemSO.onSelectBuilding -= ChangeCurrentBuilding;
     }
 
     private void Update()
@@ -106,9 +108,11 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    // Gets called from a button in build menu
-    private void ChangeCurrentBuilding(GameObject newBuilding)
+    // Gets called from a button in build menu, which calls event in BuildingItem.
+    public void ChangeCurrentBuilding(GameObject newBuilding)
     {
+        Debug.Log("Changing current building to " + newBuilding.name);
+
         currentBuildingPrefab = newBuilding;
 
         MakeInstance();

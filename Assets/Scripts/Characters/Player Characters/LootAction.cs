@@ -118,7 +118,7 @@ public class LootAction : MonoBehaviour
         ChangeLootingState(LootingState.Looting);
 
         // Freeze Movement
-        S.I.IM.PC.World.Select.Disable();
+        S.I.IM.PC.Scavenge.Select.Disable();
 
         // Face the loot container
         transform.LookAt(lootContainerTransform);
@@ -140,9 +140,9 @@ public class LootAction : MonoBehaviour
         {
             // Check to see if you already have an itemAmount that matches the item,
             //    then add however many
-            if (inventorySO.ItemToItemAmount(itemAmount.item) != null)
+            if (inventorySO.GetItemAmount(itemAmount.inventoryItemSO) != null)
             {
-                inventorySO.ItemToItemAmount(itemAmount.item).amount += itemAmount.amount;
+                inventorySO.GetItemAmount(itemAmount.inventoryItemSO).amount += itemAmount.amount;
             }
             else
             {
@@ -179,19 +179,25 @@ public class LootAction : MonoBehaviour
         lootingState = newLootingState;
 
         // If looting or walking towards loot, make left and right buttons cancel looting
-            // instead of select and drag camera.
+/*        // instead of select and drag camera.
+
+        //TODO: Set up a new deselect action in Home and Scavenge, right button with tap interaction.
+        // Do I even need this now? With the new action map setup?
+
         if (newLootingState != LootingState.NotLooting)
         {
+            //TODO: Set up a new deselect action in Home and Scavenge, right button with tap interaction.
             S.I.IM.PC.World.DragCamera.Disable();
-            S.I.IM.PC.World.Select.Disable();
+            S.I.IM.PC.Scavenge.Select.Disable();
             S.I.IM.PC.Scavenge.StopLooting.Enable();
         }
         // Otherwise set them back to normal.
         else
         {
+            //TODO: Set up a new deselect action in Home and Scavenge, right button with tap interaction.
             S.I.IM.PC.World.DragCamera.Enable();
-            S.I.IM.PC.World.Select.Enable();
+            S.I.IM.PC.Scavenge.Select.Enable();
             S.I.IM.PC.Scavenge.StopLooting.Disable();
-        }
+        }*/
     }
 }

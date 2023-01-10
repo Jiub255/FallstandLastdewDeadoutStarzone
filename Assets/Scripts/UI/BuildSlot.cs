@@ -13,20 +13,20 @@ public class BuildSlot : MonoBehaviour
 
     // Need to have a separate list of Build Items, separate inv/invSO too I think.
     // Makes sense, they're very different things, inv and buildinv.
-    private BuildingItem buildingItem;
+    private BuildingItemSO buildingItemSO;
 
-    public void SetupSlot(BuildingItem newBuildingItem)
+    public void SetupSlot(BuildingItemSO newBuildingItemSO)
     {
-        buildingItem = newBuildingItem;
-        icon.sprite = buildingItem.itemIcon;
+        buildingItemSO = newBuildingItemSO;
+        icon.sprite = buildingItemSO.itemIcon;
         icon.enabled = true;
         useButton.interactable = true;
-        costText.text = newBuildingItem.cost.ToString();
+        costText.text = newBuildingItemSO.cost.ToString();
     }
 
     public void ClearSlot()
     {
-        buildingItem = null;
+        buildingItemSO = null;
         icon.sprite = null;
         icon.enabled = false;
         useButton.interactable = false;
@@ -36,10 +36,10 @@ public class BuildSlot : MonoBehaviour
     // Called by clicking on inventory slot
 	public void OnUseButton()
     {
-        if (buildingItem != null)
+        if (buildingItemSO != null)
         {
             // TODO: Set Use() up in Item and its child classes
-            //inventoryItem.Use();
+            buildingItemSO.Use();
         }
     }
 }

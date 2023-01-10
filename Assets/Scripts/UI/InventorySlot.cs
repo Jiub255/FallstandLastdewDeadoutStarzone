@@ -19,7 +19,7 @@ public class InventorySlot : MonoBehaviour
     {
         itemAmount = newItemAmount;
 
-        icon.sprite = itemAmount.item.itemIcon;
+        icon.sprite = newItemAmount.inventoryItemSO.itemIcon;
         icon.enabled = true;
         useButton.interactable = true;
 
@@ -49,7 +49,7 @@ public class InventorySlot : MonoBehaviour
         if (itemAmount != null)
         {
             // TODO: Set Use() up in Item and its child classes
-            //inventoryItem.Use();
+            itemAmount.inventoryItemSO.Use();
         }
     }
 }

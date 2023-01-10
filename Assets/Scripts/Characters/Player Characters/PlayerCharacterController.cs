@@ -17,14 +17,18 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void Start()
     {
-        S.I.IM.PC.World.Select.performed += LeftClick;
-        S.I.IM.PC.World.DragCamera.performed += RightClick;
+        S.I.IM.PC.Home.Select.performed += LeftClick;
+        S.I.IM.PC.Scavenge.Select.performed += LeftClick;
+        S.I.IM.PC.Home.Deselect.performed += Deselect;
+        S.I.IM.PC.Scavenge.Deselect.performed += Deselect;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.World.Select.performed -= LeftClick;
-        S.I.IM.PC.World.DragCamera.performed -= RightClick;
+        S.I.IM.PC.Home.Select.performed -= LeftClick;
+        S.I.IM.PC.Scavenge.Select.performed -= LeftClick;
+        S.I.IM.PC.Home.Deselect.performed -= Deselect;
+        S.I.IM.PC.Scavenge.Deselect.performed -= Deselect;
     }
 
     private void LeftClick(InputAction.CallbackContext context)
@@ -68,7 +72,7 @@ public class PlayerCharacterController : MonoBehaviour
         }
     }
 
-    private void RightClick(InputAction.CallbackContext context)
+    private void Deselect(InputAction.CallbackContext context)
     {
         if (currentAgent != null)
         {

@@ -10,12 +10,10 @@ public class AAAAAAAAAAAAA
 
     FIRST!!
 
-    Redo input system using generated C# class? Will it work with key rebinding?
-        Don't do it with PlayerInput and individual actions in InputManager
-        Just have InputManager control which action maps are enabled/disabled
-            Based off current menu
-            Two types of scenes: Each one allows certain menus, and menus control active action maps.
+        //TODO: Set up a new deselect action in Home and Scavenge, right button with tap interaction.
+    FIX THIS. Select/deselect/stopLooting getting all mixed up. Is stop looting even necessary?
 
+    FINISH BUILD MODE, THEN DO SCAVENGING SCENE AND MAKE HOME SCENE A TRUE HOME SCENE (NO LOOTING)
     To get UI mouse position and world mouse position when in build mode,
         Have a raycast to mouseposition, and if it hits UI elements, then get UI position, 
             if not, get world position.
@@ -36,6 +34,11 @@ public class AAAAAAAAAAAAA
             So have a world camera controller/object selector action map, and Home and Scavenging ones. And those action maps 
                 will determine which menus can be opened, and those menus determine the currently active action maps.
 
+        Have Select action controlled by different action maps.
+            Don't want to select characters/loot containers in build mode
+            Maybe have a select char/loot container action, put it in Home and Scavenge so it wont be active in menus?
+
+                (Changed this back, assign button like in BetterRPG)
         ??? I have an event system component on each canvas right now, to have different "first selected"s.
             How to have a slot that was instantiated at runtime be the first selected?
                 Do: public Button button; void Start(){ button.Select(); }
