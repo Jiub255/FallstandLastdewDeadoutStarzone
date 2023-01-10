@@ -15,31 +15,16 @@ public class PlayerCharacterController : MonoBehaviour
 
     public static event Action<Transform> onChangedSelectedCharacter;
 
-    // NEW INPUT SYSTEM STUFF
-/*    private PlayerInput playerInput;
-
-    private InputAction mouseLeftAction;
-    private InputAction mouseRightAction;
-    private InputAction mousePositionAction;*/
-
-    private void Awake()
-    {
-/*        playerInput = GetComponent<PlayerInput>();
-        mouseLeftAction = playerInput.actions["MouseLeft"];
-        mouseRightAction = playerInput.actions["MouseRight"];
-        mousePositionAction = playerInput.actions["MousePosition"];*/
-    }
-
     private void Start()
     {
-        S.I.InputManager.selectAction.performed += LeftClick;
-        S.I.InputManager.dragCameraAction.performed += RightClick;
+        S.I.InputManager.playerControls.World.Select.performed += LeftClick;
+        S.I.InputManager.playerControls.World.DragCamera.performed += RightClick;
     }
 
     private void OnDisable()
     {
-        S.I.InputManager.selectAction.performed -= LeftClick;
-        S.I.InputManager.dragCameraAction.performed -= RightClick;
+        S.I.InputManager.playerControls.World.Select.performed -= LeftClick;
+        S.I.InputManager.playerControls.World.DragCamera.performed -= RightClick;
     }
 
     private void LeftClick(InputAction.CallbackContext context)
@@ -49,7 +34,7 @@ public class PlayerCharacterController : MonoBehaviour
         // ~transparentable makes the raycast ignore objects in Transparentable layer,
         //      so you can click on the other side of walls
         if (Physics.Raycast(Camera.main.ScreenPointToRay(
-                S.I.InputManager.mousePositionAction.ReadValue<Vector2>()), 
+                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>()), 
                 out hit, 
                 100, 
                 ~transparentable))

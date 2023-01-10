@@ -3,14 +3,14 @@ using UnityEngine;
 
 // Send events whenever game state changes. One for which state you're leaving,
 // one for which state you're entering.
-public class GameStateMachine : MonoBehaviour
+public class JUNKGameStateMachine : MonoBehaviour
 {
-    public GameStateSO currentState;
+/*    public GameStateSO currentState;
     // Get this from onSceneChanged event?
     public SceneStateAllower currentSceneStateAllower;
 
-/*    public event Action<GameStateSO> onLeftState;
-    public event Action<GameStateSO> onEnteredState;*/
+*//*    public event Action<GameStateSO> onLeftState;
+    public event Action<GameStateSO> onEnteredState;*//*
     // Passes previous state and new state
     public event Action<GameStateSO, GameStateSO> onChangedState;
 
@@ -26,9 +26,9 @@ public class GameStateMachine : MonoBehaviour
             currentSceneStateAllower.allowedGameStates.Contains(newState))
         {
             // InputManager listens, changes action maps corresponding to states
-            /*onLeftState.Invoke(currentState);
-            onEnteredState.Invoke(newState);*/
-            onChangedState(currentState, newState);
+            *//*onLeftState.Invoke(currentState);
+            onEnteredState.Invoke(newState);*//*
+            onChangedState?.Invoke(currentState, newState);
 
             currentState = newState;
             
@@ -41,5 +41,5 @@ public class GameStateMachine : MonoBehaviour
     public void ChangeSceneStateAllower()
     {
 
-    }
+    }*/
 }

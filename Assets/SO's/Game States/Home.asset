@@ -17,4 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 129f1ecd751cbde498b0d5837f8a86cc, type: 2}
   - {fileID: 11400000, guid: fb6d47430b89e0a43af681d27e8d2b83, type: 2}
   - {fileID: 11400000, guid: 8444f5d3965221940a743703e091f81b, type: 2}
-  stateActionMapName: Gameplay
+  StateActionMaps: []

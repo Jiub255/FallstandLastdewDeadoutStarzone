@@ -37,7 +37,7 @@ public class EnemyDamage : MonoBehaviour
             // face PC
             transform.LookAt(playerTransform);
             // play attack animation
-            animator.SetTrigger("AttacK");
+            animator.SetTrigger("Attack");
             // boxcast immediately after animation to check if PC is still there
         }
     }

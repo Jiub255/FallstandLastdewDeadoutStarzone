@@ -12,28 +12,15 @@ public class LootCommand : MonoBehaviour
 
     public static event Action<Transform, Transform> onClickedLoot;
 
-    // INPUT
-/*    private PlayerInput playerInput;
-
-    private InputAction mouseLeftAction;
-    private InputAction mousePositionAction;*/
-
-    private void Awake()
-    {
-/*        playerInput = GetComponent<PlayerInput>();
-        mouseLeftAction = playerInput.actions["MouseLeft"];
-        mousePositionAction = playerInput.actions["MousePosition"];*/
-    }
-
     private void Start()
     {
-        S.I.InputManager.selectAction.performed += LeftClick;
+        S.I.InputManager.playerControls.World.Select.performed += LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter += ChangeCurrentCharacter;
     }
 
     private void OnDisable()
     {
-        S.I.InputManager.selectAction.performed -= LeftClick;
+        S.I.InputManager.playerControls.World.Select.performed -= LeftClick;
         PlayerCharacterController.onChangedSelectedCharacter -= ChangeCurrentCharacter;
     }
 
@@ -42,7 +29,7 @@ public class LootCommand : MonoBehaviour
         if (currentlySelectedPC != null)
         {
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
-                S.I.InputManager.mousePositionAction.ReadValue<Vector2>()), 
+                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>()), 
                 100, 
                 lootContainerLayer);
 

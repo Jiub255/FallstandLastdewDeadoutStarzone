@@ -16,4 +16,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d88c235263353144eb1a11f971ee7d56, type: 2}
   - {fileID: 11400000, guid: 02e3cad3347221f4185620d3a14cd3b9, type: 2}
   - {fileID: 11400000, guid: 8444f5d3965221940a743703e091f81b, type: 2}
-  stateActionMapName: Build
+  StateActionMaps: []

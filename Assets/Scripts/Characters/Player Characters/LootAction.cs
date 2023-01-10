@@ -50,7 +50,7 @@ public class LootAction : MonoBehaviour
 
         // [PLAYERHEALTHSCRIPT].onGotHit += ResetLootingState;
 
-        S.I.InputManager.stopLootingAction.performed += ResetLootingState;
+        S.I.InputManager.playerControls.Scavenge.StopLooting.performed += ResetLootingState;
     }
 
     private void OnDisable()
@@ -59,7 +59,7 @@ public class LootAction : MonoBehaviour
 
         // [PLAYERHEALTHSCRIPT].onGotHit -= ResetLootingState;
 
-        S.I.InputManager.stopLootingAction.performed -= ResetLootingState;
+        S.I.InputManager.playerControls.Scavenge.StopLooting.performed -= ResetLootingState;
     }
 
     public void AssignLootContainer(Transform playerTransform, Transform newLootContainer)
@@ -118,7 +118,7 @@ public class LootAction : MonoBehaviour
         ChangeLootingState(LootingState.Looting);
 
         // Freeze Movement
-        S.I.InputManager.selectAction.Disable();
+        S.I.InputManager.playerControls.World.Select.Disable();
 
         // Face the loot container
         transform.LookAt(lootContainerTransform);
@@ -182,16 +182,16 @@ public class LootAction : MonoBehaviour
             // instead of select and drag camera.
         if (newLootingState != LootingState.NotLooting)
         {
-            S.I.InputManager.dragCameraAction.Disable();
-            S.I.InputManager.selectAction.Disable();
-            S.I.InputManager.stopLootingAction.Enable();
+            S.I.InputManager.playerControls.World.DragCamera.Disable();
+            S.I.InputManager.playerControls.World.Select.Disable();
+            S.I.InputManager.playerControls.Scavenge.StopLooting.Enable();
         }
         // Otherwise set them back to normal.
         else
         {
-            S.I.InputManager.dragCameraAction.Enable();
-            S.I.InputManager.selectAction.Enable();
-            S.I.InputManager.stopLootingAction.Disable();
+            S.I.InputManager.playerControls.World.DragCamera.Enable();
+            S.I.InputManager.playerControls.World.Select.Enable();
+            S.I.InputManager.playerControls.Scavenge.StopLooting.Disable();
         }
     }
 }

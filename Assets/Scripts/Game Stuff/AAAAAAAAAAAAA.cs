@@ -9,30 +9,73 @@ public class AAAAAAAAAAAAA
 ---------------------------------------------------------------------------------------------------------
 
     FIRST!!
-        Check for SceneStateAllower on OpenWhateverMenu() in UIManager.
-            It's getting checked later, but needs to be checked here since this is
-                where the whole process starts.
+
+    Redo input system using generated C# class? Will it work with key rebinding?
+        Don't do it with PlayerInput and individual actions in InputManager
+        Just have InputManager control which action maps are enabled/disabled
+            Based off current menu
+            Two types of scenes: Each one allows certain menus, and menus control active action maps.
+
+    To get UI mouse position and world mouse position when in build mode,
+        Have a raycast to mouseposition, and if it hits UI elements, then get UI position, 
+            if not, get world position.
+
+                                                                                        Check for SceneStateAllower on OpenWhateverMenu() in UIManager.
+                                                                                            It's getting checked later, but needs to be checked here since this is
+                                                                                                where the whole process starts.
 
 
-    UI/MENUS
-        Keep game states 1:1 with UI's. 
+    UI/MENUS/GAME STATE/ACTION MAP/SCENE
+        DONT USE STATES
+            Just have SceneMenuAllower -> Menu -> Action Maps
+
+        Have the current menu/menu combination BE the state? Why add another layer?
+            How to allow menus? Have a single-action action map for each menu. Then load each allowed menu's 
+                action map as you load a scene. Map, Inv, Craft, Build, Equip, about 5, not too bad. 
+            Or just enable/disable the action openWhateverMenu?
+            Really only two types of scenes anyway: 
+                Home Scene: No Menu, Inv, Equip, Craft, Build, Map, Team Status, etc.
+                Scavenging Run Scene: No Menu, Inv (usable items only), Character Status, more?
+            So have two "main gameplay" action maps, one for each. And those action maps will determine which
+                menus can be opened, and those menus determine the currently active action maps.
+
+        I have an event system component on each canvas right now, to have different "first selected"s.
+            How to have a slot that was instantiated at runtime be the first selected?
+                Do: public Button button; void Start(){ button.Select(); }
+                Then only need one event system? Can I put it back with the input manager game object?
+
+                                                                                        Keep game states 1:1 with UI's. 
+                                                                                        (SceneStateAllower + UI) --> Game State --> Action Maps
+                                                                                            ex: (HomeScene + Build UI open) --> Build Game State --> Gameplay & Build Action Maps
+
         Do one fullscreen menu UI with tabs. 
             (for inv, equip, build, craft, etc. Might be easier, can always change it later)
             I opens to inv, B to build, C to craft, etc. 
                 (rebindable and other control schemes eventually)
             Button corresponding to current tab (ie. I for inv) or escape key exits to play mode.
-        (SceneStateAllower + UI) --> Game State --> Action Maps
-            ex: (HomeScene + Build UI open) --> Build Game State --> Gameplay & Build Action Maps
         Have subtabs on the inv tab, like usable items, equipment, materials, etc.
         Same idea on the other tabs
         Make items sortable. Custom or by name, type, etc.
 
-    GAME STATE/ACTION MAP/SCENE
-        Each scene allows certain game states, and each game state allows certain action maps.
-        SceneStateAllower handles which states are allowed in each scene 
-        GameStateSO handles which action map to use, and which game states you can transition to.
-        So the game state is determined by which UI is open, 
-            which is controlled by the SceneStateAllower and the current game state.
+        Inventory Shows all the materials, raw ingredients you've collected.
+            When you click on an item, it gives you an interactable list of all things you can build with it
+                Crafting stuff on one side, building stuff on the other
+            Infinite inventory, because fuck inventory limits. Plus it makes sense, you could just pile stuff anywhere in your home base. 
+        Equip Shows all equipment on one side, team member on the other (or all team members?). 
+            Can scroll through team members here obviously. 
+        Craft shows what you can craft, categorized of course.
+            Maybe show inv here too?
+        Build shows what you can build, categorized of course. 
+            Maybe show inv here too?
+        Map shows the areas you can scavenge/explore. 
+            Not sure about this part yet. 
+
+
+                                                                                    Each scene allows certain game states, and each game state allows certain action maps.
+                                                                                    SceneStateAllower handles which states are allowed in each scene 
+                                                                                    GameStateSO handles which action map to use, and which game states you can transition to.
+                                                                                    So the game state is determined by which UI is open, 
+                                                                                        which is controlled by the SceneStateAllower and the current game state.
 
     BUILDING
         Finish build system
@@ -51,6 +94,29 @@ public class AAAAAAAAAAAAA
             Build cost in materials per building
                 Building materials, probably SO's
 
+    FINISH CAMERA CONTROLLER
+        Fix issue with drag movement being a little fast and clunky
+            Somehow cap the drag movement speed. Goes way too fast when camera is low to ground.
+            My high mouse sensitivity is part of the problem, but the camera seems to catch up too fast strangely
+            Maybe have the smoothTime be lowered while holding mouseRight?
+        Make a focus on currently selected PC button. 
+            Centers camera on PC, and resets angles and zoom to default
+        Redo a bit based off "Strategy Game Camera: Unity's New Input System"
+        Keep edge scrolling area pretty close to the edge of the screen
+        Make edge scrolling smooth
+            Smooth it by distance from edge
+            Have two concentric borders 
+                Inside the inner one, no edge scrolling happens
+                When it gets inside the inner one, it starts moving slowly (like 0.0001f * speed)
+                    Speed increases (linearly?) while going from inner to outer border
+                By the time it reaches the outer one, it's going full speed (1f * speed)
+                Anything further out than the outer one, it's also full speed
+            Normalize the movement vector, but still scale speed based on where mouse is between borders
+        Make it still work if screen size changes during runtime
+            Necessary to check screen size every frame? seems stupid
+            Is there an event fired when screen size changes? That'd be much better
+                Then just have CameraController listen for that event and reassign screenWidth/Height
+
     MOUSE CLICK MANAGER?
         Have a script that only raycasts from mouse clicks/position.
         It sends different events out depending on what you're over/leaving/clicked on.
@@ -65,7 +131,7 @@ public class AAAAAAAAAAAAA
         Assign different AI's for PC's with different tasks (gardening, defense, etc...)
 
     INPUT
-        Figure out action maps fully
+        Figure out action maps fully, especially UI stuff.
     
     COMBAT
         Finish combat system
@@ -93,28 +159,6 @@ public class AAAAAAAAAAAAA
     FIX TRANSPARENCY ISSUES
         Maybe tweak the lerp in fade coroutine to be a bit smoother?
         Like the comments from CameraControllerFollower
-
-    FINISH CAMERA CONTROLLER
-        Fix issue with drag movement being a little fast and clunky
-            My high mouse sensitivity is part of the problem, but the camera seems to catch up too fast strangely
-            Maybe have the smoothTime be lowered while holding mouseRight?
-        Make a focus on currently selected PC button. 
-            Centers camera on PC, and resets angles and zoom to default
-        Redo a bit based off "Strategy Game Camera: Unity's New Input System"
-        Keep edge scrolling area pretty close to the edge of the screen
-        Make edge scrolling smooth
-            Smooth it by distance from edge
-            Have two concentric borders 
-                Inside the inner one, no edge scrolling happens
-                When it gets inside the inner one, it starts moving slowly (like 0.0001f * speed)
-                    Speed increases (linearly?) while going from inner to outer border
-                By the time it reaches the outer one, it's going full speed (1f * speed)
-                Anything further out than the outer one, it's also full speed
-            Normalize the movement vector, but still scale speed based on where mouse is between borders
-        Make it still work if screen size changes during runtime
-            Necessary to check screen size every frame? seems stupid
-            Is there an event fired when screen size changes? That'd be much better
-                Then just have CameraController listen for that event and reassign screenWidth/Height
 
     FINISH CHARACTER CONTROLLER
         Control characters by clicking on them and then giving them an order

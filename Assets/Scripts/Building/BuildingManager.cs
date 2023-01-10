@@ -6,16 +6,12 @@ using UnityEngine.InputSystem;
 public class BuildingManager : MonoBehaviour
 {
     // Want a free form building system, not grid based. 
+        // Have an empty "border" around buildings so you can't build them so close that you can't walk between them.
 
     // Select thing to build from menu, then have it follow the mouse position on the ground
         // Highlight it red if it intersects with something, green if it's able to be placed there
             // Use a boxcast or something similar? Make sure its a little bigger than the building so people can walk around them.
         // Rotate it using the mouse wheel
-
-    // How to handle build mode?
-        // Treat it like a pause menu, except you can build/navigate build menu?
-        // Use separate action map?
-        // Use a game state machine?
 
     [SerializeField]
     private GameObject currentBuildingPrefab;
@@ -25,10 +21,6 @@ public class BuildingManager : MonoBehaviour
     [SerializeField]
     private LayerMask groundLayer;
 
-    [SerializeField]
-    private GameStateSO buildState;
-    private bool inBuildMode = false;
-
     // For debug gizmos, so they dont draw in editor mode.
     private bool started;
 
@@ -36,8 +28,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Start()
     {
-        S.I.InputManager.selectAction.performed += PlaceBuilding;
-        S.I.GameStateMachine.onChangedState += ToggleBuildMode;
+        S.I.InputManager.playerControls.World.Select.performed += PlaceBuilding;
 
         sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
 
@@ -48,17 +39,16 @@ public class BuildingManager : MonoBehaviour
 
     private void OnDisable()
     {
-        S.I.InputManager.selectAction.performed -= PlaceBuilding;
-        S.I.GameStateMachine.onChangedState -= ToggleBuildMode;
+        S.I.InputManager.playerControls.World.Select.performed -= PlaceBuilding;
     }
 
     private void Update()
     {
-        if (currentBuildingInstance != null && inBuildMode)
+        if (currentBuildingInstance != null)
         {
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
-                S.I.InputManager.mousePositionAction.ReadValue<Vector2>());
+                S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
             {
@@ -82,18 +72,6 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void ToggleBuildMode(GameStateSO oldState, GameStateSO newState)
-    {
-        if (newState.name == buildState.name)
-        {
-            inBuildMode = true;
-        }
-        else
-        {
-            inBuildMode = false;
-        }
-    }
-
     private void MakeInstance()
     {
         if (currentBuildingPrefab != null)
@@ -106,6 +84,7 @@ public class BuildingManager : MonoBehaviour
             currentBuildingInstance = Instantiate(currentBuildingPrefab);
 
             // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
+                // or put it in center of screen?
             currentBuildingInstance.transform.position = Vector3.forward * 100000f;
         }
     }
@@ -113,12 +92,16 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         if (CanBuildHere() && 
-            currentBuildingInstance != null &&
-            inBuildMode)
+            currentBuildingInstance != null)
         {
+            // Turn off red/green highlights
             currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+
+            // Stop controlling currentBuildingInstance with mouse, so essentially, build/set it.
             currentBuildingInstance = null;
+
+            // Make a new instance of same building to be the new currentBuildingInstance
             MakeInstance();
         }
     }
@@ -126,16 +109,9 @@ public class BuildingManager : MonoBehaviour
     // Gets called from a button in build menu
     private void ChangeCurrentBuilding(GameObject newBuilding)
     {
-        if (currentBuildingInstance != null)
-        {
-            Destroy(currentBuildingInstance);
-        }
-
         currentBuildingPrefab = newBuilding;
-        currentBuildingInstance = Instantiate(currentBuildingPrefab);
 
-        // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
-        currentBuildingInstance.transform.position = Vector3.forward * 100000f;
+        MakeInstance();
     }
 
     private void DeselectCurrentBuilding()

@@ -17,4 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 129f1ecd751cbde498b0d5837f8a86cc, type: 2}
   - {fileID: 11400000, guid: fb6d47430b89e0a43af681d27e8d2b83, type: 2}
   - {fileID: 11400000, guid: a7605209cd33bbb4186837e5edbedcd9, type: 2}
-  stateActionMapName: UI
+  StateActionMaps: []

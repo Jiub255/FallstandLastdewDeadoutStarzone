@@ -7,7 +7,7 @@ public class S : MonoBehaviour
     public static S I { get; private set; }
 
     public InputManager InputManager { get; private set; }
-    public GameStateMachine GameStateMachine { get; private set; }
+    public JUNKGameStateMachine GameStateMachine { get; private set; }
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class S : MonoBehaviour
         I = this;
 
         InputManager = GetComponentInChildren<InputManager>();
-        GameStateMachine = GetComponentInChildren<GameStateMachine>();
+        GameStateMachine = GetComponentInChildren<JUNKGameStateMachine>();
 
         DontDestroyOnLoad(gameObject);
     }

@@ -2,7 +2,7 @@
     "name": "PlayerControls",
     "maps": [
         {
-            "name": "Gameplay",
+            "name": "World",
             "id": "333d6583-af7b-4463-bb89-dc12b7cdb113",
             "actions": [
                 {
@@ -66,33 +66,6 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenInventory",
-                    "type": "Button",
-                    "id": "6a1688da-9944-469d-9ea6-c863bd760f83",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenBuildMenu",
-                    "type": "Button",
-                    "id": "4ca30969-c28a-49f8-918b-959303038e41",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "StopLooting",
-                    "type": "Button",
-                    "id": "5746b396-c95c-470e-b5b6-6493379e7f7f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Tap",
                     "initialStateCheck": false
                 }
             ],
@@ -253,28 +226,6 @@
                 },
                 {
                     "name": "",
-                    "id": "9ccb7f38-fb84-4585-b441-6dcead09af24",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "49c566ae-11a2-4eae-9e0c-0d2fe72a1c72",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "deccd75d-f5fc-4f59-8420-48591e6d9f6e",
                     "path": "<Mouse>/delta",
                     "interactions": "",
@@ -294,33 +245,11 @@
                     "action": "DragCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "92b917b5-adc4-492a-b957-bc306220f4a5",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "StopLooting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d39afd18-3734-46f3-8fb2-03ea03481120",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "StopLooting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
+            "name": "Inventory",
             "id": "8dde6780-e02e-4062-a266-3e0686d2a002",
             "actions": [
                 {
@@ -399,6 +328,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenInventory",
+                    "type": "Button",
+                    "id": "f2573d91-4d74-48ae-aeb5-53914fb1f639",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -443,6 +381,155 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "CloseBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ad8889d-b60d-452a-ad7b-b66c83f72545",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23a489d5-5fcb-4659-8d8c-44bf875a237b",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Home",
+            "id": "cebf6a23-b35c-43ac-913b-4269ea46e868",
+            "actions": [
+                {
+                    "name": "OpenBuildMenu",
+                    "type": "Button",
+                    "id": "249a3345-0b90-4dc5-97e7-bf272e72621b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenInventory",
+                    "type": "Button",
+                    "id": "64692471-2c71-404d-a7ce-de47180ed6c4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c6bfc5e6-c49f-43e2-bf5d-6de971cfeca7",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7c40f53-6c61-4834-bbda-422f74136069",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Scavenge",
+            "id": "5debe4a9-3f23-4f63-bf74-91675f5ba518",
+            "actions": [
+                {
+                    "name": "OpenUsableInventory",
+                    "type": "Button",
+                    "id": "8cac9631-2fc2-4d9e-8783-640ef0f21b57",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenCharacterStatus",
+                    "type": "Button",
+                    "id": "3ead7c23-d160-4985-928e-e7c8d5733666",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StopLooting",
+                    "type": "Button",
+                    "id": "98d9120b-61a0-4259-aaeb-f9787df597a1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d1baf79f-8729-4e5e-accf-b7688326ea72",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenUsableInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e691646-0734-4133-8a30-d336e35a108d",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenCharacterStatus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5ff4ae18-50aa-4c94-aff5-533cf5dcf7d5",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "StopLooting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "155820fa-fdc7-444b-9aeb-8bc62ead6db6",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "StopLooting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
