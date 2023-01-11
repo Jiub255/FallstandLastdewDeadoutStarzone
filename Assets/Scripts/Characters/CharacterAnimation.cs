@@ -7,7 +7,6 @@ public class CharacterAnimation : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Animator animator;
-    public bool isMoving = false;
     
     private void Awake()
     {

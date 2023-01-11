@@ -24,14 +24,10 @@ public class BuildingManager : MonoBehaviour
     // For debug gizmos, so they dont draw in editor mode.
     private bool started;
 
-    private SceneStateAllower sceneStateAllower;
-
     private void Start()
     {
         S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
         BuildingItemSO.onSelectBuilding += ChangeCurrentBuilding;
-
-        sceneStateAllower = GameObject.Find("Scene State Allower").GetComponent<SceneStateAllower>();
 
         // Just for testing
         //MakeInstance();

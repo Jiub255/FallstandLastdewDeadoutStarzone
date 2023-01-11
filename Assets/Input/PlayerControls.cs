@@ -323,6 +323,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""DeselectBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e9d2c45-fab9-4f00-bf01-75a4c288d003"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""RotateBuilding"",
                     ""type"": ""Value"",
                     ""id"": ""240fca0e-9abb-40ba-9db0-3a5d316839ff"",
@@ -425,6 +434,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""PlaceBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28a74924-3fd4-4b36-a170-3c368190efdc"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""DeselectBuilding"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -541,15 +561,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""StopLooting"",
-                    ""type"": ""Button"",
-                    ""id"": ""98d9120b-61a0-4259-aaeb-f9787df597a1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Tap"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""OpenCharacterStatus"",
                     ""type"": ""Button"",
                     ""id"": ""3ead7c23-d160-4985-928e-e7c8d5733666"",
@@ -599,28 +610,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""OpenUsableInventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5ff4ae18-50aa-4c94-aff5-533cf5dcf7d5"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""StopLooting"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""155820fa-fdc7-444b-9aeb-8bc62ead6db6"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""StopLooting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -683,6 +672,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_PlaceBuilding = m_Build.FindAction("PlaceBuilding", throwIfNotFound: true);
+        m_Build_DeselectBuilding = m_Build.FindAction("DeselectBuilding", throwIfNotFound: true);
         m_Build_RotateBuilding = m_Build.FindAction("RotateBuilding", throwIfNotFound: true);
         m_Build_CloseBuildMenu = m_Build.FindAction("CloseBuildMenu", throwIfNotFound: true);
         m_Build_OpenInventory = m_Build.FindAction("OpenInventory", throwIfNotFound: true);
@@ -696,7 +686,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Scavenge = asset.FindActionMap("Scavenge", throwIfNotFound: true);
         m_Scavenge_Select = m_Scavenge.FindAction("Select", throwIfNotFound: true);
         m_Scavenge_Deselect = m_Scavenge.FindAction("Deselect", throwIfNotFound: true);
-        m_Scavenge_StopLooting = m_Scavenge.FindAction("StopLooting", throwIfNotFound: true);
         m_Scavenge_OpenCharacterStatus = m_Scavenge.FindAction("OpenCharacterStatus", throwIfNotFound: true);
         m_Scavenge_OpenUsableInventory = m_Scavenge.FindAction("OpenUsableInventory", throwIfNotFound: true);
     }
@@ -873,6 +862,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Build;
     private IBuildActions m_BuildActionsCallbackInterface;
     private readonly InputAction m_Build_PlaceBuilding;
+    private readonly InputAction m_Build_DeselectBuilding;
     private readonly InputAction m_Build_RotateBuilding;
     private readonly InputAction m_Build_CloseBuildMenu;
     private readonly InputAction m_Build_OpenInventory;
@@ -881,6 +871,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         private @PlayerControls m_Wrapper;
         public BuildActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @PlaceBuilding => m_Wrapper.m_Build_PlaceBuilding;
+        public InputAction @DeselectBuilding => m_Wrapper.m_Build_DeselectBuilding;
         public InputAction @RotateBuilding => m_Wrapper.m_Build_RotateBuilding;
         public InputAction @CloseBuildMenu => m_Wrapper.m_Build_CloseBuildMenu;
         public InputAction @OpenInventory => m_Wrapper.m_Build_OpenInventory;
@@ -896,6 +887,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PlaceBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
                 @PlaceBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
                 @PlaceBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
+                @DeselectBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
+                @DeselectBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
+                @DeselectBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
                 @RotateBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
                 @RotateBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
                 @RotateBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
@@ -912,6 +906,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PlaceBuilding.started += instance.OnPlaceBuilding;
                 @PlaceBuilding.performed += instance.OnPlaceBuilding;
                 @PlaceBuilding.canceled += instance.OnPlaceBuilding;
+                @DeselectBuilding.started += instance.OnDeselectBuilding;
+                @DeselectBuilding.performed += instance.OnDeselectBuilding;
+                @DeselectBuilding.canceled += instance.OnDeselectBuilding;
                 @RotateBuilding.started += instance.OnRotateBuilding;
                 @RotateBuilding.performed += instance.OnRotateBuilding;
                 @RotateBuilding.canceled += instance.OnRotateBuilding;
@@ -988,7 +985,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IScavengeActions m_ScavengeActionsCallbackInterface;
     private readonly InputAction m_Scavenge_Select;
     private readonly InputAction m_Scavenge_Deselect;
-    private readonly InputAction m_Scavenge_StopLooting;
     private readonly InputAction m_Scavenge_OpenCharacterStatus;
     private readonly InputAction m_Scavenge_OpenUsableInventory;
     public struct ScavengeActions
@@ -997,7 +993,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public ScavengeActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Select => m_Wrapper.m_Scavenge_Select;
         public InputAction @Deselect => m_Wrapper.m_Scavenge_Deselect;
-        public InputAction @StopLooting => m_Wrapper.m_Scavenge_StopLooting;
         public InputAction @OpenCharacterStatus => m_Wrapper.m_Scavenge_OpenCharacterStatus;
         public InputAction @OpenUsableInventory => m_Wrapper.m_Scavenge_OpenUsableInventory;
         public InputActionMap Get() { return m_Wrapper.m_Scavenge; }
@@ -1015,9 +1010,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Deselect.started -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnDeselect;
                 @Deselect.performed -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnDeselect;
                 @Deselect.canceled -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnDeselect;
-                @StopLooting.started -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnStopLooting;
-                @StopLooting.performed -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnStopLooting;
-                @StopLooting.canceled -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnStopLooting;
                 @OpenCharacterStatus.started -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnOpenCharacterStatus;
                 @OpenCharacterStatus.performed -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnOpenCharacterStatus;
                 @OpenCharacterStatus.canceled -= m_Wrapper.m_ScavengeActionsCallbackInterface.OnOpenCharacterStatus;
@@ -1034,9 +1026,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Deselect.started += instance.OnDeselect;
                 @Deselect.performed += instance.OnDeselect;
                 @Deselect.canceled += instance.OnDeselect;
-                @StopLooting.started += instance.OnStopLooting;
-                @StopLooting.performed += instance.OnStopLooting;
-                @StopLooting.canceled += instance.OnStopLooting;
                 @OpenCharacterStatus.started += instance.OnOpenCharacterStatus;
                 @OpenCharacterStatus.performed += instance.OnOpenCharacterStatus;
                 @OpenCharacterStatus.canceled += instance.OnOpenCharacterStatus;
@@ -1082,6 +1071,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IBuildActions
     {
         void OnPlaceBuilding(InputAction.CallbackContext context);
+        void OnDeselectBuilding(InputAction.CallbackContext context);
         void OnRotateBuilding(InputAction.CallbackContext context);
         void OnCloseBuildMenu(InputAction.CallbackContext context);
         void OnOpenInventory(InputAction.CallbackContext context);
@@ -1097,7 +1087,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnSelect(InputAction.CallbackContext context);
         void OnDeselect(InputAction.CallbackContext context);
-        void OnStopLooting(InputAction.CallbackContext context);
         void OnOpenCharacterStatus(InputAction.CallbackContext context);
         void OnOpenUsableInventory(InputAction.CallbackContext context);
     }
