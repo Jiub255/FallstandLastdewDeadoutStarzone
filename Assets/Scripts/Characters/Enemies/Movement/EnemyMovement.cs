@@ -5,36 +5,36 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public static event Action<Transform, Transform> OnReachedPC;
+
     [SerializeField]
-    private float attackDistance = 3f;
+    private float _attackDistance = 3f;
 
-    private NavMeshAgent navMeshAgent;
+    private NavMeshAgent _navMeshAgent;
 
-    private Transform targetPC;
-
-    public static event Action<Transform, Transform> onReachedPC;
+    private Transform _targetPC;
 
     private void Awake()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
 
         ChooseRandomTarget();
     }
 
     private void Update()
     {
-        if (targetPC != null)
+        if (_targetPC != null)
         {
-            navMeshAgent.SetDestination(targetPC.transform.position);
+            _navMeshAgent.SetDestination(_targetPC.transform.position);
         }
         else
         {
             ChooseRandomTarget(); 
         }
 
-        if (Vector3.Distance(transform.position, targetPC.transform.position) <= attackDistance)
+        if (Vector3.Distance(transform.position, _targetPC.transform.position) <= _attackDistance)
         {
-            onReachedPC.Invoke(transform, targetPC);
+            OnReachedPC.Invoke(transform, _targetPC);
         }
     }
 
@@ -44,6 +44,6 @@ public class EnemyMovement : MonoBehaviour
         List<GameObject> potentialTargets = new List<GameObject>();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = UnityEngine.Random.Range(0,potentialTargets.Count);
-        targetPC = potentialTargets[randomIndex].transform;
+        _targetPC = potentialTargets[randomIndex].transform;
     }
 }

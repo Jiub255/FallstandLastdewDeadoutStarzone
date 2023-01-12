@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 
 public class LootCommand : MonoBehaviour
 {
-    [SerializeField]
-    private LayerMask lootContainerLayer;
+    public static event Action<Transform, Transform> OnClickedLoot;
 
     [SerializeField]
-    private SelectedPCSO selectedPCSO;
+    private LayerMask _lootContainerLayer;
 
-    public static event Action<Transform, Transform> onClickedLoot;
+    [SerializeField]
+    private SelectedPCSO _selectedPCSO;
 
     private void Start()
     {
@@ -24,21 +24,17 @@ public class LootCommand : MonoBehaviour
 
     private void Loot(InputAction.CallbackContext context)
     {
-        Debug.Log("Loot button pressed");
-
-        if (selectedPCSO.selectedPCGO != null)
+        if (_selectedPCSO.SelectedPCGO != null)
         {
             // Raycast checks for loot containers where the mouse clicked.
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 
                 100, 
-                lootContainerLayer);
+                _lootContainerLayer);
 
             // If click hit anything at all
             if (hits.Length > 0)
             {
-                Debug.Log("Loot raycast hit");
-
                 // Find the closest loot container to the camera
                 RaycastHit closestHit = hits[0];
 
@@ -52,7 +48,7 @@ public class LootCommand : MonoBehaviour
                 }
 
                 // Send signal to LootAction telling them to start looting closest container
-                onClickedLoot?.Invoke(selectedPCSO.selectedPCGO.transform, closestHit.collider.transform);
+                OnClickedLoot?.Invoke(_selectedPCSO.SelectedPCGO.transform, closestHit.collider.transform);
             }
         }
     }

@@ -5,5 +5,5 @@ using UnityEngine;
 // Put on each loot container
 public class LootContainer : MonoBehaviour
 {
-    public List<ItemAmount> lootItemAmounts;
+    public List<ItemAmount> LootItemAmounts;
 }

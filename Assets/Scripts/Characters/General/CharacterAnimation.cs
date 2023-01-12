@@ -5,17 +5,17 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator))]
 public class CharacterAnimation : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    private Animator animator;
+    private NavMeshAgent _agent;
+    private Animator _animator;
     
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        animator.SetFloat("Speed", agent.velocity.magnitude);
+        _animator.SetFloat("Speed", _agent.velocity.magnitude);
     }
 }

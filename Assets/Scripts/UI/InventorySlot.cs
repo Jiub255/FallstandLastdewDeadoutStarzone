@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,49 +5,49 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     [SerializeField]
-    private Image icon;
+    private Image _icon;
     [SerializeField]
-    private Button useButton;
+    private Button _useButton;
     [SerializeField]
-    private TextMeshProUGUI amountText;
+    private TextMeshProUGUI _amountText;
 
-    private ItemAmount itemAmount;
+    private ItemAmount _itemAmount;
 
     public void SetupSlot(ItemAmount newItemAmount)
     {
-        itemAmount = newItemAmount;
+        _itemAmount = newItemAmount;
 
-        icon.sprite = newItemAmount.inventoryItemSO.itemIcon;
-        icon.enabled = true;
-        useButton.interactable = true;
+        _icon.sprite = newItemAmount.InventoryItemSO.ItemIcon;
+        _icon.enabled = true;
+        _useButton.interactable = true;
 
-        if (newItemAmount.amount == 1)
+        if (newItemAmount.Amount == 1)
         {
-            amountText.text = "";
+            _amountText.text = "";
         }
         else
         {
-            amountText.text = newItemAmount.amount.ToString();
+            _amountText.text = newItemAmount.Amount.ToString();
         }
     }
 
     public void ClearSlot()
     {
-        itemAmount = null;
+        _itemAmount = null;
 
-        icon.sprite = null;
-        icon.enabled = false;
-        useButton.interactable = false;
-        amountText.text = "";
+        _icon.sprite = null;
+        _icon.enabled = false;
+        _useButton.interactable = false;
+        _amountText.text = "";
     }
 
     // Called by clicking on inventory slot
 	public void OnUseButton()
     {
-        if (itemAmount != null)
+        if (_itemAmount != null)
         {
             // TODO: Set Use() up in Item and its child classes
-            itemAmount.inventoryItemSO.Use();
+            _itemAmount.InventoryItemSO.Use();
         }
     }
 }

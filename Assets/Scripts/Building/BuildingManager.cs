@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,57 +15,80 @@ public class BuildingManager : MonoBehaviour
         // Rotate it using the mouse wheel
 
     [SerializeField]
-    private GameObject currentBuildingPrefab;
+    private GameObject _currentBuildingPrefab;
 
-    private GameObject currentBuildingInstance;
+    private GameObject _currentBuildingInstance;
 
     [SerializeField]
-    private LayerMask groundLayer;
+    private LayerMask _groundLayer;
 
     // For debug gizmos, so they dont draw in editor mode.
-    private bool started;
+    private bool _started;
+
+    [SerializeField]
+    private float _rotationSpeed = 5f;
+
+    //private InputActionMap buildActionMap;
+    //private InputAction rotateAction;
 
     private void Start()
     {
         S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
-        BuildingItemSO.onSelectBuilding += ChangeCurrentBuilding;
+        BuildingItemSO.OnSelectBuilding += ChangeCurrentBuilding;
+        S.I.IM.PC.Build.CloseBuildMenu.performed += CloseBuildMenu;
+
+        S.I.IM.PC.Build.RotateBuilding.started += RotateBuilding;
+
+        //buildActionMap = S.I.IM.PC.Build;
+        //rotateAction = S.I.IM.PC.Build.RotateBuilding;
 
         // Just for testing
         //MakeInstance();
-        started = true;
+        _started = true;
     }
 
     private void OnDisable()
     {
         S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
-        BuildingItemSO.onSelectBuilding -= ChangeCurrentBuilding;
+        BuildingItemSO.OnSelectBuilding -= ChangeCurrentBuilding;
+        S.I.IM.PC.Build.CloseBuildMenu.performed -= CloseBuildMenu;
+      
+        S.I.IM.PC.Build.RotateBuilding.performed -= RotateBuilding;
+    }
+
+    private void RotateBuilding(InputAction.CallbackContext obj)
+    {
+        if (_currentBuildingInstance != null)
+        {
+            _currentBuildingInstance.transform.Rotate(new Vector3(0f, Time.deltaTime * _rotationSpeed, 0f));
+        }
     }
 
     private void Update()
     {
-        if (currentBuildingInstance != null)
+        if (_currentBuildingInstance != null)
         {
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
-            if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
+            if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
             {
                 // Make sure to make buildings have their "pivot" on the bottom center, that is,
                 // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
-                currentBuildingInstance.transform.position = hitData.point;
+                _currentBuildingInstance.transform.position = hitData.point;
 
                 if (CanBuildHere())
                 {
                     // Green highlight, allowed to build here
-                    currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-                    currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+                    _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
                 }
                 else
                 {
                     // Red highlight, can't build here
-                    currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                    currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                    _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                    _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
                 }
             }
         }
@@ -72,32 +96,32 @@ public class BuildingManager : MonoBehaviour
 
     private void MakeInstance()
     {
-        if (currentBuildingPrefab != null)
+        if (_currentBuildingPrefab != null)
         {
-            if (currentBuildingInstance != null)
+            if (_currentBuildingInstance != null)
             {
-                Destroy(currentBuildingInstance);
+                Destroy(_currentBuildingInstance);
             } 
 
-            currentBuildingInstance = Instantiate(currentBuildingPrefab);
+            _currentBuildingInstance = Instantiate(_currentBuildingPrefab);
 
             // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
                 // or put it in center of screen?
-            currentBuildingInstance.transform.position = Vector3.forward * 100000f;
+            _currentBuildingInstance.transform.position = Vector3.forward * 100000f;
         }
     }
 
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         if (CanBuildHere() && 
-            currentBuildingInstance != null)
+            _currentBuildingInstance != null)
         {
             // Turn off red/green highlights
-            currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-            currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
 
             // Stop controlling currentBuildingInstance with mouse, so essentially, build/set it.
-            currentBuildingInstance = null;
+            _currentBuildingInstance = null;
 
             // Make a new instance of same building to be the new currentBuildingInstance
             MakeInstance();
@@ -109,38 +133,48 @@ public class BuildingManager : MonoBehaviour
     {
         Debug.Log("Changing current building to " + newBuilding.name);
 
-        currentBuildingPrefab = newBuilding;
+        _currentBuildingPrefab = newBuilding;
 
         MakeInstance();
     }
 
     private void DeselectCurrentBuilding()
     {
-        if (currentBuildingPrefab != null)
+        if (_currentBuildingPrefab != null)
         {
-            currentBuildingPrefab = null;
+            _currentBuildingPrefab = null;
         }
-        if (currentBuildingInstance != null)
+        if (_currentBuildingInstance != null)
         {
-            Destroy(currentBuildingInstance);
-            currentBuildingInstance = null;
+            Destroy(_currentBuildingInstance);
+            _currentBuildingInstance = null;
         }
     }
 
-    private void RotateBuilding()
+    // Maybe set up rotate as two buttons instead? Then just subscribe their performed event to this method
+/*    private void RotateBuilding(*//*InputAction.CallbackContext context*//*)
     {
+        if (rotateAction.ReadValue<float>() > 0.5f)
+        {
+            // Rotate clockwise
 
-    }
+        }
+        else if (rotateAction.ReadValue<float>() < -0.5f)
+        {
+            // Rotate counter-clockwise
+
+        }
+    }*/
 
     private bool CanBuildHere()
     {
-        BoxCollider boxCollider = currentBuildingInstance.GetComponentInChildren<BoxCollider>();
+        BoxCollider boxCollider = _currentBuildingInstance.GetComponentInChildren<BoxCollider>();
 
         Collider[] colliders = Physics.OverlapBox(
-            currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), 
+            _currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), 
             boxCollider.bounds.size / 2, 
             Quaternion.identity, 
-            ~groundLayer);
+            ~_groundLayer);
 
         foreach (Collider collider in colliders)
         {
@@ -158,16 +192,30 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    private void CloseBuildMenu(InputAction.CallbackContext context)
+    {
+        if (_currentBuildingInstance != null)
+        {
+            Destroy(_currentBuildingInstance);
+            _currentBuildingInstance = null;
+        }
+
+        if (_currentBuildingPrefab != null)
+        {
+            _currentBuildingPrefab = null;
+        }
+    }
+
     private void OnDrawGizmos()
     {
-        if (currentBuildingInstance != null)
+        if (_currentBuildingInstance != null)
         {
-            BoxCollider boxCollider = currentBuildingInstance.GetComponentInChildren<BoxCollider>();
+            BoxCollider boxCollider = _currentBuildingInstance.GetComponentInChildren<BoxCollider>();
 
             Gizmos.color = Color.red;
-            if (started)
+            if (_started)
             {
-                Gizmos.DrawWireCube(currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size);
+                Gizmos.DrawWireCube(_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size);
             }
         }
     }

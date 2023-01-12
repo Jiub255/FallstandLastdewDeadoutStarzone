@@ -4,13 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "InventorySO", menuName = "Items/InventorySO")]
 public class InventorySO : ScriptableObject
 {
-    public List<ItemAmount> itemAmounts = new List<ItemAmount>();
+    public List<ItemAmount> ItemAmounts = new List<ItemAmount>();
 
     public ItemAmount GetItemAmount(InventoryItemSO inventoryItemSO)
     {
-        foreach (ItemAmount itemAmount in itemAmounts)
+        foreach (ItemAmount itemAmount in ItemAmounts)
         {
-            if (itemAmount.inventoryItemSO == inventoryItemSO)
+            if (itemAmount.InventoryItemSO == inventoryItemSO)
             {
                 return itemAmount;
             }
@@ -26,12 +26,12 @@ public class InventorySO : ScriptableObject
 [System.Serializable]
 public class ItemAmount
 {
-    public InventoryItemSO inventoryItemSO;
-    public int amount;
+    public InventoryItemSO InventoryItemSO;
+    public int Amount;
 
     public ItemAmount(InventoryItemSO inventoryItemSO, int amount)
     {
-        this.inventoryItemSO = inventoryItemSO;
-        this.amount = amount;
+        this.InventoryItemSO = inventoryItemSO;
+        this.Amount = amount;
     }
 }

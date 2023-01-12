@@ -5,18 +5,18 @@ using UnityEngine.InputSystem;
 // Maybe put this on TheSingleton?
 public class UIManager : MonoBehaviour
 {
+    // MenuUIRefresher listens to initialize the UI displays
+    public static event Action OnOpenedMenu;
+
+    public static bool GamePaused = false;
+
     [Header("Canvases")]
     [SerializeField]
-    private Transform canvasesObject;
+    private Transform _canvasesObject;
     [SerializeField]
-    private Canvas inventoryCanvas;
+    private Canvas _inventoryCanvas;
     [SerializeField]
-    private Canvas buildCanvas;
-
-    // MenuUIRefresher listens to initialize the UI displays
-    public static event Action onOpenedMenu;
-
-    public static bool gamePaused = false;
+    private Canvas _buildCanvas;
 
     private void Start()
     {
@@ -47,13 +47,13 @@ public class UIManager : MonoBehaviour
 
         // Open build canvas
         CloseAllMenus();
-        buildCanvas.gameObject.SetActive(true);
+        _buildCanvas.gameObject.SetActive(true);
 
         // BuildMenuUI listens to initialize display
-        onOpenedMenu.Invoke();
+        OnOpenedMenu.Invoke();
 
         // Pause gameplay if not already paused
-        if (!gamePaused)
+        if (!GamePaused)
         {
             PauseGame();
         }
@@ -67,13 +67,13 @@ public class UIManager : MonoBehaviour
 
         // Open inventory canvas
         CloseAllMenus();
-        inventoryCanvas.gameObject.SetActive(true);
+        _inventoryCanvas.gameObject.SetActive(true);
 
         // InventoryUI listens to initialize display
-        onOpenedMenu.Invoke();
+        OnOpenedMenu.Invoke();
 
         // Pause gameplay if not already paused
-        if (!gamePaused)
+        if (!GamePaused)
         {
             PauseGame();
         }
@@ -88,7 +88,7 @@ public class UIManager : MonoBehaviour
 
         CloseAllMenus();
        
-        if (gamePaused)
+        if (GamePaused)
         {
             UnpauseGame();
         }
@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
 
     private void CloseAllMenus()
     {
-        foreach (Transform canvas in canvasesObject)
+        foreach (Transform canvas in _canvasesObject)
         {
             canvas.gameObject.SetActive(false);
         }
@@ -104,14 +104,14 @@ public class UIManager : MonoBehaviour
 
     public static void PauseGame()
     {
-        gamePaused = true;
+        GamePaused = true;
 
         Time.timeScale = 0f;
     }
 
     public static void UnpauseGame()
     {
-        gamePaused = false;
+        GamePaused = false;
 
         Time.timeScale = 1f;
     }

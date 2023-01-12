@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 // Put this on Game Controller
 public class PCMovement : MonoBehaviour
 {
-    [SerializeField]
-    private LayerMask transparentableAndPCLayers;
+    public static event Action<InputAction.CallbackContext> OnMove;
 
     [SerializeField]
-    private SelectedPCSO selectedPCSO;
+    private LayerMask _transparentableAndPCLayers;
 
-    public static event Action<InputAction.CallbackContext> onMove;
+    [SerializeField]
+    private SelectedPCSO _selectedPCSO;
 
     private void Start()
     {
@@ -31,16 +31,16 @@ public class PCMovement : MonoBehaviour
         RaycastHit hit;
 
         // Ignore "Transparentable" and "PlayerController" layers.
-        if (selectedPCSO.selectedPCGO != null &&
+        if (_selectedPCSO.SelectedPCGO != null &&
             Physics.Raycast(Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 
                 out hit, 
                 100, 
-                ~transparentableAndPCLayers))
+                ~_transparentableAndPCLayers))
         {
-            onMove?.Invoke(context);
+            OnMove?.Invoke(context);
 
-            selectedPCSO.selectedPCGO.GetComponent<NavMeshAgent>().destination = hit.point;
+            _selectedPCSO.SelectedPCGO.GetComponent<NavMeshAgent>().destination = hit.point;
         }
     }
 }

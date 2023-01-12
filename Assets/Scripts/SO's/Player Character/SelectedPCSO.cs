@@ -4,5 +4,5 @@ using UnityEngine;
 public class SelectedPCSO : ScriptableObject
 {
 	[HideInInspector]
-	public GameObject selectedPCGO;
+	public GameObject SelectedPCGO;
 }

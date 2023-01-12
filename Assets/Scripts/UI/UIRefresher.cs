@@ -5,9 +5,9 @@ using UnityEngine;
 // At least can do an abstract class and inherit for each type of UI
 public abstract class UIRefresher : MonoBehaviour
 {
-    public GameObject slotPrefab;
+    protected GameObject SlotPrefab;
 
-    public Transform content;
+    protected Transform Content;
 
     public virtual void PopulateInventory()
     {
@@ -16,7 +16,7 @@ public abstract class UIRefresher : MonoBehaviour
 
     private void ClearInventory()
     {
-        foreach (Transform child in content)
+        foreach (Transform child in Content)
         {
             Destroy(child.gameObject);
         }

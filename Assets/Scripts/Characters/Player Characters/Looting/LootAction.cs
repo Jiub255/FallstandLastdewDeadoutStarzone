@@ -1,7 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-enum LootingState
+public enum LootingState
 {   
     NotLooting,
     WalkingTowards,
@@ -11,44 +12,44 @@ enum LootingState
 // Put on each player character
 public class LootAction : MonoBehaviour
 {
-    private LootingState lootingState = LootingState.NotLooting;
+    public LootingState LootingState = LootingState.NotLooting;
 
-    private Transform lootContainerTransform;
+    private Transform _lootContainerTransform;
     [SerializeField]
-    private float lootDistance = 2f;
+    private float _lootDistance = 2.5f;
 
-    private Animator animator;
+    private Animator _animator;
 
     [SerializeField]
-    private InventorySO inventorySO;
+    private InventorySO _inventorySO;
 
     // Timer stuff
     [SerializeField]
-    private AnimationClip lootAnimation;
+    private AnimationClip _lootAnimation;
     
     [SerializeField]
-    private GameObject timerObject;
+    private GameObject _timerObject;
 
     [SerializeField]
-    private Transform fillBarTransform;
+    private Transform _fillBarTransform;
 
-    private float animationLength;
-    private float timer;
+    private float _animationLength;
+    private float _timer;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        animationLength = lootAnimation.length;
-        timer = animationLength;
+        _animator = GetComponent<Animator>();
+        _animationLength = _lootAnimation.length;
+        _timer = _animationLength;
     }
 
     private void Start()
     {
         // listen for event from LootContainer (event will pass character and container transforms)
-        LootCommand.onClickedLoot += AssignLootContainer;
+        LootCommand.OnClickedLoot += AssignLootContainer;
 
         // Before moving
-        PCMovement.onMove += ResetLootingState;
+        PCMovement.OnMove += ResetLootingState;
 
         // Before attacking
         // PlayerShoot.onShoot += ResetLootingState;
@@ -59,9 +60,9 @@ public class LootAction : MonoBehaviour
 
     private void OnDisable()
     {
-        LootCommand.onClickedLoot -= AssignLootContainer;
+        LootCommand.OnClickedLoot -= AssignLootContainer;
 
-        PCMovement.onMove -= ResetLootingState;
+        PCMovement.OnMove -= ResetLootingState;
         // PlayerShoot.onShoot -= ResetLootingState;
         // [PLAYERHEALTHSCRIPT].onGotHit -= ResetLootingState;
     }
@@ -73,30 +74,39 @@ public class LootAction : MonoBehaviour
 
         if (transform == playerTransform)
         {
-            lootContainerTransform = newLootContainer;
-            ChangeLootingState(LootingState.WalkingTowards);
+            _lootContainerTransform = newLootContainer;
+
+            //ChangeLootingState(LootingState.WalkingTowards);
+            StartCoroutine(WaitThenChangeState());
         }
+    }
+
+    // I hate this
+    // Or could check lootingState in PCMovement, and don't call onMove if you're in NotLooting.
+    private IEnumerator WaitThenChangeState()
+    {
+        yield return new WaitForEndOfFrame();
+
+        ChangeLootingState(LootingState.WalkingTowards);
     }
 
     private void Update()
     {
        // Debug.Log("Player #" + transform.GetInstanceID() + ", Looting State: " + lootingState.ToString());
 
-        if (lootingState == LootingState.WalkingTowards)
+        if (LootingState == LootingState.WalkingTowards)
         {
             if (HaveReachedLoot())
             {
                 StartLooting();
-                // Activate timer game object
-                timerObject.SetActive(true);
             }
         }
-        else if (lootingState == LootingState.Looting)
+        else if (LootingState == LootingState.Looting)
         {
-            timer -= Time.deltaTime;
+            _timer -= Time.deltaTime;
 
             // If finished looting
-            if (timer <= 0)
+            if (_timer <= 0)
             {
                 // Calls ResetLootingState, which resets timer and animation, and deactivates timer object.
                 AddLoot();
@@ -104,17 +114,17 @@ public class LootAction : MonoBehaviour
             else
             {
                 // Get percent of time elapsed
-                float percentTime = (animationLength - timer) / animationLength;
+                float percentTime = (_animationLength - _timer) / _animationLength;
                 // Raise fill bar's x scale by that percent
-                fillBarTransform.localScale = new Vector3(
+                _fillBarTransform.localScale = new Vector3(
                     percentTime, 
-                    fillBarTransform.localScale.y, 
-                    fillBarTransform.localScale.z);
+                    _fillBarTransform.localScale.y, 
+                    _fillBarTransform.localScale.z);
                 // Move fill bar along x axis, so it stays anchored on one side
-                fillBarTransform.localPosition = new Vector3(
+                _fillBarTransform.localPosition = new Vector3(
                     0.55f * (1 - percentTime), 
-                    fillBarTransform.localPosition.y, 
-                    fillBarTransform.localPosition.z);
+                    _fillBarTransform.localPosition.y, 
+                    _fillBarTransform.localPosition.z);
             }
         }
     }
@@ -125,35 +135,36 @@ public class LootAction : MonoBehaviour
         ChangeLootingState(LootingState.Looting);
 
         // Freeze Movement
-        S.I.IM.PC.Scavenge.Select.Disable();
+        //S.I.IM.PC.Scavenge.Select.Disable();
 
         // Face the loot container
-        transform.LookAt(lootContainerTransform);
+        transform.LookAt(_lootContainerTransform);
 
         // Play loot animation/timer
         //    Have Loot animation get called from trigger
         //    How to make it cancellable if you get hit/push cancel
-        animator.SetTrigger("Looting");
+        _animator.SetTrigger("Looting");
         // When timer up, call AddLoot.
+
+        // Activate timer game object
+        _timerObject.SetActive(true);
     }
 
     // Called by animation event at the end of the loot animation.
     private void AddLoot()
     {
-        Debug.Log("Added Loot");
-
-        LootContainer lootContainer = lootContainerTransform.GetComponent<LootContainer>();
-        foreach (ItemAmount itemAmount in lootContainer.lootItemAmounts) 
+        LootContainer lootContainer = _lootContainerTransform.GetComponent<LootContainer>();
+        foreach (ItemAmount itemAmount in lootContainer.LootItemAmounts) 
         {
             // Check to see if you already have an itemAmount that matches the item,
             //    then add however many
-            if (inventorySO.GetItemAmount(itemAmount.inventoryItemSO) != null)
+            if (_inventorySO.GetItemAmount(itemAmount.InventoryItemSO) != null)
             {
-                inventorySO.GetItemAmount(itemAmount.inventoryItemSO).amount += itemAmount.amount;
+                _inventorySO.GetItemAmount(itemAmount.InventoryItemSO).Amount += itemAmount.Amount;
             }
             else
             {
-                inventorySO.itemAmounts.Add(itemAmount);
+                _inventorySO.ItemAmounts.Add(itemAmount);
             }
         }
 
@@ -162,7 +173,7 @@ public class LootAction : MonoBehaviour
 
     private bool HaveReachedLoot()
     {
-        if (Vector3.Distance(transform.position, lootContainerTransform.position) < lootDistance)
+        if (Vector3.Distance(transform.position, _lootContainerTransform.position) < _lootDistance)
         {
             return true;
         }
@@ -171,19 +182,19 @@ public class LootAction : MonoBehaviour
 
     // Call this before moving, starting looting, or attacking. (Maybe other things later)
     // Listens for event onHit
-    private void ResetLootingState(InputAction.CallbackContext context = new InputAction.CallbackContext()) // is new needed?
+    private void ResetLootingState(InputAction.CallbackContext context = new InputAction.CallbackContext()) // is new needed? Default value?
     {
-        if (lootingState != LootingState.NotLooting)
+        if (LootingState != LootingState.NotLooting)
         {
             ChangeLootingState(LootingState.NotLooting);
-            animator.SetTrigger("StopLooting");
-            timerObject.SetActive(false);
-            timer = animationLength;
+            _animator.SetTrigger("StopLooting");
+            _timerObject.SetActive(false);
+            _timer = _animationLength;
         }
     }
 
     private void ChangeLootingState(LootingState newLootingState)
     {
-        lootingState = newLootingState;
+        LootingState = newLootingState;
     }
 }

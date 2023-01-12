@@ -16,7 +16,7 @@ public class InputManager : MonoBehaviour
         // Enable "Home" and "Gameplay" as default action maps
         PC.Disable();
         PC.World.Enable();
-        PC.Home.Enable();
+        //PC.Home.Enable();
 
         // SCAVENGE JUST FOR TESTING
         PC.Scavenge.Enable();

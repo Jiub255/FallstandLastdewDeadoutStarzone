@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 public class PCSelector : MonoBehaviour
 {
     [SerializeField]
-    private SelectedPCSO selectedPCSO;
+    private SelectedPCSO _selectedPCSO;
 
     [SerializeField]
-    private LayerMask playerCharacterLayer;
+    private LayerMask _playerCharacterLayer;
 
     private void Start()
     {
@@ -34,31 +34,31 @@ public class PCSelector : MonoBehaviour
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
                 out hit,
                 100,
-                playerCharacterLayer))
+                _playerCharacterLayer))
         {
             // Deactivate old selected PC's "selected" icon
-            if (selectedPCSO.selectedPCGO != null)
+            if (_selectedPCSO.SelectedPCGO != null)
             {
-                selectedPCSO.selectedPCGO.GetComponentInChildren<SelectedIcon>().DeactivateIcon();
+                _selectedPCSO.SelectedPCGO.GetComponentInChildren<SelectedIcon>().DeactivateIcon();
             }
 
             // Set new selected PC in SO
-            selectedPCSO.selectedPCGO = hit.collider.gameObject;
+            _selectedPCSO.SelectedPCGO = hit.collider.gameObject;
 
             // Activate new selected PC's "selected" icon
-            selectedPCSO.selectedPCGO.GetComponentInChildren<SelectedIcon>().ActivateIcon();
+            _selectedPCSO.SelectedPCGO.GetComponentInChildren<SelectedIcon>().ActivateIcon();
         }
     }
 
     private void Deselect(InputAction.CallbackContext context)
     {
-        if (selectedPCSO.selectedPCGO != null)
+        if (_selectedPCSO.SelectedPCGO != null)
         {
             // Deactivate old currentAgent's "selected" icon
-            selectedPCSO.selectedPCGO.GetComponentInChildren<SelectedIcon>().DeactivateIcon();
+            _selectedPCSO.SelectedPCGO.GetComponentInChildren<SelectedIcon>().DeactivateIcon();
 
             // Set selected PC to null
-            selectedPCSO.selectedPCGO = null;
+            _selectedPCSO.SelectedPCGO = null;
         }
     }
 }

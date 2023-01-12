@@ -10,8 +10,6 @@ public class AAAAAAAAAAAAA
 
     FIRST!!
 
-    FIX
-        Loot button being deactivated after deselecting and reselecting PC? Why?
 
     FINISH BUILD MODE, THEN MAKE SCAVENGING SCENE AND MAKE A TRUE HOME SCENE (NO LOOTING)
         To get UI mouse position and world mouse position when in build mode,

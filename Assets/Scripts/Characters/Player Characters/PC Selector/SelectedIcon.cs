@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class SelectedIcon : MonoBehaviour
 {
-	private MeshRenderer meshRenderer;
+	private MeshRenderer _meshRenderer;
 
     private void Awake()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer = GetComponent<MeshRenderer>();
     }
 
     public void ActivateIcon()
     {
-        meshRenderer.enabled = true;
+        _meshRenderer.enabled = true;
     }
 
     public void DeactivateIcon()
     {
-        meshRenderer.enabled = false;
+        _meshRenderer.enabled = false;
     }
 }

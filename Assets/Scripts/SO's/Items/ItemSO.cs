@@ -4,9 +4,9 @@ using UnityEngine;
 //[CreateAssetMenu(fileName = "Item", menuName = "Items/Item")]
 public class ItemSO : ScriptableObject
 {
-    public Sprite itemIcon;
+    public Sprite ItemIcon;
     [TextArea(3,20)]
-    public string description;
+    public string Description;
 
     public virtual void Use()
     {

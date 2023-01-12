@@ -3,31 +3,31 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    [SerializeField]
-    private int damage = 1;
-
-    private Animator animator;
-    private Collider enemyCollider;
+    public static event Action<int, Transform> OnHitPC;
 
     [SerializeField]
-    private LayerMask playerCharacterLayer;
+    private int _damage = 1;
 
-    public static event Action<int, Transform> onHitPC;
+    private Animator _animator;
+    private Collider _enemyCollider;
+
+    [SerializeField]
+    private LayerMask _playerCharacterLayer;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        enemyCollider = GetComponent<Collider>();
+        _animator = GetComponent<Animator>();
+        _enemyCollider = GetComponent<Collider>();
     }
 
     private void OnEnable()
     {
-        EnemyMovement.onReachedPC += Attack;
+        EnemyMovement.OnReachedPC += Attack;
     }
 
     private void OnDisable()
     {
-        EnemyMovement.onReachedPC -= Attack;
+        EnemyMovement.OnReachedPC -= Attack;
     }
 
     private void Attack(Transform enemyTransform, Transform playerTransform)
@@ -37,7 +37,7 @@ public class EnemyDamage : MonoBehaviour
             // face PC
             transform.LookAt(playerTransform);
             // play attack animation
-            animator.SetTrigger("Attack");
+            _animator.SetTrigger("Attack");
             // boxcast immediately after animation to check if PC is still there
         }
     }
@@ -49,11 +49,11 @@ public class EnemyDamage : MonoBehaviour
     {
         RaycastHit hit;
         // boxcast immediately after animation to check if PC is still there
-        bool didBoxcastHit = Physics.BoxCast(enemyCollider.bounds.center, transform.localScale, transform.forward, out hit, transform.rotation, 3f, playerCharacterLayer);
+        bool didBoxcastHit = Physics.BoxCast(_enemyCollider.bounds.center, transform.localScale, transform.forward, out hit, transform.rotation, 3f, _playerCharacterLayer);
         // if so, send damage signal to PC
         if (didBoxcastHit)
         {
-            onHitPC.Invoke(damage, hit.transform);
+            OnHitPC.Invoke(_damage, hit.transform);
         }
     }
 }

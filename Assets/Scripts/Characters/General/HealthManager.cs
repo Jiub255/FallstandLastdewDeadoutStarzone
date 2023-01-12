@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
-    private int health;
     [SerializeField]
-    private int maxHealth = 10;
+    private int _maxHealth = 10;
+    private int _health;
 
     private void Awake()
     {
-        health = maxHealth;
+        _health = _maxHealth;
     }
 
     private void TakeDamage(int amount)
     {
-        health -= amount;
-        if (health <= 0)
+        _health -= amount;
+        if (_health <= 0)
         {
             Die();
         }

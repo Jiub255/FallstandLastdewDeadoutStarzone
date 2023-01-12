@@ -17,20 +17,20 @@ using UnityEngine;
 public class CameraFollower : MonoBehaviour
 {
     [SerializeField]
-    private Transform cameraLeader;
+    private Transform _cameraLeader;
 
     [SerializeField]
-    private Transform rotationOrigin;
+    private Transform _rotationOrigin;
 
     [SerializeField]
-    private float smoothTime = 0.3f;
+    private float _smoothTime = 0.3f;
 
-    private Vector3 velocity = Vector3.zero;
+    private Vector3 _velocity = Vector3.zero;
 
     private void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, cameraLeader.position, ref velocity, smoothTime);
-        transform.LookAt(rotationOrigin);
+        transform.position = Vector3.SmoothDamp(transform.position, _cameraLeader.position, ref _velocity, _smoothTime);
+        transform.LookAt(_rotationOrigin);
         //transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero, speed * Time.deltaTime);
     }
 }

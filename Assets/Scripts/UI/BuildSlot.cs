@@ -5,41 +5,41 @@ using UnityEngine.UI;
 public class BuildSlot : MonoBehaviour
 {
     [SerializeField]
-    private Image icon;
+    private Image _icon;
     [SerializeField]
-    private Button useButton;
+    private Button _useButton;
     [SerializeField]
-    private TextMeshProUGUI costText;
+    private TextMeshProUGUI _costText;
 
     // Need to have a separate list of Build Items, separate inv/invSO too I think.
     // Makes sense, they're very different things, inv and buildinv.
-    private BuildingItemSO buildingItemSO;
+    private BuildingItemSO _buildingItemSO;
 
     public void SetupSlot(BuildingItemSO newBuildingItemSO)
     {
-        buildingItemSO = newBuildingItemSO;
-        icon.sprite = buildingItemSO.itemIcon;
-        icon.enabled = true;
-        useButton.interactable = true;
-        costText.text = newBuildingItemSO.cost.ToString();
+        _buildingItemSO = newBuildingItemSO;
+        _icon.sprite = _buildingItemSO.ItemIcon;
+        _icon.enabled = true;
+        _useButton.interactable = true;
+        _costText.text = newBuildingItemSO.Cost.ToString();
     }
 
     public void ClearSlot()
     {
-        buildingItemSO = null;
-        icon.sprite = null;
-        icon.enabled = false;
-        useButton.interactable = false;
-        costText.text = "";
+        _buildingItemSO = null;
+        _icon.sprite = null;
+        _icon.enabled = false;
+        _useButton.interactable = false;
+        _costText.text = "";
     }
 
     // Called by clicking on inventory slot
 	public void OnUseButton()
     {
-        if (buildingItemSO != null)
+        if (_buildingItemSO != null)
         {
             // TODO: Set Use() up in Item and its child classes
-            buildingItemSO.Use();
+            _buildingItemSO.Use();
         }
     }
 }

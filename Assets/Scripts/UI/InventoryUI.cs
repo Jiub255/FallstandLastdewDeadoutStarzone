@@ -3,25 +3,25 @@
 public class InventoryUI : UIRefresher
 {
     [SerializeField]
-    private InventorySO inventorySO;
+    private InventorySO _inventorySO;
 
     private void OnEnable()
     {
-        UIManager.onOpenedMenu += PopulateInventory;
+        UIManager.OnOpenedMenu += PopulateInventory;
     }
 
     private void OnDisable()
     {
-        UIManager.onOpenedMenu -= PopulateInventory;
+        UIManager.OnOpenedMenu -= PopulateInventory;
     }
 
     public override void PopulateInventory()
     {
         base.PopulateInventory();
 
-        foreach (ItemAmount itemAmount in inventorySO.itemAmounts)
+        foreach (ItemAmount itemAmount in _inventorySO.ItemAmounts)
         {
-            GameObject slotInstance = Instantiate(slotPrefab, content);
+            GameObject slotInstance = Instantiate(SlotPrefab, Content);
             
             slotInstance.transform.GetComponent<InventorySlot>().SetupSlot(itemAmount);
         }

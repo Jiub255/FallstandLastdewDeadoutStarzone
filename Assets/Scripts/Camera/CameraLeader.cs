@@ -3,69 +3,54 @@ using UnityEngine.InputSystem;
 
 public class CameraLeader : MonoBehaviour
 {
-    [Header("Zoom")]
-    [SerializeField]
-    [Range(0f, 15f)]
-    private float zoomSpeed = 5f;
+    [SerializeField, Range(0f, 15f), Header("Zoom")]
+    private float _zoomSpeed = 5f;
+
+    [SerializeField, Range(0f, 10f)]
+    private float _zoomMinDist = 3f;
+
+    [SerializeField, Range(15f, 255f)]
+    private float _zoomMaxDist = 100f;
+
+    [SerializeField, Range(0f, 30f), Header("Keyboard Movement")]
+    private float _movementSpeed = 10f;
+
+    private Vector3 _forward;
+    private Vector3 _right;
+
+    [SerializeField, Header("Drag Screen")]
+    private LayerMask _groundLayer;
+
+    private Vector3 _startDrag;
+
+    [SerializeField, Range(0f, 10f), Header("Rotate Camera")]
+    private float _rotationSpeed = 0.75f;
+
+    [SerializeField, Range(0f, 40f)]
+    private float _rotationXMin = 7f;
+
+    [SerializeField, Range(50f, 90f)]
+    private float _rotationXMax = 90f;
 
     [SerializeField]
-    [Range(0f, 10f)]
-    private float zoomMinDist = 3f;
-
-    [SerializeField]
-    [Range(15f, 255f)]
-    private float zoomMaxDist = 100f;
-
-    [Header("WASD/Arrow Key Movement")]
-    [SerializeField]
-    [Range(0f, 30f)]
-    private float movementSpeed = 10f;
-
-    private Vector3 forward;
-    private Vector3 right;
-
-    [Header("Drag Screen")]
-    [SerializeField]
-    private LayerMask groundLayer;
-
-    private Vector3 startDrag;
-
-    [Header("Rotate Camera")]
-    [SerializeField]
-    [Range(0f, 10f)]
-    private float rotationSpeed = 0.75f;
-
-    [SerializeField]
-    [Range(0f, 40f)]
-    private float rotationXMin = 7f;
-
-    [SerializeField]
-    [Range(50f, 90f)]
-    private float rotationXMax = 90f;
-
-    [SerializeField]
-    private Transform rotationOrigin;
+    private Transform _rotationOrigin;
 
 #if !UNITY_EDITOR
-    [Header("Edge Scrolling")]
-    [SerializeField]
-    [Range(0f, 30f)]
-    private float edgeScrollingSpeed = 10f;
+    [SerializeField, Range(0f, 30f), Header("Edge Scrolling")]
+    private float _edgeScrollingSpeed = 10f;
 
-    [Tooltip("Calculated using percent of width")]
-    [SerializeField]
-    [Range(0f, 30f)]
-    private float percentDistanceFromEdges = 10f;
+    [SerializeField, Range(0f, 30f), Tooltip("Calculated using percent of width")]
+    private float _percentDistanceFromEdges = 10f;
 
-    private float screenWidth;
-    private float screenHeight;
-    private float edgeDistance;
+    private float _screenWidth;
+    private float _screenHeight;
+    private float _edgeDistance;
 
     private void Awake()
     {
-        screenWidth = Screen.width;
-        screenHeight = Screen.height;
-        edgeDistance = screenWidth * (percentDistanceFromEdges / 100);
+        _screenWidth = Screen.width;
+        _screenHeight = Screen.height;
+        _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
     }
 #endif
 
@@ -82,20 +67,20 @@ public class CameraLeader : MonoBehaviour
     private void Zoom(InputAction.CallbackContext context)
     {
         float wheelMovement = S.I.IM.PC.World.Zoom.ReadValue<float>();
-        Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * zoomSpeed * Time.deltaTime;
-        float modifiedLocalZ = rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
+        Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * _zoomSpeed * Time.deltaTime;
+        float modifiedLocalZ = _rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
 
         // Clamp zoom between min and max distances
         // Works, but not perfectly. Want to lerp the zoom so it's smoother and then set it to min/max zoom if it crosses those thresholds
-        if (modifiedLocalZ > zoomMinDist && modifiedLocalZ < zoomMaxDist)
+        if (modifiedLocalZ > _zoomMinDist && modifiedLocalZ < _zoomMaxDist)
         {
             // Move camera leader (main camera follows it smoothly)
             transform.position += cameraZoomMovement;
 
             // Change the rotation origin child's local z-component so it doesn't move in world space
-            rotationOrigin.localPosition = new Vector3(
-                rotationOrigin.localPosition.x,
-                rotationOrigin.localPosition.y,
+            _rotationOrigin.localPosition = new Vector3(
+                _rotationOrigin.localPosition.x,
+                _rotationOrigin.localPosition.y,
                 modifiedLocalZ);
         }
     }
@@ -109,16 +94,16 @@ public class CameraLeader : MonoBehaviour
             //--------------------------------------------------------
 
             // GET CAMERA LEADER FORWARD AND RIGHT VECTORS
-            forward = transform.forward;
-            right = transform.right;
+            _forward = transform.forward;
+            _right = transform.right;
 
             // Project the forward and right vectors onto the horizontal plane (y = 0)
-            forward.y = 0f;
-            right.y = 0f;
+            _forward.y = 0f;
+            _right.y = 0f;
 
             // Normalize them
-            forward.Normalize();
-            right.Normalize();
+            _forward.Normalize();
+            _right.Normalize();
 
             //--------------------------------------------------------
 
@@ -128,10 +113,10 @@ public class CameraLeader : MonoBehaviour
                 S.I.IM.PC.World.MoveCamera.ReadValue<Vector2>();
 
             // Translate movement vector to world space
-            Vector3 keyboardMovement = (forward * movement.y) + (right * movement.x);
+            Vector3 keyboardMovement = (_forward * movement.y) + (_right * movement.x);
 
             // Move
-            transform.position += keyboardMovement * movementSpeed * Time.deltaTime;
+            transform.position += keyboardMovement * _movementSpeed * Time.deltaTime;
 
             //--------------------------------------------------------
 
@@ -144,18 +129,18 @@ public class CameraLeader : MonoBehaviour
                     S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
                 RaycastHit hitData;
                 // If you click on ground (as in not off screen/off the terrain), ...
-                if (Physics.Raycast(ray, out hitData, 1000, groundLayer))
+                if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
                 {
                     if (S.I.IM.PC.World.DragCamera.WasPressedThisFrame())
                     {
                         // Get the point on the ground where you originally clicked.
                         // Only happens the first frame you click.
-                        startDrag = ray.GetPoint(hitData.distance);
+                        _startDrag = ray.GetPoint(hitData.distance);
                     }
                     else
                     {
                         // Move camera leader the opposite direction you move mouse
-                        transform.position += startDrag - ray.GetPoint(hitData.distance);
+                        transform.position += _startDrag - ray.GetPoint(hitData.distance);
                     }
                 }
             }
@@ -168,9 +153,9 @@ public class CameraLeader : MonoBehaviour
                 // Rotation around y-axis
                 float deltaX =
                     S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().x *
-                    rotationSpeed;
+                    _rotationSpeed;
 
-                transform.RotateAround(rotationOrigin.position, Vector3.up, deltaX);
+                transform.RotateAround(_rotationOrigin.position, Vector3.up, deltaX);
 
                 // TODO: Try using transform.rotation.GetAngleAxis 
                 // Rotation around axis parallel to your local right vector, this axis always parallel to xz-plane.
@@ -181,12 +166,12 @@ public class CameraLeader : MonoBehaviour
 
                 float deltaY =
                     S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().y *
-                    rotationSpeed;
+                    _rotationSpeed;
 
                 // Clamp x-rotation between min and max values (at most 0 - 90).
-                if (transform.rotation.eulerAngles.x - deltaY > rotationXMin && transform.rotation.eulerAngles.x - deltaY <= rotationXMax)
+                if (transform.rotation.eulerAngles.x - deltaY > _rotationXMin && transform.rotation.eulerAngles.x - deltaY <= _rotationXMax)
                 {
-                    transform.RotateAround(rotationOrigin.position, axis, deltaY);
+                    transform.RotateAround(_rotationOrigin.position, axis, deltaY);
                 }
             }
 

@@ -8,27 +8,27 @@ public class Transparentizer : MonoBehaviour
 {
     // Layer than contains all transparentable objects
     [SerializeField]
-    private LayerMask transparentableLayer;
+    private LayerMask _transparentableLayer;
 
     // Currently selected PC
     [SerializeField]
-    private SelectedPCSO selectedPCSO;
+    private SelectedPCSO _selectedPCSO;
 
     // A material should be on at most one of these next three lists/dicts at once
     // List of all materials that are currently fully faded out
-    private List<Material> fadedOut = new List<Material>();
+    private List<Material> _fadedOut = new List<Material>();
 
     // Dictionary of all materials/coroutines that are currently fading out
-    private Dictionary<Material, Coroutine> fadingOutDict = new Dictionary<Material, Coroutine>();
+    private Dictionary<Material, Coroutine> _fadingOutDict = new Dictionary<Material, Coroutine>();
 
     // Dictionary of all materials/coroutines that are currently fading in
-    private Dictionary<Material, Coroutine> fadingInDict = new Dictionary<Material, Coroutine>();
+    private Dictionary<Material, Coroutine> _fadingInDict = new Dictionary<Material, Coroutine>();
 
     [SerializeField, Range(0, 2f)] 
-    private float fadeDuration = 1f;
+    private float _fadeDuration = 1f;
 
     [SerializeField, Range(0, 1f), Tooltip("Opacity of the object when fully faded")] 
-    private float fadeAlpha = 0.1f;
+    private float _fadeAlpha = 0.1f;
 
     private void FixedUpdate()
     {
@@ -37,20 +37,20 @@ public class Transparentizer : MonoBehaviour
             Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
             100, 
-            transparentableLayer);
+            _transparentableLayer);
 
-        if (selectedPCSO.selectedPCGO != null)
+        if (_selectedPCSO.SelectedPCGO != null)
         {
             // Hits from currently selected PC
             Vector3 position = transform.position;
-            Vector3 direction = selectedPCSO.selectedPCGO.transform.position - position;
-            float rayDistance = Vector3.Distance(position, selectedPCSO.selectedPCGO.transform.position);
+            Vector3 direction = _selectedPCSO.SelectedPCGO.transform.position - position;
+            float rayDistance = Vector3.Distance(position, _selectedPCSO.SelectedPCGO.transform.position);
 
             RaycastHit[] selectedPlayerHits = Physics.RaycastAll(
                 position,
                 direction,
                 rayDistance,
-                transparentableLayer);
+                _transparentableLayer);
 
             // Combine all hits into one array
             hits = selectedPlayerHits.Concat(hits).ToArray();
@@ -74,18 +74,18 @@ public class Transparentizer : MonoBehaviour
         // If a material is faded out or fading out but no longer in the way, unfade it
         List<Material> materialsToUnfade = new List<Material>();
 
-        for (int i = fadedOut.Count - 1; i >= 0; i--)
+        for (int i = _fadedOut.Count - 1; i >= 0; i--)
         {
-            if (!inTheWayMaterials.Contains(fadedOut[i]))
+            if (!inTheWayMaterials.Contains(_fadedOut[i]))
             {
                 // If a material is FADED out but no longer in the way, unfade it
-                materialsToUnfade.Add(AndUnfade(fadedOut[i]));
-                fadedOut.Remove(fadedOut[i]);
+                materialsToUnfade.Add(AndUnfade(_fadedOut[i]));
+                _fadedOut.Remove(_fadedOut[i]);
             }
         }
 
         List<KeyValuePair<Material, Coroutine>> itemsToRemove = new List<KeyValuePair<Material, Coroutine>>();
-        foreach (KeyValuePair<Material, Coroutine> kvp in fadingOutDict)
+        foreach (KeyValuePair<Material, Coroutine> kvp in _fadingOutDict)
         {
             if (!inTheWayMaterials.Contains(kvp.Key))
             {
@@ -97,7 +97,7 @@ public class Transparentizer : MonoBehaviour
         {
             StopCoroutine(kvp.Value);
             materialsToUnfade.Add(AndUnfade(kvp.Key));
-            fadingOutDict.Remove(kvp.Key);
+            _fadingOutDict.Remove(kvp.Key);
         }
     }
 
@@ -124,23 +124,23 @@ public class Transparentizer : MonoBehaviour
     private Material AndFadeOutIfNecessary(Material material)
     {
         // If material isn't faded out or fading out, ...
-        if (!fadedOut.Contains(material) && !fadingOutDict.ContainsKey(material))
+        if (!_fadedOut.Contains(material) && !_fadingOutDict.ContainsKey(material))
         {
             // If material is fading in, stop that coroutine and remove it from dictionary
-            if (fadingInDict.ContainsKey(material))
+            if (_fadingInDict.ContainsKey(material))
             {
-                StopCoroutine(fadingInDict[material]);
-                fadingInDict.Remove(material);
+                StopCoroutine(_fadingInDict[material]);
+                _fadingInDict.Remove(material);
             }
 
             // Start fade out coroutine
             Color fadeColor = new Color(
-                material.color.r, material.color.g, material.color.b, fadeAlpha);
+                material.color.r, material.color.g, material.color.b, _fadeAlpha);
 
-            Coroutine coroutine = StartCoroutine(Fade(material, fadeColor, fadeDuration));
+            Coroutine coroutine = StartCoroutine(Fade(material, fadeColor, _fadeDuration));
 
             // Add to fadingOutDict, then add to faded list when coroutine done
-            fadingOutDict.Add(material, coroutine);
+            _fadingOutDict.Add(material, coroutine);
 
             return material;
         }
@@ -155,10 +155,10 @@ public class Transparentizer : MonoBehaviour
         Color originalColor = new Color(
             material.color.r, material.color.g, material.color.b, 1f);
 
-        Coroutine coroutine = StartCoroutine(Fade(material, originalColor, fadeDuration));
+        Coroutine coroutine = StartCoroutine(Fade(material, originalColor, _fadeDuration));
 
         // Add to fadingInDict. Remove from fadingInDict when coroutine done
-        fadingInDict.Add(material, coroutine);
+        _fadingInDict.Add(material, coroutine);
 
         return material;
     }
@@ -179,18 +179,18 @@ public class Transparentizer : MonoBehaviour
         material.color = fadedColor;
 
         // If material is fading out (not in), ...
-        if (fadingOutDict.ContainsKey(material))
+        if (_fadingOutDict.ContainsKey(material))
         {
             // Remove from fadingOutDict
-            fadingOutDict.Remove(material);
+            _fadingOutDict.Remove(material);
 
             // Add to faded list
-            fadedOut.Add(material);
+            _fadedOut.Add(material);
         }
-        else if (fadingInDict.ContainsKey(material))
+        else if (_fadingInDict.ContainsKey(material))
         {
             // Remove from fadingInDict
-            fadingInDict.Remove(material);
+            _fadingInDict.Remove(material);
         }
     }
 }
