@@ -3,28 +3,28 @@ using UnityEngine.InputSystem;
 
 public class CameraLeader : MonoBehaviour
 {
-    [SerializeField, Range(0f, 15f), Header("Zoom")]
-    private float _zoomSpeed = 5f;
+    [SerializeField, Range(0f, 20f), Header("Zoom")]
+    private float _zoomSpeed = 10f;
 
-    [SerializeField, Range(0f, 10f)]
+    [SerializeField, Range(0f, 15f)]
     private float _zoomMinDist = 3f;
 
-    [SerializeField, Range(15f, 255f)]
+    [SerializeField, Range(16f, 255f)]
     private float _zoomMaxDist = 100f;
 
-    [SerializeField, Range(0f, 30f), Header("Keyboard Movement")]
-    private float _movementSpeed = 10f;
+    [SerializeField, Range(0f, 50f), Header("Keyboard Movement")]
+    private float _movementSpeed = 20f;
 
     private Vector3 _forward;
     private Vector3 _right;
 
-    [SerializeField, Header("Drag Screen")]
+/*    [SerializeField, Header("Drag Screen")]
     private LayerMask _groundLayer;
 
-    private Vector3 _startDrag;
+    private Vector3 _startDrag;*/
 
-    [SerializeField, Range(0f, 10f), Header("Rotate Camera")]
-    private float _rotationSpeed = 0.75f;
+    [SerializeField, Range(0f, 2f), Header("Rotate Camera")]
+    private float _rotationSpeed = 0.15f;
 
     [SerializeField, Range(0f, 40f)]
     private float _rotationXMin = 7f;
@@ -35,9 +35,9 @@ public class CameraLeader : MonoBehaviour
     [SerializeField]
     private Transform _rotationOrigin;
 
-//#if !UNITY_EDITOR
-    [SerializeField, Range(0f, 30f), Header("Edge Scrolling")]
-    private float _edgeScrollingSpeed = 10f;
+#if !UNITY_EDITOR
+    [SerializeField, Range(0f, 50f), Header("Edge Scrolling")]
+    private float _edgeScrollingSpeed = 20f;
 
     [SerializeField, Range(0f, 30f), Tooltip("Calculated using percent of width")]
     private float _percentDistanceFromEdges = 10f;
@@ -52,7 +52,7 @@ public class CameraLeader : MonoBehaviour
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
     }
-//#endif
+#endif
 
     private void Start()
     {
@@ -94,7 +94,7 @@ public class CameraLeader : MonoBehaviour
         {
             //--------------------------------------------------------
 
-            // GET CAMERA LEADER FORWARD AND RIGHT VECTORS
+            #region GET CAMERA LEADER FORWARD AND RIGHT VECTORS
             _forward = transform.forward;
             _right = transform.right;
 
@@ -105,10 +105,11 @@ public class CameraLeader : MonoBehaviour
             // Normalize them
             _forward.Normalize();
             _right.Normalize();
+            #endregion
 
             //--------------------------------------------------------
 
-            // MOVE CAMERA USING WASD/ARROW KEYS
+            #region MOVE CAMERA USING WASD/ARROW KEYS
             // Get input
             Vector2 movement =
                 S.I.IM.PC.World.MoveCamera.ReadValue<Vector2>();
@@ -118,37 +119,40 @@ public class CameraLeader : MonoBehaviour
 
             // Move
             transform.position += keyboardMovement * _movementSpeed * Time.unscaledDeltaTime;
+            #endregion
 
             //--------------------------------------------------------
 
-            // DRAG CAMERA WHILE RIGHT MOUSE BUTTON HELD DOWN
+            // Currently disabled. Maybe permanently.
+            #region DRAG CAMERA WHILE RIGHT MOUSE BUTTON HELD DOWN
             // But not when rotate is held too. Rotate overrides drag.
-            if (S.I.IM.PC.WorldGameplay.DragCamera.IsPressed() &&
-                !S.I.IM.PC.World.RotateCamera.IsPressed())
-            {
-                Ray ray = Camera.main.ScreenPointToRay(
-                    S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
-                RaycastHit hitData;
-                // If you click on ground (as in not off screen/off the terrain), ...
-                if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
-                {
-                    if (S.I.IM.PC.WorldGameplay.DragCamera.WasPressedThisFrame())
-                    {
-                        // Get the point on the ground where you originally clicked.
-                        // Only happens the first frame you click.
-                        _startDrag = ray.GetPoint(hitData.distance);
-                    }
-                    else
-                    {
-                        // Move camera leader the opposite direction you move mouse
-                        transform.position += _startDrag - ray.GetPoint(hitData.distance);
-                    }
-                }
-            }
+            /*            if (S.I.IM.PC.WorldGameplay.DragCamera.IsPressed() &&
+                            !S.I.IM.PC.World.RotateCamera.IsPressed())
+                        {
+                            Ray ray = Camera.main.ScreenPointToRay(
+                                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
+                            RaycastHit hitData;
+                            // If you click on ground (as in not off screen/off the terrain), ...
+                            if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
+                            {
+                                if (S.I.IM.PC.WorldGameplay.DragCamera.WasPressedThisFrame())
+                                {
+                                    // Get the point on the ground where you originally clicked.
+                                    // Only happens the first frame you click.
+                                    _startDrag = ray.GetPoint(hitData.distance);
+                                }
+                                else
+                                {
+                                    // Move camera leader the opposite direction you move mouse
+                                    transform.position += _startDrag - ray.GetPoint(hitData.distance);
+                                }
+                            }
+                        }*/
+            #endregion
 
             //--------------------------------------------------------
 
-            // ROTATE CAMERA WHILE MOUSE WHEEL BUTTON HELD DOWN
+            #region ROTATE CAMERA WHILE MOUSE WHEEL BUTTON HELD DOWN
             if (S.I.IM.PC.World.RotateCamera.IsPressed())
             {
                 // Rotation around y-axis
@@ -175,11 +179,12 @@ public class CameraLeader : MonoBehaviour
                     transform.RotateAround(_rotationOrigin.position, axis, deltaY);
                 }
             }
+            #endregion
 
-//#if !UNITY_EDITOR
+#if !UNITY_EDITOR
             //--------------------------------------------------------
 
-            // EDGE SCROLLING BASED ON MOUSE POSITION
+            #region EDGE SCROLLING BASED ON MOUSE POSITION
             // Don't edge scroll if holding down mouse wheel button
             else
             {
@@ -216,7 +221,9 @@ public class CameraLeader : MonoBehaviour
                 // Move camera
                 transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.unscaledDeltaTime;
             }
-//#endif
+            #endregion
+
+#endif
         }
     }
 }

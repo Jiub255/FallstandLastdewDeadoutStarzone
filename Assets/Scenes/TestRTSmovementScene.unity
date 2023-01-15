@@ -652,19 +652,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da42462f8b6bb44d9c7698ce9acdc8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _zoomSpeed: 5
+  _zoomSpeed: 10
   _zoomMinDist: 3
   _zoomMaxDist: 100
-  _movementSpeed: 10
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  _rotationSpeed: 0.75
-  _rotationXMin: 7
-  _rotationXMax: 90
+  _movementSpeed: 20
+  _rotationSpeed: 0.15
+  _rotationXMin: 15
+  _rotationXMax: 75
   _rotationOrigin: {fileID: 1559490499}
-  _edgeScrollingSpeed: 10
-  _percentDistanceFromEdges: 10
 --- !u!1 &501058930
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,7 +969,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528698881}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25, y: 0, z: -25}
+  m_LocalPosition: {x: -500, y: 0, z: -500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2571,6 +2566,7 @@ MonoBehaviour:
   _cameraLeader: {fileID: 450191101}
   _rotationOrigin: {fileID: 1559490499}
   _smoothTime: 0.3
+  _maxSpeed: 1000000
 --- !u!1001 &6719580584000911882
 PrefabInstance:
   m_ObjectHideFlags: 0
