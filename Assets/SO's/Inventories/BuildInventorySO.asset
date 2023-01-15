@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e22a39662b7b1d1448e7d2db3ec7d4e3, type: 3}
   m_Name: BuildInventorySO
   m_EditorClassIdentifier: 
-  buildItems:
+  BuildItems:
   - {fileID: 11400000, guid: be92f9e5bbb9a1947b35be822f827480, type: 2}
+  - {fileID: 11400000, guid: 80aa7a3a5cc0bbd4c829c9e156f6fa69, type: 2}

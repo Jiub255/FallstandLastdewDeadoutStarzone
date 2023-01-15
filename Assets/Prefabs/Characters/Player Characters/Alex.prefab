@@ -1403,11 +1403,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e650660b9dbc048abc13cab810b4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootDistance: 2
-  inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
-  lootAnimation: {fileID: -203655887218126122, guid: fe63839acd59fb547a23f0f5a4a1f7d4, type: 3}
-  timerObject: {fileID: 6719580582119882766}
-  fillBarTransform: {fileID: 6719580582518923424}
+  LootingState: 0
+  _lootDistance: 2.5
+  _inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
+  _lootAnimation: {fileID: -203655887218126122, guid: fe63839acd59fb547a23f0f5a4a1f7d4, type: 3}
+  _timerObject: {fileID: 6719580582119882766}
+  _fillBarTransform: {fileID: 6719580582518923424}
 --- !u!1 &5928353858364371619
 GameObject:
   m_ObjectHideFlags: 0

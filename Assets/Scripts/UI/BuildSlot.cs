@@ -11,14 +11,12 @@ public class BuildSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _costText;
 
-    // Need to have a separate list of Build Items, separate inv/invSO too I think.
-    // Makes sense, they're very different things, inv and buildinv.
-    private BuildingItemSO _buildingItemSO;
+    private BuildingSO _buildingSO;
 
-    public void SetupSlot(BuildingItemSO newBuildingItemSO)
+    public void SetupSlot(BuildingSO newBuildingItemSO)
     {
-        _buildingItemSO = newBuildingItemSO;
-        _icon.sprite = _buildingItemSO.ItemIcon;
+        _buildingSO = newBuildingItemSO;
+        _icon.sprite = _buildingSO.ItemIcon;
         _icon.enabled = true;
         _useButton.interactable = true;
         _costText.text = newBuildingItemSO.Cost.ToString();
@@ -26,7 +24,7 @@ public class BuildSlot : MonoBehaviour
 
     public void ClearSlot()
     {
-        _buildingItemSO = null;
+        _buildingSO = null;
         _icon.sprite = null;
         _icon.enabled = false;
         _useButton.interactable = false;
@@ -36,10 +34,10 @@ public class BuildSlot : MonoBehaviour
     // Called by clicking on inventory slot
 	public void OnUseButton()
     {
-        if (_buildingItemSO != null)
+        if (_buildingSO != null)
         {
             // TODO: Set Use() up in Item and its child classes
-            _buildingItemSO.Use();
+            _buildingSO.Use();
         }
     }
 }

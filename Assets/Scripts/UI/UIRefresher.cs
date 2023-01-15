@@ -5,8 +5,10 @@ using UnityEngine;
 // At least can do an abstract class and inherit for each type of UI
 public abstract class UIRefresher : MonoBehaviour
 {
+    [SerializeField]
     protected GameObject SlotPrefab;
 
+    [SerializeField]
     protected Transform Content;
 
     public virtual void PopulateInventory()

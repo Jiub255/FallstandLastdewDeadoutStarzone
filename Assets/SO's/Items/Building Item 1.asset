@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2cffa793a4749439dada2bbd3854e8, type: 3}
   m_Name: Building Item 1
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 21300000, guid: f31d2c855644aad4cb2030bce12859f6, type: 3}
-  description: vyu
+  ItemIcon: {fileID: 21300000, guid: 70632ddfe8e71b04b8f90ef7e29a9e98, type: 3}
+  Description: 56
+  BuildingPrefab: {fileID: 5933088178473574205, guid: 78526c24ac226d346b051b93227371e0, type: 3}
+  Cost: 0

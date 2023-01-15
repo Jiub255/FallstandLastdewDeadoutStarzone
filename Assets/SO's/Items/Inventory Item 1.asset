@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cdadacb7dfb594d8eeec0fbeea255a, type: 3}
   m_Name: Inventory Item 1
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 0}
-  description: 
+  ItemIcon: {fileID: 21300000, guid: d98fbe17966d8ef449b25b99024bf36f, type: 3}
+  Description: uho
+  ItemEffect:
+    m_PersistentCalls:
+      m_Calls: []

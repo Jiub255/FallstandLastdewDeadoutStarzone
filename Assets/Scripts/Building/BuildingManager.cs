@@ -1,20 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
 {
-    // Want a free form building system, not grid based. 
-        // Have an empty "border" around buildings so you can't build them so close that you can't walk between them.
-
-    // Select thing to build from menu, then have it follow the mouse position on the ground
-        // Highlight it red if it intersects with something, green if it's able to be placed there
-            // Use a boxcast or something similar? Make sure its a little bigger than the building so people can walk around them.
-        // Rotate it using the mouse wheel
+    /*
+    Want a free form building system, not grid based. 
+    Have an empty "border" around buildings so you can't build them so close that you can't walk between them.
+    Select thing to build from menu, then have it follow the mouse position on the ground
+        Highlight it red if it intersects with something, green if it's able to be placed there
+        Use a boxcast or something similar? Make sure its a little bigger than the building so people can walk around them.
+        Rotate it using the mouse wheel
+    Deactivate WorldGameplay action map when a building is selected, and activate BuildWorld action map
+        WorldBuild has rotate building with mouse wheel, and right click deselects instead of dragging camera.
+        Still have edge scrolling and keyboard camera movement and camera rotation by holding middle mouse button
+        Change World action map to have the things common to World and BuildWorld, then have WorldGameplay and WorldBuild maps to cover the
+            differences (mouse wheel, right click for now)
+    */
 
     [SerializeField]
+    private CurrentBuildingSO _currentBuildingSO;
+
     private GameObject _currentBuildingPrefab;
 
     private GameObject _currentBuildingInstance;
@@ -28,44 +33,66 @@ public class BuildingManager : MonoBehaviour
     [SerializeField]
     private float _rotationSpeed = 5f;
 
-    //private InputActionMap buildActionMap;
-    //private InputAction rotateAction;
+    private bool _haveABuildingSelected = false;
 
     private void Start()
     {
-        S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
-        BuildingItemSO.OnSelectBuilding += ChangeCurrentBuilding;
-        S.I.IM.PC.Build.CloseBuildMenu.performed += CloseBuildMenu;
+        BuildingSO.OnSelectBuilding += ChangeCurrentBuilding;
 
-        S.I.IM.PC.Build.RotateBuilding.started += RotateBuilding;
+        S.I.IM.PC.MenuBuild.PlaceBuilding.performed += PlaceBuilding;
+        S.I.IM.PC.WorldBuild.SnapBuilding.performed += SnapToNearest45;
+        S.I.IM.PC.WorldBuild.DeselectBuilding.performed += DeselectCurrentBuilding;
+        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed += DeselectCurrentBuilding;
 
-        //buildActionMap = S.I.IM.PC.Build;
-        //rotateAction = S.I.IM.PC.Build.RotateBuilding;
+        // Don't see why this would ever be true, but just in case
+        if (_currentBuildingInstance != null)
+        {
+            _haveABuildingSelected = true;
+        }
 
-        // Just for testing
-        //MakeInstance();
+        // For debug gizmos, so they dont draw in editor mode.
         _started = true;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
-        BuildingItemSO.OnSelectBuilding -= ChangeCurrentBuilding;
-        S.I.IM.PC.Build.CloseBuildMenu.performed -= CloseBuildMenu;
-      
-        S.I.IM.PC.Build.RotateBuilding.performed -= RotateBuilding;
+        BuildingSO.OnSelectBuilding -= ChangeCurrentBuilding;
+
+        S.I.IM.PC.MenuBuild.PlaceBuilding.performed -= PlaceBuilding;
+        S.I.IM.PC.WorldBuild.SnapBuilding.performed -= SnapToNearest45;
+        S.I.IM.PC.WorldBuild.DeselectBuilding.performed -= DeselectCurrentBuilding;
+        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed -= DeselectCurrentBuilding;
     }
 
-    private void RotateBuilding(InputAction.CallbackContext obj)
+    private void RotateBuilding()
+    {
+        _currentBuildingInstance.transform.Rotate(new Vector3(0f,
+            Time.unscaledDeltaTime * _rotationSpeed * S.I.IM.PC.WorldBuild.RotateBuilding.ReadValue<float>(), 0f));
+    }
+
+    private void SnapToNearest45(InputAction.CallbackContext context)
     {
         if (_currentBuildingInstance != null)
         {
-            _currentBuildingInstance.transform.Rotate(new Vector3(0f, Time.deltaTime * _rotationSpeed, 0f));
+            for (int i = 0; i <= 360; i += 45)
+            {
+                Debug.Log(i);
+
+                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= 22.5f)
+                {
+                    _currentBuildingInstance.transform.rotation = Quaternion.Euler(0f, i , 0f);
+                }
+            }
         }
     }
 
     private void Update()
     {
+        if (_haveABuildingSelected)
+        {
+            RotateBuilding();
+        }
+
         if (_currentBuildingInstance != null)
         {
             // Move building to current mouse position on ground
@@ -108,29 +135,38 @@ public class BuildingManager : MonoBehaviour
             // put new building off camera until mouse is over ground. 100000 might be a bit excessive, not sure if it matters.
                 // or put it in center of screen?
             _currentBuildingInstance.transform.position = Vector3.forward * 100000f;
+
+            _haveABuildingSelected = true;
         }
     }
 
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
-        if (CanBuildHere() && 
-            _currentBuildingInstance != null)
+        if (_currentBuildingInstance != null)
         {
-            // Turn off red/green highlights
-            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
+            if (CanBuildHere())
+            {
+                // Turn off red/green highlights
+                _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
 
-            // Stop controlling currentBuildingInstance with mouse, so essentially, build/set it.
-            _currentBuildingInstance = null;
+                // Stop controlling currentBuildingInstance with mouse, so essentially, build/set it.
+                _currentBuildingInstance = null;
 
-            // Make a new instance of same building to be the new currentBuildingInstance
-            MakeInstance();
+                // Make a new instance of same building to be the new currentBuildingInstance
+                MakeInstance();
+            }
         }
     }
 
     // Gets called from a button in build menu, which calls event in BuildingItem.
     public void ChangeCurrentBuilding(GameObject newBuilding)
     {
+        // Change from WorldGameplay to WorldBuild action map.
+        S.I.IM.PC.WorldGameplay.Disable();
+        S.I.IM.PC.WorldBuild.Enable();
+
         Debug.Log("Changing current building to " + newBuilding.name);
 
         _currentBuildingPrefab = newBuilding;
@@ -138,8 +174,12 @@ public class BuildingManager : MonoBehaviour
         MakeInstance();
     }
 
-    private void DeselectCurrentBuilding()
+    private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
+        // Change from WorldBuild to WorldGameplay action map.
+        S.I.IM.PC.WorldBuild.Disable();
+        S.I.IM.PC.WorldGameplay.Enable();
+
         if (_currentBuildingPrefab != null)
         {
             _currentBuildingPrefab = null;
@@ -149,22 +189,9 @@ public class BuildingManager : MonoBehaviour
             Destroy(_currentBuildingInstance);
             _currentBuildingInstance = null;
         }
+   
+        _haveABuildingSelected = false;
     }
-
-    // Maybe set up rotate as two buttons instead? Then just subscribe their performed event to this method
-/*    private void RotateBuilding(*//*InputAction.CallbackContext context*//*)
-    {
-        if (rotateAction.ReadValue<float>() > 0.5f)
-        {
-            // Rotate clockwise
-
-        }
-        else if (rotateAction.ReadValue<float>() < -0.5f)
-        {
-            // Rotate counter-clockwise
-
-        }
-    }*/
 
     private bool CanBuildHere()
     {
@@ -181,8 +208,10 @@ public class BuildingManager : MonoBehaviour
             Debug.Log(collider.gameObject.name);
         }
 
-        // collides with itself for now, cheap hack fix
-        if (colliders.Length == 1)
+        // TODO: Might need to fix this after adding collider to building prefabs.
+        // Stupid hack anyway, do it better. 
+        // collides with itself for now?, cheap hack fix
+        if (colliders.Length == 0)
         {
             return true;
         }
@@ -192,31 +221,13 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void CloseBuildMenu(InputAction.CallbackContext context)
-    {
-        if (_currentBuildingInstance != null)
-        {
-            Destroy(_currentBuildingInstance);
-            _currentBuildingInstance = null;
-        }
-
-        if (_currentBuildingPrefab != null)
-        {
-            _currentBuildingPrefab = null;
-        }
-    }
-
     private void OnDrawGizmos()
     {
-        if (_currentBuildingInstance != null)
+        if (_currentBuildingInstance != null && _started)
         {
             BoxCollider boxCollider = _currentBuildingInstance.GetComponentInChildren<BoxCollider>();
-
             Gizmos.color = Color.red;
-            if (_started)
-            {
-                Gizmos.DrawWireCube(_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size);
-            }
+            Gizmos.DrawWireCube(_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size);
         }
     }
 }

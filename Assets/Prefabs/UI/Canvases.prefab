@@ -417,9 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f2bf13157d5ac49b30861cbf5e5913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPrefab: {fileID: 1125692319144443039, guid: bce384e77c69ba04f983c8e58b732613, type: 3}
-  content: {fileID: 4314923721268166185}
-  inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
+  SlotPrefab: {fileID: 1125692319144443039, guid: bce384e77c69ba04f983c8e58b732613, type: 3}
+  Content: {fileID: 4314923721268166185}
+  _inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
 --- !u!1 &4314923720224025348
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,9 +884,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6360fbce2a9de8c40ae35fcda95ffc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasesObject: {fileID: 4314923721212641125}
-  inventoryCanvas: {fileID: 4314923719890600231}
-  buildCanvas: {fileID: 1882185910805079561}
+  _canvasesObject: {fileID: 4314923721212641125}
+  _inventoryCanvas: {fileID: 4314923719890600231}
+  _buildCanvas: {fileID: 1882185910805079561}
 --- !u!1 &4314923721231603553
 GameObject:
   m_ObjectHideFlags: 0
@@ -1511,9 +1511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0e36e3467c7dc498cf8807b82219c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
-  content: {fileID: 4478954206514053347}
-  buildInventorySO: {fileID: 11400000, guid: d2c6e345679b68d41a4ed2a83be32b71, type: 2}
+  SlotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
+  Content: {fileID: 4478954206514053347}
+  _buildInventorySO: {fileID: 11400000, guid: d2c6e345679b68d41a4ed2a83be32b71, type: 2}
 --- !u!1 &8146464655037193725
 GameObject:
   m_ObjectHideFlags: 0

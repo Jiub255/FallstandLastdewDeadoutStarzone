@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6832355165369835870}
-  - component: {fileID: 2765182494261477123}
+  - component: {fileID: 7326410316459294067}
   m_Layer: 5
-  m_Name: Inventory Slot
+  m_Name: Build Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2765182494261477123
+--- !u!114 &7326410316459294067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,12 +47,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1125692319144443039}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4dc2dfc079b7154fb33129c0d7fa7ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 444d48378134a9b41845bf32d032da74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 5773822726317777148}
   _useButton: {fileID: 821338501171437404}
-  _amountText: {fileID: 549769844384084504}
+  _costText: {fileID: 549769844384084504}
 --- !u!1 &2316944318938944414
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +175,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6002945825567684473}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7326410316459294067}
+        m_TargetAssemblyTypeName: BuildSlot, Assembly-CSharp
+        m_MethodName: OnUseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3554457894893863031
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +200,7 @@ GameObject:
   - component: {fileID: 3669776761371847767}
   - component: {fileID: 549769844384084504}
   m_Layer: 5
-  m_Name: Amount Text (TMP)
+  m_Name: Cost Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -323,7 +335,7 @@ GameObject:
   - component: {fileID: 4469591189966966071}
   - component: {fileID: 5773822726317777148}
   m_Layer: 5
-  m_Name: Item Icon
+  m_Name: Building Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

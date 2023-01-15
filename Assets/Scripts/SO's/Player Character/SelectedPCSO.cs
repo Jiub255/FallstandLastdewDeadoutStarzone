@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PC/Selected PC SO", fileName = "New Selected PC SO")]
+[CreateAssetMenu(fileName = "New Selected PC SO", menuName = "Scriptable Object/Player Characters/Selected PC SO")]
 public class SelectedPCSO : ScriptableObject
 {
 	[HideInInspector]

@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
         // Might be easier to use this instead of PlayerInput and every action individually with strings.
         // Just re-generated C# class whenever you change PlayerControl Input Action Asset.
     // PC is for PlayerControls
-    public PlayerControls PC/* = new PlayerControls()*/;
+    public PlayerControls PC { get; private set; }
 
     private void Awake()
     {
@@ -16,11 +16,34 @@ public class InputManager : MonoBehaviour
         // Enable "Home" and "Gameplay" as default action maps
         PC.Disable();
         PC.World.Enable();
-        //PC.Home.Enable();
+        PC.WorldGameplay.Enable();
+        PC.Home.Enable();
+    }
 
-        // SCAVENGE JUST FOR TESTING
+    #region Debug button methods
+    public void HomeMap()
+    {
+        PC.Disable();
+        PC.World.Enable();
+        PC.Home.Enable();
+        PC.WorldGameplay.Enable();
+    }
+    public void ScavengeMap()
+    {
+        PC.Disable();
+        PC.World.Enable();
+        PC.WorldGameplay.Enable();
         PC.Scavenge.Enable();
     }
+    public void HomeScavengeMap()
+    {
+        PC.Disable();
+        PC.World.Enable();
+        PC.WorldGameplay.Enable();
+        PC.Home.Enable();
+        PC.Scavenge.Enable();
+    }
+    #endregion
 
     // TODO: Need to deactivate player movement/currentlySelectedPC when going into build mode.
 

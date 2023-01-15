@@ -12,7 +12,7 @@ public enum LootingState
 // Put on each player character
 public class LootAction : MonoBehaviour
 {
-    public LootingState LootingState = LootingState.NotLooting;
+    public LootingState LootingState { get; set; } = LootingState.NotLooting;
 
     private Transform _lootContainerTransform;
     [SerializeField]
@@ -158,9 +158,9 @@ public class LootAction : MonoBehaviour
         {
             // Check to see if you already have an itemAmount that matches the item,
             //    then add however many
-            if (_inventorySO.GetItemAmount(itemAmount.InventoryItemSO) != null)
+            if (_inventorySO.GetItemAmountFromItemSO(itemAmount.InventoryItemSO) != null)
             {
-                _inventorySO.GetItemAmount(itemAmount.InventoryItemSO).Amount += itemAmount.Amount;
+                _inventorySO.GetItemAmountFromItemSO(itemAmount.InventoryItemSO).Amount += itemAmount.Amount;
             }
             else
             {

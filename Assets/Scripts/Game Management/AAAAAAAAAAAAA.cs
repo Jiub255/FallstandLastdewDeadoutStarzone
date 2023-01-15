@@ -10,8 +10,22 @@ public class AAAAAAAAAAAAA
 
     FIRST!!
 
-
     FINISH BUILD MODE, THEN MAKE SCAVENGING SCENE AND MAKE A TRUE HOME SCENE (NO LOOTING)
+        Make buildings that were just placed get detected by the new current building
+        BuildWorld has rotate building with mouse wheel, and right click deselects instead of dragging camera.
+            Still have edge scrolling and keyboard camera movement and camera rotation by holding middle mouse button
+            Change World action map to have the things common to World and BuildWorld, then have Gameplay and BuildWorld maps to cover the
+                differences (mouse wheel, right click for now)
+        Finish rotation first, got it starting to work.
+            Have it continuously rotate while holding Q or E or mouse wheel
+                Using mouse wheel could increment it in small chunks that are divisors of 90, so you could always get things perfectly lined up,
+                    but you wouldn't be able to zoom while a building is selected.
+                Or use Q/E and have a smooth rotation, and be able to zoom, but you won't be able to get perfect multiples of 90.
+                    But you could get close enough, probably go with this.
+                Maybe have a snap to the nearest 45 degrees button or something?
+            When you place a building, have the newly instantiated current building have the same rotation
+                Good for lining multiple buildings up
+        Put currentBuildingPrefab in SO? I think yes.
         To get UI mouse position and world mouse position when in build mode,
             Have a raycast to mouseposition, and if it hits UI elements, then get UI position, 
                 if not, get world position.

@@ -35,7 +35,7 @@ public class CameraLeader : MonoBehaviour
     [SerializeField]
     private Transform _rotationOrigin;
 
-#if !UNITY_EDITOR
+//#if !UNITY_EDITOR
     [SerializeField, Range(0f, 30f), Header("Edge Scrolling")]
     private float _edgeScrollingSpeed = 10f;
 
@@ -52,21 +52,21 @@ public class CameraLeader : MonoBehaviour
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
     }
-#endif
+//#endif
 
     private void Start()
     {
-        S.I.IM.PC.World.Zoom.performed += Zoom;
+        S.I.IM.PC.WorldGameplay.Zoom.performed += Zoom;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.World.Zoom.performed -= Zoom;
+        S.I.IM.PC.WorldGameplay.Zoom.performed -= Zoom;
     }
 
     private void Zoom(InputAction.CallbackContext context)
     {
-        float wheelMovement = S.I.IM.PC.World.Zoom.ReadValue<float>();
+        float wheelMovement = S.I.IM.PC.WorldGameplay.Zoom.ReadValue<float>();
         Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * _zoomSpeed * Time.deltaTime;
         float modifiedLocalZ = _rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
 
@@ -89,7 +89,7 @@ public class CameraLeader : MonoBehaviour
     {
         // Zoom overrides everything else. Not really noticeable since this action gets called only during
         // isolated frames, but it helps resolve some issues with moving while zooming.
-        if (!S.I.IM.PC.World.Zoom.WasPerformedThisFrame())
+        if (!S.I.IM.PC.WorldGameplay.Zoom.WasPerformedThisFrame())
         {
             //--------------------------------------------------------
 
@@ -122,7 +122,7 @@ public class CameraLeader : MonoBehaviour
 
             // DRAG CAMERA WHILE RIGHT MOUSE BUTTON HELD DOWN
             // But not when rotate is held too. Rotate overrides drag.
-            if (S.I.IM.PC.World.DragCamera.IsPressed() &&
+            if (S.I.IM.PC.WorldGameplay.DragCamera.IsPressed() &&
                 !S.I.IM.PC.World.RotateCamera.IsPressed())
             {
                 Ray ray = Camera.main.ScreenPointToRay(
@@ -131,7 +131,7 @@ public class CameraLeader : MonoBehaviour
                 // If you click on ground (as in not off screen/off the terrain), ...
                 if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
                 {
-                    if (S.I.IM.PC.World.DragCamera.WasPressedThisFrame())
+                    if (S.I.IM.PC.WorldGameplay.DragCamera.WasPressedThisFrame())
                     {
                         // Get the point on the ground where you originally clicked.
                         // Only happens the first frame you click.
@@ -175,7 +175,7 @@ public class CameraLeader : MonoBehaviour
                 }
             }
 
-#if !UNITY_EDITOR
+//#if !UNITY_EDITOR
             //--------------------------------------------------------
 
             // EDGE SCROLLING BASED ON MOUSE POSITION
@@ -184,37 +184,37 @@ public class CameraLeader : MonoBehaviour
             {
                 // Get mouse screen position
                 Vector3 mousePos =
-                    S.I.InputManager.playerControls.World.MousePosition.ReadValue<Vector2>();
+                    S.I.IM.PC.World.MousePosition.ReadValue<Vector2>();
 
                 int mouseX = 0;
                 int mouseY = 0;
 
                 // Check if mouse screen position is near the edges
-                if (mousePos.x > screenWidth - edgeDistance)
+                if (mousePos.x > _screenWidth - _edgeDistance)
                 {
                     mouseX = 1;
                 }
-                else if (mousePos.x < edgeDistance)
+                else if (mousePos.x < _edgeDistance)
                 {
                     mouseX = -1;
                 }
 
-                if (mousePos.y > screenHeight - edgeDistance)
+                if (mousePos.y > _screenHeight - _edgeDistance)
                 {
                     mouseY = 1;
                 }
-                else if (mousePos.y < edgeDistance)
+                else if (mousePos.y < _edgeDistance)
                 {
                     mouseY = -1;
                 }
 
                 // Direction we want to move
-                Vector3 edgeScrollMovement = (forward * mouseY) + (right * mouseX);
+                Vector3 edgeScrollMovement = (_forward * mouseY) + (_right * mouseX);
 
                 // Move camera
-                transform.position += edgeScrollMovement * edgeScrollingSpeed * Time.deltaTime;
+                transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.deltaTime;
             }
-#endif
+//#endif
         }
     }
 }

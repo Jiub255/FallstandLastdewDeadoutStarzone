@@ -38,6 +38,7 @@ public class PCMovement : MonoBehaviour
                 100, 
                 ~_transparentableAndPCLayers))
         {
+            // LootAction calls ResetLootingState from this.
             OnMove?.Invoke(context);
 
             _selectedPCSO.SelectedPCGO.GetComponent<NavMeshAgent>().destination = hit.point;

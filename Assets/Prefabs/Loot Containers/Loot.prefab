@@ -159,6 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdc37fe149280943b75d4731190b733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootItemAmounts:
-  - item: {fileID: 11400000, guid: e7af9d65bcbc311408baf9c3fb83a9f4, type: 2}
-    amount: 2
+  LootItemAmounts:
+  - InventoryItemSO: {fileID: 11400000, guid: 62a637fe3b8d11f479619fc2264adca0, type: 2}
+    Amount: 10

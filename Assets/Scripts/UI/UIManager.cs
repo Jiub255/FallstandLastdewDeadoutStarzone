@@ -22,20 +22,20 @@ public class UIManager : MonoBehaviour
     {
         S.I.IM.PC.Home.OpenInventory.performed += OpenInventory;
         S.I.IM.PC.Home.OpenBuildMenu.performed += OpenBuildMenu;
-        S.I.IM.PC.Inventory.CloseInventory.performed += CloseUI;
-        S.I.IM.PC.Inventory.OpenBuildMenu.performed += OpenBuildMenu;
-        S.I.IM.PC.Build.CloseBuildMenu.performed += CloseUI;
-        S.I.IM.PC.Build.OpenInventory.performed += OpenInventory;
+        S.I.IM.PC.MenuInventory.CloseInventory.performed += CloseUI;
+        S.I.IM.PC.MenuInventory.OpenBuildMenu.performed += OpenBuildMenu;
+        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed += CloseUI;
+        S.I.IM.PC.MenuBuild.OpenInventory.performed += OpenInventory;
     }
 
     private void OnDisable()
     {
         S.I.IM.PC.Home.OpenInventory.performed -= OpenInventory;
         S.I.IM.PC.Home.OpenBuildMenu.performed -= OpenBuildMenu;
-        S.I.IM.PC.Inventory.CloseInventory.performed -= CloseUI;
-        S.I.IM.PC.Inventory.OpenBuildMenu.performed -= OpenBuildMenu;
-        S.I.IM.PC.Build.CloseBuildMenu.performed -= CloseUI;
-        S.I.IM.PC.Build.OpenInventory.performed -= OpenInventory;
+        S.I.IM.PC.MenuInventory.CloseInventory.performed -= CloseUI;
+        S.I.IM.PC.MenuInventory.OpenBuildMenu.performed -= OpenBuildMenu;
+        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed -= CloseUI;
+        S.I.IM.PC.MenuBuild.OpenInventory.performed -= OpenInventory;
     }
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
@@ -43,7 +43,8 @@ public class UIManager : MonoBehaviour
         // Change Action Maps
         S.I.IM.PC.Disable();
         S.I.IM.PC.World.Enable();
-        S.I.IM.PC.Build.Enable();
+        S.I.IM.PC.WorldGameplay.Enable();
+        S.I.IM.PC.MenuBuild.Enable();
 
         // Open build canvas
         CloseAllMenus();
@@ -63,7 +64,7 @@ public class UIManager : MonoBehaviour
     {
         // Change Action Maps
         S.I.IM.PC.Disable();
-        S.I.IM.PC.Inventory.Enable();
+        S.I.IM.PC.MenuInventory.Enable();
 
         // Open inventory canvas
         CloseAllMenus();
@@ -84,6 +85,7 @@ public class UIManager : MonoBehaviour
         // Change Action Maps
         S.I.IM.PC.Disable();
         S.I.IM.PC.World.Enable();
+        S.I.IM.PC.WorldGameplay.Enable();
         S.I.IM.PC.Home.Enable();
 
         CloseAllMenus();
