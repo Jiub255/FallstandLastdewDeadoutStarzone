@@ -56,18 +56,19 @@ public class CameraLeader : MonoBehaviour
 
     private void Start()
     {
-        S.I.IM.PC.WorldGameplay.Zoom.performed += Zoom;
+        S.I.IM.PC.World.Zoom.performed += Zoom;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.WorldGameplay.Zoom.performed -= Zoom;
+        S.I.IM.PC.World.Zoom.performed -= Zoom;
+        float d = Time.deltaTime;
     }
 
     private void Zoom(InputAction.CallbackContext context)
     {
-        float wheelMovement = S.I.IM.PC.WorldGameplay.Zoom.ReadValue<float>();
-        Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * _zoomSpeed * Time.deltaTime;
+        float wheelMovement = S.I.IM.PC.World.Zoom.ReadValue<float>();
+        Vector3 cameraZoomMovement = /*cam.*/transform.forward * wheelMovement * _zoomSpeed * Time.unscaledDeltaTime;
         float modifiedLocalZ = _rotationOrigin.localPosition.z + cameraZoomMovement.magnitude * -Mathf.Sign(wheelMovement);
 
         // Clamp zoom between min and max distances
@@ -89,7 +90,7 @@ public class CameraLeader : MonoBehaviour
     {
         // Zoom overrides everything else. Not really noticeable since this action gets called only during
         // isolated frames, but it helps resolve some issues with moving while zooming.
-        if (!S.I.IM.PC.WorldGameplay.Zoom.WasPerformedThisFrame())
+        if (!S.I.IM.PC.World.Zoom.WasPerformedThisFrame())
         {
             //--------------------------------------------------------
 
@@ -116,7 +117,7 @@ public class CameraLeader : MonoBehaviour
             Vector3 keyboardMovement = (_forward * movement.y) + (_right * movement.x);
 
             // Move
-            transform.position += keyboardMovement * _movementSpeed * Time.deltaTime;
+            transform.position += keyboardMovement * _movementSpeed * Time.unscaledDeltaTime;
 
             //--------------------------------------------------------
 
@@ -210,9 +211,10 @@ public class CameraLeader : MonoBehaviour
 
                 // Direction we want to move
                 Vector3 edgeScrollMovement = (_forward * mouseY) + (_right * mouseX);
+                edgeScrollMovement.Normalize();
 
                 // Move camera
-                transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.deltaTime;
+                transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.unscaledDeltaTime;
             }
 //#endif
         }

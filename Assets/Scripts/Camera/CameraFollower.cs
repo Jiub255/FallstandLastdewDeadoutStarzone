@@ -29,8 +29,8 @@ public class CameraFollower : MonoBehaviour
 
     private void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, _cameraLeader.position, ref _velocity, _smoothTime);
+        // TODO: Set a max speed? Might be good for camera drag.
+        transform.position = Vector3.SmoothDamp(transform.position, _cameraLeader.position, ref _velocity, _smoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
         transform.LookAt(_rotationOrigin);
-        //transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero, speed * Time.deltaTime);
     }
 }

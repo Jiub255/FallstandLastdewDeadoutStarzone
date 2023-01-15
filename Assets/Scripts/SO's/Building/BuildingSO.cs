@@ -14,8 +14,6 @@ public class BuildingSO : ItemSO
 
     public override void Use()
     {
-        // Send signal to BuildingManager to change currentBuilding to this, but how?
-        // Store prefab in SO? I think so.
         OnSelectBuilding?.Invoke(BuildingPrefab);
 
         base.Use();

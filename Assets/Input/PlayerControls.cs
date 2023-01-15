@@ -62,6 +62,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""699202fd-6004-470e-b980-0250f206d4a7"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -207,6 +216,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""MouseDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5444e528-fdcd-4136-9ed7-2ffdb52ebec7"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -222,15 +242,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Zoom"",
-                    ""type"": ""Value"",
-                    ""id"": ""e32c51ff-039f-4e95-9cfe-2f2c146bf0f3"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -242,17 +253,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""DragCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b2a8181d-3da7-4c0d-9f8a-7cbc47f76cf4"",
-                    ""path"": ""<Mouse>/scroll/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -699,10 +699,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_World_MouseDelta = m_World.FindAction("MouseDelta", throwIfNotFound: true);
         m_World_MoveCamera = m_World.FindAction("MoveCamera", throwIfNotFound: true);
         m_World_RotateCamera = m_World.FindAction("RotateCamera", throwIfNotFound: true);
+        m_World_Zoom = m_World.FindAction("Zoom", throwIfNotFound: true);
         // WorldGameplay
         m_WorldGameplay = asset.FindActionMap("WorldGameplay", throwIfNotFound: true);
         m_WorldGameplay_DragCamera = m_WorldGameplay.FindAction("DragCamera", throwIfNotFound: true);
-        m_WorldGameplay_Zoom = m_WorldGameplay.FindAction("Zoom", throwIfNotFound: true);
         // WorldBuild
         m_WorldBuild = asset.FindActionMap("WorldBuild", throwIfNotFound: true);
         m_WorldBuild_DeselectBuilding = m_WorldBuild.FindAction("DeselectBuilding", throwIfNotFound: true);
@@ -792,6 +792,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_World_MouseDelta;
     private readonly InputAction m_World_MoveCamera;
     private readonly InputAction m_World_RotateCamera;
+    private readonly InputAction m_World_Zoom;
     public struct WorldActions
     {
         private @PlayerControls m_Wrapper;
@@ -800,6 +801,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @MouseDelta => m_Wrapper.m_World_MouseDelta;
         public InputAction @MoveCamera => m_Wrapper.m_World_MoveCamera;
         public InputAction @RotateCamera => m_Wrapper.m_World_RotateCamera;
+        public InputAction @Zoom => m_Wrapper.m_World_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_World; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -821,6 +823,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RotateCamera.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnRotateCamera;
+                @Zoom.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_WorldActionsCallbackInterface = instance;
             if (instance != null)
@@ -837,6 +842,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
@@ -846,13 +854,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_WorldGameplay;
     private IWorldGameplayActions m_WorldGameplayActionsCallbackInterface;
     private readonly InputAction m_WorldGameplay_DragCamera;
-    private readonly InputAction m_WorldGameplay_Zoom;
     public struct WorldGameplayActions
     {
         private @PlayerControls m_Wrapper;
         public WorldGameplayActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @DragCamera => m_Wrapper.m_WorldGameplay_DragCamera;
-        public InputAction @Zoom => m_Wrapper.m_WorldGameplay_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_WorldGameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -865,9 +871,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @DragCamera.started -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnDragCamera;
                 @DragCamera.performed -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnDragCamera;
                 @DragCamera.canceled -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnDragCamera;
-                @Zoom.started -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnZoom;
-                @Zoom.performed -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnZoom;
-                @Zoom.canceled -= m_Wrapper.m_WorldGameplayActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_WorldGameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -875,9 +878,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @DragCamera.started += instance.OnDragCamera;
                 @DragCamera.performed += instance.OnDragCamera;
                 @DragCamera.canceled += instance.OnDragCamera;
-                @Zoom.started += instance.OnZoom;
-                @Zoom.performed += instance.OnZoom;
-                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
@@ -1159,11 +1159,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnMouseDelta(InputAction.CallbackContext context);
         void OnMoveCamera(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
     public interface IWorldGameplayActions
     {
         void OnDragCamera(InputAction.CallbackContext context);
-        void OnZoom(InputAction.CallbackContext context);
     }
     public interface IWorldBuildActions
     {

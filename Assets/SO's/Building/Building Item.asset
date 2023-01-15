@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemIcon: {fileID: 21300000, guid: 144aa74618b85974a9a50f612c2fa8fd, type: 3}
   Description: hui
+  currentBuildingSO: {fileID: 11400000, guid: 9d4ad687c8bf50548a846890b0284f17, type: 2}
   BuildingPrefab: {fileID: 5933088178473574205, guid: 5da47869f88734648ae24d2da03d90ba, type: 3}
-  Cost: 0
