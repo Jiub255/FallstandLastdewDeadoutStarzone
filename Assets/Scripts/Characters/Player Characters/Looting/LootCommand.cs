@@ -24,7 +24,7 @@ public class LootCommand : MonoBehaviour
 
     private void Loot(InputAction.CallbackContext context)
     {
-        if (_selectedPCSO.SelectedPCGO != null)
+        if (_selectedPCSO.PCSO.PCInstance != null)
         {
             // Raycast checks for loot containers where the mouse clicked.
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
@@ -48,7 +48,7 @@ public class LootCommand : MonoBehaviour
                 }
 
                 // Send signal to LootAction telling them to start looting closest container
-                OnClickedLoot?.Invoke(_selectedPCSO.SelectedPCGO.transform, closestHit.collider.transform);
+                OnClickedLoot?.Invoke(_selectedPCSO.PCSO.PCInstance.transform, closestHit.collider.transform);
             }
         }
     }

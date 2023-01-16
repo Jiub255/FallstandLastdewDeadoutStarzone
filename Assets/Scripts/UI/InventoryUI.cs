@@ -21,7 +21,7 @@ public class InventoryUI : UIRefresher
 
         foreach (ItemAmount itemAmount in _inventorySO.ItemAmounts)
         {
-            GameObject slotInstance = Instantiate(SlotPrefab, Content);
+            GameObject slotInstance = Instantiate(SlotPrefab, SlotParent);
             
             slotInstance.transform.GetComponent<InventorySlot>().SetupSlot(itemAmount);
         }

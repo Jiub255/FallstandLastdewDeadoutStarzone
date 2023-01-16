@@ -17,7 +17,7 @@ public class InventorySlot : MonoBehaviour
     {
         _itemAmount = newItemAmount;
 
-        _icon.sprite = newItemAmount.InventoryItemSO.ItemIcon;
+        _icon.sprite = newItemAmount.InventoryItemSO.Icon;
         _icon.enabled = true;
         _useButton.interactable = true;
 

@@ -23,7 +23,7 @@ public class CameraLeader : MonoBehaviour
 
     private Vector3 _startDrag;*/
 
-    [SerializeField, Range(0f, 2f), Header("Rotate Camera")]
+    [SerializeField, Range(0f, 2f), Header("Rotate")]
     private float _rotationSpeed = 0.15f;
 
     [SerializeField, Range(0f, 40f)]
@@ -54,15 +54,35 @@ public class CameraLeader : MonoBehaviour
     }
 #endif
 
+    // For centering camera on current PC.
+    [SerializeField]
+    private SelectedPCSO _selectedPCSO;
+
     private void Start()
     {
         S.I.IM.PC.World.Zoom.performed += Zoom;
+
+        S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
     }
 
     private void OnDisable()
     {
         S.I.IM.PC.World.Zoom.performed -= Zoom;
-        float d = Time.deltaTime;
+    
+        S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
+    }
+
+    private void CenterOnPC(InputAction.CallbackContext context)
+    {
+        // TODO: Make this a double click button thing, not just double click anywhere.
+        // TODO: Also make the centering much better. Have it set to a specific heading and zoom and tilt, with PC in center of screen. 
+        if (_selectedPCSO.PCSO != null)
+        {
+            transform.position = new Vector3(
+                _selectedPCSO.PCSO.PCInstance.transform.position.x,
+                transform.position.y,
+                _selectedPCSO.PCSO.PCInstance.transform.position.z - 13f);
+        }
     }
 
     private void Zoom(InputAction.CallbackContext context)
@@ -88,7 +108,7 @@ public class CameraLeader : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Zoom overrides everything else. Not really noticeable since this action gets called only during
+        // Zoom overrides everything else. Not noticeable since this action gets called only during
         // isolated frames, but it helps resolve some issues with moving while zooming.
         if (!S.I.IM.PC.World.Zoom.WasPerformedThisFrame())
         {

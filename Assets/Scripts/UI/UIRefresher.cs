@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Could probably use this for the BuildUI too. Just make a new build inventorySlot prefab with whatever button function on it.
@@ -9,7 +10,7 @@ public abstract class UIRefresher : MonoBehaviour
     protected GameObject SlotPrefab;
 
     [SerializeField]
-    protected Transform Content;
+    protected Transform SlotParent;
 
     public virtual void PopulateInventory()
     {
@@ -18,7 +19,7 @@ public abstract class UIRefresher : MonoBehaviour
 
     private void ClearInventory()
     {
-        foreach (Transform child in Content)
+        foreach (Transform child in SlotParent)
         {
             Destroy(child.gameObject);
         }

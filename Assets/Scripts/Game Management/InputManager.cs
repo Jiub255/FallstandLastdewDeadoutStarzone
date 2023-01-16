@@ -16,7 +16,6 @@ public class InputManager : MonoBehaviour
         // Enable "Home" and "Gameplay" as default action maps
         PC.Disable();
         PC.World.Enable();
-        PC.WorldGameplay.Enable();
         PC.Home.Enable();
     }
 
@@ -26,20 +25,17 @@ public class InputManager : MonoBehaviour
         PC.Disable();
         PC.World.Enable();
         PC.Home.Enable();
-        PC.WorldGameplay.Enable();
     }
     public void ScavengeMap()
     {
         PC.Disable();
         PC.World.Enable();
-        PC.WorldGameplay.Enable();
         PC.Scavenge.Enable();
     }
     public void HomeScavengeMap()
     {
         PC.Disable();
         PC.World.Enable();
-        PC.WorldGameplay.Enable();
         PC.Home.Enable();
         PC.Scavenge.Enable();
     }

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dd3c770e08b44646b197794f373f835, type: 3}
+  m_Script: {fileID: 11500000, guid: eff1afa2012d763448f14b6468e696ff, type: 3}
   m_Name: Selected PC SO
   m_EditorClassIdentifier: 
-  selectedPCGO: {fileID: 0}
+  PCSO: {fileID: 0}

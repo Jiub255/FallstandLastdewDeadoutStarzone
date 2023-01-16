@@ -39,12 +39,12 @@ public class Transparentizer : MonoBehaviour
             100, 
             _transparentableLayer);
 
-        if (_selectedPCSO.SelectedPCGO != null)
+        if (_selectedPCSO.PCSO/*.PCInstance*/ != null)
         {
             // Hits from currently selected PC
             Vector3 position = transform.position;
-            Vector3 direction = _selectedPCSO.SelectedPCGO.transform.position - position;
-            float rayDistance = Vector3.Distance(position, _selectedPCSO.SelectedPCGO.transform.position);
+            Vector3 direction = _selectedPCSO.PCSO.PCInstance.transform.position - position;
+            float rayDistance = Vector3.Distance(position, _selectedPCSO.PCSO.PCInstance.transform.position);
 
             RaycastHit[] selectedPlayerHits = Physics.RaycastAll(
                 position,

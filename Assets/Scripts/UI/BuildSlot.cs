@@ -11,12 +11,12 @@ public class BuildSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _costText;
 
-    private BuildingSO _buildingSO;
+    private BuildingItemSO _buildingItemSO;
 
-    public void SetupSlot(BuildingSO newBuildingItemSO)
+    public void SetupSlot(BuildingItemSO newBuildingItemSO)
     {
-        _buildingSO = newBuildingItemSO;
-        _icon.sprite = _buildingSO.ItemIcon;
+        _buildingItemSO = newBuildingItemSO;
+        _icon.sprite = _buildingItemSO.Icon;
         _icon.enabled = true;
         _useButton.interactable = true;
         _costText.text = newBuildingItemSO.Cost.ToString();
@@ -24,20 +24,19 @@ public class BuildSlot : MonoBehaviour
 
     public void ClearSlot()
     {
-        _buildingSO = null;
+        _buildingItemSO = null;
         _icon.sprite = null;
         _icon.enabled = false;
         _useButton.interactable = false;
         _costText.text = "";
     }
 
-    // Called by clicking on inventory slot
+    // Called by clicking on building slot
 	public void OnUseButton()
     {
-        if (_buildingSO != null)
+        if (_buildingItemSO != null)
         {
-            // TODO: Set Use() up in Item and its child classes
-            _buildingSO.Use();
+            _buildingItemSO.Use();
         }
     }
 }

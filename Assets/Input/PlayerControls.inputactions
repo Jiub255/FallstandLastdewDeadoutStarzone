@@ -2,6 +2,34 @@
     "name": "PlayerControls",
     "maps": [
         {
+            "name": "AlwaysEnabled",
+            "id": "1cadf851-e33a-4879-81e4-cebad7dfb038",
+            "actions": [
+                {
+                    "name": "Quit",
+                    "type": "Button",
+                    "id": "3c5194ac-b144-46b7-8c32-131aed780911",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0ca1ae29-8e67-46e3-b90e-87666d44dd88",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Quit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "World",
             "id": "333d6583-af7b-4463-bb89-dc12b7cdb113",
             "actions": [
@@ -209,34 +237,6 @@
             ]
         },
         {
-            "name": "WorldGameplay",
-            "id": "feae97ab-c7a4-4c60-bc91-75b13cce064c",
-            "actions": [
-                {
-                    "name": "DragCamera",
-                    "type": "Button",
-                    "id": "34ab1db9-84b3-424f-80d0-941b6c44abee",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "7f045acb-35d0-462e-8dd2-854026918335",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "DragCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "WorldBuild",
             "id": "56cb6db7-c3d5-4d97-b886-7279867bfbdd",
             "actions": [
@@ -331,15 +331,6 @@
             "id": "cebf6a23-b35c-43ac-913b-4269ea46e868",
             "actions": [
                 {
-                    "name": "Select",
-                    "type": "Button",
-                    "id": "fc8a4de9-0d64-48d2-9e04-cdebc63c212e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Deselect",
                     "type": "Button",
                     "id": "9ae00dde-277e-4ed9-8bb1-31da03bda281",
@@ -365,6 +356,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Quit",
+                    "type": "Button",
+                    "id": "7a2d45b8-4cbc-4897-8a24-3dde2d6fb62f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectOrCenter",
+                    "type": "Button",
+                    "id": "c1f9c63d-9b2d-4277-81fd-dd2af0764a3b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -376,17 +385,6 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "OpenInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a47a37dd-8f68-4fa4-8baa-7387cc8ece2a",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -409,6 +407,28 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "Deselect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5fec9b9-a1c7-4739-bb9f-2ec81b920d29",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Quit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "773782c3-1278-44b8-94ea-2c48f5d72a7c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "SelectOrCenter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -449,6 +469,15 @@
                     "name": "OpenUsableInventory",
                     "type": "Button",
                     "id": "8cac9631-2fc2-4d9e-8783-640ef0f21b57",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Quit",
+                    "type": "Button",
+                    "id": "812eac94-a856-4b64-b61d-b857f5e40b0e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -497,6 +526,17 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "Deselect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fb22d0d-9a33-47d4-85ae-8d2b703725a7",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Quit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

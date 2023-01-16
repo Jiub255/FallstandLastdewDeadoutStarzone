@@ -223,7 +223,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6542049712496593730}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8082497680255500052
 SkinnedMeshRenderer:
@@ -1317,10 +1317,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5583104596943956341}
   - {fileID: 6719580582111830537}
-  - {fileID: 1628707956591700950}
   - {fileID: 6719580582119882767}
+  - {fileID: 5583104596943956341}
+  - {fileID: 1628707956591700950}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1403,7 +1403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e650660b9dbc048abc13cab810b4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LootingState: 0
   _lootDistance: 2.5
   _inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
   _lootAnimation: {fileID: -203655887218126122, guid: fe63839acd59fb547a23f0f5a4a1f7d4, type: 3}
@@ -1441,7 +1440,7 @@ Transform:
   - {fileID: 3179476051539762409}
   - {fileID: 1365343400547211333}
   m_Father: {fileID: 6542049712496593730}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5993956894179001820
 GameObject:
@@ -1538,7 +1537,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6542049712496593730}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6719580582111830540
 MeshFilter:
@@ -1635,7 +1634,7 @@ Transform:
   m_Children:
   - {fileID: 6719580582518923424}
   m_Father: {fileID: 6542049712496593730}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6719580582119882754
 MeshFilter:

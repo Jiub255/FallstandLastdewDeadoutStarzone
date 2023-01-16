@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ using UnityEngine.InputSystem;
 public class UIManager : MonoBehaviour
 {
     // MenuUIRefresher listens to initialize the UI displays
+    // Split into separate events for each menu? Or does it really affect performance enough to matter?
     public static event Action OnOpenedMenu;
 
     public static bool GamePaused = false;
@@ -14,50 +16,38 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Transform _canvasesObject;
     [SerializeField]
-    private Canvas _inventoryCanvas;
+    private GameObject _inventoryCanvas;
     [SerializeField]
-    private Canvas _buildCanvas;
+    private GameObject _buildCanvas;
+    [SerializeField]
+    private GameObject _hUDCanvas;
 
     private void Start()
     {
         S.I.IM.PC.Home.OpenInventory.performed += OpenInventory;
         S.I.IM.PC.Home.OpenBuildMenu.performed += OpenBuildMenu;
+
         S.I.IM.PC.MenuInventory.CloseInventory.performed += CloseUI;
         S.I.IM.PC.MenuInventory.OpenBuildMenu.performed += OpenBuildMenu;
+
         S.I.IM.PC.MenuBuild.CloseBuildMenu.performed += CloseUI;
         S.I.IM.PC.MenuBuild.OpenInventory.performed += OpenInventory;
+
+        // Setup all menus in beginning of each scene. (Not sure if necessary)
+        // Make sure all UIRefresher child classes subscribe in OnEnable, not Start, so they can hear this. 
+        OnOpenedMenu?.Invoke();
     }
 
     private void OnDisable()
     {
         S.I.IM.PC.Home.OpenInventory.performed -= OpenInventory;
         S.I.IM.PC.Home.OpenBuildMenu.performed -= OpenBuildMenu;
+
         S.I.IM.PC.MenuInventory.CloseInventory.performed -= CloseUI;
         S.I.IM.PC.MenuInventory.OpenBuildMenu.performed -= OpenBuildMenu;
+
         S.I.IM.PC.MenuBuild.CloseBuildMenu.performed -= CloseUI;
         S.I.IM.PC.MenuBuild.OpenInventory.performed -= OpenInventory;
-    }
-
-    private void OpenBuildMenu(InputAction.CallbackContext context)
-    {
-        // Change Action Maps
-        S.I.IM.PC.Disable();
-        S.I.IM.PC.World.Enable();
-        S.I.IM.PC.WorldGameplay.Enable();
-        S.I.IM.PC.MenuBuild.Enable();
-
-        // Open build canvas
-        CloseAllMenus();
-        _buildCanvas.gameObject.SetActive(true);
-
-        // BuildMenuUI listens to initialize display
-        OnOpenedMenu.Invoke();
-
-        // Pause gameplay if not already paused
-        if (!GamePaused)
-        {
-            PauseGame();
-        }
     }
 
     private void OpenInventory(InputAction.CallbackContext context)
@@ -68,9 +58,31 @@ public class UIManager : MonoBehaviour
 
         // Open inventory canvas
         CloseAllMenus();
-        _inventoryCanvas.gameObject.SetActive(true);
+        _inventoryCanvas.SetActive(true);
 
-        // InventoryUI listens to initialize display
+        // InventoryUI listens to setup display
+        OnOpenedMenu.Invoke();
+
+        // Pause gameplay if not already paused
+        if (!GamePaused)
+        {
+            PauseGame();
+        }
+    }
+
+    private void OpenBuildMenu(InputAction.CallbackContext context)
+    {
+        // Change Action Maps
+        S.I.IM.PC.Disable();
+        S.I.IM.PC.World.Enable();
+        S.I.IM.PC.MenuBuild.Enable();
+
+
+        // Open build canvas
+        CloseAllMenus();
+        _buildCanvas.SetActive(true);
+
+        // BuildUI listens to setup display
         OnOpenedMenu.Invoke();
 
         // Pause gameplay if not already paused
@@ -85,11 +97,14 @@ public class UIManager : MonoBehaviour
         // Change Action Maps
         S.I.IM.PC.Disable();
         S.I.IM.PC.World.Enable();
-        S.I.IM.PC.WorldGameplay.Enable();
         S.I.IM.PC.Home.Enable();
 
         CloseAllMenus();
-       
+        _hUDCanvas.SetActive(true);
+
+        // PCUI listens to setup display
+        OnOpenedMenu.Invoke();
+
         if (GamePaused)
         {
             UnpauseGame();
