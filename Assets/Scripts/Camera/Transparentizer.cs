@@ -30,12 +30,19 @@ public class Transparentizer : MonoBehaviour
     [SerializeField, Range(0, 1f), Tooltip("Opacity of the object when fully faded")] 
     private float _fadeAlpha = 0.1f;
 
+    private PlayerControls playerControls;
+
+    private void Start()
+    {
+        playerControls = S.I.IM.PC;
+    }
+
     private void FixedUpdate()
     {
         // Hits from mouse position
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(
-                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+                playerControls.World.MousePosition.ReadValue<Vector2>()),
             100, 
             _transparentableLayer);
 

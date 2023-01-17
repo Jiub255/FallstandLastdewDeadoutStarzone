@@ -17,13 +17,14 @@ public class PCMovement : MonoBehaviour
 
     private void Start()
     {
-        S.I.IM.PC.Home.SelectOrCenter.started += Move;
+        // started is single or double click, canceled is single click only. 
+        S.I.IM.PC.Home.SelectOrCenter./*canceled*/started += Move;
         S.I.IM.PC.Scavenge.Select.performed += Move;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.Home.SelectOrCenter.started -= Move;
+        S.I.IM.PC.Home.SelectOrCenter./*canceled*/started -= Move;
         S.I.IM.PC.Scavenge.Select.performed -= Move;
     }
 

@@ -13,7 +13,6 @@ public class AAAAAAAAAAAAAA
 
     FIRST!!
 
-
     Take little state machine in LootAction, and instead make a global singleton state machine for PC state. (Maybe enemy too?)
         Maybe do substates. Like Loot state with WalkingTowards and Looting as substates.
         Have Loot, WalkingTowardsLoot, Idle, Walk/Run, Shoot, MeleeAttack, GetHit, Dead, Others?

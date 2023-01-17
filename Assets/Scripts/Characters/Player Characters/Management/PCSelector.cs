@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PCSelector : MonoBehaviour
 {
-    // Keep availablePCsSO here?
+    public static event Action OnDoubleClickPCButton;
+
     [SerializeField]
     private AvailablePCsSO availablePCsSO;
 
@@ -13,9 +15,13 @@ public class PCSelector : MonoBehaviour
     [SerializeField]
     private LayerMask _playerCharacterLayer;
 
+    [SerializeField]
+    private float _doubleClickTimeLimit = 0.5f;
+    private float _lastClickTime = 0f;
+
     private void Start()
     {
-        PCItemSO.OnSelectPC += ChangePC;
+        PCItemSO.OnSelectPC += HandleClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started += Select;
         S.I.IM.PC.Scavenge.Select.performed += Select;
@@ -30,7 +36,7 @@ public class PCSelector : MonoBehaviour
 
     private void OnDisable()
     {
-        PCItemSO.OnSelectPC -= ChangePC;
+        PCItemSO.OnSelectPC -= HandleClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started -= Select;
         S.I.IM.PC.Scavenge.Select.performed -= Select;
@@ -95,6 +101,27 @@ public class PCSelector : MonoBehaviour
             }
         }
         return null;
+    }
+
+    // Still get double click if you click on two different buttons within time limit?
+    private void HandleClick(PCItemSO pCItemSO)
+    {
+        float currentClickTime = Time.realtimeSinceStartup;
+
+        Debug.Log(currentClickTime + " - " + _lastClickTime + " = " + (currentClickTime - _lastClickTime));
+
+        if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
+        {
+            // Double click: Center camera on PC. Use event?
+            OnDoubleClickPCButton?.Invoke();
+        }
+        else
+        {
+            // Single click: Select PC.
+            ChangePC(pCItemSO);
+        }
+
+        _lastClickTime = currentClickTime;
     }
 
     private void ChangePC(PCItemSO newPCItemSO)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 407866144}
   - component: {fileID: 407866143}
   - component: {fileID: 407866145}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bottom Panel (Probably not using)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 972536998}
   - component: {fileID: 972536997}
   - component: {fileID: 972536996}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Left Side Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 1161822669}
   - component: {fileID: 1161822671}
   - component: {fileID: 1161822670}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PC Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 1539055962}
   - component: {fileID: 1539055961}
   - component: {fileID: 1539055960}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 1555417774}
   - component: {fileID: 1555417776}
   - component: {fileID: 1555417775}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Name Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1657634726}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PC Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 1881279622}
   - component: {fileID: 1881279621}
   - component: {fileID: 1881279624}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HUD Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

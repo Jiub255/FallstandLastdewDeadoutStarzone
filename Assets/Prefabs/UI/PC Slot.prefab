@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9215846111987392368}
   - component: {fileID: 9215846111987392371}
   - component: {fileID: 9215846111987392370}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 9215846112546001568}
   - component: {fileID: 9215846112546001574}
   - component: {fileID: 9215846112546001569}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PC Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9215846113654697644}
   - component: {fileID: 5118127499594800623}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PC Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 9215846113739193627}
   - component: {fileID: 9215846113739193625}
   - component: {fileID: 9215846113739193624}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Name Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
