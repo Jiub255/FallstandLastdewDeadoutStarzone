@@ -162,3 +162,5 @@ MonoBehaviour:
   LootItemAmounts:
   - InventoryItemSO: {fileID: 11400000, guid: 62a637fe3b8d11f479619fc2264adca0, type: 2}
     Amount: 10
+  - InventoryItemSO: {fileID: 11400000, guid: f92af482ae643964189919f4ad1d1322, type: 2}
+    Amount: 2

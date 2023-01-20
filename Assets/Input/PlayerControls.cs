@@ -24,34 +24,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     ""name"": ""PlayerControls"",
     ""maps"": [
         {
-            ""name"": ""AlwaysEnabled"",
-            ""id"": ""1cadf851-e33a-4879-81e4-cebad7dfb038"",
-            ""actions"": [
-                {
-                    ""name"": ""Quit"",
-                    ""type"": ""Button"",
-                    ""id"": ""3c5194ac-b144-46b7-8c32-131aed780911"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""0ca1ae29-8e67-46e3-b90e-87666d44dd88"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""Quit"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""World"",
             ""id"": ""333d6583-af7b-4463-bb89-dc12b7cdb113"",
             ""actions"": [
@@ -733,9 +705,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // AlwaysEnabled
-        m_AlwaysEnabled = asset.FindActionMap("AlwaysEnabled", throwIfNotFound: true);
-        m_AlwaysEnabled_Quit = m_AlwaysEnabled.FindAction("Quit", throwIfNotFound: true);
         // World
         m_World = asset.FindActionMap("World", throwIfNotFound: true);
         m_World_MousePosition = m_World.FindAction("MousePosition", throwIfNotFound: true);
@@ -826,39 +795,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         return asset.FindBinding(bindingMask, out action);
     }
-
-    // AlwaysEnabled
-    private readonly InputActionMap m_AlwaysEnabled;
-    private IAlwaysEnabledActions m_AlwaysEnabledActionsCallbackInterface;
-    private readonly InputAction m_AlwaysEnabled_Quit;
-    public struct AlwaysEnabledActions
-    {
-        private @PlayerControls m_Wrapper;
-        public AlwaysEnabledActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Quit => m_Wrapper.m_AlwaysEnabled_Quit;
-        public InputActionMap Get() { return m_Wrapper.m_AlwaysEnabled; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AlwaysEnabledActions set) { return set.Get(); }
-        public void SetCallbacks(IAlwaysEnabledActions instance)
-        {
-            if (m_Wrapper.m_AlwaysEnabledActionsCallbackInterface != null)
-            {
-                @Quit.started -= m_Wrapper.m_AlwaysEnabledActionsCallbackInterface.OnQuit;
-                @Quit.performed -= m_Wrapper.m_AlwaysEnabledActionsCallbackInterface.OnQuit;
-                @Quit.canceled -= m_Wrapper.m_AlwaysEnabledActionsCallbackInterface.OnQuit;
-            }
-            m_Wrapper.m_AlwaysEnabledActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Quit.started += instance.OnQuit;
-                @Quit.performed += instance.OnQuit;
-                @Quit.canceled += instance.OnQuit;
-            }
-        }
-    }
-    public AlwaysEnabledActions @AlwaysEnabled => new AlwaysEnabledActions(this);
 
     // World
     private readonly InputActionMap m_World;
@@ -1210,10 +1146,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             if (m_KeyboardandMouseSchemeIndex == -1) m_KeyboardandMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard and Mouse");
             return asset.controlSchemes[m_KeyboardandMouseSchemeIndex];
         }
-    }
-    public interface IAlwaysEnabledActions
-    {
-        void OnQuit(InputAction.CallbackContext context);
     }
     public interface IWorldActions
     {

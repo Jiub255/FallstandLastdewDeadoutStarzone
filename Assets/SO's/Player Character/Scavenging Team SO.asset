@@ -10,7 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb558ca9f3b73594a8a8fc0fa7d81132, type: 3}
-  m_Name: Available PCs SO
+  m_Name: Scavenging Team SO
   m_EditorClassIdentifier: 
-  PCItemSOs:
-  - {fileID: 11400000, guid: baffdbbf76772e540b83aacbc3e1b9df, type: 2}
+  PCItemSOs: []

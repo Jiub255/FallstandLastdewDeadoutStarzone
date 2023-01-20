@@ -76,7 +76,7 @@ public class CameraMoveRotate : MonoBehaviour
             // Gets annoying when you accidentally edge scroll because you moved the mouse too far while rotating.
             else
             {
-                //EdgeScroll();
+                EdgeScroll();
             }
         }
     }
@@ -88,7 +88,7 @@ public class CameraMoveRotate : MonoBehaviour
         {
             RaycastHit[] hits = Physics.RaycastAll(
                 Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
-                100,
+                1000,
                 _pCLayer);
 
             if (hits.Length > 0)

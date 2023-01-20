@@ -6,7 +6,7 @@ using UnityEngine;
 public class PCInstantiator : MonoBehaviour
 {
 	[SerializeField]
-	private AvailablePCsSO availablePCsSO;
+	private PCSOListSO availablePCsSO;
 
     private void Awake()
     {
@@ -18,12 +18,12 @@ public class PCInstantiator : MonoBehaviour
 
         for (int i = 0; i < availablePCsSO.PCItemSOs.Count; i++)
         {
-            //Debug.Log("Instantiating PC #" + (i + 1).ToString());
+           // Debug.Log("Instantiating PC #" + (i + 1).ToString());
 
             availablePCsSO.PCItemSOs[i].PCInstance = Instantiate(
                 availablePCsSO.PCItemSOs[i].PCPrefab, new Vector3(3 * i, 0f, 0f), Quaternion.identity);
 
-            //Debug.Log(availablePCsSO.PCItemSOs[i].PCInstance.name);
+           // Debug.Log(availablePCsSO.PCItemSOs[i].PCInstance.name);
         }
     }
 }

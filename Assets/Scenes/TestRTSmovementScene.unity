@@ -363,7 +363,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1536596927}
         m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
         m_MethodName: ScavengeMap
         m_Mode: 1
@@ -1142,7 +1142,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1536596927}
         m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
         m_MethodName: HomeScavengeMap
         m_Mode: 1
@@ -1392,6 +1392,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1508018773}
+  - component: {fileID: 1508018779}
   - component: {fileID: 1508018778}
   - component: {fileID: 1508018777}
   - component: {fileID: 1508018776}
@@ -1484,6 +1485,7 @@ MonoBehaviour:
   _playerCharacterLayer:
     serializedVersion: 2
     m_Bits: 512
+  _doubleClickTimeLimit: 0.5
 --- !u!114 &1508018778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1497,6 +1499,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availablePCsSO: {fileID: 11400000, guid: d03460ed0f041b1468047a6de0415cf7, type: 2}
+--- !u!114 &1508018779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508018772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c01fccaa7576ae419addc7b1179b772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1515628530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,7 +1686,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1536596927}
         m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
         m_MethodName: HomeMap
         m_Mode: 1
@@ -2275,10 +2289,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1881279619, guid: 0224d9a450201b7448d936afefdf1355, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 1881279624, guid: 0224d9a450201b7448d936afefdf1355, type: 3}
+      propertyPath: _availablePCSO
+      value: 
+      objectReference: {fileID: 11400000, guid: d03460ed0f041b1468047a6de0415cf7, type: 2}
     - target: {fileID: 4314923721212641125, guid: 0224d9a450201b7448d936afefdf1355, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2441,17 +2455,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7178292981877017285, guid: 675447d9186ee3e4ba64702970c400ac, type: 3}
-      propertyPath: LootItemAmounts.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7178292981877017285, guid: 675447d9186ee3e4ba64702970c400ac, type: 3}
-      propertyPath: LootItemAmounts.Array.data[1].Amount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7178292981877017285, guid: 675447d9186ee3e4ba64702970c400ac, type: 3}
-      propertyPath: LootItemAmounts.Array.data[1].InventoryItemSO
-      value: 
-      objectReference: {fileID: 11400000, guid: f92af482ae643964189919f4ad1d1322, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 675447d9186ee3e4ba64702970c400ac, type: 3}

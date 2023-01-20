@@ -13,16 +13,32 @@ public class AAAAAAAAAAAAAA
 
     FIRST!!
 
-    Take little state machine in LootAction, and instead make a global singleton state machine for PC state. (Maybe enemy too?)
-        Maybe do substates. Like Loot state with WalkingTowards and Looting as substates.
-        Have Loot, WalkingTowardsLoot, Idle, Walk/Run, Shoot, MeleeAttack, GetHit, Dead, Others?
-        Have HomeAI state, and gardening, basketball, repairing, etc as substates?
+    Take trashy little state machine in LootAction, and instead make a (singleton?) state machine for PC state. (Maybe enemy too?)
+        Following "How to Program in Unity: Hierarchical State Machine Refactor [Built-In Character Controller #5]" youtube video.
+        For Scavenging scenes:
+            Superstates: Idle, Walk, Run, Loot, Die, others?
+            Substates: Shoot, Melee Attack, Get Hurt, others?
+        Same machine for Home scenes?
+            Superstates: Idle, Walk, Run, Die, Assorted states for farming, repairing, leisure activites, building, etc., others?
+            Substates: Shoot, Melee Attack, Get Hurt, others?
+        Yeah use same state machine. Just won't need the idle AI states for scavenging but that's fine. 
+
+    FIX: Problem with instantiating multiple of same char. Might happen with different chars? 
+        Can only select one of the many, either by clicking PCs or icons. The others give null reference. 
+        Clicking any icon selects the one selectable PC.
+        Might not work with multiples of same PCItemSO. Need multiple SOs to go with multiple PCs?
+            This wont work for enemies, might be fine for PCs.
 
     Figure out how travelling/scavenging will work.
-        Use a world map and choose the location?
-        Travel there physically in a normal map and explore the city? Would take a lot of work or procedural generation.
-            Probably not this, at least for now. 
-        Have scavenging location chosen randomly, quality of spot based on some stat?
+        Use a world map and choose the location
+        Travel on the map in a simple "overworld" style to find new locations. Uncover the map as you explore.
+            Choose to scavenge whichever buildings. Certain buildings have better loot in general, different types of 
+            buildings have different loot possibilites. 
+        Fast travel to any location you've uncovered when leaving to scavenge.
+        Occasionally find new, better locations to set up your home base. 
+            When you move, you have all your old buildings, you can place them wherever.
+            OR
+            You start over building wise, but you caravan over all your food/water/item/materials
 
     Figure out how scene management will work. 
         How to instantiate all current PCs onto scene?
@@ -35,6 +51,7 @@ public class AAAAAAAAAAAAAA
             Makes sense since you're controlling multiple people.
             Can have some scavenging and others fighting or doing whatever. 
             Don't want to have to constantly control fighters, or the others for that matter. 
+            Maybe can control currently selected PC, like aim and shoot/melee/loot. The others do the task you set them/fight or loot automatically. 
 
     Figure out how crafting will work.
         CraftingItem will inherit from ItemSO
@@ -78,6 +95,8 @@ public class AAAAAAAAAAAAAA
                     Make box cast larger so that there's room between buildings
             Build cost in materials per building
                 Just have one general "building material" or have separate materials like wood, stone, metal, etc.?
+            Have a "room score"/morale stat affected by certain buildings. Having nice furniture/decorations/entertainment stuff 
+                increases this stat, which increases all other stats by some percentage. 
 
 
     UI/MENUS/GAME STATE/ACTION MAP/SCENE
@@ -122,13 +141,6 @@ public class AAAAAAAAAAAAAA
 
     FINISH CAMERA CONTROLLER
     ------------------------
-        FIX: Change Camera Setup
-            Movement controls Rotation Origin
-            CameraLeader is child and so follows it exactly.
-                Rotation and zoom control CameraLeader as well (Change local position/rotation)
-            CameraFollower follows CameraLeader, same as before. 
-                Change rotation to SmoothDamp or Lerp to CameraLeader's rotation, instead of instantly looking at rotation origin?
-
         Make a focus on currently selected PC button. 
             Centers camera on PC, and resets angles and zoom to default
         Have a side or bottom bar with all available PCs. You can click on one to select them, or double click to select and center camera on them.       
@@ -317,6 +329,9 @@ public class AAAAAAAAAAAAAA
     Tower Defense (Home base defense)
     Pausable "Real-Time" combat? (On scavenging runs and while defending home base)
     RPG (survivors have stats/levels)
+    Permadeath, survivors can/will die. New ones can be found/rescued/find you.
+        Make difficulty kinda high, so survivors die. Make it part of the game flow. 
+        You can (automatically?) retrieve dead characters stuff.
 
     GAMEPLAY:
 

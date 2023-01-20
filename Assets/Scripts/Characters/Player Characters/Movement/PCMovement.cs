@@ -30,11 +30,11 @@ public class PCMovement : MonoBehaviour
 
     private void Move(InputAction.CallbackContext context)
     {
-        // Only raycast to ground and PC layers. 
         if (_selectedPCSO.PCSO != null)
         {
+            // Only raycast to ground and PC layers. 
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
-                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 100,
+                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 1000,
                 _groundAndPCLayers);
 
             if (hits.Length > 0)

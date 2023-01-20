@@ -43,7 +43,7 @@ public class Transparentizer : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(
                 playerControls.World.MousePosition.ReadValue<Vector2>()),
-            100, 
+            1000, 
             _transparentableLayer);
 
         if (_selectedPCSO.PCSO/*.PCInstance*/ != null)

@@ -3,7 +3,7 @@ using UnityEngine;
 public class PCUI : UIRefresher
 {
     [SerializeField]
-    private AvailablePCsSO _availablePCSO;
+    private PCSOListSO _availablePCSO;
 
     private void OnEnable()
     {

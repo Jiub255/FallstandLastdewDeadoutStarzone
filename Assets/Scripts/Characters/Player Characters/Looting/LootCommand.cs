@@ -24,12 +24,15 @@ public class LootCommand : MonoBehaviour
 
     private void Loot(InputAction.CallbackContext context)
     {
+        Debug.Log("Loot Performed");
+
         if (_selectedPCSO.PCSO.PCInstance != null)
         {
+        Debug.Log("PCInstance != null");
             // Raycast checks for loot containers where the mouse clicked.
             RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 
-                100, 
+                1000, 
                 _lootContainerLayer);
 
             // If click hit anything at all
@@ -40,6 +43,8 @@ public class LootCommand : MonoBehaviour
 
                 foreach (RaycastHit hit in hits)
                 {
+                    Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+
                     if (Vector3.Distance(transform.position, hit.transform.position)
                         < Vector3.Distance(transform.position, closestHit.transform.position))
                     {

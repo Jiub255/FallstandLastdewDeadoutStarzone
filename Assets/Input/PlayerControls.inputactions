@@ -2,34 +2,6 @@
     "name": "PlayerControls",
     "maps": [
         {
-            "name": "AlwaysEnabled",
-            "id": "1cadf851-e33a-4879-81e4-cebad7dfb038",
-            "actions": [
-                {
-                    "name": "Quit",
-                    "type": "Button",
-                    "id": "3c5194ac-b144-46b7-8c32-131aed780911",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "0ca1ae29-8e67-46e3-b90e-87666d44dd88",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Quit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "World",
             "id": "333d6583-af7b-4463-bb89-dc12b7cdb113",
             "actions": [

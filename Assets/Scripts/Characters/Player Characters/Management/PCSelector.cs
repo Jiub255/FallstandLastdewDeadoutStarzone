@@ -7,7 +7,7 @@ public class PCSelector : MonoBehaviour
     public static event Action OnDoubleClickPCButton;
 
     [SerializeField]
-    private AvailablePCsSO availablePCsSO;
+    private PCSOListSO availablePCsSO;
 
     [SerializeField]
     private SelectedPCSO _selectedPCSO;
@@ -70,7 +70,7 @@ public class PCSelector : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
                 out hit,
-                100,
+                1000,
                 _playerCharacterLayer))
         {
             ChangePC(GetSOFromInstance(hit.collider.gameObject));
@@ -107,8 +107,6 @@ public class PCSelector : MonoBehaviour
     private void HandleClick(PCItemSO pCItemSO)
     {
         float currentClickTime = Time.realtimeSinceStartup;
-
-        Debug.Log(currentClickTime + " - " + _lastClickTime + " = " + (currentClickTime - _lastClickTime));
 
         if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
         {

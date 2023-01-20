@@ -12,7 +12,7 @@ public enum LootingState
 // Put on each player character
 public class LootAction : MonoBehaviour
 {
-    public LootingState LootingState { get; set; } = LootingState.NotLooting;
+    public LootingState LootingState/* { get; set; }*/ = LootingState.NotLooting;
 
     private Transform _lootContainerTransform;
     [SerializeField]
@@ -92,7 +92,7 @@ public class LootAction : MonoBehaviour
 
     private void Update()
     {
-       // Debug.Log("Player #" + transform.GetInstanceID() + ", Looting State: " + lootingState.ToString());
+        Debug.Log("Looting State: " + LootingState.ToString());
 
         if (LootingState == LootingState.WalkingTowards)
         {

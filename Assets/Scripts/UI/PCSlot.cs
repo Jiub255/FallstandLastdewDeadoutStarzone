@@ -18,7 +18,7 @@ public class PCSlot : MonoBehaviour
     public void SetupSlot(PCItemSO newPCItemSO)
     {
         _PCItemSO = newPCItemSO;
-        _icon.sprite = _PCItemSO.Icon;
+        _icon.sprite = newPCItemSO.Icon;
         _icon.enabled = true;
         _useButton.interactable = true;
         // Could just use newPCItemSO.PCInstance.name instead?
