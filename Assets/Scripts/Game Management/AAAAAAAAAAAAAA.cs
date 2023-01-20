@@ -13,16 +13,36 @@ public class AAAAAAAAAAAAAA
 
     FIRST!!
 
-    Take trashy little state machine in LootAction, and instead make a (singleton?) state machine for PC state. (Maybe enemy too?)
-        Following "How to Program in Unity: Hierarchical State Machine Refactor [Built-In Character Controller #5]" youtube video.
-        For Scavenging scenes:
-            Superstates: Idle, Walk, Run, Loot, Die, others?
-            Substates: Shoot, Melee Attack, Get Hurt, others?
-        Same machine for Home scenes?
-            Superstates: Idle, Walk, Run, Die, Assorted states for farming, repairing, leisure activites, building, etc., others?
-            Substates: Shoot, Melee Attack, Get Hurt, others?
-        Yeah use same state machine. Just won't need the idle AI states for scavenging but that's fine. 
+    Take trashy little state machine in LootAction, and instead make a state machine for PC state. (Enemy too)
+        KEEP VARIABLES IN STATE MACHINE, NOT IN STATES THEMSELVES
+            
+    Try this:
+        "In the constructor of the factory I create an instance of each state and store them in a dictionary. Then instead of returning a new state,
+            I just fetch the same state from the dictionary. If you do that, and move the initialize substate method to the Enter functions of the states, 
+            then everything works the same. You could even go a step further and have the switch state method take in a state enum instead of having different methods for each state.
+        I'm pretty sure this disqualifies the factory as a factory, but I'm not experienced enough to know the actual name. 
+            I should also mention that this ONLY works because the states work entirely off of the data provided by the context. 
+            If the states themselves held some sort of data, this would require some extra logic to maintain."
+        
+        Change plain getter setters to one line style?
 
+        States:
+            Idle, Walk, Run, Shoot, Melee Attack, Get Hurt, Loot, Walk Towards Loot(?), Die, others?
+        How to handle PC selected or not? Sub states "Selected" and "NotSelected"? Will it work out naturally? 
+            Superstate could handle movement/animation/other stuff
+            Substate could handle input?
+        OR, have the PCSelector be "above" the state machine, so machine only runs on selected PCs? 
+            No. Need PCs to continue to fight/move/loot after being deselected.
+            Selected/Deselected substates might be best actually. 
+        State Implementation:
+            Movement
+                Have Move.performed? started? in PCIdleState Switch States to PCWalkState (implement run later/only run in scavenge and walk at home?)
+                Move set up as usual in PCWalkState. Move.canceled puts you back in Idle?
+            Looting
+                ?
+            Combat
+                ?
+        
     FIX: Problem with instantiating multiple of same char. Might happen with different chars? 
         Can only select one of the many, either by clicking PCs or icons. The others give null reference. 
         Clicking any icon selects the one selectable PC.
