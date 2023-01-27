@@ -18,69 +18,10 @@ public class AAAAAAAAAAAAAA
     DOING IT DIFFERENTLY NOW
         States are game objects which are children of PCs. 
         Activated states run their OnEnable, Update, OnDisable, etc. 
-        How to handle selected PC? Selected substate? Or using the SO like now? 
-            With selected substate, could just activate a child object of each state object with input code on it?
+        How to handle selected PC? Selected substate
+            With selected substate, could just activate a child object of each state object with input code on it. 
             By subscribing/unsubscribing to events in OnEnable/Disable, input should be disabled if selected substate is deactivated. 
             Could have different code for different substates. Like right click cancelling actions in most states, but deselecting PC in Idle state. 
-
-
-        Put PCMovement variables and methods in PCStateMachine. 
-        Put LootAction variables and methods in PCStateMachine.
-            Gonna need to rework it a lot. Get rid of the mini state machine, don't call stop looting from movement, etc. 
-        Put "Any state" logic in PCStateMachine's Update. Then you can transfer from any state to say looting by clicking a loot container. 
-
-        While PC selected and doing something (Not in idle state), right click cancels action (sets state to idle).
-        While PC selected and in idle state, right click deselects PC? 
-
-        Is all this necessary? Gonna be listening to input in every state it seems. Maybe good for enemy/non-selected PC AI? 
-            Not much seems to change between states, just animation which is already handled, and input which is too. 
-            Maybe just refactor loot system, or fix it. 
-                Have NotLooting/Idle (includes moving while not looting/fighting), WalkingTowardsLoot, Looting, and maybe some combat states? 
-            Or it could be useful. 
-                Like don't check if enemies are near while looting/attacking, since you're distracted. 
-                Or can't take input while getting hit. 
-        Maybe just have selected as a state, and the other AI states as their own state too, like looting, shooting, idle, etc. 
-            When in selected state, you control PC entirely. Other states transition between themselves depending on environmental conditions.
-            All non-selected states can transition to selected by clicking PC/PC icon. 
-        So either have selected/not substates or have selected be it's own state and the others be theirs. 
-            Have selected/not be sub or super states? 
-            Maybe super so that each can have different substates? Like no looting in NotSelected? 
-
-    Try this:
-        "In the constructor of the factory I create an instance of each state and store them in a dictionary. Then instead of returning a new state,
-            I just fetch the same state from the dictionary. If you do that, and move the initialize substate method to the Enter functions of the states, 
-            then everything works the same. You could even go a step further and have the switch state method take in a state enum instead of having different methods for each state.
-        I'm pretty sure this disqualifies the factory as a factory, but I'm not experienced enough to know the actual name. 
-            I should also mention that this ONLY works because the states work entirely off of the data provided by the context. 
-            If the states themselves held some sort of data, this would require some extra logic to maintain."
-        KEEP VARIABLES IN STATE MACHINE, NOT IN STATES THEMSELVES
-        
-        Change plain getter setters to one line style?
-
-        States:
-            Idle, Walk, Run, Shoot, Melee Attack, Get Hurt, Loot, Walk Towards Loot(?), Die, others?
-                Do I need Idle & Walk/Run? Or can I just have Idle/Walk state? Because of NavMeshAgent? 
-                In both states you'll just be waiting for new input essentially, NavMeshAgent will be taking care of any movement. 
-
-
-        When NotSelected, should PCs just default to standing there and attacking nearest enemy (in scavenge mode)?
-        And at home, should they just do random "idle base AI" stuff? (Fight during invasions obviously) 
-
-        Sub states "Selected" and "NotSelected" 
-            Superstate handles movement/animation?/some state changes/other stuff? 
-                Or should animation have it's own controller based on state? 
-            Substate handles input/some state changes. 
-            Selected substate takes/listens for input and changes superstates accordingly. 
-            NotSelected substate changes superstates based on recent input (if any), and environmental conditions (Got hit, enemy near, finished looting, etc.). 
-
-        State Implementation:
-            Movement
-                Have Move.performed? started? in PCIdleState Switch States to PCWalkState (implement run later/only run in scavenge and walk at home?)
-                Move set up as usual in PCWalkState. Move.canceled puts you back in Idle?
-            Looting
-                ?
-            Combat
-                ?
         
     FIX: Problem with instantiating multiple of same char. Might happen with different chars? 
         Can only select one of the many, either by clicking PCs or icons. The others give null reference. 

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Available PCs SO
   m_EditorClassIdentifier: 
   PCItemSOs:
-  - {fileID: 11400000, guid: baffdbbf76772e540b83aacbc3e1b9df, type: 2}
+  - {fileID: 11400000, guid: 7af967cef340d3640b3551ce12318303, type: 2}

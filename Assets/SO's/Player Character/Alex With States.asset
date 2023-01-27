@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd3c770e08b44646b197794f373f835, type: 3}
   m_Name: Alex With States
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
-  Description: 
-  PCPrefab: {fileID: 0}
-  Name: 
+  Icon: {fileID: 21300000, guid: 84e99ae79e6f9654380636b3bdb800cc, type: 3}
+  Description: 'Alex with state child objects. '
+  PCPrefab: {fileID: 5873211930012684792, guid: 5eff2cc769de1934a956c8b31b75b4f1, type: 3}
+  Name: Alex with States
   PCInstance: {fileID: 0}

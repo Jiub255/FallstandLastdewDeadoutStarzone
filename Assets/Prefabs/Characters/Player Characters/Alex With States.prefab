@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e76e518631f5bea428b38e9cc8720af9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lootDistance: 2.5
+  _lootDistance: 0.8
   _lootState: {fileID: 4139383446069824200}
 --- !u!114 &4805805704604986418
 MonoBehaviour:

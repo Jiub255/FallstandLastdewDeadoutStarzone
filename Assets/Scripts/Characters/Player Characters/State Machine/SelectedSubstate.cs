@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class SelectedSubstate : MonoBehaviour
@@ -44,8 +45,8 @@ public class SelectedSubstate : MonoBehaviour
             Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
             1000);
 
-        // If raycast hits anything, 
-        if (hits.Length > 0)
+        // If raycast hits anything, and mouse is not over UI, 
+        if (hits.Length > 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             Debug.Log($"Hit {hits.Length} things");
             foreach (RaycastHit hit in hits)
@@ -53,15 +54,19 @@ public class SelectedSubstate : MonoBehaviour
                 Debug.Log($"{ hit.collider.name} on {LayerMask.LayerToName(hit.collider.gameObject.layer)} layer");
             }
 
-            // If PC hit, deactivate "selected" substate (PCSelector handles activating new PC's substate). 
+            // If a different was PC hit, deactivate "selected" substate (PCSelector handles activating new PC's substate). 
             foreach (RaycastHit hit in hits)
             {
                 if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)
                 {
-                        Debug.Log("Hit PC: " + hit.collider.name);
+                    Debug.Log("Hit PC: " + hit.collider.name);
                     
-                    // Deactivate "selected" substate. 
-                    gameObject.SetActive(false);
+                    // If PC is not currently selected PC, 
+                    if (hit.collider.gameObject.GetInstanceID() != transform.parent.parent.parent.gameObject.GetInstanceID())
+                    {
+                        // Deactivate "selected" substate. 
+                        gameObject.SetActive(false);
+                    }
 
                     return;
                 }
@@ -103,10 +108,6 @@ public class SelectedSubstate : MonoBehaviour
                     runToLootState.LootContainerTransform = hit.transform.parent;
                     runToLootState.gameObject.SetActive(true);
                     runToLootState.transform.GetChild(0).gameObject.SetActive(true);
-
-                    // Do this in RunToLootState's OnEnable instead. 
-                    // Set new destination for PC's NavMeshAgent. 
-                    //_selectedPCSO.PCSO.PCInstance.GetComponent<NavMeshAgent>().destination = hit.transform.GetChild(0).transform.position;
 
                     // Return so that multiple hits don't get called. 
                     return;
