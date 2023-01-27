@@ -2,15 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PCIdleState : PCBaseState
+public class PCLootingState : PCBaseState
 {
-    public PCIdleState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
+    public PCLootingState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
         : base(currentContext, pCStateFactory)
     {
         // Only do this in root state constructors.
         IsRootState = true;
-
-        //InitializeSubState();
     }
 
     public override void EnterState()
@@ -20,6 +18,7 @@ public class PCIdleState : PCBaseState
 
     public override void UpdateState()
     {
+        // This method needs to be called last in UpdateState. 
         CheckSwitchStates();
     }
 
@@ -30,11 +29,15 @@ public class PCIdleState : PCBaseState
 
     public override void InitializeSubState()
     {
-
+        // See which substate you should start in, based on environmental conditions. 
+        //if (Machine.[Loot variables]...
     }
 
     public override void CheckSwitchStates()
     {
+        // If enemy hits you, attack it (Fighting state). 
+
+        // If finished looting, go to DoingNothing Idle state. 
 
     }
 }

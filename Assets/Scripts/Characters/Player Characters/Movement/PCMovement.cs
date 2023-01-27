@@ -37,9 +37,10 @@ public class PCMovement : MonoBehaviour
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()), 1000,
                 _groundAndPCLayers);
 
+            // If raycast hits anything (ground or a PC), 
             if (hits.Length > 0)
             {
-                // Return if raycast hit a PC, so you don't move old PC to newly selected PC's position while selecting new PC.
+                // Early return if raycast hit a PC, so you don't move old PC to newly selected PC's position while selecting new PC.
                 foreach (RaycastHit hit in hits)
                 {
                     if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")))
@@ -47,19 +48,20 @@ public class PCMovement : MonoBehaviour
                         return;
                     }
                 }
-                // If no PC hit, look for ground hits. (Should only ever be one)
+                // If no PC hit, look for ground hits. 
                 foreach (RaycastHit hit in hits)
                 {
-                    // IsPointerOverGameObject checks if mouse is over any UI (HUD) object.
+                    // IsPointerOverGameObject checks if mouse is over any UI (HUD) object (Put this in update? Getting warning from unity).
                     if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")) && !EventSystem.current.IsPointerOverGameObject())
                     {
-                        // LootAction calls ResetLootingState from this.
+                        // TODO: Won't need this with state machine. 
+                        // LootAction calls ResetLootingState from this. 
                         OnMove?.Invoke(context);
 
-                        // Set new destination for PC's NavMeshAgent
+                        // Set new destination for PC's NavMeshAgent. 
                         _selectedPCSO.PCSO.PCInstance.GetComponent<NavMeshAgent>().destination = hit.point;
 
-                        // Return after first "Ground" layer hit found, just in case there's more than 1. (There never should be though)
+                        // Return after first "Ground" layer hit found, just in case there's more than 1 (There never should be though). 
                         return;
                     }
                 }

@@ -4,43 +4,44 @@ public class PCStateFactory
 
     // State instances (to avoid creating new one each time it is needed)
     // ONLY WORKS if no data stored in concrete states. Otherwise that data will get recycled. 
-    // If putting data in concrete states, return new _pC[StateName]State; in each return method, 
+    // If putting data in concrete states, "return new _pC[StateName]State;" in each return method, 
     //     so states will have fresh data. 
-    private PCIdleState _pCIdleState;
-    private PCWalkState _pCWalkState;
-    private PCLootState _pCLootState;
-    private PCSelectedState _pCSelectedState;
-    private PCNotSelectedState _pCNotSelectedState;
+
+    // Superstates 
+    private PCDoingNothingState _pCDoingNothingState;
+    private PCLootingState _pCLootingState;
+    private PCFightingState _pCFightingState;
+
+    // Substates 
+    private PCMovingSubstate _pCMovingSubstate;
+    private PCIdlingSubstate _pCIdlingSubstate;
+    private PCLootingSubstate _pCLootingSubstate;
+    private PCAttackingSubstate _pCAttackingSubstate;
 
 	public PCStateFactory(PCStateMachine currentContext)
     {
         _context = currentContext;
 
-        _pCIdleState = new PCIdleState(_context, this);
-        _pCWalkState = new PCWalkState(_context, this);
-        _pCLootState = new PCLootState(_context, this);
-        _pCSelectedState = new PCSelectedState(_context, this);
-        _pCNotSelectedState = new PCNotSelectedState(_context, this);
+        // Superstates 
+        _pCDoingNothingState = new PCDoingNothingState(_context, this);
+        _pCLootingState = new PCLootingState(_context, this);
+        _pCFightingState = new PCFightingState(_context, this);
+
+        // Substates 
+        _pCMovingSubstate = new PCMovingSubstate(_context, this);
+        _pCIdlingSubstate = new PCIdlingSubstate(_context, this);
+        _pCLootingSubstate = new PCLootingSubstate(_context, this);
+        _pCAttackingSubstate = new PCAttackingSubstate(_context, this);
     }
 
-    public PCBaseState Idle() 
-    {
-        return _pCIdleState;
-    }
-    public PCBaseState Walk()
-    {
-        return _pCWalkState;
-    }
-    public PCBaseState Loot() 
-    {
-        return _pCLootState;
-    }
-    public PCBaseState Selected() 
-    {
-        return _pCSelectedState;
-    }
-    public PCBaseState NotSelected() 
-    {
-        return _pCNotSelectedState;
-    }
+    // Superstate Getters 
+    public PCBaseState GetDoingNothingState() => _pCDoingNothingState;
+    public PCBaseState GetLootingState() => _pCLootingState;
+    public PCBaseState GetFightingState() => _pCFightingState;
+    
+    // Substate Getters 
+    public PCBaseState GetMovingSubstate() => _pCMovingSubstate;
+    public PCBaseState GetIdlingSubstate() => _pCIdlingSubstate;
+    public PCBaseState GetLootingSubstate() => _pCLootingSubstate;
+    public PCBaseState GetAttackingSubstate() => _pCAttackingSubstate;
 }

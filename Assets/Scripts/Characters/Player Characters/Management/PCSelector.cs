@@ -137,6 +137,7 @@ public class PCSelector : MonoBehaviour
         _selectedPCSO.PCSO.PCInstance.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
     }
 
+    // TODO: Call this from Idle state instead. Want right click to cancel actions in other states. 
     private void Deselect(InputAction.CallbackContext context)
     {
         if (_selectedPCSO.PCSO != null)

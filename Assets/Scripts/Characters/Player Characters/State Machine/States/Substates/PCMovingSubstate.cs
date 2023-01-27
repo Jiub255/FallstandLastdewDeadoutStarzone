@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PCSelectedState : PCBaseState
+public class PCMovingSubstate : PCBaseState
 {
-    public PCSelectedState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
-        : base(currentContext, pCStateFactory) 
+    public PCMovingSubstate(PCStateMachine currentContext, PCStateFactory pCStateFactory)
+: base(currentContext, pCStateFactory)
     {
-        //InitializeSubState();
     }
 
     public override void EnterState()

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PCNotSelectedState : PCBaseState
+public class PCIdlingSubstate : PCBaseState
 {
-    public PCNotSelectedState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
-        : base(currentContext, pCStateFactory)
+    public PCIdlingSubstate(PCStateMachine currentContext, PCStateFactory pCStateFactory)
+: base(currentContext, pCStateFactory)
     {
-        //InitializeSubState();
     }
 
     public override void EnterState()
@@ -17,6 +16,7 @@ public class PCNotSelectedState : PCBaseState
 
     public override void UpdateState()
     {
+        // This method needs to be called last in UpdateState. 
         CheckSwitchStates();
     }
 

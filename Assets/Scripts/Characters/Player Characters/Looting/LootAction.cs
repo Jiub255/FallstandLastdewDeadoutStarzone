@@ -92,8 +92,9 @@ public class LootAction : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Looting State: " + LootingState.ToString());
+        //Debug.Log("Looting State: " + LootingState.ToString());
 
+        // TODO: Ugly non-state machine, fix it. 
         if (LootingState == LootingState.WalkingTowards)
         {
             if (HaveReachedLoot())

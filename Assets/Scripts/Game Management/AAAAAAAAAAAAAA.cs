@@ -13,9 +13,39 @@ public class AAAAAAAAAAAAAA
 
     FIRST!!
 
-    Take trashy little state machine in LootAction, and instead make a state machine for PC state. (Enemy too)
-        KEEP VARIABLES IN STATE MACHINE, NOT IN STATES THEMSELVES
-            
+    MAKE STATE MACHINE
+
+    DOING IT DIFFERENTLY NOW
+        States are game objects which are children of PCs. 
+        Activated states run their OnEnable, Update, OnDisable, etc. 
+        How to handle selected PC? Selected substate? Or using the SO like now? 
+            With selected substate, could just activate a child object of each state object with input code on it?
+            By subscribing/unsubscribing to events in OnEnable/Disable, input should be disabled if selected substate is deactivated. 
+            Could have different code for different substates. Like right click cancelling actions in most states, but deselecting PC in Idle state. 
+
+
+        Put PCMovement variables and methods in PCStateMachine. 
+        Put LootAction variables and methods in PCStateMachine.
+            Gonna need to rework it a lot. Get rid of the mini state machine, don't call stop looting from movement, etc. 
+        Put "Any state" logic in PCStateMachine's Update. Then you can transfer from any state to say looting by clicking a loot container. 
+
+        While PC selected and doing something (Not in idle state), right click cancels action (sets state to idle).
+        While PC selected and in idle state, right click deselects PC? 
+
+        Is all this necessary? Gonna be listening to input in every state it seems. Maybe good for enemy/non-selected PC AI? 
+            Not much seems to change between states, just animation which is already handled, and input which is too. 
+            Maybe just refactor loot system, or fix it. 
+                Have NotLooting/Idle (includes moving while not looting/fighting), WalkingTowardsLoot, Looting, and maybe some combat states? 
+            Or it could be useful. 
+                Like don't check if enemies are near while looting/attacking, since you're distracted. 
+                Or can't take input while getting hit. 
+        Maybe just have selected as a state, and the other AI states as their own state too, like looting, shooting, idle, etc. 
+            When in selected state, you control PC entirely. Other states transition between themselves depending on environmental conditions.
+            All non-selected states can transition to selected by clicking PC/PC icon. 
+        So either have selected/not substates or have selected be it's own state and the others be theirs. 
+            Have selected/not be sub or super states? 
+            Maybe super so that each can have different substates? Like no looting in NotSelected? 
+
     Try this:
         "In the constructor of the factory I create an instance of each state and store them in a dictionary. Then instead of returning a new state,
             I just fetch the same state from the dictionary. If you do that, and move the initialize substate method to the Enter functions of the states, 
@@ -23,17 +53,26 @@ public class AAAAAAAAAAAAAA
         I'm pretty sure this disqualifies the factory as a factory, but I'm not experienced enough to know the actual name. 
             I should also mention that this ONLY works because the states work entirely off of the data provided by the context. 
             If the states themselves held some sort of data, this would require some extra logic to maintain."
+        KEEP VARIABLES IN STATE MACHINE, NOT IN STATES THEMSELVES
         
         Change plain getter setters to one line style?
 
         States:
             Idle, Walk, Run, Shoot, Melee Attack, Get Hurt, Loot, Walk Towards Loot(?), Die, others?
-        How to handle PC selected or not? Sub states "Selected" and "NotSelected"? Will it work out naturally? 
-            Superstate could handle movement/animation/other stuff
-            Substate could handle input?
-        OR, have the PCSelector be "above" the state machine, so machine only runs on selected PCs? 
-            No. Need PCs to continue to fight/move/loot after being deselected.
-            Selected/Deselected substates might be best actually. 
+                Do I need Idle & Walk/Run? Or can I just have Idle/Walk state? Because of NavMeshAgent? 
+                In both states you'll just be waiting for new input essentially, NavMeshAgent will be taking care of any movement. 
+
+
+        When NotSelected, should PCs just default to standing there and attacking nearest enemy (in scavenge mode)?
+        And at home, should they just do random "idle base AI" stuff? (Fight during invasions obviously) 
+
+        Sub states "Selected" and "NotSelected" 
+            Superstate handles movement/animation?/some state changes/other stuff? 
+                Or should animation have it's own controller based on state? 
+            Substate handles input/some state changes. 
+            Selected substate takes/listens for input and changes superstates accordingly. 
+            NotSelected substate changes superstates based on recent input (if any), and environmental conditions (Got hit, enemy near, finished looting, etc.). 
+
         State Implementation:
             Movement
                 Have Move.performed? started? in PCIdleState Switch States to PCWalkState (implement run later/only run in scavenge and walk at home?)
@@ -353,18 +392,36 @@ public class AAAAAAAAAAAAAA
         Make difficulty kinda high, so survivors die. Make it part of the game flow. 
         You can (automatically?) retrieve dead characters stuff.
 
+
     GAMEPLAY:
+
+    SETTING/BACKGROUND STORY
+    ------------------------
+        Aftermath of evenly matched war with aliens. Both sides mostly destroyed. 
+            Still post-apocalyptic base builder. 
+            Can have cool alien technology/enemies. And human warlords/bandits and wild earth animals. 
+            Have it way in the future so you can have cool new earth animals/technology? 
+
 
     MANAGE A HOME BASE
     ------------------
-        Build defenses against zombie/bandit/whatever raids
-            Also repair damaged stuff after raids
-        Build rain catchers/gardens/cattle areas for food and water
-        How Stardewy do I want to go?
-            Don't want super involved obviously, but maybe more than LS:DZ
-        Can find better places for new home base and move
-            Prisons, schools, military complex, police stations, etc.
-
+        Build defenses against zombie/bandit/whatever raids. 
+            Also repair damaged stuff after raids. 
+        Build rain catchers/gardens/cattle areas for food and water. 
+        How Stardewy do I want to go? 
+            Focus more on base building than LS:DZ. 
+            Have survivors plow and plant food, each unit of ground that is planted and growing produces 
+                a certain amount of food per hour. 
+            Each survivor consumes a certain amount of food per hour. 
+            You can store food. 
+            Different types of food? Good ones boost morale? 
+        Decorate base to boost morale. 
+            Have lots of decorations/entertainment stuff. 
+        Can find better places for new home base and move. 
+            Prisons, schools, military complexes, police stations, etc. 
+            Keep old buildings or start from scratch? Scrap old buildings for materials? 
+            Have to make farm land at new place. Make sure to have enough food stored to last. 
+            
 
     MANAGE TEAM OF SURVIVORS
     ------------------------
@@ -406,6 +463,9 @@ public class AAAAAAAAAAAAAA
             They go up together, but pain actually affects your stats (speed, aim, etc)
             Alcohol/drugs/pain killers/medical equipment can lower pain so you can fight longer, but you need to rest to recover injury bar
             Pain can only go as low as a certain percentage of injury bar
+        Have melee fighters keep enemies at bay, while ranged shoot at them and looters loot. 
+            Have other "types" of fighters? Tanks, healers, "mage" types, etc? Not at first at least.
+        
 
 
     STATS (Still need to work these out)
@@ -452,7 +512,9 @@ public class AAAAAAAAAAAAAA
                 Combat/Scavenging Stats
                 Equipment
                 
-     
+     FISHING MINIGAME
+    -----------------
+        
      
      
      

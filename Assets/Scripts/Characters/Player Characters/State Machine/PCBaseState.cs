@@ -4,20 +4,23 @@ public abstract class PCBaseState
 {
 	// Fields 
 	private bool _isRootState = false;
-	private PCStateMachine _ctx;
+	private PCStateMachine _machine;
 	private PCStateFactory _factory;
 	private PCBaseState _currentSuperState;
 	private PCBaseState _currentSubState;
 
 	// Properties 
 	protected bool IsRootState { set { _isRootState = value; } }
-	protected PCStateMachine Ctx { get { return _ctx; } }
+	protected PCStateMachine Machine { get { return _machine; } }
 	protected PCStateFactory Factory { get { return _factory; } }
+	public PCBaseState CurrentSuperState { get { return _currentSuperState; } }
+	public PCBaseState CurrentSubState { get { return _currentSubState; } }
 
 	// Constructor. Inherited constructors need to extend this. Why? What is happening exactly? 
+	// It passes the concrete state 
 	public PCBaseState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
     {
-		_ctx = currentContext;
+		_machine = currentContext;
 		_factory = pCStateFactory;
     }
 
@@ -46,8 +49,8 @@ public abstract class PCBaseState
         }
 	}
 
-	// Switch current (super or sub) state.
-	protected void SwitchState(PCBaseState newState) 
+	// Switch current (super or sub) state. 
+	public void SwitchState(PCBaseState newState) 
 	{
 		// Current state exits state (Do ExitStates() instead if needed). 
 		ExitState();
@@ -58,7 +61,7 @@ public abstract class PCBaseState
 		if (_isRootState)
         {
 			// Switch current state of context. 
-			_ctx.CurrentState = newState;
+			_machine.CurrentState = newState;
         }
 		else if(_currentSuperState != null)
         {

@@ -2,15 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PCLootState : PCBaseState
+public class PCLootingSubstate : PCBaseState
 {
-    public PCLootState(PCStateMachine currentContext, PCStateFactory pCStateFactory)
-        : base(currentContext, pCStateFactory)
+    public PCLootingSubstate(PCStateMachine currentContext, PCStateFactory pCStateFactory)
+: base(currentContext, pCStateFactory)
     {
-        // Only do this in root state constructors.
-        IsRootState = true;
-
-        //InitializeSubState();
     }
 
     public override void EnterState()
