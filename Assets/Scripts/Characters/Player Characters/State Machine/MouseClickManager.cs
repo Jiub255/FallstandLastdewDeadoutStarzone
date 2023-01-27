@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 // Sends raycast from mouse position into game world. Sets state of active PC based on what was clicked (ground, loot, enemy, etc.) 
 public class MouseClickManager : MonoBehaviour
 {
-    public static event Action<Transform, Transform> OnClickedLoot;
+   // public static event Action<Transform, Transform> OnClickedLoot;
 
     [SerializeField]
 	private SelectedPCSO _selectedPCSO;

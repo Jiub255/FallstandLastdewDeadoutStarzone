@@ -61,11 +61,17 @@ public class LootState : MonoBehaviour
             // Add loot to inventory. 
             AddLoot();
 
+            // Deactivate this state. 
+            gameObject.SetActive(false);
+
             // Activate Idle state. 
             _idleState.SetActive(true);
 
-            // Deactivate this state. 
-            gameObject.SetActive(false);
+            // Activate selected substate if currently selected. 
+            if (transform.GetChild(0).gameObject.activeSelf)
+            {
+                _idleState.transform.GetChild(0).gameObject.SetActive(true);
+            }
         }
         else
         {
@@ -86,7 +92,7 @@ public class LootState : MonoBehaviour
 
     private void AddLoot()
     {
-        LootContainer lootContainer = LootContainerTransform.GetComponent<LootContainer>();
+        LootContainer lootContainer = LootContainerTransform.GetChild(1).GetComponent<LootContainer>();
         foreach (ItemAmount itemAmount in lootContainer.LootItemAmounts)
         {
             // Check to see if you already have an itemAmount that matches the item,

@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 
 public class PCSelector : MonoBehaviour
 {
-    public static event Action OnDoubleClickPCButton;
+    public static event Action<Transform> OnDoubleClickPCButton;
 
     [SerializeField]
     private PCSOListSO availablePCsSO;
 
-    [SerializeField]
-    private SelectedPCSO _selectedPCSO;
+/*    [SerializeField]
+    private SelectedPCSO _selectedPCSO;*/
 
     [SerializeField]
     private LayerMask _playerCharacterLayer;
@@ -21,12 +21,12 @@ public class PCSelector : MonoBehaviour
 
     private void Start()
     {
-        PCItemSO.OnSelectPC += HandleClick;
+        PCItemSO.OnSelectPC += HandleButtonClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started += Select;
         S.I.IM.PC.Scavenge.Select.performed += Select;
-        S.I.IM.PC.Home.Deselect.performed += Deselect;
-        S.I.IM.PC.Scavenge.Deselect.performed += Deselect;
+/*        S.I.IM.PC.Home.Deselect.performed += Deselect;
+        S.I.IM.PC.Scavenge.Deselect.performed += Deselect;*/
 
         // Trying double click stuff
 /*        S.I.IM.PC.Home.SelectOrCenter.performed += Performed;
@@ -36,12 +36,12 @@ public class PCSelector : MonoBehaviour
 
     private void OnDisable()
     {
-        PCItemSO.OnSelectPC -= HandleClick;
+        PCItemSO.OnSelectPC -= HandleButtonClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started -= Select;
         S.I.IM.PC.Scavenge.Select.performed -= Select;
-        S.I.IM.PC.Home.Deselect.performed -= Deselect;
-        S.I.IM.PC.Scavenge.Deselect.performed -= Deselect;
+/*        S.I.IM.PC.Home.Deselect.performed -= Deselect;
+        S.I.IM.PC.Scavenge.Deselect.performed -= Deselect;*/
 
         // Trying double click stuff
 /*        S.I.IM.PC.Home.SelectOrCenter.performed -= Performed;
@@ -104,14 +104,14 @@ public class PCSelector : MonoBehaviour
     }
 
     // Still get double click if you click on two different buttons within time limit?
-    private void HandleClick(PCItemSO pCItemSO)
+    private void HandleButtonClick(PCItemSO pCItemSO)
     {
         float currentClickTime = Time.realtimeSinceStartup;
 
         if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
         {
             // Double click: Center camera on PC. Use event?
-            OnDoubleClickPCButton?.Invoke();
+            OnDoubleClickPCButton?.Invoke(pCItemSO.PCInstance.transform);
         }
         else
         {
@@ -124,7 +124,21 @@ public class PCSelector : MonoBehaviour
 
     private void ChangePC(PCItemSO newPCItemSO)
     {
-        // Deactivate old selected PC's "selected" icon
+        // Deactivate "selected" substate of current PC in SelectedSubstate class. 
+
+        Transform states = newPCItemSO.PCInstance.transform.GetChild(4);
+
+        foreach (Transform state in states)
+        {
+            // If state is currently active, 
+            if (state.gameObject.activeInHierarchy)
+            {
+                // Activate "selected" substate. 
+                state.GetChild(0).gameObject.SetActive(true);
+            }
+        }
+
+/*        // Deactivate old selected PC's "selected" icon
         if (_selectedPCSO.PCSO != null)
         {
             _selectedPCSO.PCSO.PCInstance.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
@@ -134,11 +148,12 @@ public class PCSelector : MonoBehaviour
         _selectedPCSO.PCSO = newPCItemSO;
 
         // Activate new selected PC's "selected" icon
-        _selectedPCSO.PCSO.PCInstance.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
+        _selectedPCSO.PCSO.PCInstance.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();*/
     }
 
     // TODO: Call this from Idle state instead. Want right click to cancel actions in other states. 
-    private void Deselect(InputAction.CallbackContext context)
+    // OR, check if player is in idle state. 
+/*    private void Deselect(InputAction.CallbackContext context)
     {
         if (_selectedPCSO.PCSO != null)
         {
@@ -148,5 +163,5 @@ public class PCSelector : MonoBehaviour
             // Set selected PC to null
             _selectedPCSO.PCSO = null;
         }
-    }
+    }*/
 }

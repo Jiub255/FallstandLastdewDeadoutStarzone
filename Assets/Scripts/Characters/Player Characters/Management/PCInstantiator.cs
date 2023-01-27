@@ -8,7 +8,7 @@ public class PCInstantiator : MonoBehaviour
 	[SerializeField]
 	private PCSOListSO availablePCsSO;
 
-    private void Awake()
+    private void Start()
     {
         // Where to put instantiated PCs?
         //     Have a spawn area in each scavenge location and just spawn them in a bunch in the center.

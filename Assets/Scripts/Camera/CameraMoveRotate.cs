@@ -33,8 +33,8 @@ public class CameraMoveRotate : MonoBehaviour
     private float _screenHeight;
     private float _edgeDistance;
 
-    [SerializeField, Header("For Centering on PC")]
-    private SelectedPCSO _selectedPCSO;
+    [/*SerializeField,*/ Header("For Centering on PC")]
+    //private SelectedPCSO _selectedPCSO;
 
     [SerializeField]
     private LayerMask _pCLayer;
@@ -76,7 +76,7 @@ public class CameraMoveRotate : MonoBehaviour
             // Gets annoying when you accidentally edge scroll because you moved the mouse too far while rotating.
             else
             {
-                EdgeScroll();
+               // EdgeScroll();
             }
         }
     }
@@ -84,35 +84,33 @@ public class CameraMoveRotate : MonoBehaviour
     private void CenterOnPC(InputAction.CallbackContext context)
     {
         // Only raycast to PC layer. 
-        if (_selectedPCSO.PCSO != null)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(
-                Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
-                1000,
-                _pCLayer);
 
-            if (hits.Length > 0)
+        RaycastHit[] hits = Physics.RaycastAll(
+            Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+            1000,
+            _pCLayer);
+
+        if (hits.Length > 0)
+        {
+            // If double clicked on PC, center camera on them.
+            foreach (RaycastHit hit in hits)
             {
-                // If double clicked on PC, center camera on them.
-                foreach (RaycastHit hit in hits)
+                if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) && 
+                    !EventSystem.current.IsPointerOverGameObject())
                 {
-                    if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) && 
-                        !EventSystem.current.IsPointerOverGameObject())
-                    {
-                        CenterOnPC();
-                        // "return" so that you center on first one raycast hits, in case another PC is behind them. 
-                        return;
-                    }
+                    CenterOnPC(hit.collider.transform);
+                    // "return" so that you center on first one raycast hits, in case another PC is behind them. 
+                    return;
                 }
             }
         }
     }
 
     // Want to call this from double click, or at least just single click, of PC UI button. 
-    private void CenterOnPC()
+    private void CenterOnPC(Transform pCTransform)
     {
         // Maybe lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is.
-        transform.position = _selectedPCSO.PCSO.PCInstance.transform.position;
+        transform.position = pCTransform.position;
         transform.rotation = Quaternion.Euler(new Vector3(35f, 0f, 0f));
         // CameraZoom listens and sets zoom distance to default. 
         OnCenterOnPC?.Invoke();

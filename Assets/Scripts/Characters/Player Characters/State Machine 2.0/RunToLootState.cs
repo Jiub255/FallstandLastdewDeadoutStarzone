@@ -10,7 +10,7 @@ public class RunToLootState : MonoBehaviour
     private Vector3 _lootingPosition;
 
     [SerializeField]
-    private float _lootDistance = 2.5f;
+    private float _lootDistance = 1.5f;
 
     [SerializeField]
     private GameObject _lootState;
@@ -28,19 +28,25 @@ public class RunToLootState : MonoBehaviour
         if (HaveReachedLoot())
         {
             // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
-            transform.position = _lootingPosition;
+            transform.parent.parent.position = _lootingPosition;
 
             // Face the loot container
-            transform.LookAt(LootContainerTransform);
+            transform.parent.parent.LookAt(LootContainerTransform);
+
+            // Deactivate this state. 
+            gameObject.SetActive(false);
 
             // Activate LootState. 
             _lootState.SetActive(true);
 
+            // Activate selected substate if currently selected. 
+            if (transform.GetChild(0).gameObject.activeSelf)
+            {
+                _lootState.transform.GetChild(0).gameObject.SetActive(true);
+            }
+
             // Set LootContainerTransform in LootState. 
             _lootState.GetComponent<LootState>().LootContainerTransform = LootContainerTransform;
-
-            // Deactivate this state. 
-            gameObject.SetActive(false);
         }
     }
 

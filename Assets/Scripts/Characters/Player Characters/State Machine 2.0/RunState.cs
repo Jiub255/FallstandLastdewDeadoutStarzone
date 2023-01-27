@@ -15,6 +15,11 @@ public class RunState : MonoBehaviour
         _navMeshAgent = transform.parent.parent.GetComponent<NavMeshAgent>();
     }
 
+    private void OnDisable()
+    {
+        _navMeshAgent.ResetPath();
+    }
+
     private void Update()
     {
         // If PC is done moving, 
@@ -22,11 +27,17 @@ public class RunState : MonoBehaviour
             _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance &&
             (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f))
         {
+            // Deactivate this state. 
+            gameObject.SetActive(false);
+
             // Activate Idle State. 
             _idleState.SetActive(true);
 
-            // Deactivate this state. 
-            gameObject.SetActive(false);
+            // Activate selected substate if currently selected. 
+            if (transform.GetChild(0).gameObject.activeSelf)
+            {
+                _idleState.transform.GetChild(0).gameObject.SetActive(true);
+            }
         }
     }
 }

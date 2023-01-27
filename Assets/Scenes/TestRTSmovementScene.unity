@@ -1395,10 +1395,7 @@ GameObject:
   - component: {fileID: 1508018779}
   - component: {fileID: 1508018778}
   - component: {fileID: 1508018777}
-  - component: {fileID: 1508018776}
-  - component: {fileID: 1508018775}
   - component: {fileID: 1508018774}
-  - component: {fileID: 1508018780}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -1437,38 +1434,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _rotationSpeed: 50
---- !u!114 &1508018775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508018772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d1de33a89f0f1a499b69096877aac7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lootContainerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
---- !u!114 &1508018776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508018772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4b9576a35ad28648881e0b8f41282b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _groundAndPCLayers:
-    serializedVersion: 2
-    m_Bits: 640
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
 --- !u!114 &1508018777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1482,7 +1447,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availablePCsSO: {fileID: 11400000, guid: d03460ed0f041b1468047a6de0415cf7, type: 2}
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
   _playerCharacterLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1512,31 +1476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c01fccaa7576ae419addc7b1179b772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1508018780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508018772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d2bde37e4357b84aa5721981fae6d6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
-  _pCLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  _lootContainerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!1 &1515628530
 GameObject:
   m_ObjectHideFlags: 0
