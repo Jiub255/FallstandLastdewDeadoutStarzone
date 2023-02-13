@@ -1,70 +1,94 @@
 public class AAAAAAAAAAAAAA
 {/*
+_______________________________________________________________________________________________________
 
     
-                          ___________    _____     ______       _____
-                               |        /     \    |     \     /     \    *
-                               |       |       |   |      |   |       |
-                               |       |       |   |      |   |       |   *
-                               |        \_____/    |_____/     \_____/
+                           _________    _____     ______       _____
+                               |       /     \    |     \     /     \    *
+                               |      |       |   |      |   |       |
+                               |      |       |   |      |   |       |   *
+                               |       \_____/    |_____/     \_____/
 
 
----------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
 
     FIRST!!
 
-    MAKE STATE MACHINE
 
-    DOING IT DIFFERENTLY NOW
-        States are game objects which are children of PCs. 
-        Activated states run their OnEnable, Update, OnDisable, etc. 
-        How to handle selected PC? Selected substate
-            With selected substate, could just activate a child object of each state object with input code on it. 
-            By subscribing/unsubscribing to events in OnEnable/Disable, input should be disabled if selected substate is deactivated. 
-            Could have different code for different substates. Like right click cancelling actions in most states, but deselecting PC in Idle state. 
-        
-    FIX: Problem with instantiating multiple of same char. Might happen with different chars? 
-        Can only select one of the many, either by clicking PCs or icons. The others give null reference. 
-        Clicking any icon selects the one selectable PC.
-        Might not work with multiples of same PCItemSO. Need multiple SOs to go with multiple PCs?
-            This wont work for enemies, might be fine for PCs.
+    Figure out how combat will work. 
+        Like LS:DZ? 
+        Or more free form TPS? 
+        Probably more like RTS style, similar to LS:DZ. 
+            Makes sense since you're controlling multiple people. 
+            Can have some scavenging, setting traps or doing whatever, and others fighting. 
+            Don't want to have to constantly control fighters, or the others for that matter. 
+            Maybe can control currently selected PC, like aim and shoot/melee/loot. 
+                The others do the task you set them to do, or fight or loot automatically. 
+        Use Injury/Pain system instead of boring old HP. 
+            Pain rises equally with injury (both go from 0 - 100).
+                Or could rise at lower rate depending on "pain tolerance" (based off endurance or whatever stat?). 
+            Higher pain lowers your other stats (attack, def, speed, whatever). 
+            Can use painkillers to temporarily lower pain, but it always comes back up to your injury level once they wear off. 
+                Pain can only go as low as a certain percentage of injury bar. 
+            Lower injury level (and with it, pain level) by resting or seeing a doctor. 
+            Put Pain/Injury bars under each PC portrait icon in side bar. 
 
-    Figure out how travelling/scavenging will work.
-        Use a world map and choose the location
-        Travel on the map in a simple "overworld" style to find new locations. Uncover the map as you explore.
-            Choose to scavenge whichever buildings. Certain buildings have better loot in general, different types of 
-            buildings have different loot possibilites. 
+    Setup Usable item/inv system. 
+        Figure out how items/inv will work. 
+        Will inventory only show usable items in game? 
+        Can you loot crafting/usable/equipment items? Of course. 
+            Loot containers will hold lists of ItemAmounts. 
+            Specific inventories will hold lists of their type of itemAmounts. 
+            When looting, loot will be sorted into their correct inventories. 
+
+    Figure out how crafting will work. 
+        Change CraftableEquip/UsableItem back to a bool and a list that only shows when craftable bool == true. 
+        CraftingItem will inherit from ItemSO. 
+            ex: Leather, metal pipe, whatever crafting thing. 
+        Have CraftableEquipment extend EquipmentItemSO and CraftableItem extend UsableItemSO. Especially since only gonna be two types of craftable items anyway. 
+            Craft equipment and usable items (anything else?). 
+        Have a filter in crafting menu to only show items you have the materials to craft. On by default. 
+        Have a way to see crafting items, clicking on them shows what they can be used to build. 
+            Things that you have all the materials for will be not grayed out, and clicking them puts you on the craft screen for that item. 
+
+    FIX:
+        Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
+        Loot state not working perfectly. Won't loot if clicked on nearby loot container. 
+
+    Figure out how travelling will work.
+        Use a world map and choose the location? 
+        OR, Travel on the map in a simple "overworld" style to find new locations. Uncover the map as you explore.
+            Choose to scavenge whichever buildings. Certain buildings have better loot, different types of buildings have different loot possibilites. 
+            Maybe you can see enemies/mobs on map? Have to fight them if you run into them? They could be around buildings with really good loot. 
+                Fight scenes could be the same as scavenging scenes, just outside and with more enemies and less loot containers. 
+                Mob size on the map could be smaller the higher the combined stealth skill of your team is. 
         Fast travel to any location you've uncovered when leaving to scavenge.
         Occasionally find new, better locations to set up your home base. 
             When you move, you have all your old buildings, you can place them wherever.
             OR
-            You start over building wise, but you caravan over all your food/water/item/materials
+            You start over building wise, but you caravan over all your food/water/item/materials. 
 
     Figure out how scene management will work. 
-        How to instantiate all current PCs onto scene?
-            Scavenge scenes and home scene will be different.
-
-    Figure out how combat will work.
-        Like LS:DZ?
-        Or more free form TPS?
-        Probably more like RTS style, similar to LS:DZ.
-            Makes sense since you're controlling multiple people.
-            Can have some scavenging and others fighting or doing whatever. 
-            Don't want to have to constantly control fighters, or the others for that matter. 
-            Maybe can control currently selected PC, like aim and shoot/melee/loot. The others do the task you set them/fight or loot automatically. 
-
-    Figure out how crafting will work.
-        CraftingItem will inherit from ItemSO
-            ex: Leather, metal pipe, whatever crafting thing.
-        Have another set of SOs for craftable items?
-            Maybe make a "Craftable" bool on EquipmentItem and UsableItem instead of having CraftableItem? Probably.
-        Craft equipment and usable items. (Anything else?)
-        Have a filter in crafting menu to only show items you have the materials to craft. On by default. 
-        Have a way to see crafting items, clicking on them shows what they can be used to build.
-            Things that you have all the materials for will be not grayed out, and clicking them puts you on the craft screen for that item.
+        How to instantiate all current PCs onto scene? 
+            Scavenge scenes and home scene will be different. 
+        FIX: Problem with instantiating multiple of same char. Might happen with different chars? 
+            Can only select one of the many, either by clicking PCs or icons. The others give null reference. 
+            Clicking any icon selects the one selectable PC. 
+            Might not work with multiples of same PCItemSO. Need multiple SOs to go with multiple PCs? 
+                This wont work for enemies, might be fine for PCs. 
         
     Redesign UI completely
         Do some research. Look at good UIs from games you've played. 
+
+
+    DONT WORRY ABOUT THIS FOR NOW - REFACTOR LATER IF YOU WANT
+        Fix/rework inv/item/loot system. 
+            Try to use only one UIRefresher script for all inventories by having the different inventorySO's inherit from a base class/interface. 
+            Combine slot scripts into one? Or use a slot interface? Too much repeated code, I'm doing something stupid. 
+                Maybe have a SlotBase and inherit as needed for extra functionality? 
+        Stop using ItemAmounts and just use serializable dictionaries in the inv? 
+            Want to have all the different invs have either a list of ItemAmounts or a dictionary<ItemAmount, int>. 
+            Then just have Add/Remove methods on the invSO's that make sure it's the right kind of item. 
 
 
     BUILDING
@@ -97,7 +121,8 @@ public class AAAAAAAAAAAAAA
                 Just have one general "building material" or have separate materials like wood, stone, metal, etc.?
             Have a "room score"/morale stat affected by certain buildings. Having nice furniture/decorations/entertainment stuff 
                 increases this stat, which increases all other stats by some percentage. 
-
+        Eventually unlock advanced building stuff, like generators and computerized machines, which will unlock advanced equipment/usable items. 
+            Maybe need engineer/science type people? Or someone with high "int"? 
 
     UI/MENUS/GAME STATE/ACTION MAP/SCENE
     ------------------------------------
@@ -137,6 +162,15 @@ public class AAAAAAAAAAAAAA
             How to have a slot that was instantiated at runtime be the first selected?
                 Do: public Button button; void Start(){ button.Select(); }
                 Then only need one event system? Can I put it back with the input manager game object?
+
+        DOING STATE MACHINE DIFFERENTLY NOW
+            States are game objects which are children of PCs. 
+            Activated states run their OnEnable, Update, OnDisable, etc. 
+            How to handle selected PC? Selected substate
+                With selected substate, could just activate a child object of each state object with input code on it. 
+                By subscribing/unsubscribing to events in OnEnable/Disable, input should be disabled if selected substate is deactivated. 
+                Could have different code for different substates. Like right click cancelling actions in most states, but deselecting PC in Idle state. 
+            Do similar for NPCs/enemies, but simpler since you won't need selected substates or any input logic. 
 
 
     FINISH CAMERA CONTROLLER
@@ -198,9 +232,9 @@ public class AAAAAAAAAAAAAA
             Gas and fire to make a fire wall to block enemies
             Knock over big things like shelves onto enemies
             Hit them with vehicles if there's outdoor levels
-        Have injury and pain bars
+        Have injury and pain bars (instead of HP/health). 
             They go up together, but pain actually affects your stats (speed, aim, etc)
-            Alcohol/drugs/pain killers/medical equipment can lower pain so you can fight longer, but you need to rest to recover injury bar
+            Alcohol/drugs/pain killers/medical equipment/mind-over-matter-focus can lower pain so you can fight longer, but you need to rest to recover injury bar
             Pain can only go as low as a certain percentage of injury bar
 
 
@@ -282,15 +316,17 @@ public class AAAAAAAAAAAAAA
             Can click on ground/PCs/containers/enemies behind objects too.
 
 
-    MOVEMENT
+    MOVEMENT/STATE MACHINE 
     --------
         Select PC with PCSelector by left clicking on PC.
-        currentlySelectedPC stored in SO.
         Move/loot/eventually attack by clicking on ground/container/enemy while PC selected.
+        State machine with movement and looting states. 
+            States are child GO's on each PC. 
+            Selected substate on each state object to handle input. 
          
 
-    BUILDING
-    --------
+    BUILDING 
+    -------- 
         Basic menu
         Can select buildings from menu
         Buildings stored in SO, which stores building prefab
@@ -304,7 +340,7 @@ public class AAAAAAAAAAAAAA
     ----------
         Can loot containers
         Starts a timer when you loot, get items at the end of timer if not cancelled.
-        Can cancel looting by moving or looting a different container. (Eventually also if you attack or get hit)
+        Can cancel looting by moving or looting a different container (eventually also if you attack or get hit). 
 
 
     INVENTORY

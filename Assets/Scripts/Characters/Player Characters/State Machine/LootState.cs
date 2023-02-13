@@ -92,18 +92,22 @@ public class LootState : MonoBehaviour
 
     private void AddLoot()
     {
-        LootContainer lootContainer = LootContainerTransform.GetChild(1).GetComponent<LootContainer>();
+        LootContainer lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
+
         foreach (ItemAmount itemAmount in lootContainer.LootItemAmounts)
         {
-            // Check to see if you already have an itemAmount that matches the item,
-            //    then add however many
-            if (_inventorySO.GetItemAmountFromItemSO(itemAmount.InventoryItemSO) != null)
+            if (itemAmount.ItemSO.GetType() == typeof(UsableItemSO))
             {
-                _inventorySO.GetItemAmountFromItemSO(itemAmount.InventoryItemSO).Amount += itemAmount.Amount;
-            }
-            else
-            {
-                _inventorySO.ItemAmounts.Add(itemAmount);
+                // Check to see if you already have an itemAmount that matches the item,
+                //    then add however many
+                if (_inventorySO.GetItemAmountFromItemSO(itemAmount.ItemSO) != null)
+                {
+                    _inventorySO.GetItemAmountFromItemSO(itemAmount.ItemSO).Amount += itemAmount.Amount;
+                }
+                else
+                {
+                    _inventorySO.ItemAmounts.Add(itemAmount);
+                }
             }
         }
     }

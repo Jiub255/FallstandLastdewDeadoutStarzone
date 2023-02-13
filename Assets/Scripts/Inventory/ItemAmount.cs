@@ -1,12 +1,12 @@
 ﻿[System.Serializable]
 public class ItemAmount
 {
-    public InventoryItemSO InventoryItemSO;
+    public ItemSO ItemSO;
     public int Amount = 1;
 
-    public ItemAmount(InventoryItemSO inventoryItemSO, int amount)
+    public ItemAmount(ItemSO itemSO, int amount = 1)
     {
-        this.InventoryItemSO = inventoryItemSO;
-        this.Amount = amount;
+        ItemSO = itemSO;
+        Amount = amount;
     }
 }

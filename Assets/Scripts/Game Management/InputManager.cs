@@ -1,12 +1,7 @@
 using UnityEngine;
 
-// IM = InputManager
 public class InputManager : MonoBehaviour
 {
-    // From generated C# class
-        // Might be easier to use this instead of PlayerInput and every action individually with strings.
-        // Just re-generated C# class whenever you change PlayerControl Input Action Asset.
-    // PC is for PlayerControls
     public PlayerControls PC { get; private set; }
 
     private void Awake()

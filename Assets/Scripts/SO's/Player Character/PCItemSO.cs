@@ -11,12 +11,7 @@ public class PCItemSO : ItemSO
 
     public string Name;
 
-    // Gets set in game while instantiating the scene's PCs.
-    // Do in SceneManager?
-    /*    foreach (PCItemSO pCItemSO in availablePCsSO.PCItemSOs)
-        {
-            pCItemSO.PCInstance = Instantiate(pCItemSO.PCPrefab);
-        }*/
+    // Gets set in game while instantiating the scene's PCs (in PCInstantiator). 
     [HideInInspector]
     public GameObject PCInstance;
 
@@ -27,6 +22,6 @@ public class PCItemSO : ItemSO
         // PCSelector hears this. Selects this PC for now. Center camera on double click later. 
         OnSelectPC?.Invoke(this);
 
-        base.Use();
+        //base.Use();
     }
 }

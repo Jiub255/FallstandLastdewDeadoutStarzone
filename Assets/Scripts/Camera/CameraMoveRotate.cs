@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-// Put this on Rotation Origin
+// Put this on Camera Focal Point
 public class CameraMoveRotate : MonoBehaviour
 {
     public static event Action OnCenterOnPC;
@@ -84,7 +84,6 @@ public class CameraMoveRotate : MonoBehaviour
     private void CenterOnPC(InputAction.CallbackContext context)
     {
         // Only raycast to PC layer. 
-
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
             1000,
@@ -109,7 +108,7 @@ public class CameraMoveRotate : MonoBehaviour
     // Want to call this from double click, or at least just single click, of PC UI button. 
     private void CenterOnPC(Transform pCTransform)
     {
-        // Maybe lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is.
+        // TODO: Lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is. 
         transform.position = pCTransform.position;
         transform.rotation = Quaternion.Euler(new Vector3(35f, 0f, 0f));
         // CameraZoom listens and sets zoom distance to default. 

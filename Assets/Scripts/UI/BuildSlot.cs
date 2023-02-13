@@ -11,9 +11,9 @@ public class BuildSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _costText;
 
-    private BuildingItemSO _buildingItemSO;
+    private BuildItemSO _buildingItemSO;
 
-    public void SetupSlot(BuildingItemSO newBuildingItemSO)
+    public void SetupSlot(BuildItemSO newBuildingItemSO)
     {
         _buildingItemSO = newBuildingItemSO;
         _icon.sprite = _buildingItemSO.Icon;

@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class SelectedSubstate : MonoBehaviour
 {
+    public static event Action<Transform> OnSelectPC;
+    public static event Action OnDeselectPC;
+
     [SerializeField, Header("Individual Layers")]
     private LayerMask _pCLayer;
     [SerializeField]
@@ -15,6 +17,8 @@ public class SelectedSubstate : MonoBehaviour
     [SerializeField]
     private LayerMask _groundLayer;
 
+    private bool _pointerOverUI = false;
+
     private void OnEnable()
     {
         // started is single or double click, canceled is single click only. 
@@ -23,6 +27,9 @@ public class SelectedSubstate : MonoBehaviour
 
         // Activate selected icon. 
         transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
+
+        // Send Transparentizer PC's transform to set as currently selected. 
+        OnSelectPC?.Invoke(transform);
     }
 
     private void OnDisable()
@@ -32,11 +39,26 @@ public class SelectedSubstate : MonoBehaviour
 
         // Deactivate selected icon. 
         transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
+
+        // Send Transparentizer signal to set current PC transform to null. 
+        OnDeselectPC?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            _pointerOverUI = true;
+        }
+        else
+        {
+            _pointerOverUI = false;
+        }
     }
 
     private void HandleClick(InputAction.CallbackContext context)
     {
-        Debug.Log("Clicked");
+       // Debug.Log("Clicked");
 
         Transform states = transform.parent.parent;
 
@@ -46,20 +68,21 @@ public class SelectedSubstate : MonoBehaviour
             1000);
 
         // If raycast hits anything, and mouse is not over UI, 
-        if (hits.Length > 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (hits.Length > 0 && !_pointerOverUI)
         {
-            Debug.Log($"Hit {hits.Length} things");
+/*            Debug.Log($"Hit {hits.Length} things");
             foreach (RaycastHit hit in hits)
             {
                 Debug.Log($"{ hit.collider.name} on {LayerMask.LayerToName(hit.collider.gameObject.layer)} layer");
-            }
+            }*/
 
             // If a different was PC hit, deactivate "selected" substate (PCSelector handles activating new PC's substate). 
             foreach (RaycastHit hit in hits)
             {
-                if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)
+                //Using extension method instead of: if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)
+                if (_pCLayer.Contains(hit.collider.gameObject.layer))
                 {
-                    Debug.Log("Hit PC: " + hit.collider.name);
+                    //Debug.Log("Hit PC: " + hit.collider.name);
                     
                     // If PC is not currently selected PC, 
                     if (hit.collider.gameObject.GetInstanceID() != transform.parent.parent.parent.gameObject.GetInstanceID())
@@ -76,9 +99,9 @@ public class SelectedSubstate : MonoBehaviour
             // Check for enemy clicks first. 
             foreach (RaycastHit hit in hits)
             {
-                if ((_enemyLayer & (1 << hit.collider.gameObject.layer)) != 0)
+                if (_enemyLayer.Contains(hit.collider.gameObject.layer))
                 {
-                    Debug.Log("Hit enemy: " + hit.collider.name);
+                    //Debug.Log("Hit enemy: " + hit.collider.name);
                     
                     // Set fighting variables here. 
 
@@ -90,10 +113,9 @@ public class SelectedSubstate : MonoBehaviour
             // Check for loot clicks second. 
             foreach (RaycastHit hit in hits)
             {
-                Debug.Log(_lootContainerLayer & (1 << hit.collider.gameObject.layer));
-                if ((_lootContainerLayer & (1 << hit.collider.gameObject.layer)) != 0)
+                if (_lootContainerLayer.Contains(hit.collider.gameObject.layer))
                 {
-                    Debug.Log("Hit loot container: " + hit.collider.name);
+                    //Debug.Log("Hit loot container: " + hit.collider.name);
                     
                     // Set looting variables here.
 
@@ -117,9 +139,9 @@ public class SelectedSubstate : MonoBehaviour
             // Check for ground clicks last. 
             foreach (RaycastHit hit in hits)
             {
-                if ((_groundLayer & (1 << hit.collider.gameObject.layer)) != 0)
+                if (_groundLayer.Contains(hit.collider.gameObject.layer))
                 {
-                    Debug.Log("Hit ground at: " + hit.point);
+                    //Debug.Log("Hit ground at: " + hit.point);
                     // Set movement variables here.
                     // Set new destination for PC's NavMeshAgent. 
                     transform.parent.parent.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().destination = hit.point;

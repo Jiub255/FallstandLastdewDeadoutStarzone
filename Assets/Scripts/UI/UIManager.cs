@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +9,7 @@ public class UIManager : MonoBehaviour
     // Split into separate events for each menu? Or does it really affect performance enough to matter?
     public static event Action OnOpenedMenu;
 
+    // Should this be static? Why? 
     public static bool GamePaused = false;
 
     [Header("Canvases")]
@@ -57,11 +57,11 @@ public class UIManager : MonoBehaviour
         S.I.IM.PC.MenuInventory.Enable();
 
         // Open inventory canvas
-        CloseAllMenus();
+        DeactivateAllCanvases();
         _inventoryCanvas.SetActive(true);
 
         // InventoryUI listens to setup display
-        OnOpenedMenu.Invoke();
+        OnOpenedMenu?.Invoke();
 
         // Pause gameplay if not already paused
         if (!GamePaused)
@@ -79,11 +79,11 @@ public class UIManager : MonoBehaviour
 
 
         // Open build canvas
-        CloseAllMenus();
+        DeactivateAllCanvases();
         _buildCanvas.SetActive(true);
 
         // BuildUI listens to setup display
-        OnOpenedMenu.Invoke();
+        OnOpenedMenu?.Invoke();
 
         // Pause gameplay if not already paused
         if (!GamePaused)
@@ -99,11 +99,11 @@ public class UIManager : MonoBehaviour
         S.I.IM.PC.World.Enable();
         S.I.IM.PC.Home.Enable();
 
-        CloseAllMenus();
+        DeactivateAllCanvases();
         _hUDCanvas.SetActive(true);
 
         // PCUI listens to setup display
-        OnOpenedMenu.Invoke();
+        OnOpenedMenu?.Invoke();
 
         if (GamePaused)
         {
@@ -111,7 +111,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void CloseAllMenus()
+    private void DeactivateAllCanvases()
     {
         foreach (Transform canvas in _canvasesObject)
         {

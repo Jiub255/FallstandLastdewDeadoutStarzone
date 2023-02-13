@@ -4,12 +4,12 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField]
-    private Transform _cameraLeader;
+    private Transform _follow;
 
     [SerializeField]
-    private Transform _rotationOrigin;
+    private Transform _lookAt;
 
-    [SerializeField]
+    [SerializeField, Range(0.1f, 1.0f)]
     private float _smoothTime = 0.3f;
 
     private Vector3 _velocity = Vector3.zero;
@@ -21,12 +21,12 @@ public class CameraFollow : MonoBehaviour
     {
         transform.position = Vector3.SmoothDamp(
             transform.position,
-            _cameraLeader.position,
+            _follow.position,
             ref _velocity,
             _smoothTime,
             /*_maxSpeed*/Mathf.Infinity,
             Time.unscaledDeltaTime);
-        transform.LookAt(_rotationOrigin);
+        transform.LookAt(_lookAt);
     }
 }
 

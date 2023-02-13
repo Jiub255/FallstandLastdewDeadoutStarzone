@@ -17,9 +17,11 @@ public class PCSelector : MonoBehaviour
     private float _doubleClickTimeLimit = 0.5f;
     private float _lastClickTime = 0f;
 
+    private bool _pointerOverUI = false;
+
     private void Start()
     {
-        PCItemSO.OnSelectPC += HandleButtonClick;
+        PCItemSO.OnSelectPC += HandlePCIconClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started += Select;
         S.I.IM.PC.Scavenge.Select.performed += Select;
@@ -27,15 +29,48 @@ public class PCSelector : MonoBehaviour
 
     private void OnDisable()
     {
-        PCItemSO.OnSelectPC -= HandleButtonClick;
+        PCItemSO.OnSelectPC -= HandlePCIconClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started -= Select;
         S.I.IM.PC.Scavenge.Select.performed -= Select;
     }
 
+    private void Update()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            _pointerOverUI = true;
+        }
+        else
+        {
+            _pointerOverUI = false;
+        }
+    }
+
     private void Select(InputAction.CallbackContext context)
     {
-        RaycastHit hit;
+        // Only raycast to PC layer. 
+        RaycastHit[] hits = Physics.RaycastAll(
+            Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+            1000,
+            _playerCharacterLayer);
+
+        if (hits.Length > 0)
+        {
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) &&
+                    !_pointerOverUI)
+                {
+                    ChangePC(GetSOFromInstance(hit.collider.gameObject));
+                    // "return" so that you center on first one raycast hits, in case another PC is behind them. 
+                    return;
+                }
+            }
+        }
+
+
+/*        RaycastHit hit;
 
         // Only checks for collisions on PlayerCharacter Layer
         if (Physics.Raycast(Camera.main.ScreenPointToRay(
@@ -46,7 +81,7 @@ public class PCSelector : MonoBehaviour
                 !EventSystem.current.IsPointerOverGameObject())
         {
             ChangePC(GetSOFromInstance(hit.collider.gameObject));
-        }
+        }*/
     }
 
     private PCItemSO GetSOFromInstance(GameObject instance)
@@ -62,7 +97,7 @@ public class PCSelector : MonoBehaviour
     }
 
     // Still get double click if you click on two different buttons within time limit?
-    private void HandleButtonClick(PCItemSO pCItemSO)
+    private void HandlePCIconClick(PCItemSO pCItemSO)
     {
         float currentClickTime = Time.realtimeSinceStartup;
 
@@ -82,7 +117,8 @@ public class PCSelector : MonoBehaviour
 
     private void ChangePC(PCItemSO newPCItemSO)
     {
-        // Deactivate "selected" substate of current PC in SelectedSubstate class. 
+        // "Selected" substate of current PC gets deactivated in SelectedSubstate class. 
+
         Transform states = newPCItemSO.PCInstance.transform.GetChild(4);
 
         foreach (Transform state in states)

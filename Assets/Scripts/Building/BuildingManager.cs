@@ -37,7 +37,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Start()
     {
-        BuildingItemSO.OnSelectBuilding += SelectCurrentBuilding;
+        BuildItemSO.OnSelectBuilding += SelectCurrentBuilding;
 
         S.I.IM.PC.MenuBuild.PlaceBuilding.performed += PlaceBuilding;
         S.I.IM.PC.WorldBuild.SnapBuilding.performed += SnapToNearest45;
@@ -56,7 +56,7 @@ public class BuildingManager : MonoBehaviour
 
     private void OnDisable()
     {
-        BuildingItemSO.OnSelectBuilding -= SelectCurrentBuilding;
+        BuildItemSO.OnSelectBuilding -= SelectCurrentBuilding;
 
         S.I.IM.PC.MenuBuild.PlaceBuilding.performed -= PlaceBuilding;
         S.I.IM.PC.WorldBuild.SnapBuilding.performed -= SnapToNearest45;

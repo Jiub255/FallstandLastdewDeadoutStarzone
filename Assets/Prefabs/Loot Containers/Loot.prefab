@@ -144,7 +144,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
@@ -160,11 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdc37fe149280943b75d4731190b733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LootItemAmounts:
-  - InventoryItemSO: {fileID: 11400000, guid: 62a637fe3b8d11f479619fc2264adca0, type: 2}
-    Amount: 10
-  - InventoryItemSO: {fileID: 11400000, guid: f92af482ae643964189919f4ad1d1322, type: 2}
-    Amount: 2
+  LootItemAmounts: []
 --- !u!1 &7216098398149882742
 GameObject:
   m_ObjectHideFlags: 0

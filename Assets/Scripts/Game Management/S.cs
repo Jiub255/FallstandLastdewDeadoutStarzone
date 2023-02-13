@@ -6,7 +6,6 @@ public class S : MonoBehaviour
     // I is for Instance
     public static S I { get; private set; }
 
-    // IM if for InputManager
     public InputManager IM { get; private set; }
 
     private void Awake()

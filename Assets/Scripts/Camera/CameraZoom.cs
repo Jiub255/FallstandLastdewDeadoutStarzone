@@ -16,9 +16,6 @@ public class CameraZoom : MonoBehaviour
     [SerializeField, Range(5f, 35f)]
     private float _defaultZoomDist = 15f;
 
-    [SerializeField]
-    private SelectedPCSO _selectedPCSO;
-
     private void Start()
     {
         S.I.IM.PC.World.Zoom.performed += Zoom;

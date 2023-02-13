@@ -25,3 +25,46 @@ public abstract class UIRefresher : MonoBehaviour
         }
     }
 }
+
+public class UIPopulator : MonoBehaviour
+{
+    // Make specific inventories inherit from InventorySO so this script can be used by all invs? 
+    [SerializeField]
+    private InventorySO _inventorySO;
+
+    [SerializeField]
+    private GameObject SlotPrefab;
+
+    [SerializeField]
+    private Transform SlotParent;
+
+    private void OnEnable()
+    {
+        UIManager.OnOpenedMenu += PopulateInventory;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnOpenedMenu -= PopulateInventory;
+    }
+
+    public void PopulateInventory()
+    {
+        ClearInventory();
+
+        foreach (ItemAmount itemAmount in _inventorySO.ItemAmounts)
+        {
+            GameObject slotInstance = Instantiate(SlotPrefab, SlotParent);
+
+            slotInstance.transform.GetComponent<InventorySlot>().SetupSlot(itemAmount);
+        }
+    }
+
+    private void ClearInventory()
+    {
+        foreach (Transform child in SlotParent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+}

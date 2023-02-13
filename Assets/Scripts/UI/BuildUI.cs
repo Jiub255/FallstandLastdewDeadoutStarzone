@@ -19,7 +19,7 @@ public class BuildUI : UIRefresher
     {
         base.PopulateInventory();
 
-        foreach (BuildingItemSO buildingItemSO in _buildInventorySO.BuildingItemSOs)
+        foreach (BuildItemSO buildingItemSO in _buildInventorySO.BuildItemSOs)
         {
             GameObject slotInstance = Instantiate(SlotPrefab, SlotParent);
             

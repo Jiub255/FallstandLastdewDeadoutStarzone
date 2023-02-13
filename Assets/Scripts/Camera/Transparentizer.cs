@@ -11,8 +11,7 @@ public class Transparentizer : MonoBehaviour
     private LayerMask _transparentableLayer;
 
     // Currently selected PC
-    [SerializeField]
-    private SelectedPCSO _selectedPCSO;
+    private Transform _currentPCTransform;
 
     // A material should be on at most one of these next three lists/dicts at once
     // List of all materials that are currently fully faded out
@@ -30,11 +29,23 @@ public class Transparentizer : MonoBehaviour
     [SerializeField, Range(0, 1f), Tooltip("Opacity of the object when fully faded")] 
     private float _fadeAlpha = 0.1f;
 
-    private PlayerControls playerControls;
+    private PlayerControls _playerControls;
 
     private void Start()
     {
-        playerControls = S.I.IM.PC;
+        _playerControls = S.I.IM.PC;
+    }
+
+    private void OnEnable()
+    {
+        SelectedSubstate.OnSelectPC += SelectPC;
+        SelectedSubstate.OnDeselectPC += DeselectPC;
+    }
+
+    private void OnDisable()
+    {
+        SelectedSubstate.OnSelectPC -= SelectPC;
+        SelectedSubstate.OnDeselectPC -= DeselectPC;
     }
 
     private void FixedUpdate()
@@ -42,16 +53,16 @@ public class Transparentizer : MonoBehaviour
         // Hits from mouse position
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(
-                playerControls.World.MousePosition.ReadValue<Vector2>()),
+                _playerControls.World.MousePosition.ReadValue<Vector2>()),
             1000, 
             _transparentableLayer);
 
-        if (_selectedPCSO.PCSO/*.PCInstance*/ != null)
+        if (_currentPCTransform != null)
         {
             // Hits from currently selected PC
             Vector3 position = transform.position;
-            Vector3 direction = _selectedPCSO.PCSO.PCInstance.transform.position - position;
-            float rayDistance = Vector3.Distance(position, _selectedPCSO.PCSO.PCInstance.transform.position);
+            Vector3 direction = _currentPCTransform.position - position;
+            float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
 
             RaycastHit[] selectedPlayerHits = Physics.RaycastAll(
                 position,
@@ -199,5 +210,15 @@ public class Transparentizer : MonoBehaviour
             // Remove from fadingInDict
             _fadingInDict.Remove(material);
         }
+    }
+
+    private void SelectPC(Transform pcTransform)
+    {
+        _currentPCTransform = pcTransform;
+    }
+
+    private void DeselectPC()
+    {
+        _currentPCTransform = null;
     }
 }

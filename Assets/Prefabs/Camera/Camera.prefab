@@ -133,7 +133,6 @@ MonoBehaviour:
   _transparentableLayer:
     serializedVersion: 2
     m_Bits: 8
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
   _fadeDuration: 1
   _fadeAlpha: 0.1
 --- !u!1 &5059075228795231347
@@ -147,7 +146,7 @@ GameObject:
   - component: {fileID: 5059075228795231346}
   - component: {fileID: 5059075228795231349}
   m_Layer: 0
-  m_Name: Rotation Origin
+  m_Name: Focal Point
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -187,7 +186,6 @@ MonoBehaviour:
   _rotationXMax: 75
   _edgeScrollingSpeed: 20
   _percentDistanceFromEdges: 10
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}
   _pCLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -236,8 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f86213073ffed741bbdacac45264942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraLeader: {fileID: 5059075229324640780}
-  _rotationOrigin: {fileID: 5059075228795231346}
+  _follow: {fileID: 5059075229324640780}
+  _lookAt: {fileID: 5059075228795231346}
   _smoothTime: 0.3
 --- !u!1 &5059075229324640781
 GameObject:
@@ -287,4 +285,3 @@ MonoBehaviour:
   _zoomMinDist: 3
   _zoomMaxDist: 100
   _defaultZoomDist: 15
-  _selectedPCSO: {fileID: 11400000, guid: d57ffcdd5295dfa44b23beae10b818b8, type: 2}

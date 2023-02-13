@@ -2,6 +2,7 @@
 
 public class InventoryUI : UIRefresher
 {
+    // Make specific inventories inherit from InventorySO so this script can be used by all invs? 
     [SerializeField]
     private InventorySO _inventorySO;
 
