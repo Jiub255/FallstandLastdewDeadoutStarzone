@@ -24,7 +24,7 @@ public class BuildingManager : MonoBehaviour
     private GameObject _currentBuildingInstance;
 
     [SerializeField]
-    private LayerMask _groundLayer;
+    private LayerMask _groundLayerMask;
 
     // For debug gizmos, so they dont draw in editor mode.
     //private bool _started;
@@ -101,7 +101,7 @@ public class BuildingManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(
                 S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
-            if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
+            if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
             {
                 // Make sure to make buildings have their "pivot" on the bottom center, that is,
                 // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
@@ -219,7 +219,7 @@ public class BuildingManager : MonoBehaviour
             _currentBuildingInstance.transform.GetChild(0).transform.position,
             _currentBuildingInstance.transform.GetChild(0).transform.localScale, 
             Quaternion.identity, 
-            ~_groundLayer);
+            ~_groundLayerMask);
 
         // Remove collisions with self.
         List<Collider> collidersList = collidersArray.ToList();

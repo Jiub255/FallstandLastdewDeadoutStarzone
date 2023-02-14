@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,9 +25,6 @@ public class RunState : MonoBehaviour
             _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance &&
             (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f))
         {
-            // Deactivate this state. 
-            gameObject.SetActive(false);
-
             // Activate Idle State. 
             _idleState.SetActive(true);
 
@@ -38,6 +33,9 @@ public class RunState : MonoBehaviour
             {
                 _idleState.transform.GetChild(0).gameObject.SetActive(true);
             }
+
+            // Deactivate this state. 
+            gameObject.SetActive(false);
         }
     }
 }

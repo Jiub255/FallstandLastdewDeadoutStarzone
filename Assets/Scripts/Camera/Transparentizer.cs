@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Put this on camera
 public class Transparentizer : MonoBehaviour
 {
     // Layer than contains all transparentable objects
     [SerializeField]
-    private LayerMask _transparentableLayer;
+    private LayerMask _transparentableLayerMask;
 
     // Currently selected PC
     private Transform _currentPCTransform;
@@ -30,10 +31,13 @@ public class Transparentizer : MonoBehaviour
     private float _fadeAlpha = 0.1f;
 
     private PlayerControls _playerControls;
+    private bool _pointerOverUI = false;
+    private EventSystem _eventSystem;
 
     private void Start()
     {
         _playerControls = S.I.IM.PC;
+        _eventSystem = EventSystem.current;
     }
 
     private void OnEnable()
@@ -48,18 +52,35 @@ public class Transparentizer : MonoBehaviour
         SelectedSubstate.OnDeselectPC -= DeselectPC;
     }
 
+    private void Update()
+    {
+        if (_eventSystem.IsPointerOverGameObject())
+        {
+            _pointerOverUI = true;
+        }
+        else
+        {
+            _pointerOverUI = false;
+        }
+    }
+
     private void FixedUpdate()
     {
-        // Hits from mouse position
-        RaycastHit[] hits = Physics.RaycastAll(
-            Camera.main.ScreenPointToRay(
-                _playerControls.World.MousePosition.ReadValue<Vector2>()),
-            1000, 
-            _transparentableLayer);
+        RaycastHit[] hits = new RaycastHit[0];
 
+        // Hits from mouse position
+        if (!_pointerOverUI)
+        {
+            hits = Physics.RaycastAll(
+                Camera.main.ScreenPointToRay(
+                    _playerControls.World.MousePosition.ReadValue<Vector2>()),
+                1000, 
+                _transparentableLayerMask);
+        }
+
+        // Hits from currently selected PC
         if (_currentPCTransform != null)
         {
-            // Hits from currently selected PC
             Vector3 position = transform.position;
             Vector3 direction = _currentPCTransform.position - position;
             float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
@@ -68,7 +89,7 @@ public class Transparentizer : MonoBehaviour
                 position,
                 direction,
                 rayDistance,
-                _transparentableLayer);
+                _transparentableLayerMask);
 
             // Combine all hits into one array
             hits = selectedPlayerHits.Concat(hits).ToArray();

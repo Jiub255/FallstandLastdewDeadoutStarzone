@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00d47910afd62546a6ea29438815281, type: 3}
-  m_Name: Concrete Barrier
+  m_Script: {fileID: 11500000, guid: 39cb71855332f2549b8c9fe744bd67c2, type: 3}
+  m_Name: Concrete Barricade
   m_EditorClassIdentifier: 
   Icon: {fileID: 21300000, guid: 1e311e791a4ad9f47a631b4e94c1aa30, type: 3}
-  Description: Stops enemies from passing.
+  Description: 'Stops enemies. '
   BuildingPrefab: {fileID: 5885954278712367750, guid: 8f1ee18637d2b3c4c9c7a596d451c891, type: 3}
   buildingTypeSO: {fileID: 11400000, guid: 8833edc1fe69efd41b2f5d5e3d84fc25, type: 2}

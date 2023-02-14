@@ -14,15 +14,23 @@ ________________________________________________________________________________
 
     FIRST!!
 
+    Handle animations in the state machine? Might be easier, at least for now. 
+
+    Have NotSelected substate too?
+        Superstates control the action the PC is doing.
+            And transitions between states when a task is done, like going from RunToLoot to Looting. 
+        Selected/Not substates control the transitions between states. 
+            In Selected, only take input to change states? 
+            In NotSelected, change states based on the environment (got hit, saw enemy, saw loot, etc.). 
 
     Figure out how combat will work. 
         Like LS:DZ? 
         Or more free form TPS? 
         Probably more like RTS style, similar to LS:DZ. 
             Makes sense since you're controlling multiple people. 
-            Can have some scavenging, setting traps or doing whatever, and others fighting. 
+            Can have some people scavenging, setting traps or doing whatever, and others fighting. 
             Don't want to have to constantly control fighters, or the others for that matter. 
-            Maybe can control currently selected PC, like aim and shoot/melee/loot. 
+            Maybe you can control currently selected PC, like aim and shoot/melee/loot. 
                 The others do the task you set them to do, or fight or loot automatically. 
         Use Injury/Pain system instead of boring old HP. 
             Pain rises equally with injury (both go from 0 - 100).
@@ -32,6 +40,23 @@ ________________________________________________________________________________
                 Pain can only go as low as a certain percentage of injury bar. 
             Lower injury level (and with it, pain level) by resting or seeing a doctor. 
             Put Pain/Injury bars under each PC portrait icon in side bar. 
+            For enemies, have similar system but Pain and injury are combined. Basically just HP, but they get weaker as the HP gets lower. 
+        Stats?
+            STATS (Still need to work these out)
+                Scavenging - Affects quality of loot and loot time.
+                Combat - Affects attack/resistance to injury/pain threshold/base defense ability and whatever combat stuff.
+                    (Maybe split combat up into separate stats? I like the one simple stat though.)
+                Survival - Affects skill with growing crops/gathering water/medical skill, defending/building base? Not sure.
+                Stealth - How quickly enemies hear you while scavenging.
+                Medical - Ability to lower PC's injury level quickly/on the spot.
+                Science/Technology/Engineering - Ability to research/build more advanced building/crafting items/equip. 
+                Injury - How injured you are. Rest to recover.
+            DERIVED STATS (Still need to work these out)
+                Pain - Pain level. Affect stats negatively.
+                    Affected by: Injury level and certain items (painkillers, etc.).
+                Pain threshold - How fast your pain increases with your injury level.
+                    Affected by: Combat, Survival?
+                Attack Power - How effective your attacks are. Higher chance to hit, stronger melee hits, etc. = all add up to more DPS. 
 
     Setup Usable item/inv system. 
         Figure out how items/inv will work. 
@@ -54,6 +79,16 @@ ________________________________________________________________________________
     FIX:
         Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
         Loot state not working perfectly. Won't loot if clicked on nearby loot container. 
+
+    Figure out how scavenging will work. 
+        Go around each level and loot the containers.
+        Have some hidden containers that don't get outlined when you hover over them, but if you click you can still loot. 
+            They'll look like places you could loot, but less obvious than the normal loot containers. 
+            Instead of chests and boxes, they'll be in suspicious spots on the wall, or maybe inside mattresses, that kind of stuff. 
+        Have unlimited inventory at home, but limited while scavenging.
+            Scavenging inventory size depends on the size and number of wagons/trucks/whatever you have to carry stuff home. 
+            Can build new vehicles and hauling equipment to increase scavenging inv size. 
+                Also will allow you to bring more scavenging team members? That could be cool. 
 
     Figure out how travelling will work.
         Use a world map and choose the location? 
@@ -435,7 +470,7 @@ ________________________________________________________________________________
         Same combat on scavenging runs as during home base defense
             Slightly more like tower defense during home base defense (can have turrets, etc.)
         Can pause combat to assess the situation, why not?
-        Not sure of enemy types yet. Zombie apocalypse? Bandit style? Military enemies?
+        Not sure of enemy types yet. Zombie apocalypse? Bandit style? Military enemies? Aliens? 
         Have injury and pain bars
             They go up together, but pain actually affects your stats (speed, aim, etc)
             Alcohol/drugs/pain killers/medical equipment can lower pain so you can fight longer, but you need to rest to recover injury bar

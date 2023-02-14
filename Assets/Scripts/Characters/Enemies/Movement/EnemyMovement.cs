@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// TODO: Rework this whole thing. Maybe use simple state machine instead. 
+// Set destination in Update is stupid, lots of problems here. 
 public class EnemyMovement : MonoBehaviour
 {
     public static event Action<Transform, Transform> OnReachedPC;
@@ -34,6 +36,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (Vector3.Distance(transform.position, _targetPC.transform.position) <= _attackDistance)
         {
+            // Heard by EnemyDamage. 
             OnReachedPC.Invoke(transform, _targetPC);
         }
     }

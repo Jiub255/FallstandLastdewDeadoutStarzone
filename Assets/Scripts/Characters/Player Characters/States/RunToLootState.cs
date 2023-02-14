@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,26 +13,32 @@ public class RunToLootState : MonoBehaviour
     [SerializeField]
     private GameObject _lootState;
 
+    private NavMeshAgent _agent;
+
     private void OnEnable()
     {
         _lootingPosition = LootContainerTransform.GetChild(0).transform.position;
+        _agent = transform.parent.parent.gameObject.GetComponent<NavMeshAgent>();
 
         // Set new destination for PC's NavMeshAgent. 
-        transform.parent.parent.gameObject.GetComponent<NavMeshAgent>().destination = _lootingPosition;
+        _agent.destination = _lootingPosition;
     }
 
     private void Update()
     {
+        // What if container gets looted while you're on the way? 
+
         if (HaveReachedLoot())
         {
+            // Unset NavMeshAgent destination? Can't set Vector3 to null. 
+            _agent.isStopped = true;
+            _agent.ResetPath();
+
             // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
             transform.parent.parent.position = _lootingPosition;
 
-            // Face the loot container
+            // Face the loot container. 
             transform.parent.parent.LookAt(LootContainerTransform);
-
-            // Deactivate this state. 
-            gameObject.SetActive(false);
 
             // Activate LootState. 
             _lootState.SetActive(true);
@@ -47,6 +51,9 @@ public class RunToLootState : MonoBehaviour
 
             // Set LootContainerTransform in LootState. 
             _lootState.GetComponent<LootState>().LootContainerTransform = LootContainerTransform;
+
+            // Deactivate this state. 
+            gameObject.SetActive(false);
         }
     }
 

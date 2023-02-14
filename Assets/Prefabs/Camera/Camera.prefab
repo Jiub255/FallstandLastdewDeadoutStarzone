@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4071b575dc9a67408d4795e84513ed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _transparentableLayer:
+  _transparentableLayerMask:
     serializedVersion: 2
     m_Bits: 8
   _fadeDuration: 1
@@ -186,7 +186,7 @@ MonoBehaviour:
   _rotationXMax: 75
   _edgeScrollingSpeed: 20
   _percentDistanceFromEdges: 10
-  _pCLayer:
+  _pCLayerMask:
     serializedVersion: 2
     m_Bits: 512
 --- !u!1 &5059075229066574954

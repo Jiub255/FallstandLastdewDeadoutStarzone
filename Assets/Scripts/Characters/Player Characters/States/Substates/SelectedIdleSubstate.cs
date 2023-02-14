@@ -1,11 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SelectedNotIdleSubstate : MonoBehaviour
+public class SelectedIdleSubstate : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject _idleState;
-
     private void OnEnable()
     {
         S.I.IM.PC.Home.Deselect.performed += Deselect;
@@ -18,13 +15,13 @@ public class SelectedNotIdleSubstate : MonoBehaviour
         S.I.IM.PC.Scavenge.Deselect.performed -= Deselect;
     }
 
+    // Right click deselects PC while not doing anything. 
     private void Deselect(InputAction.CallbackContext context)
     {
-        // Deactivate current state. 
-        transform.parent.gameObject.SetActive(false);
+        // Activate NotSelected substate. 
+        transform.parent.GetChild(1).gameObject.SetActive(true);
 
-        // Activate Idle state (and selected substate?). 
-        _idleState.SetActive(true);
-        _idleState.transform.GetChild(0).gameObject.SetActive(true);
+        // Deactivate selected state game object. 
+        gameObject.SetActive(false);
     }
 }

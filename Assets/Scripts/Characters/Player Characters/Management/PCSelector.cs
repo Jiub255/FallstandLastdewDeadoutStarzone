@@ -11,16 +11,19 @@ public class PCSelector : MonoBehaviour
     private PCSOListSO _availablePCsSO;
 
     [SerializeField]
-    private LayerMask _playerCharacterLayer;
+    private LayerMask _pcLayerMask;
 
     [SerializeField]
     private float _doubleClickTimeLimit = 0.5f;
     private float _lastClickTime = 0f;
 
+    private EventSystem _eventSystem;
     private bool _pointerOverUI = false;
 
     private void Start()
     {
+        _eventSystem = EventSystem.current;
+
         PCItemSO.OnSelectPC += HandlePCIconClick;
 
         S.I.IM.PC.Home.SelectOrCenter.started += Select;
@@ -37,7 +40,7 @@ public class PCSelector : MonoBehaviour
 
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (_eventSystem.IsPointerOverGameObject())
         {
             _pointerOverUI = true;
         }
@@ -49,39 +52,19 @@ public class PCSelector : MonoBehaviour
 
     private void Select(InputAction.CallbackContext context)
     {
-        // Only raycast to PC layer. 
-        RaycastHit[] hits = Physics.RaycastAll(
-            Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
-            1000,
-            _playerCharacterLayer);
-
-        if (hits.Length > 0)
+        if (!_pointerOverUI)
         {
-            foreach (RaycastHit hit in hits)
+            // Only raycast to PC layer. 
+            RaycastHit[] hits = Physics.RaycastAll(
+                Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+                1000,
+                _pcLayerMask);
+
+            if (hits.Length > 0)
             {
-                if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) &&
-                    !_pointerOverUI)
-                {
-                    ChangePC(GetSOFromInstance(hit.collider.gameObject));
-                    // "return" so that you center on first one raycast hits, in case another PC is behind them. 
-                    return;
-                }
+                ChangePC(GetSOFromInstance(hits[0].collider.gameObject));
             }
         }
-
-
-/*        RaycastHit hit;
-
-        // Only checks for collisions on PlayerCharacter Layer
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(
-                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
-                out hit,
-                1000,
-                _playerCharacterLayer) &&
-                !EventSystem.current.IsPointerOverGameObject())
-        {
-            ChangePC(GetSOFromInstance(hit.collider.gameObject));
-        }*/
     }
 
     private PCItemSO GetSOFromInstance(GameObject instance)

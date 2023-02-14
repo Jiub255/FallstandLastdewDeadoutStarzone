@@ -9,18 +9,23 @@ public class SelectedSubstate : MonoBehaviour
     public static event Action OnDeselectPC;
 
     [SerializeField, Header("Individual Layers")]
-    private LayerMask _pCLayer;
+    private LayerMask _pCLayerMask;
     [SerializeField]
-    private LayerMask _enemyLayer;
+    private LayerMask _enemyLayerMask;
     [SerializeField]
-    private LayerMask _lootContainerLayer;
+    private LayerMask _lootContainerLayerMask;
     [SerializeField]
-    private LayerMask _groundLayer;
+    private LayerMask _groundLayerMask;
 
     private bool _pointerOverUI = false;
 
+    private EventSystem _eventSystem;
+
     private void OnEnable()
     {
+        // Cache EventSystem.current since we'll be checking it every frame. 
+        _eventSystem = EventSystem.current;
+
         // started is single or double click, canceled is single click only. 
         S.I.IM.PC.Home.SelectOrCenter./*canceled*/started += HandleClick;
         S.I.IM.PC.Scavenge.Select.performed += HandleClick;
@@ -46,7 +51,7 @@ public class SelectedSubstate : MonoBehaviour
 
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (_eventSystem.IsPointerOverGameObject())
         {
             _pointerOverUI = true;
         }
@@ -70,66 +75,73 @@ public class SelectedSubstate : MonoBehaviour
         // If raycast hits anything, and mouse is not over UI, 
         if (hits.Length > 0 && !_pointerOverUI)
         {
-/*            Debug.Log($"Hit {hits.Length} things");
+            // Check to see if raycast hit a PC first. 
             foreach (RaycastHit hit in hits)
             {
-                Debug.Log($"{ hit.collider.name} on {LayerMask.LayerToName(hit.collider.gameObject.layer)} layer");
-            }*/
-
-            // If a different was PC hit, deactivate "selected" substate (PCSelector handles activating new PC's substate). 
-            foreach (RaycastHit hit in hits)
-            {
-                //Using extension method instead of: if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)
-                if (_pCLayer.Contains(hit.collider.gameObject.layer))
+                //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
+                if (_pCLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    //Debug.Log("Hit PC: " + hit.collider.name);
-                    
                     // If PC is not currently selected PC, 
                     if (hit.collider.gameObject.GetInstanceID() != transform.parent.parent.parent.gameObject.GetInstanceID())
                     {
-                        // Deactivate "selected" substate. 
+                        // Deactivate "selected" substate (PCSelector handles activating new PC's substate). 
                         gameObject.SetActive(false);
                     }
-
-                    return;
-                }
-            }
-
-            // If no PC was hit by raycast, 
-            // Check for enemy clicks first. 
-            foreach (RaycastHit hit in hits)
-            {
-                if (_enemyLayer.Contains(hit.collider.gameObject.layer))
-                {
-                    //Debug.Log("Hit enemy: " + hit.collider.name);
-                    
-                    // Set fighting variables here. 
 
                     // Return so that multiple hits don't get called. 
                     return;
                 }
             }
 
-            // Check for loot clicks second. 
+            // Check for enemy clicks second. 
             foreach (RaycastHit hit in hits)
             {
-                if (_lootContainerLayer.Contains(hit.collider.gameObject.layer))
+                if (_enemyLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    //Debug.Log("Hit loot container: " + hit.collider.name);
-                    
-                    // Set looting variables here.
+                    RunToEnemyState runToEnemyState = states.gameObject.GetComponentInChildren<RunToEnemyState>(true);
 
-                    // Deactivate current state (if not in run to loot state already). 
-                    if (transform.parent.name != "Run To Loot")
+                    // Make sure to get the right parent for the transform. 
+                    // Set fighting variables. 
+                    runToEnemyState.Target = hit.transform/*.parent*/;
+
+                    // Switch current state (if not in run to enemy state already). 
+                    if (transform.parent.name != "Run To Enemy")
                     {
+                        // Deactivate current state. 
                         transform.parent.gameObject.SetActive(false);
+
+                        // Activate RunToEnemyState. 
+                        runToEnemyState.gameObject.SetActive(true);
+                        // Activate its selected substate. 
+                        runToEnemyState.transform.GetChild(0).gameObject.SetActive(true);
                     }
 
-                    // Activate and set variables for RunToLootState. 
+                    // Return so that multiple hits don't get called. 
+                    return;
+                }
+            }
+
+            // Check for loot clicks third. 
+            foreach (RaycastHit hit in hits)
+            {
+                if (_lootContainerLayerMask.Contains(hit.collider.gameObject.layer))
+                {
                     RunToLootState runToLootState = states.gameObject.GetComponentInChildren<RunToLootState>(true);
+                    
+                    // Set looting variables. 
                     runToLootState.LootContainerTransform = hit.transform.parent;
-                    runToLootState.gameObject.SetActive(true);
-                    runToLootState.transform.GetChild(0).gameObject.SetActive(true);
+
+                    // Switch current state (if not in run to loot state already). 
+                    if (transform.parent.name != "Run To Loot")
+                    {
+                        // Deactivate current state. 
+                        transform.parent.gameObject.SetActive(false);
+
+                        // Activate RunToLootState. 
+                        runToLootState.gameObject.SetActive(true);
+                        // Activate its selected substate. 
+                        runToLootState.transform.GetChild(0).gameObject.SetActive(true);
+                    }
 
                     // Return so that multiple hits don't get called. 
                     return;
@@ -139,23 +151,23 @@ public class SelectedSubstate : MonoBehaviour
             // Check for ground clicks last. 
             foreach (RaycastHit hit in hits)
             {
-                if (_groundLayer.Contains(hit.collider.gameObject.layer))
+                if (_groundLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    //Debug.Log("Hit ground at: " + hit.point);
                     // Set movement variables here.
                     // Set new destination for PC's NavMeshAgent. 
                     transform.parent.parent.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().destination = hit.point;
 
-                    // Deactivate current state (if not in run state already). 
+                    // Switch current state (if not in run state already). 
                     if (transform.parent.name != "Run")
                     {
+                        // Deactivate current state. 
                         transform.parent.gameObject.SetActive(false);
-                    }
 
-                    // Activate Run state and selected substate. 
-                    RunState runState = states.gameObject.GetComponentInChildren<RunState>(true);
-                    runState.gameObject.SetActive(true);
-                    runState.transform.GetChild(0).gameObject.SetActive(true);
+                        // Activate Run state and selected substate. 
+                        RunState runState = states.gameObject.GetComponentInChildren<RunState>(true);
+                        runState.gameObject.SetActive(true);
+                        runState.transform.GetChild(0).gameObject.SetActive(true);
+                    }
 
                     // Return so that multiple hits don't get called. 
                     return;

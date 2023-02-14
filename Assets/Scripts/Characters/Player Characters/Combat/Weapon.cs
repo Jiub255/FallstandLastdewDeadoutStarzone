@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatState : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
 	
 }

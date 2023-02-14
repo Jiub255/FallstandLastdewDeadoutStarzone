@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunToEnemyState : MonoBehaviour
+public interface IWeapon
 {
-	
+	void Attack();
 }

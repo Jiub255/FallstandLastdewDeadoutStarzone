@@ -33,17 +33,19 @@ public class CameraMoveRotate : MonoBehaviour
     private float _screenHeight;
     private float _edgeDistance;
 
-    [/*SerializeField,*/ Header("For Centering on PC")]
-    //private SelectedPCSO _selectedPCSO;
+    [SerializeField, Header("For Centering on PC")]
+    private LayerMask _pCLayerMask;
 
-    [SerializeField]
-    private LayerMask _pCLayer;
+
+    private bool _pointerOverUI = false;
+    private EventSystem _eventSystem;
 
     private void Start()
-    {
+    { 
         _screenWidth = Screen.width;
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
+        _eventSystem = EventSystem.current;
 
         // "performed" is double click.
         S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
@@ -56,6 +58,18 @@ public class CameraMoveRotate : MonoBehaviour
         S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
 
         PCSelector.OnDoubleClickPCButton -= CenterOnPC;
+    }
+
+    private void Update()
+    {
+        if (_eventSystem.IsPointerOverGameObject())
+        {
+            _pointerOverUI = true;
+        }
+        else
+        {
+            _pointerOverUI = false;
+        }
     }
 
     private void LateUpdate()
@@ -81,13 +95,14 @@ public class CameraMoveRotate : MonoBehaviour
         }
     }
 
+    // Called by double clicking PC. 
     private void CenterOnPC(InputAction.CallbackContext context)
     {
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
             1000,
-            _pCLayer);
+            _pCLayerMask);
 
         if (hits.Length > 0)
         {
@@ -95,7 +110,7 @@ public class CameraMoveRotate : MonoBehaviour
             foreach (RaycastHit hit in hits)
             {
                 if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) && 
-                    !EventSystem.current.IsPointerOverGameObject())
+                    !_pointerOverUI)
                 {
                     CenterOnPC(hit.collider.transform);
                     // "return" so that you center on first one raycast hits, in case another PC is behind them. 
@@ -105,7 +120,7 @@ public class CameraMoveRotate : MonoBehaviour
         }
     }
 
-    // Want to call this from double click, or at least just single click, of PC UI button. 
+    // Called from double click of PC UI button. 
     private void CenterOnPC(Transform pCTransform)
     {
         // TODO: Lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is. 
@@ -148,7 +163,7 @@ public class CameraMoveRotate : MonoBehaviour
             S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().x *
             _rotationSpeed;
 
-        transform.RotateAround(transform.position, Vector3/*transform*/.up, deltaX);
+        transform.RotateAround(transform.position, Vector3.up, deltaX);
 
         // Rotation around axis parallel to your local right vector, this axis always parallel to xz-plane.
         Vector3 axis = new Vector3(

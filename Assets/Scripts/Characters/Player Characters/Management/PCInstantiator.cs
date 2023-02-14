@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Just for testing for now. Will have this in a SceneManager or something similar.
@@ -8,7 +6,7 @@ public class PCInstantiator : MonoBehaviour
 	[SerializeField]
 	private PCSOListSO availablePCsSO;
 
-    private void Start()
+    private void Awake()
     {
         // Where to put instantiated PCs?
         //     Have a spawn area in each scavenge location and just spawn them in a bunch in the center.
