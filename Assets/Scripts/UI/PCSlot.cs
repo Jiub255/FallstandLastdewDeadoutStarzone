@@ -13,6 +13,7 @@ public class PCSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _nameText;
 
+    // TODO: Replace these SO's with PC prefabs. 
     private PCItemSO _PCItemSO;
 
     public void SetupSlot(PCItemSO newPCItemSO)

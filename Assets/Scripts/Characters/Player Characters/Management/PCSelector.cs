@@ -7,6 +7,7 @@ public class PCSelector : MonoBehaviour
 {
     public static event Action<Transform> OnDoubleClickPCButton;
 
+    // TODO: Use List of prefabs instead. Not doing PCSO's anymore, they're stupid. 
     [SerializeField]
     private PCSOListSO _availablePCsSO;
 

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PCUI : UIRefresher
 {
+    // TODO: Use List of prefabs instead. Not doing PCSO's anymore, they're stupid. 
     [SerializeField]
     private PCSOListSO _availablePCSO;
 

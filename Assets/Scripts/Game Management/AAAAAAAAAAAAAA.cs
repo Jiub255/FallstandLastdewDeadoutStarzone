@@ -14,14 +14,17 @@ ________________________________________________________________________________
 
     FIRST!!
 
+
+    Use SO list of PC prefabs (List<GameObject>) instead of PCSO's. Also list of instances as they get instantiated. On a separate SO? 
+        Store all data in separate components on prefab. 
+
     Handle animations in the state machine? Might be easier, at least for now. 
 
-    Have NotSelected substate too?
-        Superstates control the action the PC is doing.
-            And transitions between states when a task is done, like going from RunToLoot to Looting. 
-        Selected/Not substates control the transitions between states. 
-            In Selected, only take input to change states? 
-            In NotSelected, change states based on the environment (got hit, saw enemy, saw loot, etc.). 
+    Figure out PC object hierarchy. 
+        Have a weapon child. 
+        Use PCSO's or not? 
+            Could just use prefabs instead, and store all the data on them. 
+            Think it through, write it out on paper. 
 
     Figure out how combat will work. 
         Like LS:DZ? 

@@ -3,7 +3,8 @@ using UnityEngine;
 // Just for testing for now. Will have this in a SceneManager or something similar.
 public class PCInstantiator : MonoBehaviour
 {
-	[SerializeField]
+    // TODO: Use List of prefabs instead. Not doing PCSO's anymore, they're stupid. 
+    [SerializeField]
 	private PCSOListSO availablePCsSO;
 
     private void Awake()

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// TODO: Use PCItemSO instead
 [CreateAssetMenu(fileName = "New PC Item SO", menuName = "Scriptable Object/Player Characters/PC Item SO")]
 public class PCItemSO : ItemSO
 {

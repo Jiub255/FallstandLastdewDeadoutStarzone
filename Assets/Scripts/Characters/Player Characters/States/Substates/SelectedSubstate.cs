@@ -84,7 +84,10 @@ public class SelectedSubstate : MonoBehaviour
                     // If PC is not currently selected PC, 
                     if (hit.collider.gameObject.GetInstanceID() != transform.parent.parent.parent.gameObject.GetInstanceID())
                     {
-                        // Deactivate "selected" substate (PCSelector handles activating new PC's substate). 
+                        // Activate NotSelectedSubstate. 
+                        transform.parent.GetChild(1).gameObject.SetActive(true);
+
+                        // Deactivate SelectedSubstate (PCSelector handles activating new PC's substate). 
                         gameObject.SetActive(false);
                     }
 
