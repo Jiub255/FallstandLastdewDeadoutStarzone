@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Just for testing for now. Will have this in a SceneManager or something similar.
 public class PCInstantiator : MonoBehaviour
 {
-    // TODO: Use List of prefabs instead. Not doing PCSO's anymore, they're stupid. 
     [SerializeField]
-	private PCSOListSO availablePCsSO;
+	private GOListSO _pcPrefabsSO;
+    [SerializeField]
+	private GOListSO _pcInstancesSO;
 
     private void Awake()
     {
@@ -15,14 +17,16 @@ public class PCInstantiator : MonoBehaviour
         //     Spawn next to random buildings that PCs can interact with in home scene.
         //         Maybe include a spawn point on each building?
 
-        for (int i = 0; i < availablePCsSO.PCItemSOs.Count; i++)
+        _pcInstancesSO.GameObjects = new List<GameObject>();
+
+        for (int i = 0; i < _pcPrefabsSO.GameObjects.Count; i++)
         {
-           // Debug.Log("Instantiating PC #" + (i + 1).ToString());
+            GameObject pcInstance = Instantiate(
+                _pcPrefabsSO.GameObjects[i],
+                new Vector3(3 * i, 0f, 0f),
+                Quaternion.identity);
 
-            availablePCsSO.PCItemSOs[i].PCInstance = Instantiate(
-                availablePCsSO.PCItemSOs[i].PCPrefab, new Vector3(3 * i, 0f, 0f), Quaternion.identity);
-
-           // Debug.Log(availablePCsSO.PCItemSOs[i].PCInstance.name);
+            _pcInstancesSO.GameObjects.Add(pcInstance);
         }
     }
 }

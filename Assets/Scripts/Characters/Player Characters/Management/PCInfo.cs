@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class PCInfo : MonoBehaviour
 {
-    public static event Action<Transform> OnSelectPC;
+    // Or do Transform for PC instances? 
+    public static event Action<GameObject> OnSelectPC;
 
-    [SerializeField]
-    private Sprite _icon;
+    public Sprite Icon;
 
     public void Use()
     {
         // PCSelector hears this. Selects this PC for now. Center camera on double click later. 
-        OnSelectPC?.Invoke(transform.parent);
+        OnSelectPC?.Invoke(transform.parent.gameObject);
     }
 }

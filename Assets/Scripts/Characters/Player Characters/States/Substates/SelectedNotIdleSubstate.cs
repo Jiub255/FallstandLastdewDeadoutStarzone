@@ -21,9 +21,12 @@ public class SelectedNotIdleSubstate : MonoBehaviour
     // Switch to idle selected state when right clicking while doing something. 
     private void CancelAction(InputAction.CallbackContext context)
     {
-        // Activate Idle state (and selected substate?). 
+        // Activate Idle state. 
         _idleState.SetActive(true);
+        // Activate Selected substate. 
         _idleState.transform.GetChild(0).gameObject.SetActive(true);
+        // Deactivate NotSelected substate. 
+        _idleState.transform.GetChild(1).gameObject.SetActive(false);
 
         // Deactivate current state. 
         transform.parent.gameObject.SetActive(false);

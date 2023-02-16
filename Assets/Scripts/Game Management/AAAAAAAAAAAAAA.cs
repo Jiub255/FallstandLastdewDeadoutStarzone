@@ -15,8 +15,8 @@ ________________________________________________________________________________
     FIRST!!
 
 
-    Use SO list of PC prefabs (List<GameObject>) instead of PCSO's. Also list of instances as they get instantiated. On a separate SO? 
-        Store all data in separate components on prefab. 
+    FIX: 
+        Issues with the selected icon. Get it set up right. 
 
     Handle animations in the state machine? Might be easier, at least for now. 
 

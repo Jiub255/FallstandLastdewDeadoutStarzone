@@ -86,7 +86,6 @@ public class SelectedSubstate : MonoBehaviour
                     {
                         // Activate NotSelectedSubstate. 
                         transform.parent.GetChild(1).gameObject.SetActive(true);
-
                         // Deactivate SelectedSubstate (PCSelector handles activating new PC's substate). 
                         gameObject.SetActive(false);
                     }
@@ -110,13 +109,15 @@ public class SelectedSubstate : MonoBehaviour
                     // Switch current state (if not in run to enemy state already). 
                     if (transform.parent.name != "Run To Enemy")
                     {
-                        // Deactivate current state. 
-                        transform.parent.gameObject.SetActive(false);
-
                         // Activate RunToEnemyState. 
                         runToEnemyState.gameObject.SetActive(true);
-                        // Activate its selected substate. 
+                        // Activate its Selected substate. 
                         runToEnemyState.transform.GetChild(0).gameObject.SetActive(true);
+                        // Deactivate its NotSelected substate. 
+                        runToEnemyState.transform.GetChild(1).gameObject.SetActive(false);
+
+                        // Deactivate current state. 
+                        transform.parent.gameObject.SetActive(false);
                     }
 
                     // Return so that multiple hits don't get called. 
@@ -137,13 +138,15 @@ public class SelectedSubstate : MonoBehaviour
                     // Switch current state (if not in run to loot state already). 
                     if (transform.parent.name != "Run To Loot")
                     {
-                        // Deactivate current state. 
-                        transform.parent.gameObject.SetActive(false);
-
                         // Activate RunToLootState. 
                         runToLootState.gameObject.SetActive(true);
-                        // Activate its selected substate. 
+                        // Activate its Selected substate. 
                         runToLootState.transform.GetChild(0).gameObject.SetActive(true);
+                        // Deactivate its NotSelected substate. 
+                        runToLootState.transform.GetChild(1).gameObject.SetActive(false);
+
+                        // Deactivate current state. 
+                        transform.parent.gameObject.SetActive(false);
                     }
 
                     // Return so that multiple hits don't get called. 
@@ -156,6 +159,8 @@ public class SelectedSubstate : MonoBehaviour
             {
                 if (_groundLayerMask.Contains(hit.collider.gameObject.layer))
                 {
+                    RunState runState = states.gameObject.GetComponentInChildren<RunState>(true);
+
                     // Set movement variables here.
                     // Set new destination for PC's NavMeshAgent. 
                     transform.parent.parent.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().destination = hit.point;
@@ -163,13 +168,15 @@ public class SelectedSubstate : MonoBehaviour
                     // Switch current state (if not in run state already). 
                     if (transform.parent.name != "Run")
                     {
+                        // Activate Run state. 
+                        runState.gameObject.SetActive(true);
+                        // Activate its Selected substate. 
+                        runState.transform.GetChild(0).gameObject.SetActive(true);
+                        // Deactivate its NotSelected substate. 
+                        runState.transform.GetChild(1).gameObject.SetActive(false);
+
                         // Deactivate current state. 
                         transform.parent.gameObject.SetActive(false);
-
-                        // Activate Run state and selected substate. 
-                        RunState runState = states.gameObject.GetComponentInChildren<RunState>(true);
-                        runState.gameObject.SetActive(true);
-                        runState.transform.GetChild(0).gameObject.SetActive(true);
                     }
 
                     // Return so that multiple hits don't get called. 

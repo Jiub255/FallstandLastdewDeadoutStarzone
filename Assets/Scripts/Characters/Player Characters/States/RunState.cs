@@ -29,7 +29,7 @@ public class RunState : MonoBehaviour
             _idleState.SetActive(true);
 
             // Activate selected substate if currently selected. 
-            if (transform.GetChild(0).gameObject.activeSelf)
+            if (transform.GetChild(0).gameObject.activeInHierarchy)
             {
                 _idleState.transform.GetChild(0).gameObject.SetActive(true);
             }

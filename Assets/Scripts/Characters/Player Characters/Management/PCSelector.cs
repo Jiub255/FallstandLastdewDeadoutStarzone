@@ -7,9 +7,8 @@ public class PCSelector : MonoBehaviour
 {
     public static event Action<Transform> OnDoubleClickPCButton;
 
-    // TODO: Use List of prefabs instead. Not doing PCSO's anymore, they're stupid. 
     [SerializeField]
-    private PCSOListSO _availablePCsSO;
+    private GOListSO _pcInstancesSO;
 
     [SerializeField]
     private LayerMask _pcLayerMask;
@@ -25,16 +24,20 @@ public class PCSelector : MonoBehaviour
     {
         _eventSystem = EventSystem.current;
 
-        PCItemSO.OnSelectPC += HandlePCIconClick;
+        // Click on PC icon. 
+        PCInfo.OnSelectPC += HandlePCIconClick;
 
+        // Click on PC instance. 
         S.I.IM.PC.Home.SelectOrCenter.started += Select;
         S.I.IM.PC.Scavenge.Select.performed += Select;
     }
 
     private void OnDisable()
     {
-        PCItemSO.OnSelectPC -= HandlePCIconClick;
+        // Click on PC icon. 
+        PCInfo.OnSelectPC -= HandlePCIconClick;
 
+        // Click on PC instance. 
         S.I.IM.PC.Home.SelectOrCenter.started -= Select;
         S.I.IM.PC.Scavenge.Select.performed -= Select;
     }
@@ -63,55 +66,46 @@ public class PCSelector : MonoBehaviour
 
             if (hits.Length > 0)
             {
-                ChangePC(GetSOFromInstance(hits[0].collider.gameObject));
+                ChangePC(hits[0].collider.gameObject);
             }
         }
-    }
-
-    private PCItemSO GetSOFromInstance(GameObject instance)
-    {
-        foreach (PCItemSO pCItemSO in _availablePCsSO.PCItemSOs)
-        {
-            if (pCItemSO.PCInstance.GetInstanceID() == instance.GetInstanceID())
-            {
-                return pCItemSO;
-            }
-        }
-        return null;
     }
 
     // Still get double click if you click on two different buttons within time limit?
-    private void HandlePCIconClick(PCItemSO pCItemSO)
+    private void HandlePCIconClick(GameObject pcInstance)
     {
         float currentClickTime = Time.realtimeSinceStartup;
 
         if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
         {
             // Double click: Center camera on PC. Use event?
-            OnDoubleClickPCButton?.Invoke(pCItemSO.PCInstance.transform);
+            OnDoubleClickPCButton?.Invoke(pcInstance.transform);
         }
         else
         {
             // Single click: Select PC.
-            ChangePC(pCItemSO);
+            ChangePC(pcInstance);
         }
 
         _lastClickTime = currentClickTime;
     }
 
-    private void ChangePC(PCItemSO newPCItemSO)
+    private void ChangePC(GameObject newPCInstance)
     {
         // "Selected" substate of current PC gets deactivated in SelectedSubstate class. 
 
-        Transform states = newPCItemSO.PCInstance.transform.GetChild(4);
+        Transform states = newPCInstance.GetComponentInChildren<States>().transform;
 
         foreach (Transform state in states)
         {
             // If state is currently active, 
             if (state.gameObject.activeInHierarchy)
             {
-                // Activate "selected" substate. 
+                // Activate SelectedSubstate. 
                 state.GetChild(0).gameObject.SetActive(true);
+
+                // Deactivate NotSelectedSubstate.
+                state.GetChild(1).gameObject.SetActive(false);
             }
         }
     }

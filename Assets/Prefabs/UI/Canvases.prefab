@@ -220,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlotPrefab: {fileID: 9215846113654697647, guid: 2e2496814e5e78841a85fd889ab9d303, type: 3}
   SlotParent: {fileID: 972536995}
-  _availablePCSO: {fileID: 11400000, guid: d03460ed0f041b1468047a6de0415cf7, type: 2}
+  _pcInstancesSO: {fileID: 11400000, guid: fc1303163bea50f4a94f1e6d8078e952, type: 2}
 --- !u!1 &93676654285661717
 GameObject:
   m_ObjectHideFlags: 0

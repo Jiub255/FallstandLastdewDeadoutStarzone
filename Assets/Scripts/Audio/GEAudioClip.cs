@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Game Event (AudioClip)",
-    menuName = "Game Events/Game Event (AudioClip)")]
+    menuName = "Scriptable Object/Game Events/Game Event (AudioClip)")]
 public class GEAudioClip : ScriptableObject
 {
     private List<GELAudioClip> listeners = new List<GELAudioClip>();
