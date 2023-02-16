@@ -7,7 +7,7 @@ public class EnemyMoveToPCState : MonoBehaviour
     private Transform _target;
 
     [SerializeField]
-    private float _attackRadius = 1f;
+    private float _attackRadius = 2f;
 
     [SerializeField]
     private GameObject _enemyCombatState;
@@ -56,8 +56,7 @@ public class EnemyMoveToPCState : MonoBehaviour
         // Choose random PC from all available as starting target (for now)
         List<GameObject> potentialTargets = new List<GameObject>();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
-        int randomIndex = UnityEngine.Random.Range(0, potentialTargets.Count);
-        Debug.Log(randomIndex.ToString());
+        int randomIndex = Random.Range(0, potentialTargets.Count);
         return potentialTargets[randomIndex].transform;
     }
 }

@@ -42,8 +42,9 @@ public class SelectedSubstate : MonoBehaviour
         S.I.IM.PC.Home.SelectOrCenter./*canceled*/started -= HandleClick;
         S.I.IM.PC.Scavenge.Select.performed -= HandleClick;
 
+        // Do this in NotSelectedSubstate's OnEnable instead. 
         // Deactivate selected icon. 
-        transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
+      //  transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
 
         // Send Transparentizer signal to set current PC transform to null. 
         OnDeselectPC?.Invoke();

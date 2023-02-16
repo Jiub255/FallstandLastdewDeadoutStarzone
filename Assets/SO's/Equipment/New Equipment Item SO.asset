@@ -14,11 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 21300000, guid: 0c6a2a64ca9f9c946a7dbbd1674cf5bd, type: 3}
   Description: aegas
-  damage: 32
-  defense: 3
+  Damage: 0
+  Defense: 0
   Craftable: 1
-  Cost:
-  - craftingItemSO: {fileID: 11400000, guid: 0cd5ef7bffdeab3469ccc2a1d1980b9b, type: 2}
-    amount: 2
-  - craftingItemSO: {fileID: 11400000, guid: 358d82d943cbff44f8414567484b1ada, type: 2}
-    amount: 5
+  CraftingCost:
+  - CraftingItemSO: {fileID: 11400000, guid: 0cd5ef7bffdeab3469ccc2a1d1980b9b, type: 2}
+    Amount: 32

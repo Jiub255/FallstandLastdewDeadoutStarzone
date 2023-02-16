@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerPain : MonoBehaviour
 {
-    public static event Action<int> OnPainChanged;
+   // public static event Action<int> OnPainChanged;
 
     // Only serialized to easily see in inspector for now.
     [SerializeField]
     private int _truePain = 0;
     [SerializeField]
     private int _relief = 0;
+
+    public PCSlot Slot { get; set; }
 
     public int EffectivePain 
     { 
@@ -28,18 +30,21 @@ public class PlayerPain : MonoBehaviour
     public void AddPain(int damage)
     {
         _truePain += damage;
-        OnPainChanged?.Invoke(EffectivePain);
+        Slot.UpdatePainBar(EffectivePain);
+        //OnPainChanged?.Invoke(EffectivePain);
     }
 
     public void HealPain(int amount)
     {
         _truePain -= amount;
-        OnPainChanged?.Invoke(EffectivePain);
+        Slot.UpdatePainBar(EffectivePain);
+        //OnPainChanged?.Invoke(EffectivePain);
 
         if (_truePain < 0)
         {
             _truePain = 0;
-            OnPainChanged?.Invoke(EffectivePain);
+            Slot.UpdatePainBar(EffectivePain);
+            // OnPainChanged?.Invoke(EffectivePain);
         }
     }
 
@@ -51,11 +56,13 @@ public class PlayerPain : MonoBehaviour
     IEnumerator PainKiller(int amount, float duration)
     {
         _relief += amount;
-        OnPainChanged?.Invoke(EffectivePain);
+        Slot.UpdatePainBar(EffectivePain);
+        //OnPainChanged?.Invoke(EffectivePain);
 
         yield return new WaitForSeconds(duration);
 
         _relief -= amount;
-        OnPainChanged?.Invoke(EffectivePain);
+        Slot.UpdatePainBar(EffectivePain);
+        //OnPainChanged?.Invoke(EffectivePain);
     }
 }

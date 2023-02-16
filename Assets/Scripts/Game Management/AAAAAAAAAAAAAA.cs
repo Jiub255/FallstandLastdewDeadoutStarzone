@@ -15,16 +15,7 @@ ________________________________________________________________________________
     FIRST!!
 
 
-    FIX: 
-        Issues with the selected icon. Get it set up right. 
-
     Handle animations in the state machine? Might be easier, at least for now. 
-
-    Figure out PC object hierarchy. 
-        Have a weapon child. 
-        Use PCSO's or not? 
-            Could just use prefabs instead, and store all the data on them. 
-            Think it through, write it out on paper. 
 
     Figure out how combat will work. 
         Like LS:DZ? 
@@ -54,6 +45,7 @@ ________________________________________________________________________________
                 Medical - Ability to lower PC's injury level quickly/on the spot.
                 Science/Technology/Engineering - Ability to research/build more advanced building/crafting items/equip. 
                 Injury - How injured you are. Rest to recover.
+                Morale - Affects all stats of all PCs. Affected by many factors (entertainment buildings, food/water levels, recent deaths, etc.). 
             DERIVED STATS (Still need to work these out)
                 Pain - Pain level. Affect stats negatively.
                     Affected by: Injury level and certain items (painkillers, etc.).
@@ -69,12 +61,9 @@ ________________________________________________________________________________
             Specific inventories will hold lists of their type of itemAmounts. 
             When looting, loot will be sorted into their correct inventories. 
 
-    Figure out how crafting will work. 
-        Change CraftableEquip/UsableItem back to a bool and a list that only shows when craftable bool == true. 
+    Crafting 
         CraftingItem will inherit from ItemSO. 
             ex: Leather, metal pipe, whatever crafting thing. 
-        Have CraftableEquipment extend EquipmentItemSO and CraftableItem extend UsableItemSO. Especially since only gonna be two types of craftable items anyway. 
-            Craft equipment and usable items (anything else?). 
         Have a filter in crafting menu to only show items you have the materials to craft. On by default. 
         Have a way to see crafting items, clicking on them shows what they can be used to build. 
             Things that you have all the materials for will be not grayed out, and clicking them puts you on the craft screen for that item. 
@@ -213,43 +202,37 @@ ________________________________________________________________________________
 
     FINISH CAMERA CONTROLLER
     ------------------------
-        Make a focus on currently selected PC button. 
-            Centers camera on PC, and resets angles and zoom to default
-        Have a side or bottom bar with all available PCs. You can click on one to select them, or double click to select and center camera on them.       
-        FIX: Double click. Rethink situation. Maybe use a small timer in the method called by button to check for second click within x seconds
-            instead of using Multi-Tap interaction?
-
-        Have different rotation speeds for x and y axes?
-        Redo a bit based off "Strategy Game Camera: Unity's New Input System"
-        Keep edge scrolling area pretty close to the edge of the screen
-        Make edge scrolling smooth
-            Smooth it by distance from edge
-            Have two concentric borders 
-                Inside the inner one, no edge scrolling happens
-                When it gets outside the inner one, it starts moving slowly (like 0.0001f * speed)
-                    Speed increases (linearly?) while going from inner to outer border
-                By the time it reaches the outer one, it's going full speed (1f * speed)
-                Anything further out than the outer one, it's also full speed
-                OR, just have the outer edge of screen be the outer border.
-            Normalize the movement vector, but still scale speed based on where mouse is between borders
-        Make it still work if screen size changes during runtime
-            Necessary to check screen size every frame? seems stupid
-                Maybe check every 0.1f seconds or so to make it not too heavy?
-            Is there an event fired when screen size changes? That'd be much better
-                Then just have CameraController listen for that event and reassign screenWidth/Height
+        Have different rotation speeds for x and y axes. 
+        Redo a bit based off "Strategy Game Camera: Unity's New Input System"? 
+        Keep edge scrolling area pretty close to the edge of the screen. 
+        Make edge scrolling smooth. 
+            Smooth it by distance from edge. 
+            Have two concentric borders. 
+                Inside the inner one, no edge scrolling happens. 
+                When it gets outside the inner one, it starts moving slowly (like 0.0001f * speed). 
+                    Speed increases (linearly?) while going from inner to outer border. 
+                By the time it reaches the outer one, it's going full speed (1f * speed). 
+                Anything further out than the outer one, it's also full speed. 
+                OR, just have the outer edge of screen be the outer border. 
+            Normalize the direction vector, but still scale speed based on where mouse is between borders. 
+        Make it still work if screen size changes during runtime. 
+            Necessary to check screen size every frame? seems stupid. 
+                Maybe check every 0.1f seconds or so to make it not too heavy? 
+            Is there an event fired when screen size changes? That'd be much better. 
+                Then just have CameraController listen for that event and reassign screenWidth/Height. 
 
 
     LOOTING/SCAVENGING
     ------------------
-        Have a dust kicked up effect while looting, then it pops when done kinda thing
-            instead of a boring old timer
+        Have a dust kicked up effect while looting, then it pops when done kinda thing 
+            instead of a boring old timer. 
 
 
     PCs
     ---
-        Store PCs in prefabs with PC monobehaviours? Or on SOs?
-        Store available PCs in a SO.
-        Have bottom/top/side bar with PC icons. Click to select, double click to select and center camera on PC.
+        Store PCs in prefabs with data in components in separate child objects. 
+        Store available PCs in a SO (Have a prefab list and an instance list). 
+        Have bottom/top/side bar with PC icons. Click to select, double click to select and center camera on PC. 
         Make survivor AI for when they're idling at base. 
             Assign different AI's for PC's with different tasks (gardening, defense, etc...)
             Make 2 (or more) PCs play horse on basketball hoop.
@@ -260,20 +243,18 @@ ________________________________________________________________________________
 
     COMBAT
     ------
-        Finish combat system
-            Test EnemyDamage
-            Make PlayerShoot and Bullet
-        Auto aim like the Last Stand, or free aim shooting? Free aim might be funner
-        Make combat more actiony than the Last Stand
-        Use unique weapons/traps. Not just guns and shit.
-            Ropes and nets to stop stupid enemies (ie zombies)
-            Gas and fire to make a fire wall to block enemies
-            Knock over big things like shelves onto enemies
-            Hit them with vehicles if there's outdoor levels
+        Finish combat system, using GO states. 
+        Auto aim like the Last Stand, or free aim shooting? Free aim might be funner. 
+        Make combat more actiony than the Last Stand. 
+        Use unique weapons/traps. Not just guns and shit. 
+            Ropes and nets to stop stupid enemies (ie zombies). 
+            Gas and fire to make a fire wall to block enemies. 
+            Knock over big things like shelves onto enemies. 
+            Hit them with vehicles if there's outdoor levels. 
         Have injury and pain bars (instead of HP/health). 
-            They go up together, but pain actually affects your stats (speed, aim, etc)
-            Alcohol/drugs/pain killers/medical equipment/mind-over-matter-focus can lower pain so you can fight longer, but you need to rest to recover injury bar
-            Pain can only go as low as a certain percentage of injury bar
+            They go up together, but pain actually affects your stats (speed, aim, etc). 
+            Alcohol/drugs/pain killers/medical equipment/mind-over-matter-focus can lower pain so you can fight longer, but you need to rest to recover injury bar. 
+            Pain can only go as low as a certain percentage of injury bar. 
 
 
     MAP/SCAVENGING LOCATION SELECTION
@@ -416,6 +397,11 @@ ________________________________________________________________________________
             Still post-apocalyptic base builder. 
             Can have cool alien technology/enemies. And human warlords/bandits and wild earth animals. 
             Have it way in the future so you can have cool new earth animals/technology? 
+        OR, Aftermath of an epic battle between gods. Could have all sorts of creatures/beings. 
+            Could maybe incorporate prayer/culty shit with the gods? Maybe, later. 
+            Could have regular attacks by cults of the old gods. Your base could be the ones who say fuck the gods, they fucked us. 
+            Maybe have it like the biblical apocalypse, where a bunch of people just disappear suddenly. 
+        OR, Far future, and some technology has wiped us out (AI, some other-dimensional nonsense, whatever). 
 
 
     MANAGE A HOME BASE
@@ -436,12 +422,12 @@ ________________________________________________________________________________
             Prisons, schools, military complexes, police stations, etc. 
             Keep old buildings or start from scratch? Scrap old buildings for materials? 
             Have to make farm land at new place. Make sure to have enough food stored to last. 
-            
+    
 
     MANAGE TEAM OF SURVIVORS
     ------------------------
         Each have their own talents
-            Crafting/Building, Farming, Fighting, Scavenging, Doctor, etc.
+            Crafting/Building, Farming, Fighting, Scavenging, Doctor, Engineer, Scientist, etc.
         No main character? Not sure yet
         Control survivors by clicking on them then giving orders
             Move camera with WASD/arrow keys? and edge scrolling?
@@ -480,7 +466,7 @@ ________________________________________________________________________________
             Pain can only go as low as a certain percentage of injury bar
         Have melee fighters keep enemies at bay, while ranged shoot at them and looters loot. 
             Have other "types" of fighters? Tanks, healers, "mage" types, etc? Not at first at least.
-        
+    
 
 
     STATS (Still need to work these out)
@@ -490,8 +476,11 @@ ________________________________________________________________________________
             (Maybe split combat up into separate stats? I like the one simple stat though.)
         Survival - Affects skill with growing crops/gathering water/medical skill, defending/building base? Not sure.
         Stealth - How quickly enemies hear you while scavenging.
+
         Injury - How injured you are. Rest to recover.
         Pain - Pain level. Affect stats negatively. Affected by injury level and certain items.
+        Morale - Affected by food/water levels and quality, morale boosting buildings, time since team member's death, etc. 
+            Affects all the stats of all PCs? Have it as a collective stat or separate for each PC? 
 
 
     DERIVED STATS (Still need to work these out)
@@ -526,12 +515,15 @@ ________________________________________________________________________________
                 Morale
                 Combat/Scavenging Stats
                 Equipment
-                
-     FISHING MINIGAME
-    -----------------
-        
-     
-     
+    
+    FISHING MINIGAME
+    ----------------
+        Obviously. 
+    
+    
+    PETTING DOGS/CATS/WHATEVER ANIMAL
+    ---------------------------------
+        Also obviously. 
      
      
      

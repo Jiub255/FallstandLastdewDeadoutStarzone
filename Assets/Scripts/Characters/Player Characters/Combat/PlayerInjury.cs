@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class PlayerInjury : MonoBehaviour
 {
-    public static event Action<int> OnInjuryChanged;
+   // public static event Action<int> OnInjuryChanged;
 
-    // Only serialized to easily see in inspector for now.
-    [SerializeField]
-    private int _injury = 0;
+    public int Injury { get; private set; } = 0;
 
     private PlayerPain _playerPain;
+
+    public PCSlot Slot { get; set; } 
 
     private void Start()
     {
@@ -18,11 +18,12 @@ public class PlayerInjury : MonoBehaviour
 
     public void GetHurt(int damage)
     {
-        _injury += damage;
-        OnInjuryChanged?.Invoke(_injury);
+        Injury += damage;
+        Slot.UpdateInjuryBar(Injury);
+        //OnInjuryChanged?.Invoke(_injury);
         _playerPain.AddPain(damage);
 
-        if (_injury >= 100)
+        if (Injury >= 100)
         {
             Debug.Log("Injury >= 100, you died.");
             // Die();
@@ -31,14 +32,16 @@ public class PlayerInjury : MonoBehaviour
 
     public void Heal(int amount)
     {
-        _injury -= amount;
-        OnInjuryChanged?.Invoke(_injury);
+        Injury -= amount;
+        Slot.UpdateInjuryBar(Injury);
+        //OnInjuryChanged?.Invoke(Injury);
         _playerPain.HealPain(amount);
 
-        if (_injury < 0)
+        if (Injury < 0)
         {
-            _injury = 0;
-            OnInjuryChanged?.Invoke(_injury);
+            Injury = 0;
+            Slot.UpdateInjuryBar(Injury);
+            //OnInjuryChanged?.Invoke(Injury);
         }
     }
 }

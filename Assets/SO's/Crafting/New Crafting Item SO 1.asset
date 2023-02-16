@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b000e3d4327aa46b00f675ee2f5605, type: 3}
   m_Name: New Crafting Item SO 1
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
-  Description: 
+  Icon: {fileID: 21300000, guid: 874d8401331ede14087e8d8d486ddda6, type: 3}
+  Description: il v

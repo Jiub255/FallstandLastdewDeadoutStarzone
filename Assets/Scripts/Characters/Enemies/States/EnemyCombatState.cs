@@ -55,6 +55,10 @@ public class EnemyCombatState : MonoBehaviour
         // play attack animation
         _animator.SetTrigger("Attack");
         // boxcast immediately after animation to check if PC is still there
+
+        // JUST FOR TESTING 
+        Target.GetComponent<PlayerInjury>().GetHurt(10); 
+        Debug.Log("Got injured for 10 by " + transform.parent.parent.name); 
     }
 
     // Animation event at the end of attack animation calls this method

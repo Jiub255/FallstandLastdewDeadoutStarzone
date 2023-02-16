@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class PainInjuryUI : MonoBehaviour
 {
-	[SerializeField]
+/*	[SerializeField]
 	private Image _painFillbar;
 	[SerializeField]
 	private Image _injuryFillbar;
@@ -28,5 +28,5 @@ public class PainInjuryUI : MonoBehaviour
 	private void UpdateInjuryBar(int injury)
     {
 		_injuryFillbar.fillAmount = (float)injury / 100f;
-    }
+    }*/
 }

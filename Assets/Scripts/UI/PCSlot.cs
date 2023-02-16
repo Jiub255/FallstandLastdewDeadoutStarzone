@@ -12,8 +12,22 @@ public class PCSlot : MonoBehaviour
     private Button _useButton;
     [SerializeField]
     private TextMeshProUGUI _nameText;
+    [SerializeField]
+    private Image _painFillbar;
+    [SerializeField]
+    private Image _injuryFillbar;
 
     private GameObject _pcInstance;
+
+    public void UpdatePainBar(int pain)
+    {
+        _painFillbar.fillAmount = (float)pain / 100f;
+    }
+
+    public void UpdateInjuryBar(int injury)
+    {
+        _injuryFillbar.fillAmount = (float)injury / 100f;
+    }
 
     public void SetupSlot(GameObject pcInstance)
     {
@@ -22,6 +36,13 @@ public class PCSlot : MonoBehaviour
         _nameText.text = pcInstance.name;
         _icon.enabled = true;
         _useButton.interactable = true;
+
+        // Set the fill bars here initially, but they get changed from the pain and injury scripts.
+        UpdateInjuryBar(pcInstance.GetComponent<PlayerInjury>().Injury);
+        UpdatePainBar(pcInstance.GetComponent<PlayerPain>().EffectivePain);
+        // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
+        pcInstance.GetComponent<PlayerInjury>().Slot = this;
+        pcInstance.GetComponent<PlayerPain>().Slot = this;
     }
 
     public void ClearSlot()

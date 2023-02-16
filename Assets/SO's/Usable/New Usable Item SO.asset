@@ -17,3 +17,9 @@ MonoBehaviour:
   ItemEffect:
     m_PersistentCalls:
       m_Calls: []
+  Craftable: 1
+  CraftingCost:
+  - CraftingItemSO: {fileID: 11400000, guid: 0cd5ef7bffdeab3469ccc2a1d1980b9b, type: 2}
+    Amount: 2
+  - CraftingItemSO: {fileID: 11400000, guid: 358d82d943cbff44f8414567484b1ada, type: 2}
+    Amount: 3
