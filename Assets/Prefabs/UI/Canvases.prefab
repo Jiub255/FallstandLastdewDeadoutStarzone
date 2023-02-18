@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 4314923719890600231}
   - component: {fileID: 4314923719890607832}
   - component: {fileID: 4314923719890607833}
-  - component: {fileID: 1268672210010540687}
+  - component: {fileID: 1373674102500894686}
   m_Layer: 5
   m_Name: Inventory Canvas
   m_TagString: Untagged
@@ -625,7 +625,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1268672210010540687
+--- !u!114 &1373674102500894686
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -634,12 +634,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4314923719890607835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9f2bf13157d5ac49b30861cbf5e5913, type: 3}
+  m_Script: {fileID: 11500000, guid: b5d26b9ebb3c22a4a917af266d83dfd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlotPrefab: {fileID: 1125692319144443039, guid: bce384e77c69ba04f983c8e58b732613, type: 3}
+  SlotPrefab: {fileID: 7164624949486812563, guid: ec0afff839162d04b92e450c0d9e72b6, type: 3}
   SlotParent: {fileID: 4314923721268166185}
-  _inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
+  _usableInventorySO: {fileID: 11400000, guid: af0ce634bf8bfb946b91aed3de0d6bc0, type: 2}
 --- !u!1 &4314923720224025348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1203,7 @@ MonoBehaviour:
   m_Content: {fileID: 4314923721268166185}
   m_Horizontal: 1
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135

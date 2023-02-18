@@ -10,7 +10,7 @@ public class RunToEnemyState : MonoBehaviour
 
     // Only SerializeField for testing. 
     [SerializeField]
-    private float _weaponRange = 3f;
+    private float _weaponRange = 5f;
 
     private NavMeshAgent _agent;
     private Transform _transform;

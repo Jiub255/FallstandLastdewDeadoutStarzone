@@ -19,5 +19,6 @@ public class EquipmentItemSO : ItemSO
 	public override void Use()
 	{
 		// Equip item. 
+		Debug.Log("Equipped " + name);
 	}
 }

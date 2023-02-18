@@ -15,7 +15,9 @@ ________________________________________________________________________________
     FIRST!!
 
 
-    Handle animations in the state machine? Might be easier, at least for now. 
+    FIX:
+        Sometimes all states get deactivated and you can't regain control of PC. Not sure why. 
+        GunIdle/GunShoot not working. 
 
     Figure out how combat will work. 
         Like LS:DZ? 

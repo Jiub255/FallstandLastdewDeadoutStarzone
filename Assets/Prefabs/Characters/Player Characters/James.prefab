@@ -1176,7 +1176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _combatState: {fileID: 8080965005666189367}
-  _weaponRange: 2
+  _weaponRange: 5
 --- !u!1 &8080965006105525627
 GameObject:
   m_ObjectHideFlags: 0

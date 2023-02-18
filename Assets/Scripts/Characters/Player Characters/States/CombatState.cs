@@ -17,11 +17,15 @@ public class CombatState : MonoBehaviour
     [SerializeField]
     private GameObject _idleState;
 
+    private Transform _transform;
+
     private void OnEnable()
     {
         _timer = 0f;
         _animator = transform.parent.parent.GetComponentInChildren<Animator>();
         _animator.SetBool("GunIdle", true);
+
+        _transform = transform.parent.parent;
 
         // Get attack duration from current weapon/stats. 
         // Maybe keep these things in a SO for easy shared reference? But then each PC would need one.
@@ -29,7 +33,7 @@ public class CombatState : MonoBehaviour
         // _attackDuration = ...;
 
         // Face the enemy. 
-        transform.parent.parent.LookAt(Target);
+        _transform.LookAt(Target);
     }
 
     private void OnDisable()
@@ -40,6 +44,10 @@ public class CombatState : MonoBehaviour
     private void Update()
     {
         // TODO: Check if enemy is still in range first. 
+
+
+        // Face the enemy. 
+        _transform.LookAt(Target);
 
         _timer += Time.deltaTime;
 
@@ -59,7 +67,7 @@ public class CombatState : MonoBehaviour
         _timer = 0f;
 
         // Set attack animation trigger. 
-        _animator.SetTrigger("Attacking");
+        _animator.SetTrigger("Attack");
 
         // JUST FOR TESTING
         Target.GetComponentInChildren<EnemyHealth>().GetHurt(25, this);

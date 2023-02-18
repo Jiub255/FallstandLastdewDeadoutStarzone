@@ -1,7 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Animator))]
 public class CharacterAnimation : MonoBehaviour
 {
     private NavMeshAgent _agent;
@@ -9,7 +8,7 @@ public class CharacterAnimation : MonoBehaviour
     
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponentInParent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
     }
 

@@ -33,6 +33,6 @@ public class EnemyHealth : MonoBehaviour
 		// Send signal to attacking PC that enemy is dead, so they can switch states. 
 		attackingPC.OnEnemyKilled();
 
-		Destroy(transform.parent.gameObject);
+		Destroy(transform.parent.gameObject, 3f);
     }
 }

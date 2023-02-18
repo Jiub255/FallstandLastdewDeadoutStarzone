@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Maybe put this on TheSingleton?
+// Put this on Canvases object. 
 public class UIManager : MonoBehaviour
 {
     // MenuUIRefresher listens to initialize the UI displays

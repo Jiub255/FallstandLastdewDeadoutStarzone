@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LootState : MonoBehaviour
@@ -43,7 +41,7 @@ public class LootState : MonoBehaviour
 
         // Set animation to looting. 
         _animator = transform.parent.parent.GetComponentInChildren<Animator>();
-        _animator.SetTrigger("Looting");
+        _animator.SetTrigger("Loot");
 
         // Activate timer object. 
         _timerObject.SetActive(true);
@@ -57,9 +55,6 @@ public class LootState : MonoBehaviour
     {
         // Deactivate timer object
         _timerObject.SetActive(false);
-
-        // Set animation back to idle. 
-        _animator.SetTrigger("StopLooting");
 
         // Set LootContainer's IsBeingLooted to false. 
         _lootContainer.IsBeingLooted = false;

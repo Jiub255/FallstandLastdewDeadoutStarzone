@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.AI;
 
-public class CharacterAnimation2 : MonoBehaviour
+[RequireComponent(typeof(Animator))]
+public class JUNKCharacterAnimation : MonoBehaviour
 {
     private NavMeshAgent _agent;
     private Animator _animator;
     
     private void Awake()
     {
-        _agent = GetComponentInParent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
     }
 
