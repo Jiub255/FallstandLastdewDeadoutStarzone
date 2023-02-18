@@ -118,6 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lootDistance: 0.8
   _lootState: {fileID: 4139383446069824200}
+  _idleState: {fileID: 7361117066072064325}
 --- !u!1 &515558152159014629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c403ac5102cb6b4fb27377dbd91843a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _timer: 0
+  _attackDuration: 1
   _idleState: {fileID: 7361117066072064325}
 --- !u!1 &4283182367970806025
 GameObject:

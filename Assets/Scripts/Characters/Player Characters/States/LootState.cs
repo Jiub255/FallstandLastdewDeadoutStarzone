@@ -27,10 +27,22 @@ public class LootState : MonoBehaviour
     // RunToLootState sets this when switching to this state. 
     public Transform LootContainerTransform { get; set; }
 
+    private LootContainer _lootContainer;
+
     private void OnEnable()
     {
+        _lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
+        // Set LootContainer's IsBeingLooted to true. 
+        _lootContainer.IsBeingLooted = true;
+
+        // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
+        transform.parent.parent.position = _lootContainer.LootPosition.position;
+
+        // Face the loot container. 
+        transform.parent.parent.LookAt(LootContainerTransform);
+
         // Set animation to looting. 
-        _animator = transform.parent.parent.GetComponent<Animator>();
+        _animator = transform.parent.parent.GetComponentInChildren<Animator>();
         _animator.SetTrigger("Looting");
 
         // Activate timer object. 
@@ -48,6 +60,9 @@ public class LootState : MonoBehaviour
 
         // Set animation back to idle. 
         _animator.SetTrigger("StopLooting");
+
+        // Set LootContainer's IsBeingLooted to false. 
+        _lootContainer.IsBeingLooted = false;
     }
 
     private void Update()
@@ -61,17 +76,10 @@ public class LootState : MonoBehaviour
             // Add loot to inventory. 
             AddLoot();
 
-            // Deactivate this state. 
-            gameObject.SetActive(false);
+            // Set LootContainer's Looted to true. 
+            _lootContainer.Looted = true;
 
-            // Activate Idle state. 
-            _idleState.SetActive(true);
-
-            // Activate selected substate if currently selected. 
-            if (transform.GetChild(0).gameObject.activeSelf)
-            {
-                _idleState.transform.GetChild(0).gameObject.SetActive(true);
-            }
+            StateSwitcher.Switch(gameObject, _idleState);
         }
         else
         {

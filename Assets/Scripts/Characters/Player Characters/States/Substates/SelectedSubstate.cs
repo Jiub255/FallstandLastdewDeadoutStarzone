@@ -42,10 +42,6 @@ public class SelectedSubstate : MonoBehaviour
         S.I.IM.PC.Home.SelectOrCenter./*canceled*/started -= HandleClick;
         S.I.IM.PC.Scavenge.Select.performed -= HandleClick;
 
-        // Do this in NotSelectedSubstate's OnEnable instead. 
-        // Deactivate selected icon. 
-      //  transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
-
         // Send Transparentizer signal to set current PC transform to null. 
         OnDeselectPC?.Invoke();
     }
@@ -64,8 +60,6 @@ public class SelectedSubstate : MonoBehaviour
 
     private void HandleClick(InputAction.CallbackContext context)
     {
-       // Debug.Log("Clicked");
-
         Transform states = transform.parent.parent;
 
         // RaycastAll to see what was hit. 
@@ -83,10 +77,10 @@ public class SelectedSubstate : MonoBehaviour
                 if (_pCLayerMask.Contains(hit.collider.gameObject.layer))
                 {
                     // If PC is not currently selected PC, 
-                    if (hit.collider.gameObject.GetInstanceID() != transform.parent.parent.parent.gameObject.GetInstanceID())
+                    if (hit.transform.parent.GetInstanceID() != transform.parent.parent.parent.GetInstanceID())
                     {
                         // Activate NotSelectedSubstate. 
-                        transform.parent.GetChild(1).gameObject.SetActive(true);
+                        transform.parent.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
                         // Deactivate SelectedSubstate (PCSelector handles activating new PC's substate). 
                         gameObject.SetActive(false);
                     }
@@ -99,26 +93,19 @@ public class SelectedSubstate : MonoBehaviour
             // Check for enemy clicks second. 
             foreach (RaycastHit hit in hits)
             {
-                if (_enemyLayerMask.Contains(hit.collider.gameObject.layer))
+                if (_enemyLayerMask.Contains(hit.transform.parent.gameObject.layer))
                 {
                     RunToEnemyState runToEnemyState = states.gameObject.GetComponentInChildren<RunToEnemyState>(true);
 
                     // Make sure to get the right parent for the transform. 
                     // Set fighting variables. 
-                    runToEnemyState.Target = hit.transform/*.parent*/;
+                    runToEnemyState.Target = hit.transform.parent;
 
                     // Switch current state (if not in run to enemy state already). 
-                    if (transform.parent.name != "Run To Enemy")
+                    //if (transform.parent.name != "Run To Enemy")
+                    if (transform.parent.GetInstanceID() != runToEnemyState.GetInstanceID())
                     {
-                        // Activate RunToEnemyState. 
-                        runToEnemyState.gameObject.SetActive(true);
-                        // Activate its Selected substate. 
-                        runToEnemyState.transform.GetChild(0).gameObject.SetActive(true);
-                        // Deactivate its NotSelected substate. 
-                        runToEnemyState.transform.GetChild(1).gameObject.SetActive(false);
-
-                        // Deactivate current state. 
-                        transform.parent.gameObject.SetActive(false);
+                        SwitchToState(runToEnemyState.gameObject);
                     }
 
                     // Return so that multiple hits don't get called. 
@@ -131,27 +118,24 @@ public class SelectedSubstate : MonoBehaviour
             {
                 if (_lootContainerLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    RunToLootState runToLootState = states.gameObject.GetComponentInChildren<RunToLootState>(true);
-                    
-                    // Set looting variables. 
-                    runToLootState.LootContainerTransform = hit.transform.parent;
-
-                    // Switch current state (if not in run to loot state already). 
-                    if (transform.parent.name != "Run To Loot")
+                    // Make sure container hasn't been looted and isn't currently being looted. 
+                    if (!hit.transform.GetComponent<LootContainer>().Looted &&
+                        !hit.transform.GetComponent<LootContainer>().IsBeingLooted)
                     {
-                        // Activate RunToLootState. 
-                        runToLootState.gameObject.SetActive(true);
-                        // Activate its Selected substate. 
-                        runToLootState.transform.GetChild(0).gameObject.SetActive(true);
-                        // Deactivate its NotSelected substate. 
-                        runToLootState.transform.GetChild(1).gameObject.SetActive(false);
+                        RunToLootState runToLootState = states.gameObject.GetComponentInChildren<RunToLootState>(true);
+                    
+                        // Set looting variables. 
+                        runToLootState.LootContainerTransform = hit.transform.parent;
 
-                        // Deactivate current state. 
-                        transform.parent.gameObject.SetActive(false);
+                        // Switch current state (if not in run to loot state already). 
+                        if (transform.parent.GetInstanceID() != runToLootState.GetInstanceID())
+                        {
+                            SwitchToState(runToLootState.gameObject);
+                        }
+
+                        // Return so that multiple hits don't get called. 
+                        return;
                     }
-
-                    // Return so that multiple hits don't get called. 
-                    return;
                 }
             }
 
@@ -167,17 +151,9 @@ public class SelectedSubstate : MonoBehaviour
                     transform.parent.parent.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().destination = hit.point;
 
                     // Switch current state (if not in run state already). 
-                    if (transform.parent.name != "Run")
+                    if (transform.parent.GetInstanceID() != runState.GetInstanceID())
                     {
-                        // Activate Run state. 
-                        runState.gameObject.SetActive(true);
-                        // Activate its Selected substate. 
-                        runState.transform.GetChild(0).gameObject.SetActive(true);
-                        // Deactivate its NotSelected substate. 
-                        runState.transform.GetChild(1).gameObject.SetActive(false);
-
-                        // Deactivate current state. 
-                        transform.parent.gameObject.SetActive(false);
+                        SwitchToState(runState.gameObject);
                     }
 
                     // Return so that multiple hits don't get called. 
@@ -185,5 +161,18 @@ public class SelectedSubstate : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void SwitchToState(GameObject state)
+    {
+        // Activate RunToLootState. 
+        state.SetActive(true);
+        // Activate its Selected substate. 
+        state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
+        // Deactivate its NotSelected substate. 
+        state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
+
+        // Deactivate current state. 
+        transform.parent.gameObject.SetActive(false);
     }
 }

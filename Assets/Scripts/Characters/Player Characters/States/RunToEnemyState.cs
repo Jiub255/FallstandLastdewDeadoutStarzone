@@ -49,17 +49,7 @@ public class RunToEnemyState : MonoBehaviour
             // Set Target in CombatState. 
             _combatState.GetComponent<CombatState>().Target = Target; 
 
-            // Activate LootState. 
-            _combatState.SetActive(true);
-
-            // Activate selected substate if currently selected. 
-            if (_transform.GetChild(0).gameObject.activeSelf)
-            {
-                _combatState.transform.GetChild(0).gameObject.SetActive(true);
-            }
-
-            // Deactivate this state. 
-            gameObject.SetActive(false);
+            StateSwitcher.Switch(gameObject, _combatState);
         }
     }
 

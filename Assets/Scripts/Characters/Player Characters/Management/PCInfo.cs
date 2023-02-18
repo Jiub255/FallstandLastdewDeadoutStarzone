@@ -8,6 +8,7 @@ public class PCInfo : MonoBehaviour
 
     public Sprite Icon;
 
+    // Called by clicking PC icon button. 
     public void Use()
     {
         // PCSelector hears this. Selects this PC for now. Center camera on double click later. 

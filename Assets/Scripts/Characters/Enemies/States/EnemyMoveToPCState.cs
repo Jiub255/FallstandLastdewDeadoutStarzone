@@ -25,7 +25,7 @@ public class EnemyMoveToPCState : MonoBehaviour
 
     private void Start()
     {
-        // Set random (?) PC as target. 
+        // Set random PC as target (for now). 
         _target = ChooseRandomTarget();
         // Set target as NavMeshAgent destination
         _agent.SetDestination(_target.position);
@@ -54,7 +54,7 @@ public class EnemyMoveToPCState : MonoBehaviour
     private Transform ChooseRandomTarget()
     {
         // Choose random PC from all available as starting target (for now)
-        List<GameObject> potentialTargets = new List<GameObject>();
+        List<GameObject> potentialTargets = new();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = Random.Range(0, potentialTargets.Count);
         return potentialTargets[randomIndex].transform;

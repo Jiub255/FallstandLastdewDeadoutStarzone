@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInjury : MonoBehaviour
 {
-   // public static event Action<int> OnInjuryChanged;
-
     public int Injury { get; private set; } = 0;
 
     private PlayerPain _playerPain;
@@ -20,13 +18,12 @@ public class PlayerInjury : MonoBehaviour
     {
         Injury += damage;
         Slot.UpdateInjuryBar(Injury);
-        //OnInjuryChanged?.Invoke(_injury);
         _playerPain.AddPain(damage);
 
         if (Injury >= 100)
         {
             Debug.Log("Injury >= 100, you died.");
-            // Die();
+            Die();
         }
     }
 
@@ -34,14 +31,17 @@ public class PlayerInjury : MonoBehaviour
     {
         Injury -= amount;
         Slot.UpdateInjuryBar(Injury);
-        //OnInjuryChanged?.Invoke(Injury);
         _playerPain.HealPain(amount);
 
         if (Injury < 0)
         {
             Injury = 0;
             Slot.UpdateInjuryBar(Injury);
-            //OnInjuryChanged?.Invoke(Injury);
         }
+    }
+
+    private void Die()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

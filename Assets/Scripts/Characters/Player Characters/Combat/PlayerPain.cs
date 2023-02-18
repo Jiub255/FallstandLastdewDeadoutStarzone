@@ -1,14 +1,12 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class PlayerPain : MonoBehaviour
 {
-   // public static event Action<int> OnPainChanged;
-
     // Only serialized to easily see in inspector for now.
     [SerializeField]
     private int _truePain = 0;
+    // Only serialized to easily see in inspector for now.
     [SerializeField]
     private int _relief = 0;
 
@@ -31,20 +29,17 @@ public class PlayerPain : MonoBehaviour
     {
         _truePain += damage;
         Slot.UpdatePainBar(EffectivePain);
-        //OnPainChanged?.Invoke(EffectivePain);
     }
 
     public void HealPain(int amount)
     {
         _truePain -= amount;
         Slot.UpdatePainBar(EffectivePain);
-        //OnPainChanged?.Invoke(EffectivePain);
 
         if (_truePain < 0)
         {
             _truePain = 0;
             Slot.UpdatePainBar(EffectivePain);
-            // OnPainChanged?.Invoke(EffectivePain);
         }
     }
 
@@ -57,12 +52,10 @@ public class PlayerPain : MonoBehaviour
     {
         _relief += amount;
         Slot.UpdatePainBar(EffectivePain);
-        //OnPainChanged?.Invoke(EffectivePain);
 
         yield return new WaitForSeconds(duration);
 
         _relief -= amount;
         Slot.UpdatePainBar(EffectivePain);
-        //OnPainChanged?.Invoke(EffectivePain);
     }
 }

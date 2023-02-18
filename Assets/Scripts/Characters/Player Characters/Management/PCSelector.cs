@@ -66,7 +66,7 @@ public class PCSelector : MonoBehaviour
 
             if (hits.Length > 0)
             {
-                ChangePC(hits[0].collider.gameObject);
+                ChangePC(hits[0].transform.parent.gameObject);
             }
         }
     }
@@ -101,11 +101,13 @@ public class PCSelector : MonoBehaviour
             // If state is currently active, 
             if (state.gameObject.activeInHierarchy)
             {
+                Debug.Log(state.gameObject.name);
+
                 // Activate SelectedSubstate. 
-                state.GetChild(0).gameObject.SetActive(true);
+                state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
 
                 // Deactivate NotSelectedSubstate.
-                state.GetChild(1).gameObject.SetActive(false);
+                state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
             }
         }
     }

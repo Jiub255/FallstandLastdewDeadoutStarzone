@@ -38,11 +38,11 @@ public class PCSlot : MonoBehaviour
         _useButton.interactable = true;
 
         // Set the fill bars here initially, but they get changed from the pain and injury scripts.
-        UpdateInjuryBar(pcInstance.GetComponent<PlayerInjury>().Injury);
-        UpdatePainBar(pcInstance.GetComponent<PlayerPain>().EffectivePain);
+        UpdateInjuryBar(pcInstance.GetComponentInChildren<PlayerInjury>().Injury);
+        UpdatePainBar(pcInstance.GetComponentInChildren<PlayerPain>().EffectivePain);
         // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
-        pcInstance.GetComponent<PlayerInjury>().Slot = this;
-        pcInstance.GetComponent<PlayerPain>().Slot = this;
+        pcInstance.GetComponentInChildren<PlayerInjury>().Slot = this;
+        pcInstance.GetComponentInChildren<PlayerPain>().Slot = this;
     }
 
     public void ClearSlot()

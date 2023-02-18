@@ -25,7 +25,9 @@ public class RunState : MonoBehaviour
             _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance &&
             (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f))
         {
-            // Activate Idle State. 
+            StateSwitcher.Switch(gameObject, _idleState);
+
+/*            // Activate Idle State. 
             _idleState.SetActive(true);
 
             // Activate selected substate if currently selected. 
@@ -35,7 +37,7 @@ public class RunState : MonoBehaviour
             }
 
             // Deactivate this state. 
-            gameObject.SetActive(false);
+            gameObject.SetActive(false);*/
         }
     }
 }

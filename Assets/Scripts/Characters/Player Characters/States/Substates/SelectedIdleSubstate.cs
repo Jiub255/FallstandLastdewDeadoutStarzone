@@ -19,7 +19,7 @@ public class SelectedIdleSubstate : MonoBehaviour
     private void Deselect(InputAction.CallbackContext context)
     {
         // Activate NotSelected substate. 
-        transform.parent.GetChild(1).gameObject.SetActive(true);
+        transform.parent.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
 
         // Deactivate selected state game object. 
         gameObject.SetActive(false);

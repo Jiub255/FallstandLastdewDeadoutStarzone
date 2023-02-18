@@ -18,7 +18,7 @@ public class EnemyCombatState : MonoBehaviour
 
     private void OnEnable()
     {
-        _animator = transform.parent.GetComponentInParent<Animator>();
+        _animator = transform.parent.parent.GetComponentInChildren<Animator>();
         _transform = _animator.transform;
         _attackRadius = _enemyMoveToPCState.GetComponent<EnemyMoveToPCState>().AttackRadius;
     }
@@ -32,17 +32,18 @@ public class EnemyCombatState : MonoBehaviour
     {
         _timer += Time.deltaTime;
 
-        // Check if player is still within attack range. 
-        if (Vector3.Distance(_transform.position, Target.position) > _attackRadius)
-        {
-            // Switch back to EnemyMoveToPCState. 
-            _enemyMoveToPCState.SetActive(true);
-            gameObject.SetActive(false);
-        }
-
         if (_timer > _timeBetweenAttacks)
         {
             _timer = 0f;
+
+            // Check if player is still within attack range. 
+            if (Vector3.Distance(_transform.position, Target.position) > _attackRadius)
+            {
+                // Switch back to EnemyMoveToPCState. 
+                _enemyMoveToPCState.SetActive(true);
+                gameObject.SetActive(false);
+                return;
+            }
 
             Attack();
         }
@@ -52,12 +53,13 @@ public class EnemyCombatState : MonoBehaviour
     {
         // face PC
         transform.LookAt(Target);
+
         // play attack animation
-        _animator.SetTrigger("Attack");
+       // _animator.SetTrigger("Attack");
         // boxcast immediately after animation to check if PC is still there
 
         // JUST FOR TESTING 
-        Target.GetComponent<PlayerInjury>().GetHurt(10); 
+        Target.GetComponentInChildren<PlayerInjury>().GetHurt(10); 
         Debug.Log("Got injured for 10 by " + transform.parent.parent.name); 
     }
 
@@ -77,5 +79,4 @@ public class EnemyCombatState : MonoBehaviour
 
         // If killed PC, go back to EnemyMoveToPCState. 
     }*/
-
 }

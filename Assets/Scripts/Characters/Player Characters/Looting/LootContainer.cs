@@ -6,4 +6,9 @@ using UnityEngine;
 public class LootContainer : MonoBehaviour
 {
     public List<ItemAmount> LootItemAmounts;
+
+    public bool IsBeingLooted { get; set; } = false;
+    public bool Looted { get; set; } = false;
+
+    public Transform LootPosition; 
 }

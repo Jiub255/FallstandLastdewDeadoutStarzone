@@ -9,10 +9,11 @@ public class NotSelectedSubstate : MonoBehaviour
         StartCoroutine(WaitThenDeactivateIcon());
     }
 
+    // TODO: Is it necessary to wait a frame? 
     IEnumerator WaitThenDeactivateIcon()
     {
         yield return new WaitForEndOfFrame();
 
-        transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
+        transform.parent.parent.parent.GetComponentInChildren<SelectedPCIcon>(true).DeactivateIcon();
     }
 }
