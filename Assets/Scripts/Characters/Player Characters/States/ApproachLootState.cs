@@ -17,6 +17,7 @@ public class ApproachLootState : MonoBehaviour
     private GameObject _idleState;
 
     private NavMeshAgent _agent;
+   // private float _stoppingDistance;
     private Transform _transform;
 
     private void OnEnable()
@@ -44,6 +45,8 @@ public class ApproachLootState : MonoBehaviour
             // Unset NavMeshAgent destination? Can't set Vector3 to null. 
             _agent.isStopped = true;
             _agent.ResetPath();
+            // Set stopping distance back to normal in case it got changed to 0f in HaveReachedLoot. 
+            //_agent.stoppingDistance = _stoppingDistance;
 
             // Set LootContainerTransform in LootState. 
             _lootState.GetComponent<LootState>().LootContainerTransform = LootContainerTransform;
@@ -58,14 +61,22 @@ public class ApproachLootState : MonoBehaviour
     // Check to see if it reached its destination in update instead of doing this check here. 
     private bool HaveReachedLoot()
     {
-        if (Vector3.Distance(_transform.position, _lootingPosition) < _lootDistance)
+        Debug.Log($"NavMeshAgent.destination: {_agent.destination}, Looting Position: {_lootingPosition}");
+
+        // NOT WORKING (the stopping distance stuff). 
+        // Solves the problem of PC not moving towards loot if it was already close by temporarily setting stopping distance to zero.  
+        // Stopping distance gets set back once it reaches the loot position. 
+/*        if (Vector3.Distance(_transform.position, _lootingPosition) < _agent.stoppingDistance)
         {
-            return true;
-        }
-        return false;
+            _stoppingDistance = _agent.stoppingDistance;
+
+            _agent.stoppingDistance = 0f; 
+        }*/
+
+        return Vector3.Distance(_transform.position, _lootingPosition) < _lootDistance;
     }
 
-    private bool HaveReachedDestination()
+/*    private bool HaveReachedDestination()
     {
         float distance = 0.0f;
 
@@ -77,5 +88,5 @@ public class ApproachLootState : MonoBehaviour
         }
 
         return distance < _lootDistance;
-    }
+    }*/
 }

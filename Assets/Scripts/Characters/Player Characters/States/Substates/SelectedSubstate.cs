@@ -136,8 +136,8 @@ public class SelectedSubstate : MonoBehaviour
                         // Set looting variables. 
                         _approachLootState.LootContainerTransform = hit.transform.parent;
 
-                        // Switch current state (if not in run to loot state already). 
-                        if (transform.parent.GetInstanceID() != _approachLootState.transform.GetInstanceID())
+                        // Switch current state. 
+                        //if (transform.parent.GetInstanceID() != _approachLootState.transform.GetInstanceID())
                         {
                             SwitchToState(_approachLootState.gameObject);
                         }
@@ -176,12 +176,12 @@ public class SelectedSubstate : MonoBehaviour
     {
         Debug.Log($"Switching states from {transform.parent.gameObject.name} to {state.name}");
      
-        // Activate its Selected substate. 
+        // Activate new state's Selected substate. 
         state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
-        // Deactivate its NotSelected substate. 
+        // Deactivate new state's NotSelected substate. 
         state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
 
-        // Activate next state. 
+        // Activate new state. 
         state.SetActive(true);
         // Deactivate current state. 
         transform.parent.gameObject.SetActive(false);

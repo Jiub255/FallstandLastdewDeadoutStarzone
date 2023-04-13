@@ -30,10 +30,10 @@ public class LootState : MonoBehaviour
         _lootContainer.IsBeingLooted = true;
 
         // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
-        transform.parent.parent.position = _lootContainer.LootPosition.position;
+        transform.root.position = _lootContainer.LootPosition.position;
 
         // Face the loot container. 
-        transform.parent.parent.LookAt(LootContainerTransform);
+        transform.root.LookAt(LootContainerTransform);
 
         // Set animation to looting. 
         _animator = transform.parent.parent.GetComponentInChildren<Animator>();

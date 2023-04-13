@@ -15,10 +15,17 @@ ________________________________________________________________________________
 
     FIX:
 
-        Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
-    
-        Loot state not working correctly. Won't loot if clicked on nearby loot container. 
+        Sometimes when clicking rapidly on an already looted container with a PC selected, all of it's states and substates get deactivated. 
+            Might be related to the loot containers, not sure yet. 
 
+        Loot state not working correctly. Won't loot if clicked on nearby loot container. 
+            Issue with NavMeshAgent stopping distance. If set to zero problem goes away. 
+                Causes issues with NavMeshObstacles though. 
+                Maybe just don't use NavMeshAgent?
+                Or, change stopping distance during runtime when you're close to loot containers?
+
+
+    Stop using NavMeshAgent, make pathfinding system?
 
 
     Figure out how combat will work. 
