@@ -14,15 +14,6 @@ ________________________________________________________________________________
 
 
     FIX:
-        If you click on another PC while there is already one selected, sometimes both end up selected.
-            Not exactly sure why it happens, doesn't always happen. 
-            Who is in charge of deselecting the previous PC? PCSelector?         
-        The problem is that PCSelector's _currentPCInstance is getting set to null anytime you click anything that isn't a PC, 
-        because it was SelectedSubstate's OnDisable was getting called anytime the selected PC switched superstates, which was nulling out the 
-        current PC reference in PCSelector. 
-        Moving it to NotSelectedSubstate's OnEnable made it slightly better, but it still gets called if you select a new PC while your old one is finishing 
-        something, because once it's done its NotSelectedSubstate will call OnEnable and set PCSelector's current PC to null, letting you select a second PC. 
-        HOW TO FIX???
 
         Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
     
@@ -558,6 +549,18 @@ ________________________________________________________________________________
 
     FIXED:
 
-
+            If you click on another PC while there is already one selected, sometimes both end up selected.
+            Not exactly sure why it happens, doesn't always happen. 
+            Who is in charge of deselecting the previous PC? PCSelector?         
+        The problem is that PCSelector's _currentPCInstance is getting set to null anytime you click anything that isn't a PC, 
+        because it was SelectedSubstate's OnDisable was getting called anytime the selected PC switched superstates, which was nulling out the 
+        current PC reference in PCSelector. 
+        Moving it to NotSelectedSubstate's OnEnable made it slightly better, but it still gets called if you select a new PC while your old one is finishing 
+        something, because once it's done its NotSelectedSubstate will call OnEnable and set PCSelector's current PC to null, letting you select a second PC. 
+        HOW TO FIX???
+        Maybe send a signal only if you right click while a PC is selected and idle. 
+        Otherwise, current PC should just get changed, not nulled, and only if clicking a different PC. 
+        THAT SEEMS TO HAVE FIXED IT! Sending event from SelectedIdleSubstate to PCSelector and Transparentizer to set their
+            current PC instances to null. Only way it gets sent to null now. 
          
      

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class SelectedIdleSubstate : MonoBehaviour
 {
-   // public static event Action OnPCDeselected;
+    public static event Action OnDeselectPC;
 
     private void OnEnable()
     {
@@ -25,8 +25,8 @@ public class SelectedIdleSubstate : MonoBehaviour
         // Activate NotSelected substate. 
         transform.parent.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
 
-        // PCSelector listens for this, sets _currentPC to null. 
-        //OnPCDeselected?.Invoke();
+        // PCSelector and Transparentizer listen for this, sets _currentPC to null. 
+        OnDeselectPC?.Invoke();
 
         // Deactivate Selected substate. 
         gameObject.SetActive(false);

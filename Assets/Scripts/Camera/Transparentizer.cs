@@ -45,13 +45,13 @@ public class Transparentizer : MonoBehaviour
     private void OnEnable()
     {
         SelectedSubstate.OnSelectPC += SelectPC;
-        NotSelectedSubstate.OnDeselectPC += DeselectPC;
+        SelectedIdleSubstate.OnDeselectPC += DeselectPC;
     }
 
     private void OnDisable()
     {
         SelectedSubstate.OnSelectPC -= SelectPC;
-        NotSelectedSubstate.OnDeselectPC -= DeselectPC;
+        SelectedIdleSubstate.OnDeselectPC -= DeselectPC;
     }
 
     private void Update()

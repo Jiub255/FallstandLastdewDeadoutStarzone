@@ -39,7 +39,7 @@ public class PCSelector : MonoBehaviour
         S.I.IM.PC.Scavenge.Select.performed += CheckIfPCClicked;
 
         /*SelectedIdleSubstate.OnPCDeselected*/
-        NotSelectedSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by NotSelectedSubstate"); _currentPCInstance = null; };
+        SelectedIdleSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
     }
 
     private void OnDisable()
@@ -52,7 +52,7 @@ public class PCSelector : MonoBehaviour
         S.I.IM.PC.Scavenge.Select.performed -= CheckIfPCClicked;
 
         /*SelectedIdleSubstate.OnPCDeselected*/
-        NotSelectedSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by NotSelectedSubstate"); _currentPCInstance = null; };
+        SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
     }
 
     private void Update()
