@@ -1,5 +1,3 @@
-public class AAAAAAAAAAAAAA
-{/*
 _______________________________________________________________________________________________________
 
     
@@ -16,8 +14,21 @@ ________________________________________________________________________________
 
 
     FIX:
-        Sometimes all states get deactivated and you can't regain control of PC. Not sure why. 
-        GunIdle/GunShoot not working. 
+        If you click on another PC while there is already one selected, sometimes both end up selected.
+            Not exactly sure why it happens, doesn't always happen. 
+            Who is in charge of deselecting the previous PC? PCSelector?         
+        The problem is that PCSelector's _currentPCInstance is getting set to null anytime you click anything that isn't a PC, 
+        because it was SelectedSubstate's OnDisable was getting called anytime the selected PC switched superstates, which was nulling out the 
+        current PC reference in PCSelector. 
+        Moving it to NotSelectedSubstate's OnEnable made it slightly better, but it still gets called if you select a new PC while your old one is finishing 
+        something, because once it's done its NotSelectedSubstate will call OnEnable and set PCSelector's current PC to null, letting you select a second PC. 
+        HOW TO FIX???
+
+        Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
+    
+        Loot state not working correctly. Won't loot if clicked on nearby loot container. 
+
+
 
     Figure out how combat will work. 
         Like LS:DZ? 
@@ -29,6 +40,7 @@ ________________________________________________________________________________
             Maybe you can control currently selected PC, like aim and shoot/melee/loot. 
                 The others do the task you set them to do, or fight or loot automatically. 
         Use Injury/Pain system instead of boring old HP. 
+            Have PainInjuryManager : MonoBehaviour class and it has PlayerInjury and PlayerPain plain C# classes as member variables? 
             Pain rises equally with injury (both go from 0 - 100).
                 Or could rise at lower rate depending on "pain tolerance" (based off endurance or whatever stat?). 
             Higher pain lowers your other stats (attack, def, speed, whatever). 
@@ -55,6 +67,7 @@ ________________________________________________________________________________
                     Affected by: Combat, Survival?
                 Attack Power - How effective your attacks are. Higher chance to hit, stronger melee hits, etc. = all add up to more DPS. 
 
+
     Setup Usable item/inv system. 
         Figure out how items/inv will work. 
         Will inventory only show usable items in game? 
@@ -63,6 +76,7 @@ ________________________________________________________________________________
             Specific inventories will hold lists of their type of itemAmounts. 
             When looting, loot will be sorted into their correct inventories. 
 
+
     Crafting 
         CraftingItem will inherit from ItemSO. 
             ex: Leather, metal pipe, whatever crafting thing. 
@@ -70,9 +84,6 @@ ________________________________________________________________________________
         Have a way to see crafting items, clicking on them shows what they can be used to build. 
             Things that you have all the materials for will be not grayed out, and clicking them puts you on the craft screen for that item. 
 
-    FIX:
-        Small delay (~1s) after selecting PC where clicking on ground doesn't register. 
-        Loot state not working perfectly. Won't loot if clicked on nearby loot container. 
 
     Figure out how scavenging will work. 
         Go around each level and loot the containers.
@@ -83,6 +94,7 @@ ________________________________________________________________________________
             Scavenging inventory size depends on the size and number of wagons/trucks/whatever you have to carry stuff home. 
             Can build new vehicles and hauling equipment to increase scavenging inv size. 
                 Also will allow you to bring more scavenging team members? That could be cool. 
+
 
     Figure out how travelling will work.
         Use a world map and choose the location? 
@@ -97,6 +109,7 @@ ________________________________________________________________________________
             OR
             You start over building wise, but you caravan over all your food/water/item/materials. 
 
+
     Figure out how scene management will work. 
         How to instantiate all current PCs onto scene? 
             Scavenge scenes and home scene will be different. 
@@ -105,7 +118,8 @@ ________________________________________________________________________________
             Clicking any icon selects the one selectable PC. 
             Might not work with multiples of same PCItemSO. Need multiple SOs to go with multiple PCs? 
                 This wont work for enemies, might be fine for PCs. 
-        
+    
+    
     Redesign UI completely
         Do some research. Look at good UIs from games you've played. 
 
@@ -152,6 +166,7 @@ ________________________________________________________________________________
                 increases this stat, which increases all other stats by some percentage. 
         Eventually unlock advanced building stuff, like generators and computerized machines, which will unlock advanced equipment/usable items. 
             Maybe need engineer/science type people? Or someone with high "int"? 
+
 
     UI/MENUS/GAME STATE/ACTION MAP/SCENE
     ------------------------------------
@@ -257,6 +272,8 @@ ________________________________________________________________________________
             They go up together, but pain actually affects your stats (speed, aim, etc). 
             Alcohol/drugs/pain killers/medical equipment/mind-over-matter-focus can lower pain so you can fight longer, but you need to rest to recover injury bar. 
             Pain can only go as low as a certain percentage of injury bar. 
+        Occasionally loot items from dead enemies, based on what they are? Military style enemy gives weapons, normal enemies give maybe boring crafting items? 
+            Still need to decide who the enemies will be (zombies, humans, aliens, fantasy?) before making concrete decisions. 
 
 
     MAP/SCAVENGING LOCATION SELECTION
@@ -325,7 +342,10 @@ ________________________________________________________________________________
 
     COMBAT
     ------
-        
+        RunToEnemy and Combat states mostly working. 
+        PCs can "shoot" enemies, and enemies can melee attack PCs for now. Add more attacks later. 
+        Placeholder models/animations for now, deal with art later. 
+
 
     CAMERA
     ------
@@ -344,6 +364,7 @@ ________________________________________________________________________________
         State machine with movement and looting states. 
             States are child GO's on each PC. 
             Selected substate on each state object to handle input. 
+            NotSelected substate handles automatic transitions between states (ie. Go to combat state when you get attacked). 
          
 
     BUILDING 
@@ -352,7 +373,7 @@ ________________________________________________________________________________
         Can select buildings from menu
         Buildings stored in SO, which stores building prefab
         Building manager instantiates prefab and it follows mouse position on ground
-        Can rotate building with Q/E
+        Can rotate building with Q/E, snap to nearest 45 degree angle with shift. 
         Constantly checks if building is colliding with other objects, to see if you can place it in its current position.
         Clicking in allowed place places the building and instantiates another to move with mouse (with same rotation)
 
@@ -391,7 +412,10 @@ ________________________________________________________________________________
         You can (automatically?) retrieve dead characters stuff.
 
 
-    GAMEPLAY:
+
+                                               GAMEPLAY
+                                               --------
+
 
     SETTING/BACKGROUND STORY
     ------------------------
@@ -518,6 +542,7 @@ ________________________________________________________________________________
                 Combat/Scavenging Stats
                 Equipment
     
+
     FISHING MINIGAME
     ----------------
         Obviously. 
@@ -529,11 +554,10 @@ ________________________________________________________________________________
      
      
      
+    ------------------------------------------------------------------------------------------------------
+
+    FIXED:
+
+
+         
      
-     
-     
-     
-     
-     
-*/
-}

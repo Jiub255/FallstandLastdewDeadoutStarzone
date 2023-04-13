@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,18 +29,22 @@ public class PCSlot : MonoBehaviour
 
     public void SetupSlot(GameObject pcInstance)
     {
+        PCInfo pcInfo = pcInstance.GetComponentInChildren<PCInfo>(); 
+        PlayerPain playerPain = pcInstance.GetComponentInChildren<PlayerPain>(); 
+        PlayerInjury playerInjury = pcInstance.GetComponentInChildren<PlayerInjury>(); 
+
         _pcInstance = pcInstance;
-        _icon.sprite = pcInstance.GetComponentInChildren<PCInfo>().Icon;
-        _nameText.text = pcInstance.name;
+        _icon.sprite = pcInfo.Icon;
+        _nameText.text = pcInfo.Name;
         _icon.enabled = true;
         _useButton.interactable = true;
 
         // Set the fill bars here initially, but they get changed from the pain and injury scripts.
-        UpdateInjuryBar(pcInstance.GetComponentInChildren<PlayerInjury>().Injury);
-        UpdatePainBar(pcInstance.GetComponentInChildren<PlayerPain>().EffectivePain);
+        UpdatePainBar(playerPain.EffectivePain);
+        UpdateInjuryBar(playerInjury.Injury);
         // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
-        pcInstance.GetComponentInChildren<PlayerInjury>().Slot = this;
-        pcInstance.GetComponentInChildren<PlayerPain>().Slot = this;
+        playerPain.Slot = this;
+        playerInjury.Slot = this;
     }
 
     public void ClearSlot()

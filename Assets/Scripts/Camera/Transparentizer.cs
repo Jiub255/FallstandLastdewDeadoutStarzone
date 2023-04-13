@@ -27,29 +27,31 @@ public class Transparentizer : MonoBehaviour
     [SerializeField, Range(0, 2f)] 
     private float _fadeDuration = 1f;
 
-    [SerializeField, Range(0, 1f), Tooltip("Opacity of the object when fully faded")] 
-    private float _fadeAlpha = 0.1f;
+    [SerializeField, Range(0, 1f)] 
+    private float _alphaWhenFaded = 0.1f;
 
     private PlayerControls _playerControls;
     private bool _pointerOverUI = false;
     private EventSystem _eventSystem;
+    private Transform _transform;
 
     private void Start()
     {
         _playerControls = S.I.IM.PC;
         _eventSystem = EventSystem.current;
+        _transform = transform;
     }
 
     private void OnEnable()
     {
         SelectedSubstate.OnSelectPC += SelectPC;
-        SelectedSubstate.OnDeselectPC += DeselectPC;
+        NotSelectedSubstate.OnDeselectPC += DeselectPC;
     }
 
     private void OnDisable()
     {
         SelectedSubstate.OnSelectPC -= SelectPC;
-        SelectedSubstate.OnDeselectPC -= DeselectPC;
+        NotSelectedSubstate.OnDeselectPC -= DeselectPC;
     }
 
     private void Update()
@@ -81,7 +83,7 @@ public class Transparentizer : MonoBehaviour
         // Hits from currently selected PC
         if (_currentPCTransform != null)
         {
-            Vector3 position = transform.position;
+            Vector3 position = _transform.position;
             Vector3 direction = _currentPCTransform.position - position;
             float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
 
@@ -123,6 +125,7 @@ public class Transparentizer : MonoBehaviour
             }
         }
 
+        // Why a list of kvps instead of a dictionary? 
         List<KeyValuePair<Material, Coroutine>> itemsToRemove = new List<KeyValuePair<Material, Coroutine>>();
         foreach (KeyValuePair<Material, Coroutine> kvp in _fadingOutDict)
         {
@@ -174,7 +177,7 @@ public class Transparentizer : MonoBehaviour
 
             // Start fade out coroutine
             Color fadeColor = new Color(
-                material.color.r, material.color.g, material.color.b, _fadeAlpha);
+                material.color.r, material.color.g, material.color.b, _alphaWhenFaded);
 
             Coroutine coroutine = StartCoroutine(Fade(material, fadeColor, _fadeDuration));
 
@@ -235,11 +238,23 @@ public class Transparentizer : MonoBehaviour
 
     private void SelectPC(Transform pcTransform)
     {
+        // Waiting a frame because SelectPC gets called on the new PC before this. 
+        StartCoroutine(WaitThenSelect(pcTransform));
+    }
+
+    private IEnumerator WaitThenSelect(Transform pcTransform)
+    {
+        yield return new WaitForEndOfFrame();
+
         _currentPCTransform = pcTransform;
+
+        //Debug.Log($"Transparentizer's current PC is {_currentPCTransform.gameObject.name}");
     }
 
     private void DeselectPC()
     {
         _currentPCTransform = null;
+
+        //Debug.Log($"Transparentizer's current PC is null");
     }
 }

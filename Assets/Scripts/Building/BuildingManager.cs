@@ -114,6 +114,8 @@ public class BuildingManager : MonoBehaviour
 
     private void SetHighlight()
     {
+
+        // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
         if (CanBuildHere())
         {
             // Green highlight, allowed to build here
@@ -165,6 +167,7 @@ public class BuildingManager : MonoBehaviour
             // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
             if (CanBuildHere())
             {
+                // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
                 // Turn off red/green highlights
                 _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);

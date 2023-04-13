@@ -33,34 +33,34 @@ public class CameraMoveRotate : MonoBehaviour
     private float _screenHeight;
     private float _edgeDistance;
 
-    [SerializeField, Header("For Centering on PC")]
+/*    [SerializeField, Header("For Centering on PC")]
     private LayerMask _pCLayerMask;
 
 
     private bool _pointerOverUI = false;
-    private EventSystem _eventSystem;
+    private EventSystem _eventSystem;*/
 
     private void Start()
     { 
         _screenWidth = Screen.width;
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
-        _eventSystem = EventSystem.current;
+       // _eventSystem = EventSystem.current;
 
         // "performed" is double click.
-        S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
+       // S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
 
-        PCSelector.OnDoubleClickPCButton += CenterOnPC;
+        PCSelector.OnDoubleClickPC += CenterOnPC;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
+        //S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
 
-        PCSelector.OnDoubleClickPCButton -= CenterOnPC;
+        PCSelector.OnDoubleClickPC -= CenterOnPC;
     }
 
-    private void Update()
+/*    private void Update()
     {
         if (_eventSystem.IsPointerOverGameObject())
         {
@@ -70,7 +70,7 @@ public class CameraMoveRotate : MonoBehaviour
         {
             _pointerOverUI = false;
         }
-    }
+    }*/
 
     private void LateUpdate()
     {
@@ -96,7 +96,7 @@ public class CameraMoveRotate : MonoBehaviour
     }
 
     // Called by double clicking PC. 
-    private void CenterOnPC(InputAction.CallbackContext context)
+/*    private void CenterOnPC(InputAction.CallbackContext context)
     {
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
@@ -118,9 +118,9 @@ public class CameraMoveRotate : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
-    // Called from double click of PC UI button. 
+    // Called from double click of PC or PC UI button. 
     private void CenterOnPC(Transform pCTransform)
     {
         // TODO: Lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is. 

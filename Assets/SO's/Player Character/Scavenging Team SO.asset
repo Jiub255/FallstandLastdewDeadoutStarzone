@@ -10,8 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a80ace3e33a85f47bbd770492da2c39, type: 3}
-  m_Name: PC Prefabs SO
+  m_Name: Scavenging Team SO
   m_EditorClassIdentifier: 
-  GameObjects:
-  - {fileID: 8080965006557006832, guid: 92901ab1b570d004aac57b621b1a530d, type: 3}
-  - {fileID: 7829138938169001784, guid: 492aff544575b9b4cb14e7c239146d61, type: 3}
+  GameObjects: []

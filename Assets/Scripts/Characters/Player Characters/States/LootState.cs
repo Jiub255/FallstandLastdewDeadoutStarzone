@@ -2,15 +2,9 @@ using UnityEngine;
 
 public class LootState : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject _timerObject;
-
     // For getting the duration of the loot animation. 
     [SerializeField]
     private AnimationClip _lootAnimation;
-
-    [SerializeField]
-    private Transform _fillBarTransform;
 
     [SerializeField]
     private InventorySO _inventorySO;
@@ -21,6 +15,8 @@ public class LootState : MonoBehaviour
     private Animator _animator;
     private float _animationLength;
     private float _timer;
+	private GameObject _timerObject;
+    private Transform _fillBarTransform;
 
     // RunToLootState sets this when switching to this state. 
     public Transform LootContainerTransform { get; set; }
@@ -43,12 +39,14 @@ public class LootState : MonoBehaviour
         _animator = transform.parent.parent.GetComponentInChildren<Animator>();
         _animator.SetTrigger("Loot");
 
-        // Activate timer object. 
-        _timerObject.SetActive(true);
-
         // Set timer. 
         _animationLength = _lootAnimation.length;
-        _timer = _animationLength; 
+        _timer = _animationLength;
+        _timerObject = transform.parent.parent.GetComponentInChildren<LootTimer>(true).gameObject;
+        _fillBarTransform = _timerObject.transform.GetChild(0);
+
+        // Activate timer object. 
+        _timerObject.SetActive(true);
     }
 
     private void OnDisable()

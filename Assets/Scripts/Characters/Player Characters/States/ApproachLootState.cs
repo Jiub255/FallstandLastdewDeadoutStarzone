@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RunToLootState : MonoBehaviour
+public class ApproachLootState : MonoBehaviour
 {
     // Gets set from mouse click event, or from non-selected PC detecting loot container while idle. 
     public Transform LootContainerTransform { get; set; }
@@ -9,7 +9,7 @@ public class RunToLootState : MonoBehaviour
     private Vector3 _lootingPosition;
 
     [SerializeField]
-    private float _lootDistance = 1.5f;
+    private float _lootDistance = 0.1f;
 
     [SerializeField]
     private GameObject _lootState;
@@ -17,12 +17,14 @@ public class RunToLootState : MonoBehaviour
     private GameObject _idleState;
 
     private NavMeshAgent _agent;
+    private Transform _transform;
 
     private void OnEnable()
     {
         _lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
         _lootingPosition = LootContainerTransform.GetChild(0).transform.position;
         _agent = transform.parent.parent.gameObject.GetComponent<NavMeshAgent>();
+        _transform = _agent.transform;
 
         // Set new destination for PC's NavMeshAgent. 
         _agent.destination = _lootingPosition;
@@ -37,8 +39,7 @@ public class RunToLootState : MonoBehaviour
             // Set state back to idle. 
             StateSwitcher.Switch(gameObject, _idleState);
         }
-
-        if (HaveReachedLoot())
+        else if (HaveReachedLoot())
         {
             // Unset NavMeshAgent destination? Can't set Vector3 to null. 
             _agent.isStopped = true;
@@ -52,12 +53,29 @@ public class RunToLootState : MonoBehaviour
         }
     }
 
+    // TODO: Just let NavMeshAgent reach its destination naturally, since its heading to the looting 
+    // position instead of the loot container's position like before. 
+    // Check to see if it reached its destination in update instead of doing this check here. 
     private bool HaveReachedLoot()
     {
-        if (Vector3.Distance(transform.position, _lootingPosition) < _lootDistance)
+        if (Vector3.Distance(_transform.position, _lootingPosition) < _lootDistance)
         {
             return true;
         }
         return false;
+    }
+
+    private bool HaveReachedDestination()
+    {
+        float distance = 0.0f;
+
+        Vector3[] corners = _agent.path.corners;
+
+        for (int c = 0; c < corners.Length - 1; ++c)
+        {
+            distance += Mathf.Abs((corners[c] - corners[c + 1]).magnitude);
+        }
+
+        return distance < _lootDistance;
     }
 }

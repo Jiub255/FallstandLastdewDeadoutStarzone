@@ -366,7 +366,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""c1f9c63d-9b2d-4277-81fd-dd2af0764a3b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],

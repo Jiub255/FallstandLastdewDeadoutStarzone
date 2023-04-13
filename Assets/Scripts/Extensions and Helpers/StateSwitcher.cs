@@ -4,8 +4,7 @@ public static class StateSwitcher
 {
 	public static void Switch(GameObject from, GameObject to)
     {
-        // Activate new state. 
-        to.SetActive(true);
+        Debug.Log($"Switching states from {from.name} to {to.name}");
 
         // Activate Selected substate if currently selected. 
         if (from.GetComponentInChildren<SelectedSubstate>(true).gameObject.activeSelf)
@@ -19,6 +18,9 @@ public static class StateSwitcher
             to.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
             to.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(false);
         }
+
+        // Activate new state. 
+        to.SetActive(true);
 
         // Deactivate old state. 
         from.SetActive(false);

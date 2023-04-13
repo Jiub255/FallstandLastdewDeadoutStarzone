@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RunToEnemyState : MonoBehaviour
+public class ApproachEnemyState : MonoBehaviour
 {
     public Transform Target { get; set; }
 
