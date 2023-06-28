@@ -80,10 +80,10 @@ public class PCSelector : MonoBehaviour
             // If there were any hits, they must have been PC's. 
             if (hits.Length > 0)
             {
-                foreach (RaycastHit hit in hits)
+                /*foreach (RaycastHit hit in hits)
                 {
-                    Debug.Log($"Raycast hit {hit.collider.name}");
-                }
+                   // Debug.Log($"Raycast hit {hit.collider.name}");
+                }*/
 
                 // This handles double/single clicking. 
                 HandleClick(hits[0].transform.parent.gameObject);

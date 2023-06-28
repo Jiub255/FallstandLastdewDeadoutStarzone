@@ -25,11 +25,15 @@ public class SelectedSubstate : MonoBehaviour
     private RunState _runState;
 
     private bool _pointerOverUI = false;
-
     private EventSystem _eventSystem;
+    private UnityEngine.AI.NavMeshAgent _navMeshAgent;
+    private InputAction _mousePositionAction;
 
-    private void OnEnable()
+    private void Start/*OnEnable*/()
     {
+        _navMeshAgent = transform.root.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        _mousePositionAction = S.I.IM.PC.World.MousePosition;
+
         // Cache EventSystem.current since it gets checked every frame. 
         _eventSystem = EventSystem.current;
 
@@ -74,7 +78,7 @@ public class SelectedSubstate : MonoBehaviour
 
         // RaycastAll to see what was hit. 
         RaycastHit[] hits = Physics.RaycastAll(
-            Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+            Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
             1000);
 
         // If raycast hits anything, and mouse is not over UI, 
@@ -83,7 +87,7 @@ public class SelectedSubstate : MonoBehaviour
             // Check to see if raycast hit a PC first. 
             foreach (RaycastHit hit in hits)
             {
-                //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayer & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
+                //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayerMask & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
                 if (_pCLayerMask.Contains(hit.collider.gameObject.layer))
                 {
 /*                    // If PC is not currently selected PC, 
@@ -127,20 +131,23 @@ public class SelectedSubstate : MonoBehaviour
             {
                 if (_lootContainerLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    // Make sure container hasn't been looted and isn't currently being looted. 
+                    // Make sure container hasn't been looted, 
                     if (!hit.transform.GetComponent<LootContainer>().Looted &&
+                        // and isn't currently being looted
                         !hit.transform.GetComponent<LootContainer>().IsBeingLooted)
                     {
-                        //RunToLootState runToLootState = states.gameObject.GetComponentInChildren<RunToLootState>(true);
-                    
-                        // Set looting variables. 
-                        _approachLootState.LootContainerTransform = hit.transform.parent;
+                        //if (hit.transform.parent != _approachLootState.LootContainerTransform)
+                      //  {
+                            // Set looting variables. 
+                            _approachLootState.LootContainerTransform = hit.transform.parent;
 
-                        // Switch current state. 
-                        //if (transform.parent.GetInstanceID() != _approachLootState.transform.GetInstanceID())
-                        {
-                            SwitchToState(_approachLootState.gameObject);
-                        }
+                            // Switch current state. 
+                           // Debug.Log($"Current state: {transform.parent.gameObject.name}, ApproachLoot state: {_approachLootState.gameObject.name}");
+                            //if (transform.parent.gameObject.name != _approachLootState.gameObject.name)
+                            //{
+                                SwitchToState(_approachLootState.gameObject);
+                           // }
+                     //   }
 
                         // Return so that multiple hits don't get called. 
                         return;
@@ -157,7 +164,7 @@ public class SelectedSubstate : MonoBehaviour
 
                     // Set movement variables here.
                     // Set new destination for PC's NavMeshAgent. 
-                    transform.parent.parent.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().destination = hit.point;
+                    _navMeshAgent.destination = hit.point;
 
                     // Switch current state (if not in run state already). 
                     if (transform.parent.GetInstanceID() != _runState.transform.GetInstanceID())
@@ -174,16 +181,20 @@ public class SelectedSubstate : MonoBehaviour
 
     private void SwitchToState(GameObject state)
     {
-        Debug.Log($"Switching states from {transform.parent.gameObject.name} to {state.name}");
+        // Need this so you don't deactivate current state (since current state is deactivated after new state is activated).
+        if (state != transform.parent.gameObject)
+        {
+            Debug.Log($"[SwitchToState] from {transform.parent.gameObject.name} to {state.name}");
      
-        // Activate new state's Selected substate. 
-        state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
-        // Deactivate new state's NotSelected substate. 
-        state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
+            // Activate new state's Selected substate. 
+            state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
+            // Deactivate new state's NotSelected substate. 
+            state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
 
-        // Activate new state. 
-        state.SetActive(true);
-        // Deactivate current state. 
-        transform.parent.gameObject.SetActive(false);
+            // Activate new state. 
+            state.SetActive(true);
+            // Deactivate current state. 
+            transform.parent.gameObject.SetActive(false);
+        }
     }
 }

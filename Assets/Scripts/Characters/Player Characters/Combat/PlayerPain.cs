@@ -25,13 +25,13 @@ public class PlayerPain : MonoBehaviour
         }  
     }
 
-    public void AddPain(int damage)
+    public void IncreasePain(int amount)
     {
-        _truePain += damage;
+        _truePain += amount;
         Slot.UpdatePainBar(EffectivePain);
     }
 
-    public void HealPain(int amount)
+    public void ReducePain(int amount)
     {
         _truePain -= amount;
         if (_truePain < 0)
@@ -41,12 +41,12 @@ public class PlayerPain : MonoBehaviour
         Slot.UpdatePainBar(EffectivePain);
     }
 
-    public void RelievePain(int amount, float duration)
+    public void TemporarilyRelievePain(int amount, float duration)
     {
-        StartCoroutine(PainKiller(amount, duration)); 
+        StartCoroutine(RelievePainCoroutine(amount, duration)); 
     }
 
-    private IEnumerator PainKiller(int amount, float duration)
+    private IEnumerator RelievePainCoroutine(int amount, float duration)
     {
         _relief += amount;
         Slot.UpdatePainBar(EffectivePain);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 // Put this on camera
 public class Transparentizer : MonoBehaviour
@@ -30,16 +31,18 @@ public class Transparentizer : MonoBehaviour
     [SerializeField, Range(0, 1f)] 
     private float _alphaWhenFaded = 0.1f;
 
-    private PlayerControls _playerControls;
+    private InputAction _mousePositionAction;
     private bool _pointerOverUI = false;
     private EventSystem _eventSystem;
     private Transform _transform;
+    private Camera _camera;
 
     private void Start()
     {
-        _playerControls = S.I.IM.PC;
+        _mousePositionAction = S.I.IM.PC.World.MousePosition;
         _eventSystem = EventSystem.current;
         _transform = transform;
+        _camera = Camera.main;
     }
 
     private void OnEnable()
@@ -74,8 +77,7 @@ public class Transparentizer : MonoBehaviour
         if (!_pointerOverUI)
         {
             hits = Physics.RaycastAll(
-                Camera.main.ScreenPointToRay(
-                    _playerControls.World.MousePosition.ReadValue<Vector2>()),
+                _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
                 1000, 
                 _transparentableLayerMask);
         }

@@ -13,6 +13,7 @@ public class NotSelectedSubstate : MonoBehaviour
 
         // Deactivate selected icon. 
         StartCoroutine(WaitThenDeactivateIcon());
+        //transform.root.GetComponentInChildren<SelectedPCIcon>(true).DeactivateIcon();
     }
 
     // TODO: Is it necessary to wait a frame? 

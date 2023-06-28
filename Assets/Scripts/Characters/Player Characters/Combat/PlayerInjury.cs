@@ -18,7 +18,7 @@ public class PlayerInjury : MonoBehaviour
     {
         Injury += damage;
         Slot.UpdateInjuryBar(Injury);
-        _playerPain.AddPain(damage);
+        _playerPain.IncreasePain(damage);
 
         if (Injury >= 100)
         {
@@ -31,7 +31,7 @@ public class PlayerInjury : MonoBehaviour
     {
         Injury -= amount;
         Slot.UpdateInjuryBar(Injury);
-        _playerPain.HealPain(amount);
+        _playerPain.ReducePain(amount);
 
         if (Injury < 0)
         {

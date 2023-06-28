@@ -13,12 +13,12 @@ public class ApproachEnemyState : MonoBehaviour
     private float _weaponRange = 5f;
 
     private NavMeshAgent _agent;
-    private Transform _transform;
+    private Transform _pcTransform;
 
     private void OnEnable()
     {
         _agent = transform.parent.parent.gameObject.GetComponent<NavMeshAgent>();
-        _transform = _agent.transform;
+        _pcTransform = _agent.transform;
 
         // Set NavMeshAgent destination here. 
         _agent.destination = Target.position;
@@ -37,10 +37,10 @@ public class ApproachEnemyState : MonoBehaviour
 
     private void Update()
     {
-        // What if target dies while you're running toward them? 
+        // TODO - What if target dies while you're running toward them? 
 
         // Check if within range of target (depends on what weapon you're using). 
-        if (WithinRangeOfEnemy())
+        if (CharacterWithinRangeOfEnemy())
         {
             // Unset NavMeshAgent destination? Can't set Vector3 to null. 
             _agent.isStopped = true;
@@ -53,9 +53,10 @@ public class ApproachEnemyState : MonoBehaviour
         }
     }
 
-    private bool WithinRangeOfEnemy()
+    private bool CharacterWithinRangeOfEnemy()
     {
-        if (Vector3.Distance(_transform.position, Target.position) < _weaponRange)
+        // TODO - Check if Target becomes null. 
+        if (Vector3.Distance(_pcTransform.position, Target.position) < _weaponRange)
         {
             return true;
         }

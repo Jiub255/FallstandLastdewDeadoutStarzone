@@ -61,7 +61,7 @@ public class ApproachLootState : MonoBehaviour
     // Check to see if it reached its destination in update instead of doing this check here. 
     private bool HaveReachedLoot()
     {
-        Debug.Log($"NavMeshAgent.destination: {_agent.destination}, Looting Position: {_lootingPosition}");
+       // Debug.Log($"NavMeshAgent.destination: {_agent.destination}, Looting Position: {_lootingPosition}");
 
         // NOT WORKING (the stopping distance stuff). 
         // Solves the problem of PC not moving towards loot if it was already close by temporarily setting stopping distance to zero.  

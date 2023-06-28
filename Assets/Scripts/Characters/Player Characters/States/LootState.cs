@@ -18,7 +18,7 @@ public class LootState : MonoBehaviour
 	private GameObject _timerObject;
     private Transform _fillBarTransform;
 
-    // RunToLootState sets this when switching to this state. 
+    // ApproachLootState sets this when switching to this state. 
     public Transform LootContainerTransform { get; set; }
 
     private LootContainer _lootContainer;
@@ -93,9 +93,9 @@ public class LootState : MonoBehaviour
 
     private void AddLoot()
     {
-        LootContainer lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
+        //LootContainer lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
 
-        foreach (ItemAmount itemAmount in lootContainer.LootItemAmounts)
+        foreach (ItemAmount itemAmount in _lootContainer.LootItemAmounts)
         {
             if (itemAmount.ItemSO.GetType() == typeof(UsableItemSO))
             {

@@ -13,20 +13,26 @@ public class CameraFollow : MonoBehaviour
     private float _smoothTime = 0.3f;
 
     private Vector3 _velocity = Vector3.zero;
+    private Transform _transform;
 
     /*    [SerializeField]
         private float _maxSpeed = 25f;*/
 
+    private void Awake()
+    {
+        _transform = transform;
+    }
+
     private void Update()
     {
-        transform.position = Vector3.SmoothDamp(
-            transform.position,
+        _transform.position = Vector3.SmoothDamp(
+            _transform.position,
             _follow.position,
             ref _velocity,
             _smoothTime,
             /*_maxSpeed*/Mathf.Infinity,
             Time.unscaledDeltaTime);
-        transform.LookAt(_lookAt);
+        _transform.LookAt(_lookAt);
     }
 }
 

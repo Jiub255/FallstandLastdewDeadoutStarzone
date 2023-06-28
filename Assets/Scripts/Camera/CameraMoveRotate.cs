@@ -11,6 +11,7 @@ public class CameraMoveRotate : MonoBehaviour
     [SerializeField, Range(0f, 50f), Header("Keyboard Movement")]
     private float _movementSpeed = 20f;
 
+    private Transform _transform;
     private Vector3 _forward;
     private Vector3 _right;
 
@@ -26,25 +27,35 @@ public class CameraMoveRotate : MonoBehaviour
     [SerializeField, Range(0f, 50f), Header("Edge Scrolling")]
     private float _edgeScrollingSpeed = 20f;
 
-    [SerializeField, Range(0f, 30f), Tooltip("Calculated using percent of width")]
+    [SerializeField, Range(0f, 30f), Tooltip("Edge scrolling zone thickness calculated using percentage of width")]
     private float _percentDistanceFromEdges = 10f;
 
     private float _screenWidth;
     private float _screenHeight;
     private float _edgeDistance;
 
-/*    [SerializeField, Header("For Centering on PC")]
-    private LayerMask _pCLayerMask;
-
-
-    private bool _pointerOverUI = false;
-    private EventSystem _eventSystem;*/
+    private InputAction _zoomAction;
+    private InputAction _rotateCameraAction;
+    private InputAction _moveCameraAction;
+    private InputAction _mouseDeltaAction;
+    private InputAction _mousePositionAction;
 
     private void Start()
     { 
+        _transform = transform;
+
         _screenWidth = Screen.width;
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
+
+        _zoomAction = S.I.IM.PC.World.Zoom;
+        _rotateCameraAction = S.I.IM.PC.World.RotateCamera;
+        _moveCameraAction = S.I.IM.PC.World.MoveCamera;
+        _mouseDeltaAction = S.I.IM.PC.World.MouseDelta;
+        _mousePositionAction = S.I.IM.PC.World.MousePosition;
+
+        GetVectors();
+
        // _eventSystem = EventSystem.current;
 
         // "performed" is double click.
@@ -76,14 +87,15 @@ public class CameraMoveRotate : MonoBehaviour
     {
         // Zoom overrides everything else. Not noticeable since this action gets called only during
         // isolated frames, but it helps resolve some issues with moving while zooming.
-        if (!S.I.IM.PC.World.Zoom.WasPerformedThisFrame())
+        if (!_zoomAction.WasPerformedThisFrame())
         {
-            GetVectors();
+            //GetVectors();
 
             KeyboardMove();
 
-            if (S.I.IM.PC.World.RotateCamera.IsPressed())
+            if (_rotateCameraAction.IsPressed())
             {
+                GetVectors();
                 RotateCamera();
             }
             // Don't edge scroll if holding down mouse wheel button.
@@ -95,45 +107,22 @@ public class CameraMoveRotate : MonoBehaviour
         }
     }
 
-    // Called by double clicking PC. 
-/*    private void CenterOnPC(InputAction.CallbackContext context)
-    {
-        // Only raycast to PC layer. 
-        RaycastHit[] hits = Physics.RaycastAll(
-            Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
-            1000,
-            _pCLayerMask);
-
-        if (hits.Length > 0)
-        {
-            // If double clicked on PC, center camera on them.
-            foreach (RaycastHit hit in hits)
-            {
-                if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("PlayerCharacter")) && 
-                    !_pointerOverUI)
-                {
-                    CenterOnPC(hit.collider.transform);
-                    // "return" so that you center on first one raycast hits, in case another PC is behind them. 
-                    return;
-                }
-            }
-        }
-    }*/
-
     // Called from double click of PC or PC UI button. 
     private void CenterOnPC(Transform pCTransform)
     {
         // TODO: Lerp quickly instead of instantly move there? Looks jumpy when you center on PC as is. 
-        transform.position = pCTransform.position;
-        transform.rotation = Quaternion.Euler(new Vector3(35f, 0f, 0f));
+        _transform.position = pCTransform.position;
+        _transform.rotation = Quaternion.Euler(new Vector3(35f, 0f, 0f));
         // CameraZoom listens and sets zoom distance to default. 
         OnCenterOnPC?.Invoke();
     }
 
+    // Only need to get these while rotating, because they don't change while moving or zooming. 
+    // Also once when the script loads, so movement and zooming work from the beginning. 
     private void GetVectors()
     {
-        _forward = transform.forward;
-        _right = transform.right;
+        _forward = _transform.forward;
+        _right = _transform.right;
 
         // Project the forward and right vectors onto the horizontal plane (y = 0)
         _forward.y = 0f;
@@ -147,65 +136,65 @@ public class CameraMoveRotate : MonoBehaviour
     private void KeyboardMove()
     {
         // Get input
-        Vector2 movement = S.I.IM.PC.World.MoveCamera.ReadValue<Vector2>();
+        Vector2 movement = _moveCameraAction.ReadValue<Vector2>();
 
         // Translate movement vector to world space
         Vector3 keyboardMovement = (_forward * movement.y) + (_right * movement.x);
 
         // Move
-        transform.position += keyboardMovement * _movementSpeed * Time.unscaledDeltaTime;
+        _transform.position += keyboardMovement * _movementSpeed * Time.unscaledDeltaTime;
     }
 
     private void RotateCamera()
     {
         // Rotation around y-axis
         float deltaX =
-            S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().x *
+            _mouseDeltaAction.ReadValue<Vector2>().x *
             _rotationSpeed;
 
-        transform.RotateAround(transform.position, Vector3.up, deltaX);
+        _transform.RotateAround(_transform.position, Vector3.up, deltaX);
 
         // Rotation around axis parallel to your local right vector, this axis always parallel to xz-plane.
         Vector3 axis = new Vector3(
-            -Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.y),
+            -Mathf.Cos(Mathf.Deg2Rad * _transform.rotation.eulerAngles.y),
             0f,
-            Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.y));
+            Mathf.Sin(Mathf.Deg2Rad * _transform.rotation.eulerAngles.y));
 
         float deltaY =
-            S.I.IM.PC.World.MouseDelta.ReadValue<Vector2>().y *
+            _mouseDeltaAction.ReadValue<Vector2>().y *
             _rotationSpeed;
 
         // Clamp x-rotation between min and max values (at most 0 - 90).
-        if (transform.rotation.eulerAngles.x - deltaY > _rotationXMin && transform.rotation.eulerAngles.x - deltaY <= _rotationXMax)
+        if (_transform.rotation.eulerAngles.x - deltaY > _rotationXMin && _transform.rotation.eulerAngles.x - deltaY <= _rotationXMax)
         {
-            transform.RotateAround(transform.position, axis, deltaY);
+            _transform.RotateAround(_transform.position, axis, deltaY);
         }
     }
 
     private void EdgeScroll()
     {
         // Get mouse screen position
-        Vector3 mousePos =
-            S.I.IM.PC.World.MousePosition.ReadValue<Vector2>();
+        Vector3 mousePosition =
+            _mousePositionAction.ReadValue<Vector2>();
 
         int mouseX = 0;
         int mouseY = 0;
 
         // Check if mouse screen position is near the edges
-        if (mousePos.x > _screenWidth - _edgeDistance)
+        if (mousePosition.x > _screenWidth - _edgeDistance)
         {
             mouseX = 1;
         }
-        else if (mousePos.x < _edgeDistance)
+        else if (mousePosition.x < _edgeDistance)
         {
             mouseX = -1;
         }
 
-        if (mousePos.y > _screenHeight - _edgeDistance)
+        if (mousePosition.y > _screenHeight - _edgeDistance)
         {
             mouseY = 1;
         }
-        else if (mousePos.y < _edgeDistance)
+        else if (mousePosition.y < _edgeDistance)
         {
             mouseY = -1;
         }
@@ -215,6 +204,6 @@ public class CameraMoveRotate : MonoBehaviour
         edgeScrollMovement.Normalize();
 
         // Move camera
-        transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.unscaledDeltaTime;
+        _transform.position += edgeScrollMovement * _edgeScrollingSpeed * Time.unscaledDeltaTime;
     }
 }
