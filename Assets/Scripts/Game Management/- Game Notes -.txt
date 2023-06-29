@@ -14,6 +14,10 @@ FIRST!!
 
 
     Make PathNavigator recalculate path when it gets blocked. 
+        Might just build pathfinding from scratch instead of using NavMesh.CalculatePath. 
+        D* algorithm? 
+        Or do A*, then recalculate if path blocked near you, could use boxcasts out in front of PC to check. 
+            Make the world grid somewhat coarse, doesn't need to be super exact. It'll save on performance too. 
 
     Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 

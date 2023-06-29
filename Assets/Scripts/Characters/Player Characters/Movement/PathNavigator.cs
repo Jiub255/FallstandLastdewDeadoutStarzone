@@ -47,6 +47,7 @@ public class PathNavigator : MonoBehaviour
     private void GetCorners()
     {
         NavMeshPath path = new();
+        // How to get this to use NavMeshObstacles in the way and calculate path around them? 
         NavMesh.CalculatePath(transform.position, _destination, NavMesh.AllAreas, path);
         _corners = path.corners;
     }

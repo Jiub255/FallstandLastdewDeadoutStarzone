@@ -88,5 +88,8 @@ public class PlayerApproachLootState : PlayerState
         _navMeshAgent.ResetPath();*/
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate() 
+    {
+        _stateMachine.PathNavigator.TravelPath(_lootingPosition);
+    }
 }

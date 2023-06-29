@@ -20,7 +20,10 @@ public class EnemyCombatState : State<EnemyController>
 
         _timer = 0f;
         _transform = characterController.transform;
-//        _animator = characterController.GetComponentInChildren<Animator>();
+
+        characterController.PathNavigator.StopMoving();
+
+//      _animator = characterController.GetComponentInChildren<Animator>();
     }
 
     public override void Update()

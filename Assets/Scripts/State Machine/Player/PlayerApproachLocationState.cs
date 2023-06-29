@@ -47,5 +47,8 @@ public class PlayerApproachLocationState : PlayerState
         }
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate() 
+    {
+        _stateMachine.PathNavigator.TravelPath(_destination);
+    }
 }
