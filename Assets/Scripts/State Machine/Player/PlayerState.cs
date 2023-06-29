@@ -20,4 +20,7 @@ public abstract class PlayerState : State<PlayerController>
         // So override this in idle state only. 
         _stateMachine.ChangeStateTo(_stateMachine.Idle());
     }
+
+/*    public abstract override void Update();
+    public abstract override void FixedUpdate();*/
 }

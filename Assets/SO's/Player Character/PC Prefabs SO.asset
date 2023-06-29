@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: PC Prefabs SO
   m_EditorClassIdentifier: 
   GameObjects:
-  - {fileID: 8080965006557006832, guid: 92901ab1b570d004aac57b621b1a530d, type: 3}
-  - {fileID: 7829138938169001784, guid: 492aff544575b9b4cb14e7c239146d61, type: 3}
+  - {fileID: 8080965006557006832, guid: 9690baa4d327eb340982f6f5e3410fbf, type: 3}

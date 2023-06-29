@@ -13,16 +13,16 @@ public class LootTimer : MonoBehaviour
         _fillBarTransform.GetComponent<Renderer>().enabled = activate;
     }
 
-    public void Tick(float percentTime)
+    public void Tick(float percentOfTimeElapsed)
     {
         // Raise fill bar's x scale by percent time elasped. 
         _fillBarTransform.localScale = new Vector3(
-            percentTime,
+            percentOfTimeElapsed,
             _fillBarTransform.localScale.y,
             _fillBarTransform.localScale.z);
         // Move fill bar along x axis, so it stays anchored on one side. 
         _fillBarTransform.localPosition = new Vector3(
-            0.55f * (1 - percentTime),
+            0.55f * (1 - percentOfTimeElapsed),
             _fillBarTransform.localPosition.y,
             _fillBarTransform.localPosition.z);
     }

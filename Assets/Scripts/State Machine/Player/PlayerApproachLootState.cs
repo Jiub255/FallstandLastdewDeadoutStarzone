@@ -5,8 +5,8 @@ using UnityEngine.AI;
 public class PlayerApproachLootState : PlayerState
 {
     private LootContainer _lootContainer;
-//    private Vector3 _lootingPosition;
-    private float _lootDistanceSquared = 0.1f;
+    private Vector3 _lootingPosition;
+    private float _lootDistanceSquared;
     private NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
@@ -17,7 +17,7 @@ public class PlayerApproachLootState : PlayerState
         _lootContainer = lootContainer;
         _lootDistanceSquared = lootDistance * lootDistance;
 
-//        _lootingPosition = lootContainer.LootPositionTransform.position;
+        _lootingPosition = lootContainer.LootPositionTransform.position;
         _navMeshAgent = _stateMachine.NavMeshAgent;
         _transform = _stateMachine.transform;
 
@@ -25,10 +25,12 @@ public class PlayerApproachLootState : PlayerState
         _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
     }
 
+    // TODO - Not getting called, why? 
     public override void Update()
     {
         // What if container gets looted while you're on the way? 
         // Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
+        Debug.Log($"Looted: {_lootContainer.Looted}, IsBeingLooted: {_lootContainer.IsBeingLooted}");
         if (_lootContainer.IsBeingLooted || _lootContainer.Looted)
         {
             // Set state back to idle. 
@@ -37,7 +39,7 @@ public class PlayerApproachLootState : PlayerState
         else if (HaveReachedLoot())
         {
             // Set stopping distance back to normal in case it got changed to 0f in HaveReachedLoot. 
-            //_agent.stoppingDistance = _stoppingDistance;
+//            _agent.stoppingDistance = _stoppingDistance;
 
             _stateMachine.ChangeStateTo(_stateMachine.Loot(_lootContainer));
         }
@@ -60,7 +62,9 @@ public class PlayerApproachLootState : PlayerState
                     _agent.stoppingDistance = 0f; 
                 }*/
 
-        return (/*_lootingPosition*/_navMeshAgent.destination - _transform.position).sqrMagnitude < _lootDistanceSquared;
+        Debug.Log($"Squared distance: {(_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude}," +
+            $"Looting position: {_lootingPosition}, Position: {_transform.position}, NavMeshAgent destination: {_navMeshAgent.destination}");
+        return (_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude < _lootDistanceSquared;
     }
 
     /*    private bool HaveReachedDestination()

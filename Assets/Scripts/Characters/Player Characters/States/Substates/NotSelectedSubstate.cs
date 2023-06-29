@@ -21,6 +21,6 @@ public class NotSelectedSubstate : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        transform.root.GetComponentInChildren<SelectedPCIcon>(true).DeactivateIcon();
+ //       transform.root.GetComponentInChildren<SelectedPCIcon>(true).DeactivateIcon();
     }
 }

@@ -14,9 +14,8 @@ ________________________________________________________________________________
 
 
         Change state machine to plain C# class style instead of using Monobehaviours and game objects. 
-            Maybe have a selected state machine that runs the selected pc's states, and have the rest run on the normal state machine?
-                Could possible have the selected one inherit the normal one and override whatever it needs to. 
-
+            Update not getting called in PlayerState classes, specifically PlayerApproachLootState. Not sure why, maybe PlayerState is messing 
+                inheritance up somehow? 
 
     FIX:
 
@@ -71,11 +70,12 @@ ________________________________________________________________________________
                 Medical - Ability to lower PC's injury level quickly/on the spot.
                 Science/Technology/Engineering - Ability to research/build more advanced building/crafting items/equip. 
                 Injury - How injured you are. Rest to recover.
+                    Affected by: Toughness/Constitution? 
                 Morale - Affects all stats of all PCs. Affected by many factors (entertainment buildings, food/water levels, recent deaths, etc.). 
             DERIVED STATS (Still need to work these out)
                 Pain - Pain level. Affect stats negatively.
-                    Affected by: Injury level and certain items (painkillers, etc.).
-                Pain threshold - How fast your pain increases with your injury level.
+                    Affected by: Injury level, Pain tolerance and certain items (painkillers, etc.).
+                Pain tolerance - How fast your pain increases with your injury level.
                     Affected by: Combat, Survival?
                 Attack Power - How effective your attacks are. Higher chance to hit, stronger melee hits, etc. = all add up to more DPS. 
 

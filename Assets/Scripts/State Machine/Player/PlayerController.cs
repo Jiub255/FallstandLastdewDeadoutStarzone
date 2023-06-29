@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -6,11 +5,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : StateMachine<PlayerController>
 {
-    public static event Action<Transform> OnSelectPC;
+//    public static event Action<Transform> OnSelectPC;
 //    public static event Action OnDeselectPC;
 
-    [SerializeField, Header("Idle State Variables")]
+    [SerializeField, Header("Idle/Movement State Variables")]
     private float _sightDistance = 5f;
+    [SerializeField]
+    private float _stoppingDistance = 1f;
 
     [SerializeField, Header("Loot State Variables")]
     private float _lootDistance = 0.1f;
@@ -35,9 +36,10 @@ public class PlayerController : StateMachine<PlayerController>
     [Header("Any State Variables")]
     public NavMeshAgent NavMeshAgent;
     public Animator Animator;
+    public SelectedPCIcon SelectedPCIcon;
     // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
     // acts differently when not selected (unselected characters automatically loot and fight things within range). 
-    public bool Selected { get; set; } = false;
+    public bool Selected { get; private set; } = false;
 
     [Header("Individual Layers")]
     public LayerMask PCLayerMask;
@@ -46,19 +48,27 @@ public class PlayerController : StateMachine<PlayerController>
     public LayerMask GroundLayerMask;
 
     private EventSystem _eventSystem;
+    // Need to use this bool and check in update to avoid a unity error. 
+    private bool _pointerOverUI = false;
     private InputAction _mousePositionAction;
 
     // States
-    public PlayerApproachLocationState ApproachLocation(Vector3 destination) { return new PlayerApproachLocationState(this, destination); } 
-    public PlayerApproachEnemyState ApproachEnemy(Transform target) { return new PlayerApproachEnemyState(this, target, _weaponRange); } 
-    public PlayerApproachLootState ApproachLoot(LootContainer lootContainer) { return new PlayerApproachLootState(this, lootContainer, _lootDistance); } 
     public PlayerIdleState Idle() { return new PlayerIdleState(this, _sightDistance); } 
     public PlayerCombatState Combat(Transform target) { return new PlayerCombatState(this, target, _attackDuration); } 
-    public PlayerLootState Loot(LootContainer lootContainer) { return new PlayerLootState(this, lootContainer, _lootAnimation, _inventorySO, _lootTimer); } 
+    public PlayerLootState Loot(LootContainer lootContainer) { return new PlayerLootState(this, lootContainer, _lootAnimation, _inventorySO, _lootTimer); }
+    public PlayerApproachLocationState ApproachLocation(Vector3 destination) { return new PlayerApproachLocationState(this, destination, _stoppingDistance); } 
+    public PlayerApproachEnemyState ApproachEnemy(Transform target) { return new PlayerApproachEnemyState(this, target, _weaponRange); } 
+    public PlayerApproachLootState ApproachLoot(LootContainer lootContainer) { return new PlayerApproachLootState(this, lootContainer, _lootDistance); } 
+
+    // Just for testing. 
+    private void FixedUpdate()
+    {
+        Debug.Log($"Active state: {_activeState.GetType()}");
+    }
 
     private void Start/*OnEnable*/()
     {
-        NavMeshAgent = transform.root.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
         _mousePositionAction = S.I.IM.PC.World.MousePosition;
         _eventSystem = EventSystem.current;
 
@@ -66,20 +76,16 @@ public class PlayerController : StateMachine<PlayerController>
         S.I.IM.PC.Home.SelectOrCenter./*canceled*/performed += HandleClick;
         S.I.IM.PC.Scavenge.Select.performed += HandleClick;
 
-        if (Selected)
-        {
-            transform.root.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
-
-            // Send Transparentizer PC's transform to set as currently selected. 
-            OnSelectPC?.Invoke(transform.root);
-        }
-        else
-        {
-            transform.root.GetComponentInChildren<SelectedPCIcon>().DeactivateIcon();
-        }
+        // Activate or deactivate selected pc icon. 
+        SelectedPCIcon.ActivateIcon(Selected);
 
         // Start in idle state.
         ChangeStateTo(Idle());
+    }
+
+    private void Update()
+    {
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void OnDisable()
@@ -94,6 +100,12 @@ public class PlayerController : StateMachine<PlayerController>
         // OnDeselectPC?.Invoke();
     }
 
+    public void SetSelected(bool selected)
+    {
+        Selected = selected;
+        SelectedPCIcon.ActivateIcon(selected);
+    }
+
     private void HandleClick(InputAction.CallbackContext context)
     {
         if (Selected)
@@ -104,7 +116,7 @@ public class PlayerController : StateMachine<PlayerController>
                 1000);
 
             // If raycast hits anything, and mouse is not over UI, 
-            if (hits.Length > 0 && !_eventSystem.IsPointerOverGameObject())
+            if (hits.Length > 0 && !_pointerOverUI)
             {
                 // Check to see if raycast hit a PC first. 
                 foreach (RaycastHit hit in hits)
@@ -117,16 +129,6 @@ public class PlayerController : StateMachine<PlayerController>
                         // inside of HandleClick? 
                         // Using PCSelector for now, might try some other new idea later. 
 
-                        // If PC is not currently selected PC, 
-/*                        if (hit.transform.GetInstanceID() != transform.GetInstanceID())
-                        {
-                            // Select new PC. 
-                            hit.transform.GetComponent<PlayerController>().Selected = true;
-
-                            // Deselect this PC.
-                            Selected = false;
-                        }*/
-
                         // Return so that multiple hits don't get called. 
                         // PCSelector handles the actual PC hits. In its own class and not here since it can happen with no PC selected. 
                         return;
@@ -136,7 +138,7 @@ public class PlayerController : StateMachine<PlayerController>
                 // Check for enemy clicks second. 
                 foreach (RaycastHit hit in hits)
                 {
-                    if (EnemyLayerMask.Contains(hit.transform.parent.gameObject.layer))
+                    if (EnemyLayerMask.Contains(hit.collider.gameObject.layer))
                     {
                         ChangeStateTo(ApproachEnemy(hit.transform));
 
@@ -156,6 +158,7 @@ public class PlayerController : StateMachine<PlayerController>
                             // Make sure container hasn't been looted and isn't currently being looted, 
                             if (!lootContainer.Looted && !lootContainer.IsBeingLooted)
                             {
+                                Debug.Log($"Changing state to ApproachLoot from PlayerController. ");
                                 ChangeStateTo(ApproachLoot(lootContainer));
 
                                 // Return so that multiple hits don't get called. 

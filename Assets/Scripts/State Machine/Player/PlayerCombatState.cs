@@ -3,12 +3,10 @@ using UnityEngine;
 public class PlayerCombatState : PlayerState
 {
     private Transform _target;
-    // public EnemyInjury _enemyInjury;
     private float _attackDuration;
 
     private float _timer;
     private Animator _animator;
-
     private Transform _transform;
 
     public PlayerCombatState(PlayerController characterController, Transform target, float attackDuration) : base(characterController)
@@ -21,11 +19,6 @@ public class PlayerCombatState : PlayerState
         _animator.SetBool("GunIdle", true);
 
         _transform = _stateMachine.transform;
-
-        // Get attack duration from current weapon/stats. 
-        // Maybe keep these things in a SO for easy shared reference? But then each PC would need one.
-        // Maybe just keep them on the PC instance? 
-        // _attackDuration = ...;
 
         // Face the enemy. 
         _transform.LookAt(_target);
@@ -55,8 +48,8 @@ public class PlayerCombatState : PlayerState
 
     private void Attack()
     {
-        // The attack should come from the weapon and stats. 
-        // transform.parent.parent.GetComponentInChildren<Weapon>().CurrentWeapon.Attack(); or whatever. Use interface? 
+        // Get attack damage and duration from current weapon/stats. 
+
 
         // Reset timer. 
         _timer = 0f;

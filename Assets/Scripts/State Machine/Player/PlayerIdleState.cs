@@ -12,15 +12,15 @@ public class PlayerIdleState : PlayerState
     {
         _sightDistance = sightDistance;
 
-        // Not sure how to just clear the nav mesh agent. 
+/*        // Not sure how to just clear the nav mesh agent. 
         _stateMachine.NavMeshAgent.isStopped = true;
-        _stateMachine.NavMeshAgent.ResetPath();
+        _stateMachine.NavMeshAgent.ResetPath();*/
     }
 
     // Override to deselect instead of cancel action, only in idle state. 
     public override void CancelOrDeselect(InputAction.CallbackContext context)
     {
-        _stateMachine.Selected = false;
+        _stateMachine.SetSelected(false);
 
         // Change selectedPCSO? Use an event? 
         // PCSelector listens, calls ChangePC(null). 

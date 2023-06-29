@@ -18,6 +18,8 @@ public class PCSelector : MonoBehaviour
     private float _lastClickTime = 0f;
 
     private EventSystem _eventSystem;
+    // Need to use this bool and check in update to avoid a unity error. 
+    private bool _pointerOverUI = false;
 
     private int _firstClickedObjectID;
 
@@ -40,6 +42,11 @@ public class PCSelector : MonoBehaviour
         PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
 
+    private void Update()
+    {
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
+    }
+
     private void OnDisable()
     {
         // Click on PC icon. 
@@ -57,7 +64,7 @@ public class PCSelector : MonoBehaviour
 
     private void CheckIfPCClicked(InputAction.CallbackContext context)
     {
-        if (!_eventSystem.IsPointerOverGameObject())
+        if (!_pointerOverUI)
         {
             // Only raycast to PC layer. 
             RaycastHit[] hits = Physics.RaycastAll(
@@ -68,13 +75,8 @@ public class PCSelector : MonoBehaviour
             // If there were any hits, they must have been PCs. 
             if (hits.Length > 0)
             {
-                /*foreach (RaycastHit hit in hits)
-                {
-                   // Debug.Log($"Raycast hit {hit.collider.name}");
-                }*/
-
                 // This handles double/single clicking. 
-                HandleClick(hits[0].transform.parent.gameObject);
+                HandleClick(hits[0].transform.gameObject);
             }
         }
     }
@@ -117,74 +119,22 @@ public class PCSelector : MonoBehaviour
 
     private void ChangePC(GameObject clickedPCInstance)
     {
-        // "Selected" substate of current PC gets deactivated in SelectedSubstate class. 
-        // TODO - Previous PC not getting deselected when selecting a new one, but sometimes not. 
-
         // If clicked PC is NOT your current PC (true also when _currentPCInstance == null), 
         if (_currentPCInstance != clickedPCInstance)
         {
             // If there is a currently selected PC, set its Selected to false. 
             if (_currentPCInstance)
             {
-                _currentPCInstance.GetComponent<PlayerController>().Selected = false;
-
-                // If there is a currently selected PC, set it to not selected substate of whatever state it's in. 
-/*                Transform currentPCStates = _currentPCInstance.GetComponentInChildren<States>().transform;
-
-                foreach (Transform state in currentPCStates)
-                {
-                    // If state is currently active, 
-                    if (state.gameObject.activeInHierarchy)
-                    {
-                        Debug.Log($"{state.name} is the active state of current pc {_currentPCInstance.name}");
-
-                        // Activate NotSelectedSubstate.
-                        state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
-
-                        // Deactivate SelectedSubstate. 
-                        state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(false);
-
-                        // Hopefully shouldn't need this break since there should never be two states active at the same time. 
-                        break;
-                    }
-
-                    // Is this necessary? Is it harmful (because of OnEnable/OnDisable stuff)?  
-                    // Was GetChild(0) supposed to be the idle state? 
-                    // And really, it should never get here, because every PC should have one state active at all times. 
-                    // TODO - Figure this nonsense out. 
-                   // currentPCStates.GetChild(0).GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
-                   // currentPCStates.GetChild(0).GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(false);
-                }*/
+                _currentPCInstance.GetComponent<PlayerController>().SetSelected(false);
             }
 
             // Set clicked PC's Selected to true.
-            clickedPCInstance.GetComponent<PlayerController>().Selected = true;
-
-            // Set clicked PC to selected substate of whatever state it's in. 
-/*            Transform newPCStates = clickedPCInstance.GetComponentInChildren<States>().transform;
-            foreach (Transform state in newPCStates)
+            if (clickedPCInstance != null)
             {
-                // If state is currently active, 
-                if (state.gameObject.activeInHierarchy)
-                {
-                    // Activate SelectedSubstate. 
-                    state.GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
-
-                    // Deactivate NotSelectedSubstate.
-                    state.GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
-
-                    break;
-                }
-
-                // Is this necessary? Is it harmful (because of OnEnable/OnDisable stuff)?  
-                // Was GetChild(0) supposed to be the idle state? 
-                // And really, it should never get here, because every PC should have one state active at all times. 
-                // TODO - Figure this nonsense out. 
-                // newPCStates.GetChild(0).GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
-                // newPCStates.GetChild(0).GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
-            }*/
+                clickedPCInstance.GetComponent<PlayerController>().SetSelected(true);
+            }
+         
+            _currentPCInstance = clickedPCInstance; 
         }
-
-        _currentPCInstance = clickedPCInstance; 
     }
 }

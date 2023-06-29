@@ -41,7 +41,7 @@ public class SelectedSubstate : MonoBehaviour
         S.I.IM.PC.Scavenge.Select.performed += HandleClick;
 
         // Activate selected icon. 
-        transform.root.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
+//        transform.root.GetComponentInChildren<SelectedPCIcon>().ActivateIcon();
 
         // Send Transparentizer PC's transform to set as currently selected. 
         OnSelectPC?.Invoke(transform.root);

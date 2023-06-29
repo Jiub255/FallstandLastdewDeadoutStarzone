@@ -9,13 +9,15 @@ public class SelectedPCIcon : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void ActivateIcon()
+    public void ActivateIcon(bool activate)
     {
-        _meshRenderer.enabled = true;
+//        Debug.Log($"ActivateIcon({activate}) called. ");
+        _meshRenderer.enabled = activate;
     }
 
-    public void DeactivateIcon()
+/*    public void DeactivateIcon()
     {
+        Debug.Log("DeactivateIcon called. ");
         _meshRenderer.enabled = false;
-    }
+    }*/
 }
