@@ -34,9 +34,10 @@ public class PlayerController : StateMachine<PlayerController>
 //    public Transform Target { get; set; }
 
     [Header("Any State Variables")]
-    public NavMeshAgent NavMeshAgent;
     public Animator Animator;
     public SelectedPCIcon SelectedPCIcon;
+    public PathNavigator PathNavigator;
+//    public NavMeshAgent NavMeshAgent;
     // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
     // acts differently when not selected (unselected characters automatically loot and fight things within range). 
     public bool Selected { get; private set; } = false;
@@ -61,12 +62,12 @@ public class PlayerController : StateMachine<PlayerController>
     public PlayerApproachLootState ApproachLoot(LootContainer lootContainer) { return new PlayerApproachLootState(this, lootContainer, _lootDistance); } 
 
     // Just for testing. 
-    public override void FixedUpdate()
+/*    public override void FixedUpdate()
     {
         base.FixedUpdate();
 
         Debug.Log($"Active state: {_activeState.GetType()}");
-    }
+    }*/
 
     public override void Update()
     {
@@ -77,7 +78,7 @@ public class PlayerController : StateMachine<PlayerController>
 
     private void Start/*OnEnable*/()
     {
-        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
+//        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
         _mousePositionAction = S.I.IM.PC.World.MousePosition;
         _eventSystem = EventSystem.current;
 

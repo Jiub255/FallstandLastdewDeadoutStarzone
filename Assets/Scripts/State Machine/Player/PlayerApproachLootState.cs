@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 // Gets set from mouse click event, or from non-selected PC detecting loot container while idle. 
 public class PlayerApproachLootState : PlayerState
@@ -7,7 +6,7 @@ public class PlayerApproachLootState : PlayerState
     private LootContainer _lootContainer;
     private Vector3 _lootingPosition;
     private float _lootDistanceSquared;
-    private NavMeshAgent _navMeshAgent;
+//    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
@@ -16,15 +15,16 @@ public class PlayerApproachLootState : PlayerState
     {
         _lootContainer = lootContainer;
 //        _lootDistanceSquared = lootDistance * lootDistance;
-        _lootDistanceSquared = characterController.NavMeshAgent.stoppingDistance * characterController.NavMeshAgent.stoppingDistance * 1.2f;
+        _lootDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
 
         _lootingPosition = lootContainer.LootPositionTransform.position;
-        _navMeshAgent = characterController.NavMeshAgent;
+//        _navMeshAgent = characterController.NavMeshAgent;
         _transform = characterController.transform;
 
-        // Set new destination for PC's NavMeshAgent. 
+        // Set destination. 
+        characterController.PathNavigator.TravelPath(_lootingPosition);
 //        _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
-        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
+//        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
     }
 
     public override void Update()

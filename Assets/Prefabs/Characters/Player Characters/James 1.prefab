@@ -936,7 +936,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8080965006557006833}
-  - component: {fileID: 8080965006557006846}
+  - component: {fileID: 1729663205511615171}
   - component: {fileID: 2876730837047733713}
   - component: {fileID: 979327382676080073}
   - component: {fileID: 5123034392192844336}
@@ -967,28 +967,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &8080965006557006846
-NavMeshAgent:
+--- !u!114 &1729663205511615171
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8080965006557006832}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 20
-  m_Acceleration: 50
-  avoidancePriority: 50
-  m_AngularSpeed: 255
-  m_StoppingDistance: 1
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab68a4778e37aa7408db6e6ba9e4f851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 5
+  _stoppingDistance: 0.5
+  _turnSpeed: 500
 --- !u!114 &2876730837047733713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,9 +1002,9 @@ MonoBehaviour:
   _lootTimer: {fileID: 7461302068374981788}
   _weaponRange: 5
   _attackDuration: 1
-  NavMeshAgent: {fileID: 8080965006557006846}
   Animator: {fileID: 8080965005752804064}
   SelectedPCIcon: {fileID: 8080965005502691794}
+  PathNavigator: {fileID: 1729663205511615171}
   PCLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -1050,7 +1043,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 80
   m_CollisionDetection: 1

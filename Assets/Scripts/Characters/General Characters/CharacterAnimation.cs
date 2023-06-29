@@ -1,19 +1,21 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 public class CharacterAnimation : MonoBehaviour
 {
-    private NavMeshAgent _navMeshAgent;
+    private PathNavigator _pathNavigator;
+//    private NavMeshAgent _navMeshAgent;
     private Animator _animator;
     
     private void Awake()
     {
-        _navMeshAgent = GetComponentInParent<NavMeshAgent>();
+        _pathNavigator = GetComponentInParent<PathNavigator>();
+//        _navMeshAgent = GetComponentInParent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        _animator.SetFloat("Speed", _navMeshAgent.velocity.magnitude);
+        float speed = _pathNavigator.Moving ? 1 : 0;
+        _animator.SetFloat("Speed", speed);
     }
 }

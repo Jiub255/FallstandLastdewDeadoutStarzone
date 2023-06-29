@@ -1,24 +1,26 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class PlayerApproachEnemyState : PlayerState
 {
     private Transform _target;
     private float _weaponRangeSquared;
+    private Transform _transform;
 
-    private NavMeshAgent _navMeshAgent;
+//    private NavMeshAgent _navMeshAgent;
 //    private Transform _pcTransform;
 
     public PlayerApproachEnemyState(PlayerController characterController, Transform target, float weaponRange) : base(characterController)
     {
+        _transform = characterController.transform;
         _target = target;
         _weaponRangeSquared = weaponRange * weaponRange;
 
-        _navMeshAgent = characterController.NavMeshAgent;
+//        _navMeshAgent = characterController.NavMeshAgent;
 //        _pcTransform = _navMeshAgent.transform;
 
         // Set NavMeshAgent destination here. 
-        _navMeshAgent.SetDestination(_target.position);
+//        _navMeshAgent.SetDestination(_target.position);
+        characterController.PathNavigator.TravelPath(_target.position);
 //        _navMeshAgent.destination = _target.position;
 
         // Get weapon range from current weapon, and maybe stats affect it too. 
@@ -41,8 +43,8 @@ public class PlayerApproachEnemyState : PlayerState
         if (CharacterWithinRangeOfEnemy())
         {
             // Unset NavMeshAgent destination? Can't set Vector3 to null. 
-            _navMeshAgent.isStopped = true;
-            _navMeshAgent.ResetPath();
+/*            _navMeshAgent.isStopped = true;
+            _navMeshAgent.ResetPath();*/
 
             _stateMachine.ChangeStateTo(_stateMachine.Combat(_target));
         }
@@ -51,7 +53,7 @@ public class PlayerApproachEnemyState : PlayerState
     private bool CharacterWithinRangeOfEnemy()
     {
         // TODO - Check if Target becomes null. 
-        if ((/*_pcTransform*/_target.position - _navMeshAgent.transform.position).sqrMagnitude < _weaponRangeSquared)
+        if ((/*_pcTransform*/_target.position - _transform.position).sqrMagnitude < _weaponRangeSquared)
         {
             return true;
         }
