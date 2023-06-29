@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class PCSelector : MonoBehaviour
 {
     public static event Action<Transform> OnDoubleClickPC;
+    public static event Action<Transform> OnSelectPC;
 
 /*    [SerializeField]
     private GOListSO _pcInstancesSO;*/
@@ -37,7 +38,7 @@ public class PCSelector : MonoBehaviour
         S.I.IM.PC.Scavenge.Select.performed += CheckIfPCClicked;
 
         /*SelectedIdleSubstate.OnPCDeselected*/
-        SelectedIdleSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
+//        SelectedIdleSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
 
         PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
@@ -57,7 +58,7 @@ public class PCSelector : MonoBehaviour
         S.I.IM.PC.Scavenge.Select.performed -= CheckIfPCClicked;
 
         /*SelectedIdleSubstate.OnPCDeselected*/
-        SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
+//        SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
    
         PlayerIdleState.OnPCDeselected -= () => ChangePC(null);
     }
@@ -92,6 +93,7 @@ public class PCSelector : MonoBehaviour
             // If the second click was on the same PC as first click, center on that PC. 
             if (pcInstance.GetInstanceID() == _firstClickedObjectID)
             {
+                // CameraMoveRotate listens, centers on PC. 
                 OnDoubleClickPC?.Invoke(pcInstance.transform);
             }
             // If second click was on a different PC, treat it like a single click. 
@@ -135,6 +137,16 @@ public class PCSelector : MonoBehaviour
             }
          
             _currentPCInstance = clickedPCInstance; 
+        }
+
+        // Transparentizer listens, sets current PC. 
+        if (_currentPCInstance != null)
+        {
+            OnSelectPC?.Invoke(clickedPCInstance.transform);
+        }
+        else
+        {
+            OnSelectPC?.Invoke(null);
         }
     }
 }

@@ -13,8 +13,10 @@ ________________________________________________________________________________
     FIRST!!
 
 
-        Fix jittery navmesh movement. 
-            Maybe try using NavMesh.Calculate path to get the points of the path, then use rigidbody or whatever to do the actual movement? 
+        Make PathNavigator recalculate path when it gets blocked. 
+
+        Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
+            Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
 
     FIX:
@@ -594,3 +596,7 @@ ________________________________________________________________________________
             inheritance up somehow? 
         FIXED BY MAKING THE STATEMACHINE UPDATE (AND FIXEDUPDATE) PUBLIC VIRTUAL AND THE PLAYERCONTROLLER ONES PUBLIC OVERRIDE.
             WAS ACCIDENTALLY HIDING IT BY CALLING PRIVATE ON BOTH. 
+
+                Fix jittery navmesh movement. 
+        Maybe try using NavMesh.Calculate path to get the points of the path, then use rigidbody or whatever to do the actual movement? 
+        FIXED BY MAKING PATHNAVIGATOR IN PLACE OF NAVMESHAGENT. 

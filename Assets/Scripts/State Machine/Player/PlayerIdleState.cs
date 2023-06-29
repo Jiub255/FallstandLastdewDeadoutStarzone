@@ -12,6 +12,8 @@ public class PlayerIdleState : PlayerState
     {
         _sightDistance = sightDistance;
 
+        characterController.PathNavigator.StopMoving();
+
         // Not sure how to just clear the nav mesh agent. 
 //        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
 /*        _stateMachine.NavMeshAgent.isStopped = true;

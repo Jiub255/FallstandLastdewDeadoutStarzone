@@ -28,6 +28,11 @@ public class PathNavigator : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
+    public void StopMoving() 
+    {
+        _moving = false;
+    }
+
     public void TravelPath(Vector3 destination)
     {
         _destination = destination;

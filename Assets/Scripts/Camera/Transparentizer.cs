@@ -47,14 +47,41 @@ public class Transparentizer : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectedSubstate.OnSelectPC += SelectPC;
-        SelectedIdleSubstate.OnDeselectPC += DeselectPC;
+        PCSelector.OnSelectPC += SelectPC;
+
+/*        SelectedSubstate.OnSelectPC += SelectPC;
+        SelectedIdleSubstate.OnDeselectPC += DeselectPC;*/
     }
 
     private void OnDisable()
     {
-        SelectedSubstate.OnSelectPC -= SelectPC;
-        SelectedIdleSubstate.OnDeselectPC -= DeselectPC;
+        PCSelector.OnSelectPC -= SelectPC;
+        
+/*        SelectedSubstate.OnSelectPC -= SelectPC;
+        SelectedIdleSubstate.OnDeselectPC -= DeselectPC;*/
+    }
+
+    private void SelectPC(Transform pcTransform)
+    {
+        _currentPCTransform = pcTransform;
+        // Waiting a frame because SelectPC gets called on the new PC before this. 
+//        StartCoroutine(WaitThenSelect(pcTransform));
+    }
+
+/*    private IEnumerator WaitThenSelect(Transform pcTransform)
+    {
+        yield return new WaitForEndOfFrame();
+
+        _currentPCTransform = pcTransform;
+
+        //Debug.Log($"Transparentizer's current PC is {_currentPCTransform.gameObject.name}");
+    }*/
+
+    private void DeselectPC()
+    {
+        _currentPCTransform = null;
+
+        //Debug.Log($"Transparentizer's current PC is null");
     }
 
     private void Update()
@@ -236,27 +263,5 @@ public class Transparentizer : MonoBehaviour
             // Remove from fadingInDict
             _fadingInDict.Remove(material);
         }
-    }
-
-    private void SelectPC(Transform pcTransform)
-    {
-        // Waiting a frame because SelectPC gets called on the new PC before this. 
-        StartCoroutine(WaitThenSelect(pcTransform));
-    }
-
-    private IEnumerator WaitThenSelect(Transform pcTransform)
-    {
-        yield return new WaitForEndOfFrame();
-
-        _currentPCTransform = pcTransform;
-
-        //Debug.Log($"Transparentizer's current PC is {_currentPCTransform.gameObject.name}");
-    }
-
-    private void DeselectPC()
-    {
-        _currentPCTransform = null;
-
-        //Debug.Log($"Transparentizer's current PC is null");
     }
 }
