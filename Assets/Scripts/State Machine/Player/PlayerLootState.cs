@@ -20,13 +20,13 @@ public class PlayerLootState : PlayerState
         _lootContainer.IsBeingLooted = true;
 
         // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
-        _stateMachine.transform.root.position = _lootContainer.LootPositionTransform.position;
+        characterController.transform.position = _lootContainer.LootPositionTransform.position;
 
         // Face the loot container. 
-        _stateMachine.transform.root.LookAt(_lootContainer.transform);
+        characterController.transform.LookAt(_lootContainer.transform);
 
         // Set animation to looting. 
-        _stateMachine.Animator.SetTrigger("Loot");
+        characterController.Animator.SetTrigger("Loot");
 
         // Activate timer object. 
         _lootTimer.ActivateTimer(true);

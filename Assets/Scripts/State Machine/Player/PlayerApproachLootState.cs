@@ -15,22 +15,22 @@ public class PlayerApproachLootState : PlayerState
     public PlayerApproachLootState(PlayerController characterController, LootContainer lootContainer, float lootDistance) : base(characterController)
     {
         _lootContainer = lootContainer;
-        _lootDistanceSquared = lootDistance * lootDistance;
+//        _lootDistanceSquared = lootDistance * lootDistance;
+        _lootDistanceSquared = characterController.NavMeshAgent.stoppingDistance * characterController.NavMeshAgent.stoppingDistance * 1.2f;
 
         _lootingPosition = lootContainer.LootPositionTransform.position;
-        _navMeshAgent = _stateMachine.NavMeshAgent;
-        _transform = _stateMachine.transform;
+        _navMeshAgent = characterController.NavMeshAgent;
+        _transform = characterController.transform;
 
         // Set new destination for PC's NavMeshAgent. 
-        _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
+//        _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
+        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
     }
 
-    // TODO - Not getting called, why? 
     public override void Update()
     {
         // What if container gets looted while you're on the way? 
         // Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
-        Debug.Log($"Looted: {_lootContainer.Looted}, IsBeingLooted: {_lootContainer.IsBeingLooted}");
         if (_lootContainer.IsBeingLooted || _lootContainer.Looted)
         {
             // Set state back to idle. 
@@ -62,8 +62,8 @@ public class PlayerApproachLootState : PlayerState
                     _agent.stoppingDistance = 0f; 
                 }*/
 
-        Debug.Log($"Squared distance: {(_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude}," +
-            $"Looting position: {_lootingPosition}, Position: {_transform.position}, NavMeshAgent destination: {_navMeshAgent.destination}");
+/*        Debug.Log($"Squared distance: {(_lootingPosition*//*_navMeshAgent.destination*//* - _transform.position).sqrMagnitude}," +
+            $"Looting position: {_lootingPosition}, Position: {_transform.position}, NavMeshAgent destination: {_navMeshAgent.destination}");*/
         return (_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude < _lootDistanceSquared;
     }
 
@@ -84,8 +84,8 @@ public class PlayerApproachLootState : PlayerState
     public override void Exit()
     {
         // Unset NavMeshAgent destination? Can't set Vector3 to null. 
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.ResetPath();
+/*        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();*/
     }
 
     public override void FixedUpdate() {}

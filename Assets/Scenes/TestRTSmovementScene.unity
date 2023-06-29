@@ -272,6 +272,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Loot Container (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8053604430189520242, guid: ef2f921d25c8f544e881f4807b906139, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef2f921d25c8f544e881f4807b906139, type: 3}
 --- !u!4 &49326952 stripped
@@ -3045,7 +3049,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8053604430189520241, guid: ef2f921d25c8f544e881f4807b906139, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8053604430189520241, guid: ef2f921d25c8f544e881f4807b906139, type: 3}
       propertyPath: m_LocalPosition.x

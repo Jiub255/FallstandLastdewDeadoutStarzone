@@ -61,9 +61,18 @@ public class PlayerController : StateMachine<PlayerController>
     public PlayerApproachLootState ApproachLoot(LootContainer lootContainer) { return new PlayerApproachLootState(this, lootContainer, _lootDistance); } 
 
     // Just for testing. 
-    private void FixedUpdate()
+    public override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         Debug.Log($"Active state: {_activeState.GetType()}");
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void Start/*OnEnable*/()
@@ -81,11 +90,6 @@ public class PlayerController : StateMachine<PlayerController>
 
         // Start in idle state.
         ChangeStateTo(Idle());
-    }
-
-    private void Update()
-    {
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void OnDisable()

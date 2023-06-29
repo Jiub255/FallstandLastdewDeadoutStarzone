@@ -13,9 +13,9 @@ ________________________________________________________________________________
     FIRST!!
 
 
-        Change state machine to plain C# class style instead of using Monobehaviours and game objects. 
-            Update not getting called in PlayerState classes, specifically PlayerApproachLootState. Not sure why, maybe PlayerState is messing 
-                inheritance up somehow? 
+        Fix jittery navmesh movement. 
+            Maybe try using NavMesh.Calculate path to get the points of the path, then use rigidbody or whatever to do the actual movement? 
+        
 
     FIX:
 
@@ -437,6 +437,9 @@ ________________________________________________________________________________
             Still post-apocalyptic base builder. 
             Can have cool alien technology/enemies. And human warlords/bandits and wild earth animals. 
             Have it way in the future so you can have cool new earth animals/technology? 
+        OR, Crash landed on alien planet. Could go with above idea. 
+            Could find items to help you learn the alien language and eventually interact with them.
+                They could join your team.
         OR, Aftermath of an epic battle between gods. Could have all sorts of creatures/beings. 
             Could maybe incorporate prayer/culty shit with the gods? Maybe, later. 
             Could have regular attacks by cults of the old gods. Your base could be the ones who say fuck the gods, they fucked us. 
@@ -587,3 +590,7 @@ ________________________________________________________________________________
             current PC instances to null. Only way it gets sent to null now. 
          
      
+        Update not getting called in PlayerState classes, specifically PlayerApproachLootState. Not sure why, maybe PlayerState is messing 
+            inheritance up somehow? 
+        FIXED BY MAKING THE STATEMACHINE UPDATE (AND FIXEDUPDATE) PUBLIC VIRTUAL AND THE PLAYERCONTROLLER ONES PUBLIC OVERRIDE.
+            WAS ACCIDENTALLY HIDING IT BY CALLING PRIVATE ON BOTH. 

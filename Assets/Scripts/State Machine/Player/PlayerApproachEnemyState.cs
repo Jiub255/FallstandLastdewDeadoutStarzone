@@ -14,11 +14,12 @@ public class PlayerApproachEnemyState : PlayerState
         _target = target;
         _weaponRangeSquared = weaponRange * weaponRange;
 
-        _navMeshAgent = _stateMachine.NavMeshAgent;
+        _navMeshAgent = characterController.NavMeshAgent;
 //        _pcTransform = _navMeshAgent.transform;
 
         // Set NavMeshAgent destination here. 
-        _navMeshAgent.destination = _target.position;
+        _navMeshAgent.SetDestination(_target.position);
+//        _navMeshAgent.destination = _target.position;
 
         // Get weapon range from current weapon, and maybe stats affect it too. 
         // _weaponRange = _playerSomething.CurrentWeapon._range; 

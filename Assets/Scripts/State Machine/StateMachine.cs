@@ -4,7 +4,7 @@ public abstract class StateMachine<T> : MonoBehaviour where T : MonoBehaviour
 {
     protected State<T> _activeState { get; private set; }
 
-    private void Update()
+    public virtual void Update()
     {
         if (_activeState != null)
         {
@@ -16,7 +16,7 @@ public abstract class StateMachine<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (_activeState != null)
         {
