@@ -66,8 +66,7 @@ public class PlayerCombatState : PlayerState
     // Then players in combat state can check if it matches their current target, if so enemy is dead. 
     public void OnEnemyKilled()
     {
-        // Set Target to null. 
-        _target = null;
+        Debug.Log("OnEnemyKilled called");
 
         _stateMachine.ChangeStateTo(_stateMachine.Idle());
     }

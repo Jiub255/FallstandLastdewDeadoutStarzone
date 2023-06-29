@@ -37,6 +37,6 @@ public abstract class StateMachine<T> : MonoBehaviour where T : MonoBehaviour
 
         _activeState = state;
 
-//        Debug.Log($"Changed state to: {_activeState.GetType()}");
+        Debug.Log($"{gameObject.name} changed state to: {_activeState.GetType()}");
     }
 }

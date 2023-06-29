@@ -5,9 +5,9 @@ public class PlayerApproachEnemyState : PlayerState
     private Transform _target;
     private float _weaponRangeSquared;
     private Transform _transform;
+    private PathNavigator _pathNavigator;
 
 //    private NavMeshAgent _navMeshAgent;
-//    private Transform _pcTransform;
 
     public PlayerApproachEnemyState(PlayerController characterController, Transform target, float weaponRange) : base(characterController)
     {
@@ -15,12 +15,18 @@ public class PlayerApproachEnemyState : PlayerState
         _target = target;
         _weaponRangeSquared = weaponRange * weaponRange;
 
+        if (CharacterWithinRangeOfEnemy())
+        {
+            characterController.ChangeStateTo(characterController.Combat(target));
+        }
+
+        _pathNavigator = characterController.PathNavigator;
+
 //        _navMeshAgent = characterController.NavMeshAgent;
-//        _pcTransform = _navMeshAgent.transform;
 
         // Set NavMeshAgent destination here. 
 //        _navMeshAgent.SetDestination(_target.position);
-        characterController.PathNavigator.TravelPath(_target.position);
+        _pathNavigator.TravelPath(_target.position);
 //        _navMeshAgent.destination = _target.position;
 
         // Get weapon range from current weapon, and maybe stats affect it too. 
@@ -29,8 +35,6 @@ public class PlayerApproachEnemyState : PlayerState
 
     public override void Exit()
     {
-        // Send _target to CombatState here? 
-
         // Set destination to null or whatever. 
 
     }
@@ -53,12 +57,15 @@ public class PlayerApproachEnemyState : PlayerState
     private bool CharacterWithinRangeOfEnemy()
     {
         // TODO - Check if Target becomes null. 
-        if ((/*_pcTransform*/_target.position - _transform.position).sqrMagnitude < _weaponRangeSquared)
+        if ((_target.position - _transform.position).sqrMagnitude < _weaponRangeSquared)
         {
             return true;
         }
         return false;
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate() 
+    {
+        _pathNavigator.TravelPath(_target.position);
+    }
 }

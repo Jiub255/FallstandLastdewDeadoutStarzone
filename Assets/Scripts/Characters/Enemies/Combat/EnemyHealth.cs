@@ -33,6 +33,10 @@ public class EnemyHealth : MonoBehaviour
 		// Send signal to attacking PC that enemy is dead, so they can switch states. 
 		attackingPC.OnEnemyKilled();
 
-		Destroy(transform.parent.gameObject, 3f);
+		// Destroy enemy after a delay. 
+		Destroy(transform.parent.gameObject, 1f);
+
+		// Disable enemy collider so that PlayerIdleState doesn't detect it during death delay. 
+		transform.parent.GetComponent<Collider>().enabled = false;
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombatState : MonoBehaviour
+public class OLDEnemyCombatState : MonoBehaviour
 {
 	[SerializeField]
 	private float _timeBetweenAttacks = 2f;

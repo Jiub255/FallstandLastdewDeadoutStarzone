@@ -10,37 +10,16 @@ ________________________________________________________________________________
 
 -------------------------------------------------------------------------------------------------------
 
-    FIRST!!
+FIRST!!
 
 
-        Make PathNavigator recalculate path when it gets blocked. 
+    Make PathNavigator recalculate path when it gets blocked. 
 
-        Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
-            Might need to cancel actual looting too, don't want to get items if it gets canceled. 
+    Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
+        Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
 
-    FIX:
-
-        Sometimes when clicking rapidly on an already looted container with a PC selected, all of it's states and substates get deactivated. 
-            Might be related to the loot containers, not sure yet. 
-            Happens when clicking on loot container while already in approach loot state. 
-
-        Loot state not working correctly. Won't loot if clicked on nearby loot container. 
-            Issue with NavMeshAgent stopping distance. If set to zero problem goes away. 
-                Causes issues with NavMeshObstacles though. 
-                Maybe just don't use NavMeshAgent?
-                Or, change stopping distance during runtime when you're close to loot containers?
-
-
-    Stop using NavMeshAgent, make pathfinding system?
-        How exactly to implement?
-            Make game grid based? Don't really want to. 
-            Lay a grid over the gameplay area (of whatever resolution) and do A* on that?
-                Just have it check for which tiles have objects/characters on them and make them unpassable. 
-                    How to dynamically check for moving obstacles (ie other characters)?
-                        Have it check the path it found each time the character enters a new tile? Then recalculate path if there's an obstacle? 
-                    What to do when clicking on unpassable tiles?
-                        Set the destination as the nearest walkable tile on the line connecting the character and the attempted destination? 
+FIX:
 
 
     Figure out how combat will work. 

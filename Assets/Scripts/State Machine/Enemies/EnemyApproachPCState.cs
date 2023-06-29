@@ -1,53 +1,44 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class EnemyMoveToPCState : MonoBehaviour
+public class EnemyApproachPCState : State<EnemyController>
 {
     private Transform _target;
 
-    [SerializeField]
-    private float _attackRadius = 2f;
+    private float _attackRadius;
 
-    [SerializeField]
-    private GameObject _enemyCombatState;
-
-    private NavMeshAgent _agent;
+    private PathNavigator _pathNavigator;
+//    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
-    public float AttackRadius { get { return _attackRadius; } }
-
-    private void OnEnable()
+    public EnemyApproachPCState(EnemyController characterController, float attackRadius) : base(characterController)
     {
-        _agent = transform.parent.GetComponentInParent<NavMeshAgent>();
-        _transform = _agent.transform;
-    }
+        _attackRadius = attackRadius;
 
-    private void Start()
-    {
+        _pathNavigator = characterController.PathNavigator;
+//        _navMeshAgent = characterController.transform.parent.GetComponentInParent<NavMeshAgent>();
+        _transform = characterController.transform;
         // Set random PC as target (for now). 
         _target = ChooseRandomTarget();
         // Set target as NavMeshAgent destination
-        _agent.SetDestination(_target.position);
+        _pathNavigator.TravelPath(_target.position);
+//        _navMeshAgent.SetDestination(_target.position);
     }
 
-    private void Update()
+    public override void Update()
     {
         if (Vector3.Distance(_target.position, _transform.position) <= _attackRadius)
         {
-            // Set the Target in EnemyCombatState. 
-            _enemyCombatState.GetComponent<OLDEnemyCombatState>().Target = _target; 
-
             // Switch to EnemyCombatState. 
-            _enemyCombatState.SetActive(true);
-            gameObject.SetActive(false);
+            _stateMachine.ChangeStateTo(_stateMachine.Combat(_target));
         }
     }
 
-    private void FixedUpdate()
+    public override void FixedUpdate()
     {
         // Update destination in FixedUpdate so it's less costly. Probably unnecessary. 
-        _agent.SetDestination(_target.position);
+        _pathNavigator.TravelPath(_target.position);
+//        _navMeshAgent.SetDestination(_target.position);
         _transform.LookAt(_target);
     }
 
@@ -59,4 +50,6 @@ public class EnemyMoveToPCState : MonoBehaviour
         int randomIndex = Random.Range(0, potentialTargets.Count);
         return potentialTargets[randomIndex].transform;
     }
+
+    public override void Exit() {}
 }
