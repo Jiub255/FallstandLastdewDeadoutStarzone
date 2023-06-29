@@ -1,64 +1,63 @@
 using UnityEngine;
 
-public class LootState : MonoBehaviour
+public class PlayerLootState : PlayerState
 {
-    // For getting the duration of the loot animation. 
-    [SerializeField]
-    private AnimationClip _lootAnimation;
 
-    [SerializeField]
+    private float _lootAnimationDuration;
     private InventorySO _inventorySO;
+    private LootTimer _lootTimer;
 
-    [SerializeField]
-    private GameObject _idleState;
-
-    private Animator _animator;
-    private float _animationLength;
     private float _timer;
-	private GameObject _timerObject;
-    private Transform _fillBarTransform;
+//    private GameObject _timerObject;
+//    private Transform _fillBarTransform;
 
     // ApproachLootState sets this when switching to this state. 
     public Transform LootContainerTransform { get; set; }
 
     private LootContainer _lootContainer;
 
-    private void OnEnable()
+
+    public PlayerLootState(PlayerController characterController, LootContainer lootContainer, AnimationClip lootAnimation, InventorySO inventorySO, LootTimer lootTimer) : base(characterController)
     {
-        _lootContainer = LootContainerTransform.GetComponentInChildren<LootContainer>();
+        _lootContainer = lootContainer;
+        _lootAnimationDuration = lootAnimation.length;
+        _inventorySO = inventorySO;
+        _lootTimer = lootTimer;
+
         // Set LootContainer's IsBeingLooted to true. 
         _lootContainer.IsBeingLooted = true;
 
         // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
-        transform.root.position = _lootContainer.LootPositionTransform.position;
+        _stateMachine.transform.root.position = _lootContainer.LootPositionTransform.position;
 
         // Face the loot container. 
-        transform.root.LookAt(LootContainerTransform);
+        _stateMachine.transform.root.LookAt(LootContainerTransform);
 
         // Set animation to looting. 
-        _animator = transform.parent.parent.GetComponentInChildren<Animator>();
-        _animator.SetTrigger("Loot");
+        _stateMachine.Animator.SetTrigger("Loot");
 
+        // TODO - Do this cleaner. Not sure exactly how yet. 
+        // Just get LootTimer from PlayerController serialized field, then call _lootTimer.Tick() in update and enable/disable it that way too. 
         // Set timer. 
-        _animationLength = _lootAnimation.length;
-        _timer = _animationLength;
-        _timerObject = transform.parent.parent.GetComponentInChildren<LootTimer>(true).gameObject;
-        _fillBarTransform = _timerObject.transform.GetChild(0);
+/*        _timer = _lootAnimationDuration;
+        _timerObject = _stateMachine.transform.parent.parent.GetComponentInChildren<LootTimer>(true).gameObject;
+        _fillBarTransform = _timerObject.transform.GetChild(0);*/
 
         // Activate timer object. 
-        _timerObject.SetActive(true);
+        _lootTimer.ActivateTimer(true);
+//        _timerObject.SetActive(true);
     }
 
-    private void OnDisable()
+    public override void Exit()
     {
         // Deactivate timer object
-        _timerObject.SetActive(false);
+        _lootTimer.ActivateTimer(false);
 
         // Set LootContainer's IsBeingLooted to false. 
         _lootContainer.IsBeingLooted = false;
     }
 
-    private void Update()
+    public override void Update()
     {
         // Increment timer. 
         _timer -= Time.deltaTime;
@@ -72,22 +71,14 @@ public class LootState : MonoBehaviour
             // Set LootContainer's Looted to true. 
             _lootContainer.Looted = true;
 
-            StateSwitcher.Switch(gameObject, _idleState);
+            _stateMachine.ChangeStateTo(_stateMachine.Idle());
         }
         else
         {
             // Get percent of time elapsed
-            float percentTime = (_animationLength - _timer) / _animationLength;
-            // Raise fill bar's x scale by that percent
-            _fillBarTransform.localScale = new Vector3(
-                percentTime,
-                _fillBarTransform.localScale.y,
-                _fillBarTransform.localScale.z);
-            // Move fill bar along x axis, so it stays anchored on one side
-            _fillBarTransform.localPosition = new Vector3(
-                0.55f * (1 - percentTime),
-                _fillBarTransform.localPosition.y,
-                _fillBarTransform.localPosition.z);
+            float percentTime = (_lootAnimationDuration - _timer) / _lootAnimationDuration;
+            // Tick timer by that amount. 
+            _lootTimer.Tick(percentTime);
         }
     }
 
@@ -112,4 +103,6 @@ public class LootState : MonoBehaviour
             }
         }
     }
+
+    public override void FixedUpdate() {}
 }

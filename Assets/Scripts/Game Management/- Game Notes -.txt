@@ -13,6 +13,11 @@ ________________________________________________________________________________
     FIRST!!
 
 
+        Change state machine to plain C# class style instead of using Monobehaviours and game objects. 
+            Maybe have a selected state machine that runs the selected pc's states, and have the rest run on the normal state machine?
+                Could possible have the selected one inherit the normal one and override whatever it needs to. 
+
+
     FIX:
 
         Sometimes when clicking rapidly on an already looted container with a PC selected, all of it's states and substates get deactivated. 

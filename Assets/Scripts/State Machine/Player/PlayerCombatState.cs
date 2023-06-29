@@ -1,31 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatState : MonoBehaviour
+public class PlayerCombatState : PlayerState
 {
-    public Transform Target { get; set; }
-   // public EnemyInjury _enemyInjury;
+    private Transform _target;
+    // public EnemyInjury _enemyInjury;
+    private float _attackDuration;
 
-    [SerializeField]
     private float _timer;
-    // Only serialized for testing. Will get this value from weapon/stats eventually. 
-    [SerializeField]
-    private float _attackDuration = 1f;
     private Animator _animator;
-
-    [SerializeField]
-    private GameObject _idleState;
 
     private Transform _transform;
 
-    private void OnEnable()
+    public PlayerCombatState(PlayerController characterController, Transform target, float attackDuration) : base(characterController)
     {
+        _target = target;
+        _attackDuration = attackDuration;
+
         _timer = 0f;
-        _animator = transform.parent.parent.GetComponentInChildren<Animator>();
+        _animator = _stateMachine.Animator;
         _animator.SetBool("GunIdle", true);
 
-        _transform = transform.parent.parent;
+        _transform = _stateMachine.transform;
 
         // Get attack duration from current weapon/stats. 
         // Maybe keep these things in a SO for easy shared reference? But then each PC would need one.
@@ -33,21 +28,21 @@ public class CombatState : MonoBehaviour
         // _attackDuration = ...;
 
         // Face the enemy. 
-        _transform.LookAt(Target);
+        _transform.LookAt(_target);
     }
 
-    private void OnDisable()
+    public override void Exit()
     {
         _animator.SetBool("GunIdle", false);
     }
 
-    private void Update()
+    public override void Update()
     {
         // TODO: Check if enemy is still in range first. 
 
 
         // Face the enemy. 
-        _transform.LookAt(Target);
+        _transform.LookAt(_target);
 
         _timer += Time.deltaTime;
 
@@ -70,17 +65,19 @@ public class CombatState : MonoBehaviour
         _animator.SetTrigger("Attack");
 
         // JUST FOR TESTING
-//        Target.GetComponentInChildren<EnemyHealth>().GetHurt(25, this);
-    }
-
-    public void OnEnemyKilled()
-    {
-        // Set Target to null. 
-        Target = null;
-
-        StateSwitcher.Switch(gameObject, _idleState);
+        // TODO - Use IDamageable interface and do an OverlapBox in front of player. Same as in 3D-RPG. 
+        _target.GetComponentInChildren<EnemyHealth>().GetHurt(25, this);
     }
 
     // How to check if enemy is dead? Dying enemy could send a signal with its instanceID.
     // Then players in combat state can check if it matches their current target, if so enemy is dead. 
+    public void OnEnemyKilled()
+    {
+        // Set Target to null. 
+        _target = null;
+
+        _stateMachine.ChangeStateTo(_stateMachine.Idle());
+    }
+
+    public override void FixedUpdate() {}
 }

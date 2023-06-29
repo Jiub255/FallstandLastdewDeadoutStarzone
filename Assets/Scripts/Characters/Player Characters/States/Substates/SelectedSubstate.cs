@@ -24,7 +24,6 @@ public class SelectedSubstate : MonoBehaviour
     [SerializeField]
     private RunState _runState;
 
-    private bool _pointerOverUI = false;
     private EventSystem _eventSystem;
     private UnityEngine.AI.NavMeshAgent _navMeshAgent;
     private InputAction _mousePositionAction;
@@ -60,18 +59,6 @@ public class SelectedSubstate : MonoBehaviour
        // OnDeselectPC?.Invoke();
     }
 
-    private void Update()
-    {
-        if (_eventSystem.IsPointerOverGameObject())
-        {
-            _pointerOverUI = true;
-        }
-        else
-        {
-            _pointerOverUI = false;
-        }
-    }
-
     private void HandleClick(InputAction.CallbackContext context)
     {
         //Transform states = transform.parent.parent;
@@ -82,7 +69,7 @@ public class SelectedSubstate : MonoBehaviour
             1000);
 
         // If raycast hits anything, and mouse is not over UI, 
-        if (hits.Length > 0 && !_pointerOverUI)
+        if (hits.Length > 0 && !_eventSystem.IsPointerOverGameObject())
         {
             // Check to see if raycast hit a PC first. 
             foreach (RaycastHit hit in hits)

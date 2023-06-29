@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,5 +9,5 @@ public class LootContainer : MonoBehaviour
     public bool IsBeingLooted { get; set; } = false;
     public bool Looted { get; set; } = false;
 
-    public Transform LootPosition; 
+    public Transform LootPositionTransform; 
 }

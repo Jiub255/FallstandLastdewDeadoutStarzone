@@ -18,7 +18,6 @@ public class PCSelector : MonoBehaviour
     private float _lastClickTime = 0f;
 
     private EventSystem _eventSystem;
-    private bool _pointerOverUI = false;
 
     private int _firstClickedObjectID;
 
@@ -27,9 +26,6 @@ public class PCSelector : MonoBehaviour
     private void Start()
     {
         _eventSystem = EventSystem.current;
-
-        // Just so GetInstanceID works. 
-        //_currentPC = new GameObject("NotNull");
 
         // Click on PC icon. 
         PCInfo.OnSelectPC += HandleClick;
@@ -40,6 +36,8 @@ public class PCSelector : MonoBehaviour
 
         /*SelectedIdleSubstate.OnPCDeselected*/
         SelectedIdleSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
+
+        PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
 
     private void OnDisable()
@@ -53,23 +51,13 @@ public class PCSelector : MonoBehaviour
 
         /*SelectedIdleSubstate.OnPCDeselected*/
         SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
-    }
-
-    private void Update()
-    {
-        if (_eventSystem.IsPointerOverGameObject())
-        {
-            _pointerOverUI = true;
-        }
-        else
-        {
-            _pointerOverUI = false;
-        }
+   
+        PlayerIdleState.OnPCDeselected -= () => ChangePC(null);
     }
 
     private void CheckIfPCClicked(InputAction.CallbackContext context)
     {
-        if (!_pointerOverUI)
+        if (!_eventSystem.IsPointerOverGameObject())
         {
             // Only raycast to PC layer. 
             RaycastHit[] hits = Physics.RaycastAll(
@@ -77,7 +65,7 @@ public class PCSelector : MonoBehaviour
                 1000,
                 _pcLayerMask);
 
-            // If there were any hits, they must have been PC's. 
+            // If there were any hits, they must have been PCs. 
             if (hits.Length > 0)
             {
                 /*foreach (RaycastHit hit in hits)
@@ -135,10 +123,13 @@ public class PCSelector : MonoBehaviour
         // If clicked PC is NOT your current PC (true also when _currentPCInstance == null), 
         if (_currentPCInstance != clickedPCInstance)
         {
-            // If there is a currently selected PC, set it to not selected substate of whatever state it's in. 
+            // If there is a currently selected PC, set its Selected to false. 
             if (_currentPCInstance)
             {
-                Transform currentPCStates = _currentPCInstance.GetComponentInChildren<States>().transform;
+                _currentPCInstance.GetComponent<PlayerController>().Selected = false;
+
+                // If there is a currently selected PC, set it to not selected substate of whatever state it's in. 
+/*                Transform currentPCStates = _currentPCInstance.GetComponentInChildren<States>().transform;
 
                 foreach (Transform state in currentPCStates)
                 {
@@ -163,11 +154,14 @@ public class PCSelector : MonoBehaviour
                     // TODO - Figure this nonsense out. 
                    // currentPCStates.GetChild(0).GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(true);
                    // currentPCStates.GetChild(0).GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(false);
-                }
+                }*/
             }
 
+            // Set clicked PC's Selected to true.
+            clickedPCInstance.GetComponent<PlayerController>().Selected = true;
+
             // Set clicked PC to selected substate of whatever state it's in. 
-            Transform newPCStates = clickedPCInstance.GetComponentInChildren<States>().transform;
+/*            Transform newPCStates = clickedPCInstance.GetComponentInChildren<States>().transform;
             foreach (Transform state in newPCStates)
             {
                 // If state is currently active, 
@@ -188,7 +182,7 @@ public class PCSelector : MonoBehaviour
                 // TODO - Figure this nonsense out. 
                 // newPCStates.GetChild(0).GetComponentInChildren<SelectedSubstate>(true).gameObject.SetActive(true);
                 // newPCStates.GetChild(0).GetComponentInChildren<NotSelectedSubstate>(true).gameObject.SetActive(false);
-            }
+            }*/
         }
 
         _currentPCInstance = clickedPCInstance; 
