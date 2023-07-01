@@ -1,28 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyApproachPCState : State<EnemyController>
 {
     private Transform _target;
-
     private float _attackRadius;
 
-    private PathNavigator _pathNavigator;
-//    private NavMeshAgent _navMeshAgent;
+//    private PathNavigator _pathNavigator;
+    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
     public EnemyApproachPCState(EnemyController characterController, float attackRadius) : base(characterController)
     {
         _attackRadius = attackRadius;
 
-        _pathNavigator = characterController.PathNavigator;
-//        _navMeshAgent = characterController.transform.parent.GetComponentInParent<NavMeshAgent>();
+//        _pathNavigator = characterController.PathNavigator;
+        _navMeshAgent = characterController.NavMeshAgent;
         _transform = characterController.transform;
         // Set random PC as target (for now). 
         _target = ChooseRandomTarget();
         // Set target as NavMeshAgent destination
-        _pathNavigator.TravelPath(_target.position);
-//        _navMeshAgent.SetDestination(_target.position);
+//        _pathNavigator.TravelPath(_target.position);
+        _navMeshAgent.SetDestination(_target.position);
     }
 
     public override void Update()
@@ -37,8 +37,8 @@ public class EnemyApproachPCState : State<EnemyController>
     public override void FixedUpdate()
     {
         // Update destination in FixedUpdate so it's less costly. Probably unnecessary. 
-        _pathNavigator.TravelPath(_target.position);
-//        _navMeshAgent.SetDestination(_target.position);
+//        _pathNavigator.TravelPath(_target.position);
+        _navMeshAgent.SetDestination(_target.position);
         _transform.LookAt(_target);
     }
 

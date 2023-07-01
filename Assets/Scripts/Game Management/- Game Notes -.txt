@@ -18,6 +18,8 @@ FIRST!!
         D* algorithm? 
         Or do A*, then recalculate if path blocked near you, could use boxcasts out in front of PC to check. 
             Make the world grid somewhat coarse, doesn't need to be super exact. It'll save on performance too. 
+    OR, try NavMesh again. Could use com.unity.ai.navigation package with NavMeshSurface and bake it in runtime. 
+        Good for placing/destroying buildings. 
 
     Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 

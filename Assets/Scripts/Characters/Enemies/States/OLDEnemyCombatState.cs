@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class OLDEnemyCombatState : MonoBehaviour
 {
-	[SerializeField]
+/*	[SerializeField]
 	private float _timeBetweenAttacks = 2f;
     private float _timer;
 
@@ -20,7 +20,7 @@ public class OLDEnemyCombatState : MonoBehaviour
     {
         _animator = transform.parent.parent.GetComponentInChildren<Animator>();
         _transform = _animator.transform;
-        _attackRadius = _enemyMoveToPCState.GetComponent<EnemyMoveToPCState>().AttackRadius;
+        _attackRadius = _enemyMoveToPCState.GetComponent<OLDEnemyMoveToPCState>().AttackRadius;
     }
 
     private void Start()
@@ -66,7 +66,7 @@ public class OLDEnemyCombatState : MonoBehaviour
     // Animation event at the end of attack animation calls this method
     // TODO: Wont work with readonly animations from mixamo. Can't change them at all.
     // Maybe use a timer instead? Set to the animation's length? 
-/*    public void DoDamage()
+*//*    public void DoDamage()
     {
         RaycastHit hit;
         // boxcast immediately after animation to check if PC is still there

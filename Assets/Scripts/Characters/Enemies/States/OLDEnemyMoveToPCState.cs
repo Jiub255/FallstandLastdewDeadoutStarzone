@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMoveToPCState : MonoBehaviour
+public class OLDEnemyMoveToPCState : MonoBehaviour
 {
-    private Transform _target;
+/*    private Transform _target;
 
     [SerializeField]
     private float _attackRadius = 2f;
@@ -12,15 +12,15 @@ public class EnemyMoveToPCState : MonoBehaviour
     [SerializeField]
     private GameObject _enemyCombatState;
 
-    private NavMeshAgent _agent;
+    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
     public float AttackRadius { get { return _attackRadius; } }
 
     private void OnEnable()
     {
-        _agent = transform.parent.GetComponentInParent<NavMeshAgent>();
-        _transform = _agent.transform;
+        _navMeshAgent = transform.parent.GetComponentInParent<NavMeshAgent>();
+        _transform = _navMeshAgent.transform;
     }
 
     private void Start()
@@ -28,7 +28,7 @@ public class EnemyMoveToPCState : MonoBehaviour
         // Set random PC as target (for now). 
         _target = ChooseRandomTarget();
         // Set target as NavMeshAgent destination
-        _agent.SetDestination(_target.position);
+        _navMeshAgent.SetDestination(_target.position);
     }
 
     private void Update()
@@ -47,7 +47,7 @@ public class EnemyMoveToPCState : MonoBehaviour
     private void FixedUpdate()
     {
         // Update destination in FixedUpdate so it's less costly. Probably unnecessary. 
-        _agent.SetDestination(_target.position);
+        _navMeshAgent.SetDestination(_target.position);
         _transform.LookAt(_target);
     }
 
@@ -58,5 +58,5 @@ public class EnemyMoveToPCState : MonoBehaviour
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = Random.Range(0, potentialTargets.Count);
         return potentialTargets[randomIndex].transform;
-    }
+    }*/
 }

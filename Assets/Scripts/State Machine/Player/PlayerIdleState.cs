@@ -12,12 +12,11 @@ public class PlayerIdleState : PlayerState
     {
         _sightDistance = sightDistance;
 
-        characterController.PathNavigator.StopMoving();
-
-        // Not sure how to just clear the nav mesh agent. 
+        // Stop character from moving. Not sure how to do it best though. 
 //        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
-/*        _stateMachine.NavMeshAgent.isStopped = true;
-        _stateMachine.NavMeshAgent.ResetPath();*/
+        characterController.NavMeshAgent.isStopped = true;
+        characterController.NavMeshAgent.ResetPath();
+//        characterController.PathNavigator.StopMoving();
     }
 
     // Override to deselect instead of cancel action, only in idle state. 

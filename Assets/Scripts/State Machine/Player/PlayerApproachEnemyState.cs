@@ -1,13 +1,13 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerApproachEnemyState : PlayerState
 {
     private Transform _target;
     private float _weaponRangeSquared;
     private Transform _transform;
-    private PathNavigator _pathNavigator;
-
-//    private NavMeshAgent _navMeshAgent;
+    private NavMeshAgent _navMeshAgent;
+//    private PathNavigator _pathNavigator;
 
     public PlayerApproachEnemyState(PlayerController characterController, Transform target, float weaponRange) : base(characterController)
     {
@@ -20,13 +20,12 @@ public class PlayerApproachEnemyState : PlayerState
             characterController.ChangeStateTo(characterController.Combat(target));
         }
 
-        _pathNavigator = characterController.PathNavigator;
-
-//        _navMeshAgent = characterController.NavMeshAgent;
+        _navMeshAgent = characterController.NavMeshAgent;
+//        _pathNavigator = characterController.PathNavigator;
 
         // Set NavMeshAgent destination here. 
-//        _navMeshAgent.SetDestination(_target.position);
-        _pathNavigator.TravelPath(_target.position);
+        _navMeshAgent.SetDestination(_target.position);
+//        _pathNavigator.TravelPath(_target.position);
 //        _navMeshAgent.destination = _target.position;
 
         // Get weapon range from current weapon, and maybe stats affect it too. 
@@ -66,6 +65,8 @@ public class PlayerApproachEnemyState : PlayerState
 
     public override void FixedUpdate() 
     {
-        _pathNavigator.TravelPath(_target.position);
+        // Recalculate path every fixed update in case something got in the way. 
+        _navMeshAgent.SetDestination(_target.position);
+        //_pathNavigator.TravelPath(_target.position);
     }
 }

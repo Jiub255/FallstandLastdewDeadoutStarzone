@@ -22,6 +22,12 @@ public class PlayerCombatState : PlayerState
 
         // Face the enemy. 
         _transform.LookAt(_target);
+
+        // Stop character from moving. Not sure how to do it best though. 
+//        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
+        characterController.NavMeshAgent.isStopped = true;
+        characterController.NavMeshAgent.ResetPath();
+//        characterController.PathNavigator.StopMoving();
     }
 
     public override void Exit()

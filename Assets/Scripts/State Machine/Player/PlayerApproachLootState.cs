@@ -6,7 +6,7 @@ public class PlayerApproachLootState : PlayerState
     private LootContainer _lootContainer;
     private Vector3 _lootingPosition;
     private float _lootDistanceSquared;
-//    private NavMeshAgent _navMeshAgent;
+    private UnityEngine.AI.NavMeshAgent _navMeshAgent;
     private Transform _transform;
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
@@ -14,17 +14,20 @@ public class PlayerApproachLootState : PlayerState
     public PlayerApproachLootState(PlayerController characterController, LootContainer lootContainer, float lootDistance) : base(characterController)
     {
         _lootContainer = lootContainer;
+
+        // Not sure about this, might need to make it smaller/bigger. 
+        _lootDistanceSquared = characterController.NavMeshAgent.stoppingDistance * characterController.NavMeshAgent.stoppingDistance * 1.2f;
 //        _lootDistanceSquared = lootDistance * lootDistance;
-        _lootDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
+//        _lootDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
 
         _lootingPosition = lootContainer.LootPositionTransform.position;
-//        _navMeshAgent = characterController.NavMeshAgent;
+        _navMeshAgent = characterController.NavMeshAgent;
         _transform = characterController.transform;
 
         // Set destination. 
-        characterController.PathNavigator.TravelPath(_lootingPosition);
+//        characterController.PathNavigator.TravelPath(_lootingPosition);
 //        _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
-//        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
+        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
     }
 
     public override void Update()
@@ -62,9 +65,9 @@ public class PlayerApproachLootState : PlayerState
                     _agent.stoppingDistance = 0f; 
                 }*/
 
-/*        Debug.Log($"Squared distance: {(_lootingPosition*//*_navMeshAgent.destination*//* - _transform.position).sqrMagnitude}," +
-            $"Looting position: {_lootingPosition}, Position: {_transform.position}, NavMeshAgent destination: {_navMeshAgent.destination}");*/
-        return (_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude < _lootDistanceSquared;
+        Debug.Log($"Squared distance: {(_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude}," +
+            $"Looting position: {_lootingPosition}, Position: {_transform.position}, Looting distance squared: {_lootDistanceSquared}");
+        return (_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude < 0.2f/*_lootDistanceSquared*/;
     }
 
     /*    private bool HaveReachedDestination()
@@ -90,6 +93,8 @@ public class PlayerApproachLootState : PlayerState
 
     public override void FixedUpdate() 
     {
-        _stateMachine.PathNavigator.TravelPath(_lootingPosition);
+        // Recalculate path every fixed update in case something got in the way. 
+        _navMeshAgent.SetDestination(_lootingPosition);
+        //_stateMachine.PathNavigator.TravelPath(_lootingPosition);
     }
 }

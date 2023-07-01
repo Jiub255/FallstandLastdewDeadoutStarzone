@@ -52,7 +52,6 @@ public class PathNavigator : MonoBehaviour
         _corners = path.corners;
     }
     
-    // TODO - Recalculate path when blocked. How?
     private void FixedUpdate()
     {
         if (_moving)
@@ -63,6 +62,17 @@ public class PathNavigator : MonoBehaviour
                     $" Distance: {(_corners[_index] - _rigidbody.position).sqrMagnitude}, Stopping distance: {_stoppingDistanceSquared}");*/
                 if ((_corners[_index] - _rigidbody.position).sqrMagnitude > _stoppingDistanceSquared)
                 {
+                    // Recalculate path when blocked. 
+                    // Raycast from character to next waypoint. If it hits something, recalculate path and return out of this fixed update. 
+                    RaycastHit[] hits = Physics.RaycastAll(
+                        new Vector3(_rigidbody.position.x, 1f, _rigidbody.position.z),
+                        _corners[_index] - _rigidbody.position);
+                    if (hits.Length > 0)
+                    {
+                        TravelPath(_destination);
+                        return;
+                    }
+                    
                     // Move rigidbody toward next corner. 
                     _rigidbody.MovePosition(_rigidbody.position + ((_corners[_index] - _rigidbody.position).normalized * _speed * Time.fixedDeltaTime));
 
