@@ -27,7 +27,15 @@ public class EnemyApproachPCState : State<EnemyController>
         _lastPositionChecked = _target.position;
 
         _targetCollider = _target.GetComponent<Collider>();
-        // Set target as NavMeshAgent destination
+
+        Debug.Log($"{_stateMachine.transform.name}'s target: {(_target != null ? _target.name : "null")}");
+        Debug.Log($"{_stateMachine.transform.name}'s target's position: {(_target != null ? _target.position : "none")}");
+        Debug.Log($"{_stateMachine.transform.name}'s collider: {(_targetCollider != null ? _targetCollider.name : "null")}");
+        Debug.Log($"{_stateMachine.transform.name}'s PathNavigator: {(_pathNavigator != null ? _pathNavigator.name : "null")}");
+
+        // TODO - When starting scene with multiple enemies, some are getting null reference exception on this call even though the above debugs 
+        // show that the references are not null. 
+        // Set target position as destination and start traveling path. 
         _pathNavigator.TravelPath(_target.position, _targetCollider);
 //        _navMeshAgent.SetDestination(_target.position);
     }
@@ -68,6 +76,7 @@ public class EnemyApproachPCState : State<EnemyController>
         List<GameObject> potentialTargets = new();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = Random.Range(0, potentialTargets.Count);
+        Debug.Log($"{_stateMachine.transform.name}'s potential targets: {potentialTargets.Count}, randomIndex: {randomIndex}");
         return potentialTargets[randomIndex].transform;
     }
 

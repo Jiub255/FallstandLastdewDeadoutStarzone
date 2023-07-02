@@ -15,7 +15,9 @@ public class EnemyController : StateMachine<EnemyController>
     public EnemyCombatState Combat(Transform target) { return new EnemyCombatState(this, target, _attackRadius, _timeBetweenAttacks); }
     public EnemyApproachPCState ApproachPC() { return new EnemyApproachPCState(this, _attackRadius); }
 
-    private void Start()
+    // Needs to be in Start and not Awake so the PCs have time to instantiate, then the enemy can choose a target PC
+    // in its EnemyApproachPCState constructor. 
+    private void /*Awake*/Start()
     {
         ChangeStateTo(ApproachPC());
     }

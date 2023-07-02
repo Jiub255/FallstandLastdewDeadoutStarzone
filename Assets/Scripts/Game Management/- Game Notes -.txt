@@ -21,7 +21,6 @@ FIRST!!
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
 
-
 FIX:
 
 
@@ -592,4 +591,11 @@ FIX:
                 PC automatically switching back to going toward the enemy when walking to a location. Maybe it still has the enemy
             transform? 
         FIXED BY SETTING DESTINATIONCOLLIDER AND DESTINATIONTRANSFORM TO NULL WHEN PASSING IN A NULL DESTINATIONCOLLIDER. 
+
+            When starting scene with multiple enemies, half or so are getting null reference exceptions in the EnemyApproachPlayerState constructor
+        on the _pathNavigator.TravelPath() method, even though debug statements say all the relevant references are NOT null. 
+        It's the same enemies that work each time, so it's not related to the random index. 
+        Same thing happens with 2, 4, and 6 enemies. Might be position related? Nope. 
+        FIXED BY CHANGING PATHNAVIGATOR'S INITIALIZATION FROM START TO AWAKE, SINCE SEEKER.STARTPATH WAS GETTING CALLED FROM ENEMYAPPROACHPCSTATE'S START METHOD
+            SO IT WAS A RACE CONDITION OR SOMETHING. 
 

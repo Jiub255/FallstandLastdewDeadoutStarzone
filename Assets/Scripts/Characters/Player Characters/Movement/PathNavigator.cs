@@ -33,7 +33,7 @@ public class PathNavigator : MonoBehaviour
     public float StoppingDistance { get { return _stoppingDistance; } }
     public bool Moving { get { return _moving;} }
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
 //        _aiPath = GetComponent<AIPath>();
@@ -156,13 +156,16 @@ public class PathNavigator : MonoBehaviour
                         _obstaclesLayerMask); ;
                     if (hits.Length > 0)
                     {
-                        Debug.Log($"Hits length: {hits.Length}");
-                        Debug.Log($"Destination collider name: {_destinationCollider.name}");
-                        // If raycast only hits destination colllider, don't do anything. 
-                        // Is comparing colliders working? Should I compare something else? InstanceID? Transform? GameObject? 
-                        if (hits.Length == 1 && hits[0].collider == _destinationCollider)
+                        if (_destinationCollider != null)
                         {
-                            return;
+                            Debug.Log($"Hits length: {hits.Length}");
+                            Debug.Log($"Destination collider name: {_destinationCollider.name}");
+                            // If raycast only hits destination colllider, don't do anything. 
+                            // Is comparing colliders working? Should I compare something else? InstanceID? Transform? GameObject? 
+                            if (hits.Length == 1 && hits[0].collider == _destinationCollider)
+                            {
+                                return;
+                            }
                         }
 
                         foreach (RaycastHit hit in hits)
