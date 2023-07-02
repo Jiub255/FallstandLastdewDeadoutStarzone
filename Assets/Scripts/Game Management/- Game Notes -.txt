@@ -13,17 +13,14 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    Make PathNavigator recalculate path when it gets blocked. 
-        Might just build pathfinding from scratch instead of using NavMesh.CalculatePath. 
-        D* algorithm? 
-        Or do A*, then recalculate if path blocked near you, could use boxcasts out in front of PC to check. 
-            Make the world grid somewhat coarse, doesn't need to be super exact. It'll save on performance too. 
-    OR, try NavMesh again. Could use com.unity.ai.navigation package with NavMeshSurface and bake it in runtime. 
-        Good for placing/destroying buildings. 
+    For pathfinding, went with Aron Granberg's A* package. Not working perfectly yet, but good, hopefully can fix it.
+        Agents still get stuck between obstacles. Might make code to deal with getting stuck/incomplete paths. 
+
 
     Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
+
 
 FIX:
 
@@ -585,3 +582,14 @@ FIX:
                 Fix jittery navmesh movement. 
         Maybe try using NavMesh.Calculate path to get the points of the path, then use rigidbody or whatever to do the actual movement? 
         FIXED BY MAKING PATHNAVIGATOR IN PLACE OF NAVMESHAGENT. 
+
+                Having problems with enemy recalculating path to PC too often and wobbling around. 
+        FIXED BY ONLY RECALCULATING WHEN ENEMY MOVES A CERTAIN AMOUNT OR GETS CLOSE TO YOU. 
+
+                Pathfinding working pretty well, enemies still get caught on corners sometimes, find a way to increase edge radius or something? 
+        FIXED BY INCREASING COLLIDER RADIUS (FROM 2 TO 2.5) ON PATHFINDER OBJECT. RADIUS ABOVE THREE BROKE THINGS. 
+
+                PC automatically switching back to going toward the enemy when walking to a location. Maybe it still has the enemy
+            transform? 
+        FIXED BY SETTING DESTINATIONCOLLIDER AND DESTINATIONTRANSFORM TO NULL WHEN PASSING IN A NULL DESTINATIONCOLLIDER. 
+

@@ -134,7 +134,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _fadeDuration: 1
-  _fadeAlpha: 0.1
+  _alphaWhenFaded: 0.1
 --- !u!1 &5059075228795231347
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,15 +180,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77368ac4399e5ba40bdc4cb5f8b356d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 20
+  _movementSpeed: 17.3
   _rotationSpeed: 0.15
   _rotationXMin: 10
   _rotationXMax: 75
   _edgeScrollingSpeed: 20
   _percentDistanceFromEdges: 10
-  _pCLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1 &5059075229066574954
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f68c9ecad6a7a45a08450db6f50026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _zoomSpeed: 15
-  _zoomMinDist: 3
-  _zoomMaxDist: 100
+  _zoomSpeed: 3.2
+  _zoomMinDist: 4.49
+  _zoomMaxDist: 36
   _defaultZoomDist: 15

@@ -36,8 +36,8 @@ public class PlayerController : StateMachine<PlayerController>
     [Header("Any State Variables")]
     public Animator Animator;
     public SelectedPCIcon SelectedPCIcon;
-//    public PathNavigator PathNavigator;
-    public NavMeshAgent NavMeshAgent;
+    public PathNavigator PathNavigator;
+//    public NavMeshAgent NavMeshAgent;
     // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
     // acts differently when not selected (unselected characters automatically loot and fight things within range). 
     public bool Selected { get; private set; } = false;
@@ -78,7 +78,7 @@ public class PlayerController : StateMachine<PlayerController>
 
     private void Start/*OnEnable*/()
     {
-        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
+//        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
         _mousePositionAction = S.I.IM.PC.World.MousePosition;
         _eventSystem = EventSystem.current;
 

@@ -22,10 +22,10 @@ public class EnemyCombatState : State<EnemyController>
         _transform = characterController.transform;
 
         // Stop character from moving. Not sure how to do it best though. 
+        characterController.PathNavigator.StopMoving();
 //        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
-        characterController.NavMeshAgent.isStopped = true;
-        characterController.NavMeshAgent.ResetPath();
-//        characterController.PathNavigator.StopMoving();
+//        characterController.NavMeshAgent.isStopped = true;
+//        characterController.NavMeshAgent.ResetPath();
 
 //      _animator = characterController.GetComponentInChildren<Animator>();
     }
