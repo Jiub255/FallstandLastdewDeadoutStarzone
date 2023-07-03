@@ -23,6 +23,8 @@ foreach ( var kangaroo in animals.Friends.OfType<Kangaroo>()) {
 }
 ---------------------------------------------------------------
     to get each specific inventory type in their respective inventories. 
+    OR, have each inventory hold its own items, but when you loot use that code to organize them into their 
+        correct inventories. 
     Building items might be their own type. 
     And crafting recipes (not crafting items/craftable items).
     Item
@@ -40,6 +42,7 @@ foreach ( var kangaroo in animals.Friends.OfType<Kangaroo>()) {
             Weapons and armor
             Tools
             Building materials? Or is that just tedious? Probably. 
+                Maybe just occasion, special, unique ones. Like advanced stuff like circuit boards and batteries or something. 
             Vehicles? 
         Building and crafting recipes share a base class. 
             int Total skill needed
