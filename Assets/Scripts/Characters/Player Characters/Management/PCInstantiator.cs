@@ -12,13 +12,16 @@ public class PCInstantiator : MonoBehaviour
     private void Awake()
     {
         // Where to put instantiated PCs?
-        //     Have a spawn area in each scavenge location and just spawn them in a bunch in the center.
+        //     Scavenging: Have a spawn area in each scavenge location and just spawn them in a bunch in the center.
         //         Make area big enough for max amount of PCs
-        //     Spawn next to random buildings that PCs can interact with in home scene.
+        //     Home Base: Spawn next to random buildings that PCs can interact with in home scene?
         //         Maybe include a spawn point on each building?
+        //         Or just choose random spots on the home base map from the pathfinding grid,
+        //             and make sure they're at least x units from each other. 
 
         _pcInstancesSO.GameObjects = new List<GameObject>();
 
+        // For now, just instantiating them in a line starting at the origin. 
         for (int i = 0; i < _pcPrefabsSO.GameObjects.Count; i++)
         {
             GameObject pcInstance = Instantiate(

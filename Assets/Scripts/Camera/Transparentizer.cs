@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 // Put this on camera
 public class Transparentizer : MonoBehaviour
 {
-    // Layer than contains all transparentable objects
+    // Could make multiple transparentable layers if needed, then collect them all into this LayerMask. 
     [SerializeField]
     private LayerMask _transparentableLayerMask;
 

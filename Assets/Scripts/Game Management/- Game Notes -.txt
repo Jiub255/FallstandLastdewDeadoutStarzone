@@ -13,13 +13,73 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    For pathfinding, went with Aron Granberg's A* package. Not working perfectly yet, but good, hopefully can fix it.
-        Agents still get stuck between obstacles. Might make code to deal with getting stuck/incomplete paths. 
+    Change items system. Have inventory hold all base items, then use
+---------------------------------------------------------------
+You can use LINQ to filter on the type you're looking for
+
+animals.Friends = new List<Animal> { new Kangaroo(), new Bird() };
+foreach ( var kangaroo in animals.Friends.OfType<Kangaroo>()) {
+  kangaroo.Hop();
+}
+---------------------------------------------------------------
+    to get each specific inventory type in their respective inventories. 
+    Building items might be their own type. 
+    And crafting recipes (not crafting items/craftable items).
+    Item
+        Usable item
+        Crafting item
+        Equipment item
+    Recipes
+        Building
+            Farm/garden
+            Engineer
+            Defense
+            Morale (decoration, food prep, sanitation?)
+        Crafting
+            Medical
+            Weapons and armor
+            Tools
+            Building materials? Or is that just tedious? Probably. 
+            Vehicles? 
+        Building and crafting recipes share a base class. 
+            int Total skill needed
+            int Minimum single PC skill needed
+            Method to check skill, then derived classes choose whichever skill to check. 
+        Have separate types of building and crafting recipes, which require different skills to uncover. 
+            That way you could get recipes that makes sense for the characters/skills you have.
+            Like with a team of brute force strength types, you'd learn how to make big melee weapons and armor,
+                and engineer types would learn advanced buildings and stuff. 
+
+
+    Make starting base scene.
+        Build something at the workbench.
+            Make crafting system/menu. 
+        Go to door to go to scavenging location map.
+        Choose location.
+        Go on scavenging raid there.
+        Have end of raid screen with info about loot.
+        Go back to home base.
+        Build a new building, like another type of workbench or something for now. 
+    
+
+    Fix transparentizer not working on polygon materials. 
+        Maybe need to set render mode to transparent in Transparentizer?
+        Maybe something else?
 
 
     Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
+
+    Don't use the GE/GEL scripts for audio manager. 
+        Not sure how to do audio yet. 
+        Have the listener on the selected PC, and camera when none selected. And make each object the source of its own sounds, so you get 3D sound. 
+        Or just have a simple audio manager singleton so all sounds are the same volume with no 3D? No, do it the good way. 
+
+
+    For pathfinding, went with Aron Granberg's A* package. Not working perfectly yet, but good, hopefully can fix it.
+        Agents still get stuck between obstacles. Might make code to deal with getting stuck/incomplete paths. 
+
 
 FIX:
 
@@ -78,7 +138,9 @@ FIX:
         Have a filter in crafting menu to only show items you have the materials to craft. On by default. 
         Have a way to see crafting items, clicking on them shows what they can be used to build. 
             Things that you have all the materials for will be not grayed out, and clicking them puts you on the craft screen for that item. 
-
+        The combined (or average? or max?) crafting level of your PCs determines which "recipes" you have access too. 
+            Maybe use a formula involving the max and the combined amount. Like each recipe has a total crafting skill cost and a 
+                minimum single PC crafting cost, so you can't build advanced stuff with a large group of bad crafters. 
 
     Figure out how scavenging will work. 
         Go around each level and loot the containers.
@@ -428,26 +490,62 @@ FIX:
             Could have regular attacks by cults of the old gods. Your base could be the ones who say fuck the gods, they fucked us. 
             Maybe have it like the biblical apocalypse, where a bunch of people just disappear suddenly. 
         OR, Far future, and some technology has wiped us out (AI, some other-dimensional nonsense, whatever). 
-
+        OR, (mixed with above ideas to keep it interesting and not boring old earth or zombies), start as a survival nut 
+            kind of person who is locked in their bunker after shit went down. You have some decent supplies like food, water, and some weapons 
+            and other stuff.
+            But it's a small shelter so you don't want to stay there too long. 
+            This could be a good place for a tutorial too. Just teach the basics in the bunker, then in the next location they learn farming and stuff. And so on. 
+            You start going out to find survivors and meet random (or not random) people (or not people), some are good, some are bad. 
+            You can have good ones join you, but sometimes they will turn out bad and sabotage you at your home base later maybe. 
+            You can scavenge for food and supplies, or go hunting to get more food but no supplies. 
 
     MANAGE A HOME BASE
     ------------------
-        Build defenses against zombie/bandit/whatever raids. 
+        Build defenses against alien/demon/zombie/bandit/whatever raids. 
             Also repair damaged stuff after raids. 
         Build rain catchers/gardens/cattle areas for food and water. 
         How Stardewy do I want to go? 
+            Want to focus more on the happy life in the base and have the motivation for going out scavenging be to improve home base life. 
+                A lot more cheerful colorful vibe at home, and dark and scary out scavenging. Almost like two different games. Stardewy at home, scary and deadly outside. 
+                Sometimes the two worlds mix when the home base gets raided. 
             Focus more on base building than LS:DZ. 
-            Have survivors plow and plant food, each unit of ground that is planted and growing produces 
-                a certain amount of food per hour. 
-            Each survivor consumes a certain amount of food per hour. 
-            You can store food. 
-            Different types of food? Good ones boost morale? 
-        Decorate base to boost morale. 
-            Have lots of decorations/entertainment stuff. 
-        Can find better places for new home base and move. 
-            Prisons, schools, military complexes, police stations, etc. 
-            Keep old buildings or start from scratch? Scrap old buildings for materials? 
-            Have to make farm land at new place. Make sure to have enough food stored to last. 
+                Could even have a cooking skill, and cooking equipment and go with that. Getting pretty complex, but whatever. 
+            Can move to new bases when you find new locations. 
+                Prisons, schools, military complexes, police stations, etc. 
+                Keep old buildings or start from scratch? Scrap old buildings for materials? 
+                Have to make farm land at new place. Make sure to have enough food stored to last. 
+                Make multiple base locations with unique features for each. 
+                Find them by exploring. 
+                How to handle moving? Maybe a minigame where you fight off invaders while moving stuff in big trucks or something? 
+                    How well you do determines how much stuff survives the trip?
+                Or just do easy automatic move? 
+            Decorate base to boost morale. 
+                Have lots of decorations/entertainment stuff. 
+                Don't need a bed per survivor like LSDZ, but it affect morale a lot. So have many comfortable beds and little sleeping areas. 
+            Food/Farming
+                Have survivors plow and plant food, each unit of ground that is planted and growing produces 
+                    a certain amount of food per hour. 
+                Each survivor consumes a certain amount of food per hour. 
+                You can store food. 
+                    Should it go bad eventually? Then you could build fridges to keep it longer?
+                    Freezing would lower quality but then keep indefinitely. 
+                Have different types of food. 
+                    Good ones boost morale? 
+                    Having a bigger variety boosts morale. 
+                    Foods could have different properties:
+                        Quality = flavor * freshness
+                        Flavor (higher gives higher morale boost)
+                            OR, each PC could have randomized tastes, and they get individual flavor ratings for each.
+                            Like, give each food a flavor integer from 0 - 10 (11 choices on purpose, to allow a neutral middle one). Then each PC gets a randomized dictionary 
+                                or list of custom class (FoodItem food, int tasteModifier). Then your distance from the flavor integer, 
+                                modded to be in (-5, 5) (or maybe somethine like (-3, 7) to make the average positive?), and that's how much they like the food. Easy. 
+                            Could be a cool system if done right. Then you'd want to optimize your farms/gardens to make the whole team happy.
+                                Or maybe you'd set it up to make your most powerful PCs happy and let the rest just deal with it. 
+                        Freshness (affected by time, freezing, affects quality)
+                        Rarity (better foods harder to find, at least sometmes)
+                        Growability (some foods are harder to grow, and a higher percentage of them die. Better farmers can have better success/grow harder foods)
+
+                
     
 
     MANAGE TEAM OF SURVIVORS
