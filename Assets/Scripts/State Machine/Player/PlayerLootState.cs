@@ -71,7 +71,7 @@ public class PlayerLootState : PlayerState
 
     private void AddLoot()
     {
-        foreach (ItemAmount itemAmount in _lootContainer.LootItemAmounts)
+        foreach (OLDItemAmount itemAmount in _lootContainer.LootItemAmounts)
         {
             if (itemAmount.ItemSO.GetType() == typeof(UsableItemSO))
             {

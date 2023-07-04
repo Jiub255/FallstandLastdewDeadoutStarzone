@@ -53,6 +53,10 @@ foreach ( var kangaroo in animals.Friends.OfType<Kangaroo>()) {
             Like with a team of brute force strength types, you'd learn how to make big melee weapons and armor,
                 and engineer types would learn advanced buildings and stuff. 
 
+    Use SOItem to design the items and have a blueprint, but use a plain c# Item class to add them to inventories/loot lists. This Item class can have an
+        int amount field since it will be newed from the SO data (and amount data from the game) when needed. 
+        Could still use ItemAmount to set up loot lists in inspector, then make the Item list during initialization. 
+        SOItem/ItemAmount will only be used for enemy/loot container loot lists in inspector. Actual enemy/loot container/player inventories will be newed Item lists. 
 
     Make starting base scene.
         Build something at the workbench.
