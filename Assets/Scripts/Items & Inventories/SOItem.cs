@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 // SOCraftingItem, SOEquipmentItem, and SOUsableItem all inherit from this. 
-public abstract class SOItem : ScriptableObject, IGenericSOInventory
+public abstract class SOItem : ScriptableObject
 {
     public static event Action<SOItem> OnRemoveItem;
     public static event Action<SOItem> OnAddItem;

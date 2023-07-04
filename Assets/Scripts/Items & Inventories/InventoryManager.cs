@@ -3,26 +3,25 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     [SerializeField]
-    protected SOUsableInventory _usableInventorySO;
+    protected SOInventory _usableInventorySO;
     [SerializeField]
-    protected SOEquipmentInventory _equipmentInventorySO;
+    protected SOInventory _equipmentInventorySO;
     [SerializeField]
-    protected SOCraftingInventory _craftingInventorySO;
+    protected SOInventory _craftingInventorySO;
 
-    // Is there a cleaner way to do this? 
     public void AddItems(SOItem item, int amount)
     {
         if (item.GetType() == typeof(SOUsableItem))
         {
-            _usableInventorySO.AddItems((SOUsableItem)item, amount);
+            _usableInventorySO.AddItems(item, amount);
         }
         else if (item.GetType() == typeof(SOEquipmentItem))
         {
-            _equipmentInventorySO.AddItems((SOEquipmentItem)item, amount);
+            _equipmentInventorySO.AddItems(item, amount);
         }
         else if (item.GetType() == typeof(SOCraftingItem))
         {
-            _craftingInventorySO.AddItems((SOCraftingItem)item, amount);
+            _craftingInventorySO.AddItems(item, amount);
         }
     }
 
@@ -30,15 +29,15 @@ public class InventoryManager : MonoBehaviour
     {
         if (item.GetType() == typeof(SOUsableItem))
         {
-            _usableInventorySO.RemoveItems((SOUsableItem)item, amount);
+            _usableInventorySO.RemoveItems(item, amount);
         }
         else if (item.GetType() == typeof(SOEquipmentItem))
         {
-            _equipmentInventorySO.RemoveItems((SOEquipmentItem)item, amount);
+            _equipmentInventorySO.RemoveItems(item, amount);
         }
         else if (item.GetType() == typeof(SOCraftingItem))
         {
-            _craftingInventorySO.RemoveItems((SOCraftingItem)item, amount);
+            _craftingInventorySO.RemoveItems(item, amount);
         }
     }
 }

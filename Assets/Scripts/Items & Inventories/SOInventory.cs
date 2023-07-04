@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SOInventory<T> : ScriptableObject, IResettable, IGenericSOInventory where T : SOItem
+[CreateAssetMenu(fileName = "New Inventory SO", menuName = "Items/SOInventory")]
+public class SOInventory/*<T>*/ : ScriptableObject, IResettable/*, IGenericSOInventory where T : SOItem*/
 {
     public event Action OnInventoryChanged;
+    // Serialized for now just to see in inspector. Can get rid of the protected field entirely when done testing. 
+    [SerializeField]
+    protected List<ItemAmount> _itemAmounts = new List<ItemAmount>();
 
-    public List<ItemAmount<T>> ItemAmounts { get; protected set; }
+    public List<ItemAmount/*<T>*/> ItemAmounts { get { return _itemAmounts; } protected set { _itemAmounts = value; } }
 
-    public ItemAmount<T> Contains(T item)
+    public ItemAmount/*<T>*/ Contains(SOItem/*T*/ item)
     {
-        foreach (ItemAmount<T> itemAmount in ItemAmounts)
+        foreach (ItemAmount/*<T>*/ itemAmount in ItemAmounts)
         {
             if (itemAmount.ItemSO == item)
             {
@@ -21,9 +25,9 @@ public abstract class SOInventory<T> : ScriptableObject, IResettable, IGenericSO
         return null;
     }
 
-    public void AddItems(T item, int amount)
+    public void AddItems(SOItem/*T*/ item, int amount)
     {
-        ItemAmount<T> listItemAmount = Contains(item);
+        ItemAmount/*<T>*/ listItemAmount = Contains(item);
         // Increase amount if item already in list. 
         if (listItemAmount != null)
         {
@@ -32,7 +36,7 @@ public abstract class SOInventory<T> : ScriptableObject, IResettable, IGenericSO
         // Add new itemAmount to list if not. 
         else
         {
-            ItemAmount<T> newItemAmount = new(item, amount);
+            ItemAmount/*<T>*/ newItemAmount = new(item, amount);
             ItemAmounts.Add(newItemAmount);
         }
 
@@ -40,9 +44,9 @@ public abstract class SOInventory<T> : ScriptableObject, IResettable, IGenericSO
         OnInventoryChanged?.Invoke();
     }
 
-    public void RemoveItems(T item, int amount)
+    public void RemoveItems(SOItem/*T*/ item, int amount)
     {
-        ItemAmount<T> listItemAmount = Contains(item);
+        ItemAmount/*<T>*/ listItemAmount = Contains(item);
         if (listItemAmount != null)
         {
             // If there's more than [amount] in inventory, decrease amount.
