@@ -2,9 +2,9 @@
 public class ItemAmount/*<T> where T : SOItem*/
 {
     public /*T*/SOItem ItemSO;
-    public int Amount = 1;
+    public int Amount;
 
-    public ItemAmount(/*T*/SOItem itemSO, int amount)
+    public ItemAmount(/*T*/SOItem itemSO, int amount = 1)
     {
         ItemSO = itemSO;
         Amount = amount;

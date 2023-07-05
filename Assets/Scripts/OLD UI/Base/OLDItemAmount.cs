@@ -2,7 +2,7 @@
 public class OLDItemAmount
 {
     public ItemSO ItemSO;
-    public int Amount = 1;
+    public int Amount;
 
     public OLDItemAmount(ItemSO itemSO, int amount = 1)
     {

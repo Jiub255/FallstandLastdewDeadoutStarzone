@@ -25,6 +25,8 @@ foreach ( var kangaroo in animals.Friends.OfType<Kangaroo>()) {
     to get each specific inventory type in their respective inventories. 
     OR, have each inventory hold its own items, but when you loot use that code to organize them into their 
         correct inventories. 
+    SOItem is the base class. Crafting, equipment, and usable items all inherit from it. ItemAmount is just a class with SOItem and int Amount. 
+        SOInventory handles a list of ItemAmounts, and each type of item has an instance of it. 
     Building items might be their own type. 
     And crafting recipes (not crafting items/craftable items).
     Item
