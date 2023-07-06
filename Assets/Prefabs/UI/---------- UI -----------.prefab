@@ -217,9 +217,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26965fa72ca676044b043024435da91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pcSOsSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
   SlotPrefab: {fileID: 9215846113654697647, guid: 2e2496814e5e78841a85fd889ab9d303, type: 3}
   SlotParent: {fileID: 972536995}
-  _pcInstancesSO: {fileID: 11400000, guid: fc1303163bea50f4a94f1e6d8078e952, type: 2}
 --- !u!1 &78661165911438456
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,7 +2001,7 @@ GameObject:
   - component: {fileID: 8032897252257061497}
   - component: {fileID: 8562738159704516782}
   m_Layer: 5
-  m_Name: Craft Title
+  m_Name: Crafting Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2055,7 +2055,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Craft
+  m_text: Crafting
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 12ef6ecee47cee740843f4062ff383a8, type: 2}
   m_sharedMaterial: {fileID: 5946257914767341571, guid: 12ef6ecee47cee740843f4062ff383a8, type: 2}
@@ -2135,7 +2135,7 @@ GameObject:
   - component: {fileID: 8086131555549873885}
   - component: {fileID: 7362534328864551355}
   m_Layer: 5
-  m_Name: Build Content
+  m_Name: Crafting Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4601,7 +4601,7 @@ GameObject:
   - component: {fileID: 4712953966793208901}
   - component: {fileID: 2553054553434213928}
   m_Layer: 5
-  m_Name: Craft Canvas
+  m_Name: Crafting Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4702,7 +4702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recipeSlotPrefab: {fileID: 0}
-  _slotsParent: {fileID: 0}
+  _slotsParent: {fileID: 8086131555549873885}
 --- !u!1 &5450849514478412812
 GameObject:
   m_ObjectHideFlags: 0
@@ -6297,7 +6297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recipeSlotPrefab: {fileID: 0}
-  _slotsParent: {fileID: 0}
+  _slotsParent: {fileID: 4478954206514053347}
 --- !u!1 &8146464655037193725
 GameObject:
   m_ObjectHideFlags: 0

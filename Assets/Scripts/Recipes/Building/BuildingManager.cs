@@ -41,10 +41,10 @@ public class BuildingManager : MonoBehaviour
     {
         SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
 
-        S.I.IM.PC.MenuBuild.PlaceBuilding.performed += PlaceBuilding;
-        S.I.IM.PC.WorldBuild.SnapBuilding.performed += SnapToNearest45;
-        S.I.IM.PC.WorldBuild.DeselectBuilding.performed += DeselectCurrentBuilding;
-        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed += DeselectCurrentBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
+        S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearest45;
+        S.I.IM.PC.Build.DeselectBuilding.performed += DeselectCurrentBuilding;
+        S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
 
         // Don't see why this would ever be true, but just in case
         if (_currentBuildingInstance != null)
@@ -61,20 +61,23 @@ public class BuildingManager : MonoBehaviour
     {
         SOBuildingRecipe.OnSelectBuilding -= SelectCurrentBuilding;
 
-        S.I.IM.PC.MenuBuild.PlaceBuilding.performed -= PlaceBuilding;
-        S.I.IM.PC.WorldBuild.SnapBuilding.performed -= SnapToNearest45;
-        S.I.IM.PC.WorldBuild.DeselectBuilding.performed -= DeselectCurrentBuilding;
-        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed -= DeselectCurrentBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
+        S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearest45;
+        S.I.IM.PC.Build.DeselectBuilding.performed -= DeselectCurrentBuilding;
+        S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
     }
 
     private void RotateBuilding()
     {
-        _currentBuildingInstance.transform.Rotate(new Vector3(0f,
-            Time.unscaledDeltaTime * _rotationSpeed * S.I.IM.PC.WorldBuild.RotateBuilding.ReadValue<float>(), 0f));
+        if (_currentBuildingInstance != null)
+        {
+            _currentBuildingInstance.transform.Rotate(new Vector3(0f,
+            Time.unscaledDeltaTime * _rotationSpeed * S.I.IM.PC.Build.RotateBuilding.ReadValue<float>(), 0f));
 
-        _rotation = _currentBuildingInstance.transform.rotation;
+            _rotation = _currentBuildingInstance.transform.rotation;
 
-        SetHighlight();
+            SetHighlight();
+        }
     }
 
     private void SnapToNearest45(InputAction.CallbackContext context)
@@ -102,7 +105,7 @@ public class BuildingManager : MonoBehaviour
         {
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
-                S.I.IM.PC.World.MousePosition.ReadValue<Vector2>());
+                S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
             {
@@ -114,13 +117,14 @@ public class BuildingManager : MonoBehaviour
             }
         }
 
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject() ? true : false;
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void SetHighlight()
     {
 
         // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
+        // Use SelectedBuildingIcon as a component of the building Prefab. 
         if (CanBuildHere())
         {
             // Green highlight, allowed to build here
@@ -194,8 +198,6 @@ public class BuildingManager : MonoBehaviour
     // Also called when selecting a building the first time, not just changing buildings.
     public void SelectCurrentBuilding(GameObject newBuilding)
     {
-        S.I.IM.PC.WorldBuild.Enable();
-
        // Debug.Log("Changing current building to " + newBuilding.name);
 
         _currentBuildingPrefab = newBuilding;
@@ -205,8 +207,6 @@ public class BuildingManager : MonoBehaviour
 
     private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
-        S.I.IM.PC.WorldBuild.Disable();
-
         if (_currentBuildingPrefab != null)
         {
             _currentBuildingPrefab = null;

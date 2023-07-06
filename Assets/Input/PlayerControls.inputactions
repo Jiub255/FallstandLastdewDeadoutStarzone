@@ -2,13 +2,22 @@
     "name": "PlayerControls",
     "maps": [
         {
-            "name": "World",
-            "id": "333d6583-af7b-4463-bb89-dc12b7cdb113",
+            "name": "Camera",
+            "id": "2dbd04b7-f51f-4f7e-a0ea-3859d12ba948",
             "actions": [
                 {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "bdc4a67b-76dc-4e2a-882c-f6fadaf844fb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MousePosition",
-                    "type": "Value",
-                    "id": "baed4c61-a25a-48d5-9229-2e85db2aa572",
+                    "type": "PassThrough",
+                    "id": "9e4ee24a-25ed-4ccb-990c-9e119d94c764",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -16,8 +25,8 @@
                 },
                 {
                     "name": "MouseDelta",
-                    "type": "Value",
-                    "id": "a58ac3f4-56d5-400d-b22d-ad57fe463cc9",
+                    "type": "PassThrough",
+                    "id": "4a4bed4d-b1d3-47c0-ae27-f59101564d0f",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -25,8 +34,8 @@
                 },
                 {
                     "name": "MoveCamera",
-                    "type": "Value",
-                    "id": "9edbcbaa-872b-49b3-8825-d02ca337afa4",
+                    "type": "PassThrough",
+                    "id": "501b6ea6-996d-406b-80d7-2528df785ac7",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -34,27 +43,38 @@
                 },
                 {
                     "name": "RotateCamera",
-                    "type": "Button",
-                    "id": "0a85a7f5-8298-4586-9582-e82604368b0b",
+                    "type": "PassThrough",
+                    "id": "b8e9eee5-3ef7-4d13-8bdc-ed341be11428",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Zoom",
-                    "type": "Value",
-                    "id": "699202fd-6004-470e-b980-0250f206d4a7",
+                    "type": "PassThrough",
+                    "id": "287af1cd-5f2a-4b34-9abe-be23c7a7a191",
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "56ab4e61-b5a9-40d5-9004-97d5ba5ca6c7",
+                    "id": "fd7e287c-0e2a-4409-b540-5207d3b6f422",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9dd20627-57ce-4095-aca7-577f36f4ed66",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
@@ -64,8 +84,19 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "2dd87fa7-91ad-4eb1-bfc3-3db6627dd992",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "MouseDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "WASD",
-                    "id": "a2a35609-70b1-430a-a1e3-a0f264287da5",
+                    "id": "7956f101-0178-41b3-8708-d9329dea2e3b",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -76,7 +107,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "c6ed99f4-a18c-4add-857f-63d58557685b",
+                    "id": "cc748415-2b94-4c6a-9f35-0ddd68a0ebac",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -87,7 +118,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "c64bb0b5-5e92-4704-a4af-c58abb6d42ee",
+                    "id": "69e66235-992d-4bba-8628-8873c1e0c0e7",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -98,7 +129,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "be40560c-6a17-4545-ba54-4471620ffc42",
+                    "id": "61210fcd-980f-4f0e-813b-e26c5c9f9ae7",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -109,7 +140,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "bf5789aa-eb84-427b-9132-e912e160428a",
+                    "id": "32a8f321-caf7-4900-9b97-a136ea12601b",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -120,7 +151,7 @@
                 },
                 {
                     "name": "ArrowKeys",
-                    "id": "370e04e2-d978-45de-aa8c-b0cafc1f37d2",
+                    "id": "a6c42d42-ce99-4fff-a387-a84ff2dc2941",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -131,7 +162,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "3914d097-09dc-4439-a6d9-6fcaa5ecc208",
+                    "id": "5c1400b9-1665-4a9c-8826-6a44ca86bf80",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
@@ -142,7 +173,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "d4e286cf-ed9b-4e06-afa3-bb452cfc09b8",
+                    "id": "39857c28-2238-4096-87d3-f0f9b356dae3",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
@@ -153,7 +184,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "9f0cc468-d053-4821-bd06-19c477abf1d3",
+                    "id": "1a11018b-8b91-4092-85dd-f71939f1c5ac",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -164,7 +195,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "7d409d26-d8a7-48a5-8d10-f952cbf8861e",
+                    "id": "22e0b03f-e359-4702-8ea7-4e69bb2be0d0",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -175,7 +206,7 @@
                 },
                 {
                     "name": "",
-                    "id": "a43dc905-ec2a-4ded-9665-5fc1350a275d",
+                    "id": "e1e2e7f3-ed34-4e03-93b5-d80cdc54c677",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
@@ -186,18 +217,7 @@
                 },
                 {
                     "name": "",
-                    "id": "deccd75d-f5fc-4f59-8420-48591e6d9f6e",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "MouseDelta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5444e528-fdcd-4136-9ed7-2ffdb52ebec7",
+                    "id": "18d76389-6172-42bb-8830-e132bd217eca",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
@@ -209,12 +229,60 @@
             ]
         },
         {
-            "name": "WorldBuild",
+            "name": "World",
+            "id": "333d6583-af7b-4463-bb89-dc12b7cdb113",
+            "actions": [
+                {
+                    "name": "SelectOrCenter",
+                    "type": "PassThrough",
+                    "id": "d9dbc16e-6f7f-4ade-841f-101da8ed1cbe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Deselect",
+                    "type": "PassThrough",
+                    "id": "ddf5f10a-395c-45c8-9d1b-6ccd85069eb4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7f3e816c-5b4b-4853-b838-6d6a63bc4945",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "SelectOrCenter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "221af38a-3834-4993-9dfc-36dd36dbb571",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Deselect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Build",
             "id": "56cb6db7-c3d5-4d97-b886-7279867bfbdd",
             "actions": [
                 {
                     "name": "DeselectBuilding",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "a5e667eb-bed4-42cb-b3ec-7c9db8b47a0a",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -223,7 +291,7 @@
                 },
                 {
                     "name": "RotateBuilding",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "9a3e82be-af03-4d90-b3bf-0f4dcf47a75d",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -232,8 +300,17 @@
                 },
                 {
                     "name": "SnapBuilding",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "be286cfd-8a5a-4666-899c-38e5458e7d98",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PlaceBuilding",
+                    "type": "PassThrough",
+                    "id": "5d789d10-f4a6-4085-af61-ae45c7d6c83d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -295,53 +372,28 @@
                     "action": "SnapBuilding",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91a54552-616f-4319-8061-43b086250f40",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "PlaceBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Home",
+            "name": "Quit",
             "id": "cebf6a23-b35c-43ac-913b-4269ea46e868",
             "actions": [
                 {
-                    "name": "Deselect",
-                    "type": "Button",
-                    "id": "9ae00dde-277e-4ed9-8bb1-31da03bda281",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenInventory",
-                    "type": "Button",
-                    "id": "64692471-2c71-404d-a7ce-de47180ed6c4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenBuildMenu",
-                    "type": "Button",
-                    "id": "249a3345-0b90-4dc5-97e7-bf272e72621b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Quit",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "7a2d45b8-4cbc-4897-8a24-3dde2d6fb62f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SelectOrCenter",
-                    "type": "Button",
-                    "id": "c1f9c63d-9b2d-4277-81fd-dd2af0764a3b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -349,39 +401,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "b7c40f53-6c61-4834-bbda-422f74136069",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c6bfc5e6-c49f-43e2-bf5d-6de971cfeca7",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3004cdc7-f928-4855-a29a-86e7b4cb7737",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Deselect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "e5fec9b9-a1c7-4739-bb9f-2ec81b920d29",
@@ -392,242 +411,33 @@
                     "action": "Quit",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "773782c3-1278-44b8-94ea-2c48f5d72a7c",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "SelectOrCenter",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Scavenge",
-            "id": "5debe4a9-3f23-4f63-bf74-91675f5ba518",
-            "actions": [
-                {
-                    "name": "Select",
-                    "type": "Button",
-                    "id": "efe24902-6c62-4e00-9f5b-eaff4697d095",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Deselect",
-                    "type": "Button",
-                    "id": "4bdfc87c-a81d-4667-8f16-e8fef504f672",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenCharacterStatus",
-                    "type": "Button",
-                    "id": "3ead7c23-d160-4985-928e-e7c8d5733666",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenUsableInventory",
-                    "type": "Button",
-                    "id": "8cac9631-2fc2-4d9e-8783-640ef0f21b57",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Quit",
-                    "type": "Button",
-                    "id": "812eac94-a856-4b64-b61d-b857f5e40b0e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "7e691646-0734-4133-8a30-d336e35a108d",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenCharacterStatus",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a5e543b6-6baf-4aa4-90e2-6d6d923a3f95",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d1baf79f-8729-4e5e-accf-b7688326ea72",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenUsableInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8bcbc636-a328-48bb-92ca-798f189d1830",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Deselect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1fb22d0d-9a33-47d4-85ae-8d2b703725a7",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Quit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "MenuInventory",
-            "id": "8dde6780-e02e-4062-a266-3e0686d2a002",
-            "actions": [
-                {
-                    "name": "CloseInventory",
-                    "type": "Button",
-                    "id": "da773435-6846-4ed8-80e5-f9b8415966f6",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenBuildMenu",
-                    "type": "Button",
-                    "id": "b18c594a-eb85-4f8b-9eb5-7fce37bc74ab",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "7425b8c1-cd34-4701-9702-7ce8e8ab7b39",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "df104299-a0fd-45f2-96d1-9b1bbc9d518a",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9da20f26-8402-409d-8b99-615ec59a1350",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "OpenBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "MenuBuild",
+            "name": "InventoryMenu",
             "id": "e1054432-fc96-4adc-90c2-a02c236d23ad",
             "actions": [
                 {
-                    "name": "PlaceBuilding",
-                    "type": "Button",
-                    "id": "ac833c21-78fc-4b46-8733-1f5ff4b98259",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CloseBuildMenu",
-                    "type": "Button",
-                    "id": "7154093c-2ce0-4f7f-831e-88a73304e669",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "OpenInventory",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "f2573d91-4d74-48ae-aeb5-53914fb1f639",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CloseInventory",
+                    "type": "PassThrough",
+                    "id": "196e871f-fc3c-4f2b-ad2c-b6088657a810",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "50ca54eb-52d4-4a54-b403-8e84b990b7fc",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9ad8889d-b60d-452a-ad7b-b66c83f72545",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "23a489d5-5fcb-4659-8d8c-44bf875a237b",
@@ -641,12 +451,133 @@
                 },
                 {
                     "name": "",
-                    "id": "db92ee87-c95d-42c1-8e4d-24f9d6300587",
-                    "path": "<Mouse>/leftButton",
+                    "id": "f6e340e4-156c-47e8-9a80-d8874e090866",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "PlaceBuilding",
+                    "action": "CloseInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5707e521-400f-42ed-8494-6cf9ea56464d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "BuildCraftingMenus",
+            "id": "89065333-d518-4ec8-9f13-b660d8239f08",
+            "actions": [
+                {
+                    "name": "OpenBuildMenu",
+                    "type": "PassThrough",
+                    "id": "1e3cb696-bbe2-4580-91c9-312c87fb25d3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CloseBuildMenu",
+                    "type": "PassThrough",
+                    "id": "6bcbbdc5-71aa-4892-820c-46730b913815",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenCraftingMenu",
+                    "type": "PassThrough",
+                    "id": "3078849f-f965-4e22-9200-8f318d2d6763",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CloseCraftingMenu",
+                    "type": "PassThrough",
+                    "id": "c6189075-5c60-46b3-b67e-5c3980e24add",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6f1ff7aa-610c-497d-8a39-0a1c03411c57",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "926ed22f-608e-46dc-a9f2-f75a1fc017a3",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "13c4af1e-32da-4346-a616-80760e6a06e1",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad4eb1d9-b122-43df-a7c4-0836200f42a7",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenCraftingMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0928147f-a5e1-490d-a7da-785ce4e9a277",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseCraftingMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86a52a03-887e-4fe6-b3f1-aa75bc75db06",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseCraftingMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

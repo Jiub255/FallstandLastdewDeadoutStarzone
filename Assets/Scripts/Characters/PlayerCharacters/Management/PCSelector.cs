@@ -8,9 +8,6 @@ public class PCSelector : MonoBehaviour
     public static event Action<Transform> OnDoubleClickPC;
     public static event Action<Transform> OnSelectPC;
 
-/*    [SerializeField]
-    private GOListSO _pcInstancesSO;*/
-
     [SerializeField]
     private LayerMask _pcLayerMask;
 
@@ -31,15 +28,11 @@ public class PCSelector : MonoBehaviour
         _eventSystem = EventSystem.current;
 
         // Click on PC icon. 
-        PCInfo.OnSelectPC += HandleClick;
+        SOPC.OnSelectPC += HandleClick;
 
         // Click on PC instance. 
-        S.I.IM.PC.Home.SelectOrCenter.performed += CheckIfPCClicked;
-        S.I.IM.PC.Scavenge.Select.performed += CheckIfPCClicked;
-
-        /*SelectedIdleSubstate.OnPCDeselected*/
-//        SelectedIdleSubstate.OnDeselectPC += () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
-
+        S.I.IM.PC.World.SelectOrCenter.performed += CheckIfPCClicked;
+        
         PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
 
@@ -51,11 +44,10 @@ public class PCSelector : MonoBehaviour
     private void OnDisable()
     {
         // Click on PC icon. 
-        PCInfo.OnSelectPC -= HandleClick;
+        SOPC.OnSelectPC -= HandleClick;
 
         // Click on PC instance. 
-        S.I.IM.PC.Home.SelectOrCenter.performed -= CheckIfPCClicked;
-        S.I.IM.PC.Scavenge.Select.performed -= CheckIfPCClicked;
+        S.I.IM.PC.World.SelectOrCenter.performed -= CheckIfPCClicked;
 
         /*SelectedIdleSubstate.OnPCDeselected*/
 //        SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
@@ -69,7 +61,7 @@ public class PCSelector : MonoBehaviour
         {
             // Only raycast to PC layer. 
             RaycastHit[] hits = Physics.RaycastAll(
-                Camera.main.ScreenPointToRay(S.I.IM.PC.World.MousePosition.ReadValue<Vector2>()),
+                Camera.main.ScreenPointToRay(S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>()),
                 1000,
                 _pcLayerMask);
 

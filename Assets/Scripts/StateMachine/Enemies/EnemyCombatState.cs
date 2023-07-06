@@ -60,8 +60,8 @@ public class EnemyCombatState : State<EnemyController>
         // _animator.SetTrigger("Attack");
         // boxcast immediately after animation to check if PC is still there
 
-        // JUST FOR TESTING 
-        _target.GetComponentInChildren<PlayerInjury>().GetHurt(10);
+        // JUST FOR TESTING. Will use events and a better system eventually. 
+        _target.GetComponentInChildren<PainInjuryManager>().GetHurt(10);
         Debug.Log("Got injured for 10 by " + _stateMachine.transform.name);
     }
 

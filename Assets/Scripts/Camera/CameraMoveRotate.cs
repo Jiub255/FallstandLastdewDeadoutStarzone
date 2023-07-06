@@ -48,11 +48,11 @@ public class CameraMoveRotate : MonoBehaviour
         _screenHeight = Screen.height;
         _edgeDistance = _screenWidth * (_percentDistanceFromEdges / 100);
 
-        _zoomAction = S.I.IM.PC.World.Zoom;
-        _rotateCameraAction = S.I.IM.PC.World.RotateCamera;
-        _moveCameraAction = S.I.IM.PC.World.MoveCamera;
-        _mouseDeltaAction = S.I.IM.PC.World.MouseDelta;
-        _mousePositionAction = S.I.IM.PC.World.MousePosition;
+        _zoomAction = S.I.IM.PC.Camera.Zoom;
+        _rotateCameraAction = S.I.IM.PC.Camera.RotateCamera;
+        _moveCameraAction = S.I.IM.PC.Camera.MoveCamera;
+        _mouseDeltaAction = S.I.IM.PC.Camera.MouseDelta;
+        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
         GetVectors();
 

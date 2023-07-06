@@ -1,13 +1,17 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 // Just for testing for now. Will have this in a SceneManager or something similar.
 public class PCInstantiator : MonoBehaviour
 {
-    [SerializeField]
+    // TODO - Use PCSOs instead, and have each one hold a reference to its own instance. Set it in here after instantiating. 
+    // Then would only need a list of PCSOs, and no need for PCInfo component or these GOListSOs. 
+/*    [SerializeField]
 	private GOListSO _pcPrefabsSO;
     [SerializeField]
-	private GOListSO _pcInstancesSO;
+	private GOListSO _pcInstancesSO;*/
+
+    [SerializeField]
+    private SOListSOPC _pcSOsSO;
 
     private void Awake()
     {
@@ -19,17 +23,23 @@ public class PCInstantiator : MonoBehaviour
         //         Or just choose random spots on the home base map from the pathfinding grid,
         //             and make sure they're at least x units from each other. 
 
-        _pcInstancesSO.GameObjects = new List<GameObject>();
+//        _pcInstancesSO.GameObjects = new List<GameObject>();
 
         // For now, just instantiating them in a line starting at the origin. 
-        for (int i = 0; i < _pcPrefabsSO.GameObjects.Count; i++)
+        for (int i = 0; i < _pcSOsSO.SOPCs.Count; i++)
         {
-            GameObject pcInstance = Instantiate(
+            _pcSOsSO.SOPCs[i].PCInstance = Instantiate(
+                _pcSOsSO.SOPCs[i].PCPrefab,
+                new Vector3(3 * i, 0f, 0f),
+                Quaternion.identity);
+
+
+/*            GameObject pcInstance = Instantiate(
                 _pcPrefabsSO.GameObjects[i],
                 new Vector3(3 * i, 0f, 0f),
                 Quaternion.identity);
 
-            _pcInstancesSO.GameObjects.Add(pcInstance);
+            _pcInstancesSO.GameObjects.Add(pcInstance);*/
         }
     }
 }

@@ -4,9 +4,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : StateMachine<PlayerController>
 {
-//    public static event Action<Transform> OnSelectPC;
-//    public static event Action OnDeselectPC;
-
     [SerializeField, Header("Idle/Movement State Variables")]
     private float _sightDistance = 5f;
     [SerializeField]
@@ -21,7 +18,6 @@ public class PlayerController : StateMachine<PlayerController>
     private SOInventory _inventorySO;
     [SerializeField]
     private LootTimer _lootTimer;
-//    public LootContainer LootContainer { get; set; }
 
     [Header("Combat State Variables")]
     // Only serialized for testing. Will get this value from weapon/stats eventually. 
@@ -30,13 +26,11 @@ public class PlayerController : StateMachine<PlayerController>
     // Only serialized for testing. Will get this value from weapon/stats eventually. 
     [SerializeField]
     private float _attackDuration = 1f;
-//    public Transform Target { get; set; }
 
     [Header("Any State Variables")]
     public Animator Animator;
     public SelectedPCIcon SelectedPCIcon;
     public PathNavigator PathNavigator;
-//    public NavMeshAgent NavMeshAgent;
     // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
     // acts differently when not selected (unselected characters automatically loot and fight things within range). 
     public bool Selected { get; private set; } = false;
@@ -77,13 +71,11 @@ public class PlayerController : StateMachine<PlayerController>
 
     private void Start/*OnEnable*/()
     {
-//        NavMeshAgent = transform.root.GetComponent<NavMeshAgent>();
-        _mousePositionAction = S.I.IM.PC.World.MousePosition;
+        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
         _eventSystem = EventSystem.current;
 
         // started is single or double click, canceled is single click only. 
-        S.I.IM.PC.Home.SelectOrCenter./*canceled*/performed += HandleClick;
-        S.I.IM.PC.Scavenge.Select.performed += HandleClick;
+        S.I.IM.PC.World.SelectOrCenter./*canceled*/performed += HandleClick;
 
         // Activate or deactivate selected pc icon. 
         SelectedPCIcon.ActivateIcon(Selected);
@@ -94,8 +86,7 @@ public class PlayerController : StateMachine<PlayerController>
 
     private void OnDisable()
     {
-        S.I.IM.PC.Home.SelectOrCenter./*canceled*/performed -= HandleClick;
-        S.I.IM.PC.Scavenge.Select.performed -= HandleClick;
+        S.I.IM.PC.World.SelectOrCenter./*canceled*/performed -= HandleClick;
 
         // Send Transparentizer and PCSelector the signal to set current PC transform to null. 
         // TODO - This is causing problems because it sends this event whenever current PC switches states, 

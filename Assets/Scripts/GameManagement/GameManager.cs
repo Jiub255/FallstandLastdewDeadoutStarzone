@@ -3,16 +3,25 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    public bool Paused { get; private set; } = false;
+
+    public void Pause(bool pause)
+    {
+        if (Paused != pause)
+        {
+            Paused = pause;
+            Time.timeScale = pause ? 0f : 1f;
+        }
+    }
+
     private void Start()
     {
-        S.I.IM.PC.Home.Quit.performed += QuitGame;
-        S.I.IM.PC.Scavenge.Quit.performed += QuitGame;
+        S.I.IM.PC.Quit.Quit.performed += QuitGame;
     }
 
     private void OnDisable()
     {
-        S.I.IM.PC.Home.Quit.performed -= QuitGame;
-        S.I.IM.PC.Scavenge.Quit.performed -= QuitGame;
+        S.I.IM.PC.Quit.Quit.performed -= QuitGame;
     }
 
     private void QuitGame(InputAction.CallbackContext obj)

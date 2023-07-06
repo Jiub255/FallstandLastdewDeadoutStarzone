@@ -5,33 +5,34 @@ using UnityEngine.InputSystem;
 // Put this on Canvases object. 
 public class UIManager : MonoBehaviour
 {
+    // TODO - Do this better. Send individual events for menus, don't rebuild entire UI each time. 
     // MenuUIRefresher listens to initialize the UI displays
     // Split into separate events for each menu? Or does it really affect performance enough to matter?
     public static event Action OnOpenedMenu;
 
-    // Should this be static? Why? 
-    public static bool GamePaused = false;
-
     [Header("Canvases")]
-    [SerializeField]
-    private Transform _canvasesObject;
     [SerializeField]
     private GameObject _inventoryCanvas;
     [SerializeField]
     private GameObject _buildCanvas;
     [SerializeField]
+    private GameObject _craftingCanvas;
+    [SerializeField]
     private GameObject _hUDCanvas;
+
+    private GameManager _gameManager;
+    private InputManager _inputManager;
 
     private void Start()
     {
-        S.I.IM.PC.Home.OpenInventory.performed += OpenInventory;
-        S.I.IM.PC.Home.OpenBuildMenu.performed += OpenBuildMenu;
+        _gameManager = S.I.GameManager;
+        _inputManager = S.I.IM;
 
-        S.I.IM.PC.MenuInventory.CloseInventory.performed += CloseUI;
-        S.I.IM.PC.MenuInventory.OpenBuildMenu.performed += OpenBuildMenu;
-
-        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed += CloseUI;
-        S.I.IM.PC.MenuBuild.OpenInventory.performed += OpenInventory;
+        // TODO - Put menu control actions in one map, since OpenCanvas checks if things are already active/inactive. 
+        _inputManager.PC.InventoryMenu.OpenInventory.performed += OpenInventory;
+        _inputManager.PC.InventoryMenu.CloseInventory.performed += CloseUI;
+        _inputManager.PC.BuildCraftingMenus.OpenBuildMenu.performed += OpenBuildMenu;
+        _inputManager.PC.BuildCraftingMenus.CloseBuildMenu.performed += CloseUI;
 
         // Setup all menus in beginning of each scene. (Not sure if necessary)
         // Make sure all UIRefresher child classes subscribe in OnEnable, not Start, so they can hear this. 
@@ -40,96 +41,74 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        S.I.IM.PC.Home.OpenInventory.performed -= OpenInventory;
-        S.I.IM.PC.Home.OpenBuildMenu.performed -= OpenBuildMenu;
-
-        S.I.IM.PC.MenuInventory.CloseInventory.performed -= CloseUI;
-        S.I.IM.PC.MenuInventory.OpenBuildMenu.performed -= OpenBuildMenu;
-
-        S.I.IM.PC.MenuBuild.CloseBuildMenu.performed -= CloseUI;
-        S.I.IM.PC.MenuBuild.OpenInventory.performed -= OpenInventory;
+        _inputManager.PC.InventoryMenu.OpenInventory.performed -= OpenInventory;
+        _inputManager.PC.InventoryMenu.CloseInventory.performed -= CloseUI;
+        _inputManager.PC.BuildCraftingMenus.OpenBuildMenu.performed -= OpenBuildMenu;
+        _inputManager.PC.BuildCraftingMenus.CloseBuildMenu.performed -= CloseUI;
     }
 
     private void OpenInventory(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.IM.PC.Disable();
-        S.I.IM.PC.MenuInventory.Enable();
+        _inputManager.OpenInventory(true);
 
-        // Open inventory canvas
-        DeactivateAllCanvases();
-        _inventoryCanvas.SetActive(true);
+        OpenCanvas(_inventoryCanvas);
 
         // InventoryUI listens to setup display
         OnOpenedMenu?.Invoke();
 
-        // Pause gameplay if not already paused
-        if (!GamePaused)
-        {
-            PauseGame();
-        }
+        // Pause gameplay. 
+        _gameManager.Pause(true);
     }
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.IM.PC.Disable();
-        S.I.IM.PC.World.Enable();
-        S.I.IM.PC.MenuBuild.Enable();
+        _inputManager.OpenInventory(true);
 
-
-        // Open build canvas
-        DeactivateAllCanvases();
-        _buildCanvas.SetActive(true);
+        OpenCanvas(_buildCanvas);
 
         // BuildUI listens to setup display
         OnOpenedMenu?.Invoke();
 
-        // Pause gameplay if not already paused
-        if (!GamePaused)
-        {
-            PauseGame();
-        }
+        // Pause gameplay. 
+        _gameManager.Pause(true);
+    }
+
+    private void OpenCraftingMenu(InputAction.CallbackContext context)
+    {
+        // Change Action Maps
+        _inputManager.OpenInventory(true);
+
+        OpenCanvas(_craftingCanvas);
+
+        // CanvasUI listens to setup display
+        OnOpenedMenu?.Invoke();
+
+        // Pause gameplay. 
+        _gameManager.Pause(true);
     }
 
     private void CloseUI(InputAction.CallbackContext context)
     {
         // Change Action Maps
-        S.I.IM.PC.Disable();
-        S.I.IM.PC.World.Enable();
-        S.I.IM.PC.Home.Enable();
+        _inputManager.OpenInventory(false);
 
-        DeactivateAllCanvases();
-        _hUDCanvas.SetActive(true);
+        OpenCanvas(_hUDCanvas);
 
         // PCUI listens to setup display
         OnOpenedMenu?.Invoke();
 
-        if (GamePaused)
-        {
-            UnpauseGame();
-        }
+        // Unpause gameplay. 
+        _gameManager.Pause(false);
     }
 
-    private void DeactivateAllCanvases()
+    private void OpenCanvas(GameObject canvas)
     {
-        foreach (Transform canvas in _canvasesObject)
-        {
-            canvas.gameObject.SetActive(false);
-        }
-    }
-
-    public static void PauseGame()
-    {
-        GamePaused = true;
-
-        Time.timeScale = 0f;
-    }
-
-    public static void UnpauseGame()
-    {
-        GamePaused = false;
-
-        Time.timeScale = 1f;
+        if (_buildCanvas.activeInHierarchy) _buildCanvas.gameObject.SetActive(false);
+        if (_craftingCanvas.activeInHierarchy) _craftingCanvas.gameObject.SetActive(false);
+        if (_inventoryCanvas.activeInHierarchy) _inventoryCanvas.gameObject.SetActive(false);
+        if (_hUDCanvas.activeInHierarchy) _hUDCanvas.gameObject.SetActive(false);
+        if (!canvas.activeInHierarchy) canvas.SetActive(true);
     }
 }

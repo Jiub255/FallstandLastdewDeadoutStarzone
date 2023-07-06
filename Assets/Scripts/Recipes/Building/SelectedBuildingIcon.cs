@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// TODO - Handle changing highlight from green to red here too. Instead of that slop in BuildingManager. 
 public class SelectedBuildingIcon : MonoBehaviour
 {
 	private MeshRenderer _meshRenderer;

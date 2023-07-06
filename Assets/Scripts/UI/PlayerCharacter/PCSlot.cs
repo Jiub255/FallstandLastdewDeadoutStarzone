@@ -7,15 +7,13 @@ public class PCSlot : MonoBehaviour
     [SerializeField]
     private Image _icon;
     [SerializeField]
-    private Button _useButton;
-    [SerializeField]
     private TextMeshProUGUI _nameText;
     [SerializeField]
     private Image _painFillbar;
     [SerializeField]
     private Image _injuryFillbar;
 
-    private GameObject _pcInstance;
+    private SOPC _pcSO;
 
     public void UpdatePainBar(int pain)
     {
@@ -27,41 +25,28 @@ public class PCSlot : MonoBehaviour
         _injuryFillbar.fillAmount = (float)injury / 100f;
     }
 
-    public void SetupSlot(GameObject pcInstance)
+    public void SetupSlot(SOPC pcSO)
     {
-        PCInfo pcInfo = pcInstance.GetComponentInChildren<PCInfo>(); 
-        PlayerPain playerPain = pcInstance.GetComponentInChildren<PlayerPain>(); 
-        PlayerInjury playerInjury = pcInstance.GetComponentInChildren<PlayerInjury>(); 
+        _pcSO = pcSO;
+        _icon.sprite = pcSO.Icon;
+        _nameText.text = pcSO.name;
 
-        _pcInstance = pcInstance;
-        _icon.sprite = pcInfo.Icon;
-        _nameText.text = pcInfo.Name;
-        _icon.enabled = true;
-        _useButton.interactable = true;
+        PainInjuryManager painInjuryManager = pcSO.PCInstance.GetComponentInChildren<PainInjuryManager>();
 
         // Set the fill bars here initially, but they get changed from the pain and injury scripts.
-        UpdatePainBar(playerPain.EffectivePain);
-        UpdateInjuryBar(playerInjury.Injury);
-        // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
-        playerPain.Slot = this;
-        playerInjury.Slot = this;
-    }
+        UpdatePainBar(painInjuryManager.PlayerPain.EffectivePain);
+        UpdateInjuryBar(painInjuryManager.PlayerInjury.Injury);
 
-    public void ClearSlot()
-    {
-        _pcInstance = null;
-        _icon.sprite = null;
-        _nameText.text = "";
-        _icon.enabled = false;
-        _useButton.interactable = false;
+        // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
+        painInjuryManager.Slot = this;
     }
 
     // Called by clicking on PC slot
     public void OnUseButton()
     {
-        if (_pcInstance != null)
+        if (_pcSO != null)
         {
-            _pcInstance.GetComponentInChildren<PCInfo>().Use();
+            _pcSO.Use();
         }
     }
 }

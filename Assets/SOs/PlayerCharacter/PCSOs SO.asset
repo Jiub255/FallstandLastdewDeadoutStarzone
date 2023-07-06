@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a80ace3e33a85f47bbd770492da2c39, type: 3}
-  m_Name: PC Prefabs SO
+  m_Script: {fileID: 11500000, guid: 4e2fece574f19f54da7dcb9cf66d51d5, type: 3}
+  m_Name: PCSOs SO
   m_EditorClassIdentifier: 
-  GameObjects:
-  - {fileID: 8080965006557006832, guid: 4e8654fa56a8ba64f8aaff9db3cd1745, type: 3}
+  SOPCs:
+  - {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}

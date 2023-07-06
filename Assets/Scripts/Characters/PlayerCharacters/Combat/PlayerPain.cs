@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerPain : MonoBehaviour
+public class PlayerPain
 {
     // Only serialized to easily see in inspector for now.
     [SerializeField]
@@ -10,7 +10,13 @@ public class PlayerPain : MonoBehaviour
     [SerializeField]
     private int _relief = 0;
 
-    public PCSlot Slot { get; set; }
+    public PlayerPain()
+    {
+        _truePain = 0;
+        _relief = 0;
+    }
+
+    public int Relief { get { return _truePain; } set { _truePain = value; } }
 
     public int EffectivePain 
     { 
@@ -28,7 +34,6 @@ public class PlayerPain : MonoBehaviour
     public void IncreasePain(int amount)
     {
         _truePain += amount;
-        Slot.UpdatePainBar(EffectivePain);
     }
 
     public void ReducePain(int amount)
@@ -38,22 +43,5 @@ public class PlayerPain : MonoBehaviour
         {
             _truePain = 0;
         }
-        Slot.UpdatePainBar(EffectivePain);
-    }
-
-    public void TemporarilyRelievePain(int amount, float duration)
-    {
-        StartCoroutine(RelievePainCoroutine(amount, duration)); 
-    }
-
-    private IEnumerator RelievePainCoroutine(int amount, float duration)
-    {
-        _relief += amount;
-        Slot.UpdatePainBar(EffectivePain);
-
-        yield return new WaitForSeconds(duration);
-
-        _relief -= amount;
-        Slot.UpdatePainBar(EffectivePain);
     }
 }

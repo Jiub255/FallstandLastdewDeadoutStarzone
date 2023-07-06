@@ -1,23 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerInjury : MonoBehaviour
+public class PlayerInjury
 {
     public int Injury { get; private set; } = 0;
 
     private PlayerPain _playerPain;
 
-    public PCSlot Slot { get; set; } 
-
-    private void Start()
+    public PlayerInjury(PlayerPain playerPain)
     {
-        _playerPain = GetComponent<PlayerPain>();
+        Injury = 0;
+        _playerPain = playerPain;
     }
 
     public void GetHurt(int damage)
     {
         Injury += damage;
-        Slot.UpdateInjuryBar(Injury);
         _playerPain.IncreasePain(damage);
 
         if (Injury >= 100)
@@ -27,21 +25,21 @@ public class PlayerInjury : MonoBehaviour
         }
     }
 
+    // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time and rest. 
+    // Medical items can speed up recovery maybe? And medical buildings and PCs with high medical skill? 
     public void Heal(int amount)
     {
         Injury -= amount;
-        Slot.UpdateInjuryBar(Injury);
         _playerPain.ReducePain(amount);
 
         if (Injury < 0)
         {
             Injury = 0;
-            Slot.UpdateInjuryBar(Injury);
         }
     }
 
     private void Die()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+//        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

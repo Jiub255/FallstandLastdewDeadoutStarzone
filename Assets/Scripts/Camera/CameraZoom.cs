@@ -22,7 +22,7 @@ public class CameraZoom : MonoBehaviour
     private void Start()
     {
         _transform = transform;
-        _zoomAction = S.I.IM.PC.World.Zoom;
+        _zoomAction = S.I.IM.PC.Camera.Zoom;
 
         _zoomAction.performed += Zoom;
 

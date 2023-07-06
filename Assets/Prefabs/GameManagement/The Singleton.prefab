@@ -527,8 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3e36bc80a203d49ab9b193051eb365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcPrefabsSO: {fileID: 11400000, guid: 322fcf6bdc5201149916791bf1db2949, type: 2}
-  _pcInstancesSO: {fileID: 11400000, guid: fc1303163bea50f4a94f1e6d8078e952, type: 2}
+  _pcSOsSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
 --- !u!114 &8429050034460973244
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ public class Transparentizer : MonoBehaviour
 
     private void Start()
     {
-        _mousePositionAction = S.I.IM.PC.World.MousePosition;
+        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
         _eventSystem = EventSystem.current;
         _transform = transform;
         _camera = Camera.main;
