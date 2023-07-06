@@ -1,14 +1,14 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO - Rework for multiple PCs. Don't use SOs? 
-
-// Just serializable for testing, to see in inspector. 
-[System.Serializable]
+[Serializable]
 public class Stat
 {
-    public static event System.Action OnBaseValueChanged;
+    public static event Action OnBaseValueChanged;
 
+    public SOStatType StatTypeSO;
+    [SerializeField]
     protected int _baseValue;
 
     protected List<int> _modifiers = new();
@@ -18,16 +18,13 @@ public class Stat
     [SerializeField]
     protected int _moddedValue;
 
-    // Trying to pass in default empty stat, not sure if it works yet. 
-    public Stat(int baseValue = 1, List<int> modifiers = null)
+/*    public Stat(SOStatType statSO, int baseValue = 1)
     {
+        StatTypeSO = statSO;
+
         _baseValue = baseValue;
         _modifiers = new();
-        if (modifiers != null)
-        {
-            _modifiers = modifiers;
-        }
-    }
+    }*/
 
     public int GetValue()
     {

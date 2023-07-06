@@ -51,7 +51,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 5773822726317777148}
-  _useButton: {fileID: 821338501171437404}
   _amountText: {fileID: 549769844384084504}
 --- !u!1 &2316944318938944414
 GameObject:
@@ -175,7 +174,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6002945825567684473}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2765182494261477123}
+        m_TargetAssemblyTypeName: InventorySlot, Assembly-CSharp
+        m_MethodName: OnUseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3554457894893863031
 GameObject:
   m_ObjectHideFlags: 0

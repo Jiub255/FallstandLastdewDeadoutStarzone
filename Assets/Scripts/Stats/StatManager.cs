@@ -1,18 +1,19 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-
-// TODO - Rework this for multiple PCs. 
 public class StatManager : MonoBehaviour
 {
     public static event Action OnStatsChanged;
 
     [SerializeField]
-    private Stats _statsSO;
-    [SerializeField]
-    private Equipment _equipment;
+    protected List<Stat> _stats;
 
-    private void Start()
+    // Just serialized to see in inspector for testing. 
+    [SerializeField, Header("Only Serialized For Testing")]
+    protected Equipment _equipment;
+
+    protected void Start()
     {
         CalculateStatModifiers();
 
@@ -20,32 +21,34 @@ public class StatManager : MonoBehaviour
         _equipment = transform.parent.GetComponentInChildren<EquipmentManager>().Equipment;
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         _equipment.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         _equipment.OnEquipmentChanged -= CalculateStatModifiers;
         Stat.OnBaseValueChanged -= CalculateStatModifiers;
     }
 
-    private void CalculateStatModifiers()
+    protected void CalculateStatModifiers()
     {
-        // Clear all modifiers on all stats. 
-        foreach (Stat stat in _statsSO.StatSOs)
+        // TODO - Can this be done better? Without three nested foreach loops? 
+        foreach (Stat stat in _stats/*.StatsList*/)
         {
             stat.ClearModifiers();
-        }
 
-        // Add each bonus.
-        foreach (SOEquipmentItem equipmentItem in _equipment.EquipmentItems)
-        {
-            foreach (EquipmentBonus bonus in equipmentItem.Bonuses)
+            foreach (SOEquipmentItem equipmentItem in _equipment.EquipmentItems)
             {
-                bonus.StatSO.AddModifier(bonus.BonusAmount);
+                foreach (EquipmentBonus bonus in equipmentItem.Bonuses)
+                {
+                    if (bonus.StatTypeSO == stat.StatTypeSO)
+                    {
+                        stat.AddModifier(bonus.BonusAmount);
+                    }
+                }
             }
         }
 
