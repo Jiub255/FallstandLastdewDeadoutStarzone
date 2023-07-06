@@ -3,9 +3,8 @@ using UnityEngine;
 // Put this on the Crafting and Building canvases. 
 public class UIRecipes : MonoBehaviour
 {
-	// Not showing in inspector, use abstract class instead? 
 	[SerializeField]
-	private IRecipeList _recipeList;
+	private RecipeList _recipeList;
 	[SerializeField]
 	private GameObject _recipeSlotPrefab;
 	[SerializeField]
@@ -28,10 +27,10 @@ public class UIRecipes : MonoBehaviour
 		// TODO - Use object pooling instead of instantiate/destroy. 
 		// Might need to rework InventorySlot a bit, not sure. Or move the slot somewhere else? Not sure yet. 
 		// Maybe just unparenting it from _inventoryContent will be enough. 
-		foreach (SOItem itemSO in _recipeList.Recipes)
+		foreach (SORecipe recipeSO in _recipeList.Recipes)
 		{
 			GameObject slot = Instantiate(_recipeSlotPrefab, _slotsParent);
-			slot.GetComponent<RecipeSlot>().SetupSlot(itemSO);
+			slot.GetComponent<RecipeSlot>().SetupSlot(recipeSO);
 		}
 	}
 

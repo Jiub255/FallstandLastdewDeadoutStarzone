@@ -19,7 +19,7 @@ public class InventorySlot : MonoBehaviour
     }
 
     // Called by clicking on inventory slot
-	public void OnUseButton()
+	public void OnClickInventoryItem()
     {
         if (_itemSO != null)
         {

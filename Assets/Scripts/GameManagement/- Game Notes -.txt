@@ -13,16 +13,7 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    
-    Rework action maps to work with new systems. 
-        Can keep all menu actions in one map.
-        Organize build map better, why are there two maps, one for world and one for menu? 
-        Think in terms of game states, which actions are needed in each game state?
-            In menu, just need menu control input. 
-            In base, need world movement and camera stuff, and menu control.
-            In home combat, need world/camera still. And inventory menu, disable build and crafting.
-            In scavenging, same as home combat? 
-
+    Fix building highlights in build mode. Sloppy right now with GetChild nonsense. Use SelectedBuildingIcon instead. 
 
     How to handle injury/pain? 
         Getting hit raises injury, which raises pain, which negatively affects stats. 
@@ -33,9 +24,6 @@ FIRST!!
         Or, similarly, healing could take a certain amount of time per injury point (affected by medical items/buildings/skilled PCs), and
             there is always the danger of being raided. So you don't want to have your whole team injured or you could easily get wiped out by a raid. 
             I like this one better. Still have day/night cycle, just don't do discrete day chunks like stardew. Go by healing rates. 
-
-
-    Fix PC HUD stuff to work with new system. 
 
 
     Item

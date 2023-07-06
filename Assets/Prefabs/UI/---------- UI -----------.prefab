@@ -3913,9 +3913,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6360fbce2a9de8c40ae35fcda95ffc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasesObject: {fileID: 4314923721212641125}
   _inventoryCanvas: {fileID: 4314923719890607835}
   _buildCanvas: {fileID: 7977803640239919478}
+  _craftingCanvas: {fileID: 5290609741861204813}
   _hUDCanvas: {fileID: 1881279619}
 --- !u!1 &4314923721231603553
 GameObject:
@@ -4701,7 +4701,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34473425980b48840b9638d5d1b9620f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recipeSlotPrefab: {fileID: 0}
+  _recipeList: {fileID: 11400000, guid: cf415609b5aec9a498ebac80b8698a48, type: 2}
+  _recipeSlotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
   _slotsParent: {fileID: 8086131555549873885}
 --- !u!1 &5450849514478412812
 GameObject:
@@ -6296,7 +6297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34473425980b48840b9638d5d1b9620f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recipeSlotPrefab: {fileID: 0}
+  _recipeList: {fileID: 11400000, guid: fe38649df7e7b2c449aecbf5a2da3ba4, type: 2}
+  _recipeSlotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
   _slotsParent: {fileID: 4478954206514053347}
 --- !u!1 &8146464655037193725
 GameObject:

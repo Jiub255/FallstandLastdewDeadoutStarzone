@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public enum GameStates
@@ -24,10 +23,9 @@ public class InputManager : MonoBehaviour
         PC = new PlayerControls();
 
         // Enable default action maps
-        WorldMap();
+        ChangeGameState(GameStates.World);
     }
 
-    // TODO - Implement a game state machine here to control action maps? 
     public void ChangeGameState(GameStates gameState)
     {
         GameState = gameState;
@@ -52,6 +50,9 @@ public class InputManager : MonoBehaviour
                 break;
             case GameStates.Build:
                 BuildMap();
+                break;
+            default:
+                Debug.Log($"No state matching {gameState} found. Add {gameState} to InputManager.ActivateStateActionMaps(). ");
                 break;
         }
     }

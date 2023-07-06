@@ -6,13 +6,13 @@ using UnityEngine;
 // Use this class to collect a list of all created SOItem assets with a non-empty RecipeCost list, ie. craftable items. 
 // Then another class can filter that list down to the ones you are able to build (StatRequirement-wise). 
 [CreateAssetMenu(menuName = "Recipes/Crafting/SOCraftableItems", fileName = "New Craftable Items SO")]
-public class SOCraftableItems : ScriptableObject, IRecipeList
+public class SOCraftableItems : RecipeList
 {
     private List<SORecipe> _craftableItems = new();
 
-    public List<SORecipe> Recipes => _craftableItems;
+    public override List<SORecipe> Recipes => _craftableItems;
 
-    public void PopulateList()
+    public override void PopulateList()
     {
         List<SORecipe> items = new();
 
