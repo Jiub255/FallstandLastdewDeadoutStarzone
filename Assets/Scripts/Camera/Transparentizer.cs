@@ -175,17 +175,17 @@ public class Transparentizer : MonoBehaviour
     private List<Material> GetMaterialsFromHit(RaycastHit hit)
     {
         List<Material> materials = new List<Material>();
-        List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+        List<Renderer> renderers = new List<Renderer>();
 
-        meshRenderers.AddRange(hit.collider.GetComponents<MeshRenderer>());
+        renderers.AddRange(hit.collider.GetComponents<Renderer>());
         // Uncomment below line if using objects with colliders on grandchildren
         //meshRenderers.AddRange(hit.collider.GetComponentsInChildren<MeshRenderer>());
 
-        if (meshRenderers.Count > 0)
+        if (renderers.Count > 0)
         {
-            foreach (MeshRenderer meshRenderer in meshRenderers)
+            foreach (Renderer renderer in renderers)
             {
-                materials.AddRange(meshRenderer.materials);
+                materials.AddRange(renderer.materials);
             }
         }
 

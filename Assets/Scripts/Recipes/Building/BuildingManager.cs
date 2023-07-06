@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+// TODO - Use a "Building" prefab with the selected building icon child. Then attach the actual building prefab as a child of it in this script.
 public class BuildingManager : MonoBehaviour
 {
     /*
@@ -22,6 +23,7 @@ public class BuildingManager : MonoBehaviour
 
     private GameObject _currentBuildingPrefab;
     private GameObject _currentBuildingInstance;
+    private SelectedBuildingIcon _selectedBuildingIcon;
 
     [SerializeField]
     private LayerMask _groundLayerMask;
@@ -37,16 +39,23 @@ public class BuildingManager : MonoBehaviour
     private bool _pointerOverUI = false;
     private EventSystem _eventSystem;
 
+    [SerializeField, Tooltip("Snap angle to the nearest [Snap Angle]. Works best with a divisor of 360.")]
+    private int _snapAngle = 45;
+
+    private InputAction _rotateBuildingAction;
+
     private void Start()
     {
+        _rotateBuildingAction = S.I.IM.PC.Build.RotateBuilding;
+
         SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
 
         S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearest45;
+        S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearestAngle;
         S.I.IM.PC.Build.DeselectBuilding.performed += DeselectCurrentBuilding;
         S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
 
-        // Don't see why this would ever be true, but just in case
+        // Don't see why this would ever be true, but just in case. 
         if (_currentBuildingInstance != null)
         {
             _haveABuildingSelected = true;
@@ -62,7 +71,7 @@ public class BuildingManager : MonoBehaviour
         SOBuildingRecipe.OnSelectBuilding -= SelectCurrentBuilding;
 
         S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearest45;
+        S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearestAngle;
         S.I.IM.PC.Build.DeselectBuilding.performed -= DeselectCurrentBuilding;
         S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
     }
@@ -71,8 +80,10 @@ public class BuildingManager : MonoBehaviour
     {
         if (_currentBuildingInstance != null)
         {
-            _currentBuildingInstance.transform.Rotate(new Vector3(0f,
-            Time.unscaledDeltaTime * _rotationSpeed * S.I.IM.PC.Build.RotateBuilding.ReadValue<float>(), 0f));
+            _currentBuildingInstance.transform.Rotate(new Vector3(
+                0f,
+                Time.unscaledDeltaTime * _rotationSpeed * _rotateBuildingAction.ReadValue<float>(), 
+                0f));
 
             _rotation = _currentBuildingInstance.transform.rotation;
 
@@ -80,13 +91,13 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void SnapToNearest45(InputAction.CallbackContext context)
+    private void SnapToNearestAngle(InputAction.CallbackContext context)
     {
         if (_currentBuildingInstance != null)
         {
-            for (int i = 0; i <= 360; i += 45)
+            for (int i = 0; i <= 360; i += _snapAngle)
             {
-                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= 22.5f)
+                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= (_snapAngle / 2f))
                 {
                     _currentBuildingInstance.transform.rotation = Quaternion.Euler(0f, i , 0f);
                 }
@@ -94,19 +105,21 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_haveABuildingSelected)
         {
             RotateBuilding();
-        }
+/*        }
 
+        // Why not check for _haveABuildingSelected here instead? 
         if (_currentBuildingInstance != null)
-        {
+        {*/
             // Move building to current mouse position on ground
             Ray ray = Camera.main.ScreenPointToRay(
                 S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>());
             RaycastHit hitData;
+            // TODO - Set maxDistance to zoom level plus a bit? Or is that just going overboard? 
             if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
             {
                 // Make sure to make buildings have their "pivot" on the bottom center, that is,
@@ -127,16 +140,27 @@ public class BuildingManager : MonoBehaviour
         // Use SelectedBuildingIcon as a component of the building Prefab. 
         if (CanBuildHere())
         {
-            // Green highlight, allowed to build here
-            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            // Green highlight, allowed to build here. 
+            _selectedBuildingIcon.SetGreenMaterial();
+
+/*            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);*/
         }
         else
         {
-            // Red highlight, can't build here
-            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+            // Red highlight, can't build here. 
+            _selectedBuildingIcon.SetRedMaterial();
+
+/*            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);*/
         }
+    }
+
+    private void SetBuildingInstance(GameObject buildingInstance)
+    {
+        _currentBuildingInstance = buildingInstance;
+        _selectedBuildingIcon = (buildingInstance == null) ? null : buildingInstance.GetComponent<SelectedBuildingIcon>();
+        _selectedBuildingIcon.ActivateIcon();
     }
 
     private void MakeInstance()
@@ -146,9 +170,11 @@ public class BuildingManager : MonoBehaviour
             if (_currentBuildingInstance != null)
             {
                 Destroy(_currentBuildingInstance);
-            } 
+                SetBuildingInstance(null);
+            }
 
-            _currentBuildingInstance = Instantiate(_currentBuildingPrefab);
+            SetBuildingInstance(Instantiate(_currentBuildingPrefab));
+//            _currentBuildingInstance = Instantiate(_currentBuildingPrefab);
 
             // Set building's rotation
             _currentBuildingInstance.transform.rotation = _rotation;
@@ -177,16 +203,20 @@ public class BuildingManager : MonoBehaviour
             {
                 // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
                 // Turn off red/green highlights
-                _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+                _selectedBuildingIcon.DeactivateIcon();
+
+/*                _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);*/
 
                 // Collider not working unless I switch it off and on again.
                 // Could make it disabled in prefab then just enable it after placing?
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
 
-                // Stop controlling currentBuildingInstance with mouse, so essentially, build/set it.
-                _currentBuildingInstance = null;
+                // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built).
+                // This is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu. 
+                SetBuildingInstance(null);
+//                _currentBuildingInstance = null;
 
                 // Make a new instance of same building to be the new currentBuildingInstance
                 MakeInstance();
@@ -214,28 +244,30 @@ public class BuildingManager : MonoBehaviour
         if (_currentBuildingInstance != null)
         {
             Destroy(_currentBuildingInstance);
-            _currentBuildingInstance = null;
+            SetBuildingInstance(null);
+//            _currentBuildingInstance = null;
         }
-   
+
         _haveABuildingSelected = false;
     }
 
     private bool CanBuildHere()
     {
         Collider[] collidersArray = Physics.OverlapBox(
-            _currentBuildingInstance.transform.GetChild(0).transform.position,
-            _currentBuildingInstance.transform.GetChild(0).transform.localScale, 
+            _selectedBuildingIcon.transform.position,
+            _selectedBuildingIcon.transform.localScale,
 //            Quaternion.identity, 
-            _currentBuildingInstance.transform.GetChild(0).transform.localRotation, 
+            _selectedBuildingIcon.transform.localRotation, 
             ~_groundLayerMask);
 
+        // TODO - Do this better. 
         // Remove collisions with self.
         List<Collider> collidersList = collidersArray.ToList();
         for (int i = collidersList.Count - 1; i >= 0; i--)
         {
             //Debug.Log(_currentBuildingInstance.transform.GetChild(0).gameObject.GetInstanceID() + " collided with " + collider.gameObject.GetInstanceID());
 
-            if (_currentBuildingInstance.transform.GetChild(0).gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
+            if (_selectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
             {
                 collidersList.Remove(collidersList[i]);
             }
