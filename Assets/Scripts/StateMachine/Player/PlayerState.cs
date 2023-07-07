@@ -4,12 +4,12 @@ public abstract class PlayerState : State<PlayerController>
 {
     public PlayerState(PlayerController characterController) : base(characterController)
     {
-        S.I.IM.PC.World.Deselect.performed += CancelOrDeselect;
+        InputManager.OnDeselectOrCancel += CancelOrDeselect;
     }
 
     public override void Exit()
     {
-        S.I.IM.PC.World.Deselect.performed -= CancelOrDeselect;
+        InputManager.OnDeselectOrCancel -= CancelOrDeselect;
     }
 
     public virtual void CancelOrDeselect(InputAction.CallbackContext context)
@@ -18,7 +18,4 @@ public abstract class PlayerState : State<PlayerController>
         // So override this in idle state only. 
         _stateMachine.ChangeStateTo(_stateMachine.Idle());
     }
-
-/*    public abstract override void Update();
-    public abstract override void FixedUpdate();*/
 }

@@ -8,26 +8,27 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Recipes/Crafting/SOCraftableItems", fileName = "New Craftable Items SO")]
 public class SOCraftableItems : RecipeList
 {
-    private List<SORecipe> _craftableItems = new();
-
-    public override List<SORecipe> Recipes => _craftableItems;
-
-    public override void PopulateList()
+    public override List<SORecipe> GetAllRecipes()
     {
-        List<SORecipe> items = new();
+        List<SORecipe> itemSOs = new();
 
         // TODO - Using UnityEditor here, so need to find another way, or do this before building the game. 
+        // Maybe run this method manually right before building? 
         string[] assetNames = AssetDatabase.FindAssets(
             "t:SOItem",
             new[] { "Assets/SOs/Recipes/Items" });
-        items.Clear();
+        itemSOs.Clear();
         foreach (string SOName in assetNames)
         {
             var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
             var character = AssetDatabase.LoadAssetAtPath<SOItem>(SOpath);
-            items.Add(character);
+            itemSOs.Add(character);
         }
 
-        _craftableItems = items.Where(item => item.RecipeCosts.Count > 0).ToList();
+        List<SORecipe> Recipes = itemSOs.Where(item => item.RecipeCosts.Count > 0).ToList();
+
+        Debug.Log($"Craftable items list length: {Recipes.Count}");
+
+        return Recipes;
     }
 }

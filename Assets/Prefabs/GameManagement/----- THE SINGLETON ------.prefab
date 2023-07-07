@@ -420,6 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a77a77019f72345a3af3b96f519270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mouseMovementThreshold: 0.1
 --- !u!1 &8429050034455999767
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,7 +432,7 @@ GameObject:
   - component: {fileID: 8429050034455999761}
   - component: {fileID: 8429050034455999760}
   m_Layer: 0
-  m_Name: The Singleton
+  m_Name: ----- THE SINGLETON ------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -556,7 +557,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893399e3b6ae8304eb7b3f298771edeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 128
   _rotationSpeed: 50
+  _snapAngle: 45

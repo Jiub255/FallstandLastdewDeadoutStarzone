@@ -28,13 +28,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""2dbd04b7-f51f-4f7e-a0ea-3859d12ba948"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
+                    ""name"": ""RightClick"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""bdc4a67b-76dc-4e2a-882c-f6fadaf844fb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""MousePosition"",
@@ -86,11 +86,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fd7e287c-0e2a-4409-b540-5207d3b6f422"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""New action"",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -262,15 +262,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Deselect"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""ddf5f10a-395c-45c8-9d1b-6ccd85069eb4"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -284,17 +275,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""SelectOrCenter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""221af38a-3834-4993-9dfc-36dd36dbb571"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""Deselect"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -302,15 +282,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""name"": ""Build"",
             ""id"": ""56cb6db7-c3d5-4d97-b886-7279867bfbdd"",
             ""actions"": [
-                {
-                    ""name"": ""DeselectBuilding"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""a5e667eb-bed4-42cb-b3ec-7c9db8b47a0a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
                 {
                     ""name"": ""RotateBuilding"",
                     ""type"": ""PassThrough"",
@@ -340,17 +311,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""a077c862-2d2e-48ec-a061-8f48ad4fd088"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""DeselectBuilding"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""1D Axis"",
                     ""id"": ""cd78c3d9-8c49-4316-bb61-dec5f2d3dde2"",
@@ -638,7 +598,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
 }");
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
-        m_Camera_Newaction = m_Camera.FindAction("New action", throwIfNotFound: true);
+        m_Camera_RightClick = m_Camera.FindAction("RightClick", throwIfNotFound: true);
         m_Camera_MousePosition = m_Camera.FindAction("MousePosition", throwIfNotFound: true);
         m_Camera_MouseDelta = m_Camera.FindAction("MouseDelta", throwIfNotFound: true);
         m_Camera_MoveCamera = m_Camera.FindAction("MoveCamera", throwIfNotFound: true);
@@ -647,10 +607,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // World
         m_World = asset.FindActionMap("World", throwIfNotFound: true);
         m_World_SelectOrCenter = m_World.FindAction("SelectOrCenter", throwIfNotFound: true);
-        m_World_Deselect = m_World.FindAction("Deselect", throwIfNotFound: true);
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
-        m_Build_DeselectBuilding = m_Build.FindAction("DeselectBuilding", throwIfNotFound: true);
         m_Build_RotateBuilding = m_Build.FindAction("RotateBuilding", throwIfNotFound: true);
         m_Build_SnapBuilding = m_Build.FindAction("SnapBuilding", throwIfNotFound: true);
         m_Build_PlaceBuilding = m_Build.FindAction("PlaceBuilding", throwIfNotFound: true);
@@ -726,7 +684,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Camera
     private readonly InputActionMap m_Camera;
     private ICameraActions m_CameraActionsCallbackInterface;
-    private readonly InputAction m_Camera_Newaction;
+    private readonly InputAction m_Camera_RightClick;
     private readonly InputAction m_Camera_MousePosition;
     private readonly InputAction m_Camera_MouseDelta;
     private readonly InputAction m_Camera_MoveCamera;
@@ -736,7 +694,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         private @PlayerControls m_Wrapper;
         public CameraActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Camera_Newaction;
+        public InputAction @RightClick => m_Wrapper.m_Camera_RightClick;
         public InputAction @MousePosition => m_Wrapper.m_Camera_MousePosition;
         public InputAction @MouseDelta => m_Wrapper.m_Camera_MouseDelta;
         public InputAction @MoveCamera => m_Wrapper.m_Camera_MoveCamera;
@@ -751,9 +709,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_CameraActionsCallbackInterface != null)
             {
-                @Newaction.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnNewaction;
-                @Newaction.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnNewaction;
-                @Newaction.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnNewaction;
+                @RightClick.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnRightClick;
+                @RightClick.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnRightClick;
+                @RightClick.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnRightClick;
                 @MousePosition.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMousePosition;
@@ -773,9 +731,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
@@ -800,13 +758,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_World;
     private IWorldActions m_WorldActionsCallbackInterface;
     private readonly InputAction m_World_SelectOrCenter;
-    private readonly InputAction m_World_Deselect;
     public struct WorldActions
     {
         private @PlayerControls m_Wrapper;
         public WorldActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @SelectOrCenter => m_Wrapper.m_World_SelectOrCenter;
-        public InputAction @Deselect => m_Wrapper.m_World_Deselect;
         public InputActionMap Get() { return m_Wrapper.m_World; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -819,9 +775,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SelectOrCenter.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnSelectOrCenter;
                 @SelectOrCenter.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnSelectOrCenter;
                 @SelectOrCenter.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnSelectOrCenter;
-                @Deselect.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnDeselect;
-                @Deselect.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnDeselect;
-                @Deselect.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnDeselect;
             }
             m_Wrapper.m_WorldActionsCallbackInterface = instance;
             if (instance != null)
@@ -829,9 +782,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SelectOrCenter.started += instance.OnSelectOrCenter;
                 @SelectOrCenter.performed += instance.OnSelectOrCenter;
                 @SelectOrCenter.canceled += instance.OnSelectOrCenter;
-                @Deselect.started += instance.OnDeselect;
-                @Deselect.performed += instance.OnDeselect;
-                @Deselect.canceled += instance.OnDeselect;
             }
         }
     }
@@ -840,7 +790,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Build
     private readonly InputActionMap m_Build;
     private IBuildActions m_BuildActionsCallbackInterface;
-    private readonly InputAction m_Build_DeselectBuilding;
     private readonly InputAction m_Build_RotateBuilding;
     private readonly InputAction m_Build_SnapBuilding;
     private readonly InputAction m_Build_PlaceBuilding;
@@ -848,7 +797,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         private @PlayerControls m_Wrapper;
         public BuildActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @DeselectBuilding => m_Wrapper.m_Build_DeselectBuilding;
         public InputAction @RotateBuilding => m_Wrapper.m_Build_RotateBuilding;
         public InputAction @SnapBuilding => m_Wrapper.m_Build_SnapBuilding;
         public InputAction @PlaceBuilding => m_Wrapper.m_Build_PlaceBuilding;
@@ -861,9 +809,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_BuildActionsCallbackInterface != null)
             {
-                @DeselectBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
-                @DeselectBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
-                @DeselectBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDeselectBuilding;
                 @RotateBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
                 @RotateBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
                 @RotateBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotateBuilding;
@@ -877,9 +822,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             m_Wrapper.m_BuildActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @DeselectBuilding.started += instance.OnDeselectBuilding;
-                @DeselectBuilding.performed += instance.OnDeselectBuilding;
-                @DeselectBuilding.canceled += instance.OnDeselectBuilding;
                 @RotateBuilding.started += instance.OnRotateBuilding;
                 @RotateBuilding.performed += instance.OnRotateBuilding;
                 @RotateBuilding.canceled += instance.OnRotateBuilding;
@@ -1044,7 +986,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public interface ICameraActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnMouseDelta(InputAction.CallbackContext context);
         void OnMoveCamera(InputAction.CallbackContext context);
@@ -1054,11 +996,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IWorldActions
     {
         void OnSelectOrCenter(InputAction.CallbackContext context);
-        void OnDeselect(InputAction.CallbackContext context);
     }
     public interface IBuildActions
     {
-        void OnDeselectBuilding(InputAction.CallbackContext context);
         void OnRotateBuilding(InputAction.CallbackContext context);
         void OnSnapBuilding(InputAction.CallbackContext context);
         void OnPlaceBuilding(InputAction.CallbackContext context);

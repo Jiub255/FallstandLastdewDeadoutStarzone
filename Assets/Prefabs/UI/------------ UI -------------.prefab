@@ -3876,7 +3876,7 @@ GameObject:
   - component: {fileID: 4314923721212641125}
   - component: {fileID: 586983868}
   m_Layer: 0
-  m_Name: ---------- UI -----------
+  m_Name: ------------ UI -------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

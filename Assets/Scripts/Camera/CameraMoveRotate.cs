@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+// TODO - Add right click to drag camera. Base it off mouse screen position, not the ground. 
 // Put this on Camera Focal Point
 public class CameraMoveRotate : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class CameraMoveRotate : MonoBehaviour
     private float _screenHeight;
     private float _edgeDistance;
 
+    [SerializeField, Range(0f, 3f), Header("Drag Camera")]
+    private float _draggingSpeed = 2f;
+    private bool _dragging;
+    private Vector2 _lastMousePosition;
+
+    // Input Actions
     private InputAction _zoomAction;
     private InputAction _rotateCameraAction;
     private InputAction _moveCameraAction;
@@ -62,6 +69,9 @@ public class CameraMoveRotate : MonoBehaviour
        // S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
 
         PCSelector.OnDoubleClickPC += CenterOnPC;
+
+        S.I.IM.PC.Camera.RightClick.started += (c) => { _dragging = true; _lastMousePosition = _mousePositionAction.ReadValue<Vector2>(); };
+        S.I.IM.PC.Camera.RightClick.canceled += (c) => _dragging = false;
     }
 
     private void OnDisable()
@@ -69,6 +79,9 @@ public class CameraMoveRotate : MonoBehaviour
         //S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
 
         PCSelector.OnDoubleClickPC -= CenterOnPC;
+
+        S.I.IM.PC.Camera.RightClick.started -= (c) => { _dragging = true; _lastMousePosition = _mousePositionAction.ReadValue<Vector2>(); };
+        S.I.IM.PC.Camera.RightClick.canceled -= (c) => _dragging = false;
     }
 
 /*    private void Update()
@@ -89,9 +102,14 @@ public class CameraMoveRotate : MonoBehaviour
         // isolated frames, but it helps resolve some issues with moving while zooming.
         if (!_zoomAction.WasPerformedThisFrame())
         {
-            //GetVectors();
-
-            KeyboardMove();
+            if (_dragging)
+            {
+                DragCamera();
+            }
+            else
+            {
+                KeyboardMove();
+            }
 
             if (_rotateCameraAction.IsPressed())
             {
@@ -105,6 +123,23 @@ public class CameraMoveRotate : MonoBehaviour
                // EdgeScroll();
             }
         }
+    }
+
+    private void DragCamera()
+    {
+        // Get movement direction. 
+        Vector2 direction = (_lastMousePosition - _mousePositionAction.ReadValue<Vector2>());
+
+        // Translate direction vector to world space
+        Vector3 movement = (_forward * direction.y) + (_right * direction.x);
+
+        Debug.Log($"Mouse position: {_mousePositionAction.ReadValue<Vector2>()}, Last position: {_lastMousePosition}, movement: {movement}");
+
+        // Move
+        _transform.position += movement * _draggingSpeed * Time.unscaledDeltaTime;
+
+        // Set last mouse position. 
+        _lastMousePosition = _mousePositionAction.ReadValue<Vector2>();
     }
 
     // Called from double click of PC or PC UI button. 

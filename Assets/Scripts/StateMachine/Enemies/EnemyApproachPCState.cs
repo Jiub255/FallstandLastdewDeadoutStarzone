@@ -76,7 +76,7 @@ public class EnemyApproachPCState : State<EnemyController>
         List<GameObject> potentialTargets = new();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = Random.Range(0, potentialTargets.Count);
-        Debug.Log($"{_stateMachine.transform.name}'s potential targets: {potentialTargets.Count}, randomIndex: {randomIndex}");
+//        Debug.Log($"{_stateMachine.transform.name}'s potential targets: {potentialTargets.Count}, random index: {randomIndex}");
         return potentialTargets[randomIndex].transform;
     }
 

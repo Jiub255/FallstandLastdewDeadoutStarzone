@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5059075228530019439}
   m_Layer: 0
-  m_Name: ------- CAMERA -------
+  m_Name: --------- CAMERA ---------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,6 +186,7 @@ MonoBehaviour:
   _rotationXMax: 75
   _edgeScrollingSpeed: 20
   _percentDistanceFromEdges: 10
+  _draggingSpeed: 2
 --- !u!1 &5059075229066574954
 GameObject:
   m_ObjectHideFlags: 0

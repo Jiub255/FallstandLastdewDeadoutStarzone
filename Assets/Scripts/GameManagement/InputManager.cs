@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum GameStates
 {
@@ -11,6 +13,8 @@ public enum GameStates
 
 public class InputManager : MonoBehaviour
 {
+    public static event Action<InputAction.CallbackContext> OnDeselectOrCancel;
+
     public PlayerControls PC { get; private set; }
 
     public GameStates GameState { get; private set; }
@@ -18,12 +22,39 @@ public class InputManager : MonoBehaviour
     // Probably a cleaner way to do this. 
     private GameStates WorldOrBuildMostRecently = GameStates.World;
 
+    private Vector2 _startingMousePosition;
+    [SerializeField]
+    private float _mouseMovementThreshold = 0.1f;
+    private float _mouseMovementThresholdSquared { get { return _mouseMovementThreshold * _mouseMovementThreshold; } }
+
     private void Awake()
     {
         PC = new PlayerControls();
 
         // Enable default action maps
         ChangeGameState(GameStates.World);
+
+        PC.Camera.RightClick.started += GetStartingMousePosition;
+        PC.Camera.RightClick.canceled += HandleRightClick;
+    }
+
+    private void OnDisable()
+    {
+        PC.Camera.RightClick.started -= GetStartingMousePosition;
+        PC.Camera.RightClick.canceled -= HandleRightClick;
+    }
+
+    private void GetStartingMousePosition(InputAction.CallbackContext context)
+    {
+        _startingMousePosition = PC.Camera.MousePosition.ReadValue<Vector2>();
+    }
+
+    public void HandleRightClick(InputAction.CallbackContext context)
+    {
+        if ((PC.Camera.MousePosition.ReadValue<Vector2>() - _startingMousePosition).sqrMagnitude < _mouseMovementThresholdSquared)
+        {
+            OnDeselectOrCancel?.Invoke(context);
+        }
     }
 
     public void ChangeGameState(GameStates gameState)

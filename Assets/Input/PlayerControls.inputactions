@@ -6,13 +6,13 @@
             "id": "2dbd04b7-f51f-4f7e-a0ea-3859d12ba948",
             "actions": [
                 {
-                    "name": "New action",
-                    "type": "Button",
+                    "name": "RightClick",
+                    "type": "PassThrough",
                     "id": "bdc4a67b-76dc-4e2a-882c-f6fadaf844fb",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "interactions": "Hold",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "MousePosition",
@@ -64,11 +64,11 @@
                 {
                     "name": "",
                     "id": "fd7e287c-0e2a-4409-b540-5207d3b6f422",
-                    "path": "",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "New action",
+                    "groups": "Keyboard and Mouse",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -240,15 +240,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Deselect",
-                    "type": "PassThrough",
-                    "id": "ddf5f10a-395c-45c8-9d1b-6ccd85069eb4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -262,17 +253,6 @@
                     "action": "SelectOrCenter",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "221af38a-3834-4993-9dfc-36dd36dbb571",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Deselect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -280,15 +260,6 @@
             "name": "Build",
             "id": "56cb6db7-c3d5-4d97-b886-7279867bfbdd",
             "actions": [
-                {
-                    "name": "DeselectBuilding",
-                    "type": "PassThrough",
-                    "id": "a5e667eb-bed4-42cb-b3ec-7c9db8b47a0a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
                 {
                     "name": "RotateBuilding",
                     "type": "PassThrough",
@@ -318,17 +289,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "a077c862-2d2e-48ec-a061-8f48ad4fd088",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "DeselectBuilding",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "1D Axis",
                     "id": "cd78c3d9-8c49-4316-bb61-dec5f2d3dde2",

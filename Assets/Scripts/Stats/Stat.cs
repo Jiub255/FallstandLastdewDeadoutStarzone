@@ -13,10 +13,10 @@ public class Stat
 
     protected List<int> _modifiers = new();
 
-    // Just to see in the inspector, variable has no real use. 
-    // TODO - Delete before building, waste of resources. 
-    [SerializeField]
-    protected int _moddedValue;
+    // Only serialized to see in the editor. 
+    // TODO - Keep this and just update it whenever stat/modifiers change, so you
+    // aren't recalculating it every time you use it. 
+    public int ModdedValue { get; private set; }
 
 /*    public Stat(SOStatType statSO, int baseValue = 1)
     {
@@ -36,7 +36,7 @@ public class Stat
     public void ChangeBaseValue(int amount)
     {
         _baseValue += amount;
-        _moddedValue = GetValue();
+        ModdedValue = GetValue();
         // StatManager listens. 
         OnBaseValueChanged?.Invoke();
     }
@@ -45,20 +45,20 @@ public class Stat
     {
         _modifiers.Add(modifier);
 
-        _moddedValue = GetValue();
+        ModdedValue = GetValue();
     }
 
     public void RemoveModifier(int modifier)
     {
         _modifiers.Remove(modifier);
 
-        _moddedValue = GetValue();
+        ModdedValue = GetValue();
     }
 
     public void ClearModifiers()
     {
         _modifiers.Clear();
 
-        _moddedValue = GetValue();
+        ModdedValue = GetValue();
     }
 }

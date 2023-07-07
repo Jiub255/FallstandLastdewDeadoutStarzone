@@ -21,6 +21,8 @@ public class BuildingManager : MonoBehaviour
             differences (mouse wheel, right click for now)
     */
 
+    [SerializeField]
+    private GameObject _buildingPrefab;
     private GameObject _currentBuildingPrefab;
     private GameObject _currentBuildingInstance;
     private SelectedBuildingIcon _selectedBuildingIcon;
@@ -52,7 +54,7 @@ public class BuildingManager : MonoBehaviour
 
         S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearestAngle;
-        S.I.IM.PC.Build.DeselectBuilding.performed += DeselectCurrentBuilding;
+        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
 
         // Don't see why this would ever be true, but just in case. 
@@ -72,8 +74,32 @@ public class BuildingManager : MonoBehaviour
 
         S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearestAngle;
-        S.I.IM.PC.Build.DeselectBuilding.performed -= DeselectCurrentBuilding;
+        InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
         S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
+    }
+
+    private void FixedUpdate()
+    {
+        if (_haveABuildingSelected)
+        {
+            RotateBuilding();
+
+            // Move building to current mouse position on ground
+            Ray ray = Camera.main.ScreenPointToRay(S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>());
+            RaycastHit hitData;
+
+            // TODO - Set maxDistance to zoom level plus a bit? Or is that just going overboard? 
+            if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
+            {
+                // Make sure to make buildings have their "pivot" on the bottom center, that is,
+                // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
+                _currentBuildingInstance.transform.position = hitData.point;
+
+                SetHighlight();
+            }
+        }
+
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void RotateBuilding()
@@ -105,62 +131,18 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (_haveABuildingSelected)
-        {
-            RotateBuilding();
-/*        }
-
-        // Why not check for _haveABuildingSelected here instead? 
-        if (_currentBuildingInstance != null)
-        {*/
-            // Move building to current mouse position on ground
-            Ray ray = Camera.main.ScreenPointToRay(
-                S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>());
-            RaycastHit hitData;
-            // TODO - Set maxDistance to zoom level plus a bit? Or is that just going overboard? 
-            if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
-            {
-                // Make sure to make buildings have their "pivot" on the bottom center, that is,
-                // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
-                _currentBuildingInstance.transform.position = hitData.point;
-
-                SetHighlight();
-            }
-        }
-
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
-    }
-
     private void SetHighlight()
     {
-
-        // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
-        // Use SelectedBuildingIcon as a component of the building Prefab. 
         if (CanBuildHere())
         {
             // Green highlight, allowed to build here. 
             _selectedBuildingIcon.SetGreenMaterial();
-
-/*            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);*/
         }
         else
         {
             // Red highlight, can't build here. 
             _selectedBuildingIcon.SetRedMaterial();
-
-/*            _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-            _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);*/
         }
-    }
-
-    private void SetBuildingInstance(GameObject buildingInstance)
-    {
-        _currentBuildingInstance = buildingInstance;
-        _selectedBuildingIcon = (buildingInstance == null) ? null : buildingInstance.GetComponent<SelectedBuildingIcon>();
-        _selectedBuildingIcon.ActivateIcon();
     }
 
     private void MakeInstance()
@@ -192,6 +174,25 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    // Use a "Building" prefab with the selected building icon child. Then attach the actual building prefab as a child of it in this script.
+    private void SetBuildingInstance(GameObject buildingInstance)
+    {
+        if (buildingInstance != null)
+        {
+            GameObject buildingParent = Instantiate(_buildingPrefab);
+            buildingInstance.transform.SetParent(buildingParent.transform);
+            buildingInstance.transform.localPosition = Vector3.zero;
+            _currentBuildingInstance = buildingParent;
+            _selectedBuildingIcon = buildingInstance.GetComponent<SelectedBuildingIcon>();
+//            _selectedBuildingIcon?.ActivateIcon();
+        }
+        else
+        {
+            _currentBuildingInstance = null;
+            _selectedBuildingIcon = null;
+        }
+    }
+
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         // TODO: This might not work in builds, especially for android. Figure it out. 
@@ -203,7 +204,7 @@ public class BuildingManager : MonoBehaviour
             {
                 // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
                 // Turn off red/green highlights
-                _selectedBuildingIcon.DeactivateIcon();
+//                _selectedBuildingIcon.DeactivateIcon();
 
 /*                _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);*/
@@ -212,6 +213,13 @@ public class BuildingManager : MonoBehaviour
                 // Could make it disabled in prefab then just enable it after placing?
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
+
+                // Disconnect the actual building from the parent/selected icon. 
+                GameObject justTheBuilding = _currentBuildingInstance.transform.GetComponentInChildren<Collider>().gameObject;
+                justTheBuilding.transform.parent = null;
+
+                // Destroy the parent/selected icon. 
+                Destroy(_currentBuildingInstance);
 
                 // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built).
                 // This is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu. 

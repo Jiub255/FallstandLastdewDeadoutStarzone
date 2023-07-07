@@ -7,7 +7,6 @@ public class SelectedBuildingIcon : MonoBehaviour
     private Material _greenMaterial;
     [SerializeField]
     private Material _redMaterial;
-
     [SerializeField]
     private float _borderThickness = 1f;
     [SerializeField]
@@ -31,7 +30,6 @@ public class SelectedBuildingIcon : MonoBehaviour
         // Set icon size based off collider, border thickness, and a y value for height. 
         Vector3 position = _boxCollider.transform.position;
         Vector3 size = _boxCollider.size;
-        Debug.Log($"Size: {_boxCollider.size}");
         
         // Set position, including height. 
         _transform.position = new Vector3(position.x, 0f, position.z);
@@ -43,7 +41,7 @@ public class SelectedBuildingIcon : MonoBehaviour
             size.z + (_borderThickness / _transform.parent.localScale.z));
     }
 
-    public void ActivateIcon()
+/*    public void ActivateIcon()
     {
         _renderer.enabled = true;
     }
@@ -51,7 +49,7 @@ public class SelectedBuildingIcon : MonoBehaviour
     public void DeactivateIcon()
     {
         _renderer.enabled = false;
-    }
+    }*/
 
     public void SetRedMaterial()
     {
