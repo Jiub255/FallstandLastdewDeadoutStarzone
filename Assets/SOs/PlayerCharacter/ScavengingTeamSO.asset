@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e2fece574f19f54da7dcb9cf66d51d5, type: 3}
   m_Name: ScavengingTeamSO
   m_EditorClassIdentifier: 
-  SOPCs: []
+  SOPCs:
+  - {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}

@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestRTSmovementScene.unity
     guid: ce1968d8cd7eda04ebb4e1197aa10aed
+  - enabled: 1
+    path: Assets/Scenes/TestBaseScene.unity
+    guid: 9718b053fc46af44ca2c5644049bd44b
+  - enabled: 1
+    path: Assets/Scenes/ScavengingScene.unity
+    guid: 034b1035e4132784a8e00fafa186c546
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c09f927aa27ee2746a8cc9e5253373a2, type: 2}

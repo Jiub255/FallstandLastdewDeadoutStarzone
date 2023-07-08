@@ -3,7 +3,7 @@ using UnityEngine;
 public class PCInstantiator : MonoBehaviour
 {
     [SerializeField]
-    private SOListSOPC _pcSOsSO;
+    private SOListSOPC _pcSOListSO;
 
     private void Awake()
     {
@@ -16,11 +16,13 @@ public class PCInstantiator : MonoBehaviour
         //             and make sure they're at least x units from each other. 
 
         // For now, just instantiating them in a line starting at the spawn point. 
-        for (int i = 0; i < _pcSOsSO.SOPCs.Count; i++)
+
+        Transform spawnPointTransform = transform;
+        for (int i = 0; i < _pcSOListSO.SOPCs.Count; i++)
         {
-            _pcSOsSO.SOPCs[i].PCInstance = Instantiate(
-                _pcSOsSO.SOPCs[i].PCPrefab,
-                new Vector3(3 * i, 0f, 0f) + transform.position,
+            _pcSOListSO.SOPCs[i].PCInstance = Instantiate(
+                _pcSOListSO.SOPCs[i].PCPrefab,
+                new Vector3(3 * i, 0f, 0f) + spawnPointTransform.position,
                 Quaternion.identity);
         }
     }

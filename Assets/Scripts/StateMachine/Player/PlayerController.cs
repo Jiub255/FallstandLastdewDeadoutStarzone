@@ -39,6 +39,7 @@ public class PlayerController : StateMachine<PlayerController>
     public LayerMask PCLayerMask;
     public LayerMask EnemyLayerMask;
     public LayerMask LootContainerLayerMask;
+    public LayerMask ExitLayerMask;
     public LayerMask GroundLayerMask;
 
     private EventSystem _eventSystem;
@@ -163,6 +164,22 @@ public class PlayerController : StateMachine<PlayerController>
                         else
                         {
                             Debug.LogWarning("No LootContainer found. ");
+                        }
+                    }
+                }
+
+                // Check for exit clicks fourth. 
+                // TODO - Would it be more performant to just skip the scene check? 
+                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene() == UnityEngine.SceneManagement.SceneManager.GetSceneByName("ScavengingScene"))
+                {
+                    foreach (RaycastHit hit in hits)
+                    {
+                        if (ExitLayerMask.Contains(hit.collider.gameObject.layer))
+                        {
+                            ChangeStateTo(ApproachLocation(hit.point));
+
+                            // Return so that multiple hits don't get called. 
+                            return;
                         }
                     }
                 }

@@ -13,8 +13,10 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    In the camera, have another game object follow the focal point and have the camera look at that instead. It will be the actual focal point. 
-        Should stop camera from tilting while moving. 
+    Finish map/scavenging system. 
+
+    
+    Use particle system for magic effects (and other stuff). 
 
 
     How to handle injury/pain? 
@@ -149,6 +151,13 @@ FIX:
 
     Figure out how travelling will work.
         Use a world map and choose the location? 
+        Make a big map to explore. 
+            Lots of different types of buildings. 
+            Use procedural generation? 
+        Once you choose a location, your team starts traveling there. You can watch them on the map.
+            Possible to get attacked while team is away so don't always send your best fighters. 
+            Can send multiple teams at the same time if you have enough PCs. 
+            Finding/repairing/building vehicles increases your travel speed. 
         OR, Travel on the map in a simple "overworld" style to find new locations. Uncover the map as you explore.
             Choose to scavenge whichever buildings. Certain buildings have better loot, different types of buildings have different loot possibilites. 
             Maybe you can see enemies/mobs on map? Have to fight them if you run into them? They could be around buildings with really good loot. 

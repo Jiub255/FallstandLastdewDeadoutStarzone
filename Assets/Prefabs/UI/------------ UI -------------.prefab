@@ -3917,6 +3917,7 @@ MonoBehaviour:
   _inventoryCanvas: {fileID: 4314923719890607835}
   _buildCanvas: {fileID: 7977803640239919478}
   _craftingCanvas: {fileID: 5290609741861204813}
+  _mapCanvas: {fileID: 5634059733192307266}
   _hUDCanvas: {fileID: 1881279619}
 --- !u!1 &4314923721231603553
 GameObject:
