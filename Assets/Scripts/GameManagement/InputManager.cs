@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
     public GameStates GameState { get; private set; }
 
     // Probably a cleaner way to do this. 
-    private GameStates WorldOrBuildMostRecently = GameStates.World;
+    private GameStates MostRecentActionMap = GameStates.World;
 
     private Vector2 _startingMousePosition;
     [SerializeField]
@@ -94,12 +94,12 @@ public class InputManager : MonoBehaviour
         {
             if (GameState == GameStates.World)
             {
-                WorldOrBuildMostRecently = GameStates.World;
+                MostRecentActionMap = GameStates.World;
                 ChangeGameState(GameStates.WorldMenus);
             }
             else if (GameState == GameStates.Build)
             {
-                WorldOrBuildMostRecently = GameStates.Build;
+                MostRecentActionMap = GameStates.Build;
                 ChangeGameState(GameStates.WorldMenus);
             }
             else if(GameState == GameStates.Combat)
@@ -111,11 +111,11 @@ public class InputManager : MonoBehaviour
         {
             if (GameState == GameStates.WorldMenus)
             {
-                if (WorldOrBuildMostRecently == GameStates.World)
+                if (MostRecentActionMap == GameStates.World)
                 {
                     ChangeGameState(GameStates.World);
                 }
-                else if(WorldOrBuildMostRecently == GameStates.Build)
+                else if(MostRecentActionMap == GameStates.Build)
                 {
                     ChangeGameState(GameStates.Build);
                 }
@@ -127,7 +127,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    #region Debug button methods
+    // Used at home base (not during combat/raids/invasions).
     public void WorldMap()
     {
         PC.Disable();
@@ -135,15 +135,19 @@ public class InputManager : MonoBehaviour
         PC.Quit.Enable();
         PC.World.Enable();
         PC.InventoryMenu.Enable();
-        PC.BuildCraftingMenus.Enable();
+        PC.NonCombatMenus.Enable();
     }
+
+    // Used in non-combat menus. 
     public void WorldMenusMap()
     {
         PC.Disable();
         PC.Quit.Enable();
         PC.InventoryMenu.Enable();
-        PC.BuildCraftingMenus.Enable();
+        PC.NonCombatMenus.Enable();
     }
+
+    // Used in scavenging scenes and home base combat. 
     public void CombatMap()
     {
         PC.Disable();
@@ -152,12 +156,16 @@ public class InputManager : MonoBehaviour
         PC.World.Enable();
         PC.InventoryMenu.Enable();
     }
+
+    // Used in combat menus. 
     public void CombatMenusMap()
     {
         PC.Disable();
         PC.Quit.Enable();
         PC.InventoryMenu.Enable();
     }
+
+    // Used in build mode in home base. 
     public void BuildMap()
     {
         PC.Disable();
@@ -165,10 +173,8 @@ public class InputManager : MonoBehaviour
         PC.Quit.Enable();
         PC.Build.Enable();
         PC.InventoryMenu.Enable();
-        PC.BuildCraftingMenus.Enable();
+        PC.NonCombatMenus.Enable();
     }
-
-    #endregion
 
     // TODO: Need to deactivate player movement/currentlySelectedPC when going into build mode.
 

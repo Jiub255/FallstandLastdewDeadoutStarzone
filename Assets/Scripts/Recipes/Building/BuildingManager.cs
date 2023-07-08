@@ -55,7 +55,7 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearestAngle;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
-        S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
 
         // Don't see why this would ever be true, but just in case. 
         if (_currentBuildingInstance != null)
@@ -75,7 +75,7 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearestAngle;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
-        S.I.IM.PC.BuildCraftingMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
     }
 
     private void FixedUpdate()

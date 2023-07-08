@@ -8,6 +8,7 @@ public class S : MonoBehaviour
 
     public InputManager IM { get; private set; }
     public GameManager GameManager { get; private set; }
+    public SceneTransitionManager SceneTransitionManager { get; private set; }
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class S : MonoBehaviour
 
         IM = GetComponentInChildren<InputManager>();
         GameManager = GetComponentInChildren<GameManager>();
+        SceneTransitionManager = GetComponentInChildren<SceneTransitionManager>();
 
         DontDestroyOnLoad(gameObject);
     }

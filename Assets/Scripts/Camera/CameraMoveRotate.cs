@@ -102,6 +102,7 @@ public class CameraMoveRotate : MonoBehaviour
         // isolated frames, but it helps resolve some issues with moving while zooming.
         if (!_zoomAction.WasPerformedThisFrame())
         {
+            // Can't drag and keyboard move at the same time, dragging overrides keyboard movement. 
             if (_dragging)
             {
                 DragCamera();
@@ -120,7 +121,8 @@ public class CameraMoveRotate : MonoBehaviour
             // Gets annoying when you accidentally edge scroll because you moved the mouse too far while rotating.
             else
             {
-               // EdgeScroll();
+                // Turning off while making the game because it's annoying while in the editor. 
+//                EdgeScroll();
             }
         }
     }
@@ -133,7 +135,7 @@ public class CameraMoveRotate : MonoBehaviour
         // Translate direction vector to world space
         Vector3 movement = (_forward * direction.y) + (_right * direction.x);
 
-        Debug.Log($"Mouse position: {_mousePositionAction.ReadValue<Vector2>()}, Last position: {_lastMousePosition}, movement: {movement}");
+//        Debug.Log($"Mouse position: {_mousePositionAction.ReadValue<Vector2>()}, Last position: {_lastMousePosition}, movement: {movement}");
 
         // Move
         _transform.position += movement * _draggingSpeed * Time.unscaledDeltaTime;

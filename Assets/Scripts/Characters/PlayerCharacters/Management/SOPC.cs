@@ -9,7 +9,8 @@ public class SOPC : ScriptableObject
 
     public Sprite Icon;
     public GameObject PCPrefab;
-    public GameObject PCInstance { get; set; }
+    [HideInInspector]
+    public GameObject PCInstance;/* { get; set; }*/
 
     // Called by clicking PC icon button. 
     public void Use()

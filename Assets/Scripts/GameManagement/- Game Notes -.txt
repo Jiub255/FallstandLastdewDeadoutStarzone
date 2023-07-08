@@ -13,6 +13,9 @@ ________________________________________________________________________________
 FIRST!!
 
 
+    In the camera, have another game object follow the focal point and have the camera look at that instead. It will be the actual focal point. 
+        Should stop camera from tilting while moving. 
+
 
     How to handle injury/pain? 
         Getting hit raises injury, which raises pain, which negatively affects stats. 

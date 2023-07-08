@@ -434,7 +434,7 @@
             ]
         },
         {
-            "name": "BuildCraftingMenus",
+            "name": "NonCombatMenus",
             "id": "89065333-d518-4ec8-9f13-b660d8239f08",
             "actions": [
                 {
@@ -472,6 +472,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenMap",
+                    "type": "PassThrough",
+                    "id": "5f079a0c-ca47-47e6-ae9c-ad22fb807bfb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CloseMap",
+                    "type": "PassThrough",
+                    "id": "83723cdf-9f11-4223-b6b1-ce89090a1984",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -538,6 +556,39 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "CloseCraftingMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "137e7296-6550-4689-bd6f-110c3716b4d9",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b75dae29-43b5-48ab-9327-fdfdb182ef51",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6d8d35b6-cdca-48b8-ab44-76a79625b491",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "CloseMap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

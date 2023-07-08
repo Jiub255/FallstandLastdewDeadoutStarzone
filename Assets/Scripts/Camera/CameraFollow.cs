@@ -5,10 +5,8 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField]
     private Transform _follow;
-
     [SerializeField]
     private Transform _lookAt;
-
     [SerializeField, Range(0.1f, 1.0f)]
     private float _smoothTime = 0.3f;
 

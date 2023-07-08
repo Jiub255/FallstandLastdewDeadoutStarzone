@@ -456,7 +456,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""BuildCraftingMenus"",
+            ""name"": ""NonCombatMenus"",
             ""id"": ""89065333-d518-4ec8-9f13-b660d8239f08"",
             ""actions"": [
                 {
@@ -494,6 +494,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenMap"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5f079a0c-ca47-47e6-ae9c-ad22fb807bfb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CloseMap"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""83723cdf-9f11-4223-b6b1-ce89090a1984"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -562,6 +580,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""CloseCraftingMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""137e7296-6550-4689-bd6f-110c3716b4d9"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b75dae29-43b5-48ab-9327-fdfdb182ef51"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""CloseMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d8d35b6-cdca-48b8-ab44-76a79625b491"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""CloseMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -619,12 +670,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_InventoryMenu = asset.FindActionMap("InventoryMenu", throwIfNotFound: true);
         m_InventoryMenu_OpenInventory = m_InventoryMenu.FindAction("OpenInventory", throwIfNotFound: true);
         m_InventoryMenu_CloseInventory = m_InventoryMenu.FindAction("CloseInventory", throwIfNotFound: true);
-        // BuildCraftingMenus
-        m_BuildCraftingMenus = asset.FindActionMap("BuildCraftingMenus", throwIfNotFound: true);
-        m_BuildCraftingMenus_OpenBuildMenu = m_BuildCraftingMenus.FindAction("OpenBuildMenu", throwIfNotFound: true);
-        m_BuildCraftingMenus_CloseBuildMenu = m_BuildCraftingMenus.FindAction("CloseBuildMenu", throwIfNotFound: true);
-        m_BuildCraftingMenus_OpenCraftingMenu = m_BuildCraftingMenus.FindAction("OpenCraftingMenu", throwIfNotFound: true);
-        m_BuildCraftingMenus_CloseCraftingMenu = m_BuildCraftingMenus.FindAction("CloseCraftingMenu", throwIfNotFound: true);
+        // NonCombatMenus
+        m_NonCombatMenus = asset.FindActionMap("NonCombatMenus", throwIfNotFound: true);
+        m_NonCombatMenus_OpenBuildMenu = m_NonCombatMenus.FindAction("OpenBuildMenu", throwIfNotFound: true);
+        m_NonCombatMenus_CloseBuildMenu = m_NonCombatMenus.FindAction("CloseBuildMenu", throwIfNotFound: true);
+        m_NonCombatMenus_OpenCraftingMenu = m_NonCombatMenus.FindAction("OpenCraftingMenu", throwIfNotFound: true);
+        m_NonCombatMenus_CloseCraftingMenu = m_NonCombatMenus.FindAction("CloseCraftingMenu", throwIfNotFound: true);
+        m_NonCombatMenus_OpenMap = m_NonCombatMenus.FindAction("OpenMap", throwIfNotFound: true);
+        m_NonCombatMenus_CloseMap = m_NonCombatMenus.FindAction("CloseMap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -910,44 +963,54 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public InventoryMenuActions @InventoryMenu => new InventoryMenuActions(this);
 
-    // BuildCraftingMenus
-    private readonly InputActionMap m_BuildCraftingMenus;
-    private IBuildCraftingMenusActions m_BuildCraftingMenusActionsCallbackInterface;
-    private readonly InputAction m_BuildCraftingMenus_OpenBuildMenu;
-    private readonly InputAction m_BuildCraftingMenus_CloseBuildMenu;
-    private readonly InputAction m_BuildCraftingMenus_OpenCraftingMenu;
-    private readonly InputAction m_BuildCraftingMenus_CloseCraftingMenu;
-    public struct BuildCraftingMenusActions
+    // NonCombatMenus
+    private readonly InputActionMap m_NonCombatMenus;
+    private INonCombatMenusActions m_NonCombatMenusActionsCallbackInterface;
+    private readonly InputAction m_NonCombatMenus_OpenBuildMenu;
+    private readonly InputAction m_NonCombatMenus_CloseBuildMenu;
+    private readonly InputAction m_NonCombatMenus_OpenCraftingMenu;
+    private readonly InputAction m_NonCombatMenus_CloseCraftingMenu;
+    private readonly InputAction m_NonCombatMenus_OpenMap;
+    private readonly InputAction m_NonCombatMenus_CloseMap;
+    public struct NonCombatMenusActions
     {
         private @PlayerControls m_Wrapper;
-        public BuildCraftingMenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @OpenBuildMenu => m_Wrapper.m_BuildCraftingMenus_OpenBuildMenu;
-        public InputAction @CloseBuildMenu => m_Wrapper.m_BuildCraftingMenus_CloseBuildMenu;
-        public InputAction @OpenCraftingMenu => m_Wrapper.m_BuildCraftingMenus_OpenCraftingMenu;
-        public InputAction @CloseCraftingMenu => m_Wrapper.m_BuildCraftingMenus_CloseCraftingMenu;
-        public InputActionMap Get() { return m_Wrapper.m_BuildCraftingMenus; }
+        public NonCombatMenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenBuildMenu => m_Wrapper.m_NonCombatMenus_OpenBuildMenu;
+        public InputAction @CloseBuildMenu => m_Wrapper.m_NonCombatMenus_CloseBuildMenu;
+        public InputAction @OpenCraftingMenu => m_Wrapper.m_NonCombatMenus_OpenCraftingMenu;
+        public InputAction @CloseCraftingMenu => m_Wrapper.m_NonCombatMenus_CloseCraftingMenu;
+        public InputAction @OpenMap => m_Wrapper.m_NonCombatMenus_OpenMap;
+        public InputAction @CloseMap => m_Wrapper.m_NonCombatMenus_CloseMap;
+        public InputActionMap Get() { return m_Wrapper.m_NonCombatMenus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BuildCraftingMenusActions set) { return set.Get(); }
-        public void SetCallbacks(IBuildCraftingMenusActions instance)
+        public static implicit operator InputActionMap(NonCombatMenusActions set) { return set.Get(); }
+        public void SetCallbacks(INonCombatMenusActions instance)
         {
-            if (m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface != null)
+            if (m_Wrapper.m_NonCombatMenusActionsCallbackInterface != null)
             {
-                @OpenBuildMenu.started -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @OpenBuildMenu.performed -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @OpenBuildMenu.canceled -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @CloseBuildMenu.started -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @CloseBuildMenu.performed -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @CloseBuildMenu.canceled -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @OpenCraftingMenu.started -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @OpenCraftingMenu.performed -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @OpenCraftingMenu.canceled -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @CloseCraftingMenu.started -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseCraftingMenu;
-                @CloseCraftingMenu.performed -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseCraftingMenu;
-                @CloseCraftingMenu.canceled -= m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface.OnCloseCraftingMenu;
+                @OpenBuildMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
+                @OpenBuildMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
+                @OpenBuildMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
+                @CloseBuildMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
+                @CloseBuildMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
+                @CloseBuildMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
+                @OpenCraftingMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
+                @OpenCraftingMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
+                @OpenCraftingMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
+                @CloseCraftingMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
+                @CloseCraftingMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
+                @CloseCraftingMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
+                @OpenMap.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
+                @OpenMap.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
+                @OpenMap.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
+                @CloseMap.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
+                @CloseMap.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
+                @CloseMap.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
             }
-            m_Wrapper.m_BuildCraftingMenusActionsCallbackInterface = instance;
+            m_Wrapper.m_NonCombatMenusActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @OpenBuildMenu.started += instance.OnOpenBuildMenu;
@@ -962,10 +1025,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @CloseCraftingMenu.started += instance.OnCloseCraftingMenu;
                 @CloseCraftingMenu.performed += instance.OnCloseCraftingMenu;
                 @CloseCraftingMenu.canceled += instance.OnCloseCraftingMenu;
+                @OpenMap.started += instance.OnOpenMap;
+                @OpenMap.performed += instance.OnOpenMap;
+                @OpenMap.canceled += instance.OnOpenMap;
+                @CloseMap.started += instance.OnCloseMap;
+                @CloseMap.performed += instance.OnCloseMap;
+                @CloseMap.canceled += instance.OnCloseMap;
             }
         }
     }
-    public BuildCraftingMenusActions @BuildCraftingMenus => new BuildCraftingMenusActions(this);
+    public NonCombatMenusActions @NonCombatMenus => new NonCombatMenusActions(this);
     private int m_ControllerSchemeIndex = -1;
     public InputControlScheme ControllerScheme
     {
@@ -1012,11 +1081,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnOpenInventory(InputAction.CallbackContext context);
         void OnCloseInventory(InputAction.CallbackContext context);
     }
-    public interface IBuildCraftingMenusActions
+    public interface INonCombatMenusActions
     {
         void OnOpenBuildMenu(InputAction.CallbackContext context);
         void OnCloseBuildMenu(InputAction.CallbackContext context);
         void OnOpenCraftingMenu(InputAction.CallbackContext context);
         void OnCloseCraftingMenu(InputAction.CallbackContext context);
+        void OnOpenMap(InputAction.CallbackContext context);
+        void OnCloseMap(InputAction.CallbackContext context);
     }
 }
