@@ -13,6 +13,9 @@ ________________________________________________________________________________
 FIRST!!
 
 
+    Clean up PCSelector, or move it to PlayerController with the rest of the click handling. Or have InputManager handle the click then send events? 
+
+
     Finish map/scavenging system. 
 
     

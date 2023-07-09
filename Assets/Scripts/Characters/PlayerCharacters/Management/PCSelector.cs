@@ -16,7 +16,6 @@ public class PCSelector : MonoBehaviour
     private float _lastClickTime = 0f;
 
     private EventSystem _eventSystem;
-    // Need to use this bool and check in update to avoid a unity error. 
     private bool _pointerOverUI = false;
 
     private int _firstClickedObjectID;
@@ -36,11 +35,6 @@ public class PCSelector : MonoBehaviour
         PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
 
-    private void Update()
-    {
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
-    }
-
     private void OnDisable()
     {
         // Click on PC icon. 
@@ -49,10 +43,12 @@ public class PCSelector : MonoBehaviour
         // Click on PC instance. 
         S.I.IM.PC.World.SelectOrCenter.performed -= CheckIfPCClicked;
 
-        /*SelectedIdleSubstate.OnPCDeselected*/
-//        SelectedIdleSubstate.OnDeselectPC -= () => { Debug.Log("OnDeselectPC called by SelectedIdleSubstate"); _currentPCInstance = null; };
-   
         PlayerIdleState.OnPCDeselected -= () => ChangePC(null);
+    }
+
+    private void Update()
+    {
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void CheckIfPCClicked(InputAction.CallbackContext context)

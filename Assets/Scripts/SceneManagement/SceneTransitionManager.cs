@@ -42,6 +42,9 @@ public class SceneTransitionManager : MonoBehaviour
         // Instantiate scavenging level. 
         Instantiate(levelPrefab, Vector3.zero, Quaternion.identity);
 
+        // Make pathfinding grid graph. 
+
+
         // Unload previous scene here so it doesn't block fade in canvas and so you don't see both scenes. 
         SceneManager.UnloadSceneAsync(currentScene);
     }

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class MBASTest : MBAutoUnsubscribe
 {
-/*    private void OnEnable()
+
+    private void OnEnable()
     {
-//        Subscribe(UIManager.OnOpenedMenu, TestMethod);
+        Subscribe(MBASTestOtherScript.OnTest, TestMethod);
     }
 
-    private void TestMethod()
+    public void TestMethod()
     {
         Debug.Log("Test worked. ");
-    }*/
+    }
 }

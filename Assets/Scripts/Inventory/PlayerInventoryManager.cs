@@ -14,6 +14,8 @@ public class PlayerInventoryManager : InventoryManager
 
         SOItem.OnAddItem += (item) => AddItems(item, 1);
         SOItem.OnRemoveItem += (item) => RemoveItems(item, 1);
+
+        PlayerLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
     }
 
     protected void OnDisable()
@@ -23,5 +25,7 @@ public class PlayerInventoryManager : InventoryManager
 
         SOItem.OnAddItem -= (item) => AddItems(item, 1);
         SOItem.OnRemoveItem -= (item) => RemoveItems(item, 1);
+   
+        PlayerLootState.OnLootItems -= (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
     }
 }

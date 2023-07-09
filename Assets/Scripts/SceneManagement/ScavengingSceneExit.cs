@@ -11,4 +11,5 @@ public class ScavengingSceneExit : MonoBehaviour
 
 	// Once last PC leaves, load next scene (Scavenging scene results menu). 
 	// Show loot gained, condition of team members, enemies killed, time taken, whatever other info. 
+
 }

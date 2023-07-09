@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-// Put this on camera
+// TODO - Change materials from Opaque to Transparent only while fading/faded. Otherwise seems to cause clipping issues with graphics. 
+// Put this on camera. 
 public class Transparentizer : MonoBehaviour
 {
     // Could make multiple transparentable layers if needed, then collect them all into this LayerMask. 
@@ -15,14 +16,14 @@ public class Transparentizer : MonoBehaviour
     // Currently selected PC
     private Transform _currentPCTransform;
 
-    // A material should be on at most one of these next three lists/dicts at once
-    // List of all materials that are currently fully faded out
+    // A material should be on at most one of these next three lists/dicts at once. 
+    // List of all materials that are currently fully faded out. 
     private List<Material> _fadedOut = new List<Material>();
 
-    // Dictionary of all materials/coroutines that are currently fading out
+    // Dictionary of all materials/coroutines that are currently fading out. 
     private Dictionary<Material, Coroutine> _fadingOutDict = new Dictionary<Material, Coroutine>();
 
-    // Dictionary of all materials/coroutines that are currently fading in
+    // Dictionary of all materials/coroutines that are currently fading in. 
     private Dictionary<Material, Coroutine> _fadingInDict = new Dictionary<Material, Coroutine>();
 
     [SerializeField, Range(0, 2f)] 
@@ -48,40 +49,16 @@ public class Transparentizer : MonoBehaviour
     private void OnEnable()
     {
         PCSelector.OnSelectPC += SelectPC;
-
-/*        SelectedSubstate.OnSelectPC += SelectPC;
-        SelectedIdleSubstate.OnDeselectPC += DeselectPC;*/
     }
 
     private void OnDisable()
     {
         PCSelector.OnSelectPC -= SelectPC;
-        
-/*        SelectedSubstate.OnSelectPC -= SelectPC;
-        SelectedIdleSubstate.OnDeselectPC -= DeselectPC;*/
     }
 
     private void SelectPC(Transform pcTransform)
     {
         _currentPCTransform = pcTransform;
-        // Waiting a frame because SelectPC gets called on the new PC before this. 
-//        StartCoroutine(WaitThenSelect(pcTransform));
-    }
-
-/*    private IEnumerator WaitThenSelect(Transform pcTransform)
-    {
-        yield return new WaitForEndOfFrame();
-
-        _currentPCTransform = pcTransform;
-
-        //Debug.Log($"Transparentizer's current PC is {_currentPCTransform.gameObject.name}");
-    }*/
-
-    private void DeselectPC()
-    {
-        _currentPCTransform = null;
-
-        //Debug.Log($"Transparentizer's current PC is null");
     }
 
     private void Update()
@@ -100,7 +77,7 @@ public class Transparentizer : MonoBehaviour
     {
         RaycastHit[] hits = new RaycastHit[0];
 
-        // Hits from mouse position
+        // Hits from mouse position 
         if (!_pointerOverUI)
         {
             hits = Physics.RaycastAll(
@@ -109,7 +86,7 @@ public class Transparentizer : MonoBehaviour
                 _transparentableLayerMask);
         }
 
-        // Hits from currently selected PC
+        // Hits from currently selected PC 
         if (_currentPCTransform != null)
         {
             Vector3 position = _transform.position;
@@ -122,11 +99,11 @@ public class Transparentizer : MonoBehaviour
                 rayDistance,
                 _transparentableLayerMask);
 
-            // Combine all hits into one array
+            // Combine all hits into one array. 
             hits = selectedPlayerHits.Concat(hits).ToArray();
         }
 
-        // List of all in the way materials, gets remade each fixed update
+        // List of all in the way materials, gets remade each fixed update. 
         List<Material> inTheWayMaterials = new List<Material>();
 
         foreach (RaycastHit hit in hits)
@@ -135,20 +112,20 @@ public class Transparentizer : MonoBehaviour
 
             foreach (Material material in hitMaterials)
             {
-                // Adds all in the way materials to list, and starts fading them if they're not already fading/faded
-                // Also stops fading-in coroutines and starts fading those materials out
+                // Adds all in the way materials to list, and starts fading them if they're not already fading/faded. 
+                // Also stops fading-in coroutines and starts fading those materials out. 
                 inTheWayMaterials.Add(AndFadeOutIfNecessary(material));
             }
         }
 
-        // If a material is faded out or fading out but no longer in the way, unfade it
+        // If a material is faded out or fading out but no longer in the way, unfade it. 
         List<Material> materialsToUnfade = new List<Material>();
 
         for (int i = _fadedOut.Count - 1; i >= 0; i--)
         {
             if (!inTheWayMaterials.Contains(_fadedOut[i]))
             {
-                // If a material is FADED out but no longer in the way, unfade it
+                // If a material is FADED out but no longer in the way, unfade it. 
                 materialsToUnfade.Add(AndUnfade(_fadedOut[i]));
                 _fadedOut.Remove(_fadedOut[i]);
             }
@@ -160,7 +137,7 @@ public class Transparentizer : MonoBehaviour
         {
             if (!inTheWayMaterials.Contains(kvp.Key))
             {
-                // If a material is FADING out but no longer in the way, unfade it
+                // If a material is FADING out but no longer in the way, unfade it. 
                 itemsToRemove.Add(kvp);
             }
         }
@@ -178,8 +155,14 @@ public class Transparentizer : MonoBehaviour
         List<Renderer> renderers = new List<Renderer>();
 
         renderers.AddRange(hit.collider.GetComponents<Renderer>());
-        // Uncomment below line if using objects with colliders on grandchildren
-        //meshRenderers.AddRange(hit.collider.GetComponentsInChildren<MeshRenderer>());
+
+        // Uncomment below line if using objects with renderers on children. 
+        renderers.AddRange(hit.collider.GetComponentsInChildren<Renderer>());
+        // Uncomment below line if using objects with renderers on grandchildren. 
+        foreach (Transform child in hit.transform)
+        {
+            renderers.AddRange(child.GetComponentsInChildren<Renderer>());
+        }
 
         if (renderers.Count > 0)
         {
@@ -197,20 +180,26 @@ public class Transparentizer : MonoBehaviour
         // If material isn't faded out or fading out, ...
         if (!_fadedOut.Contains(material) && !_fadingOutDict.ContainsKey(material))
         {
-            // If material is fading in, stop that coroutine and remove it from dictionary
+            // If material is fading in, stop that coroutine and remove it from dictionary. 
             if (_fadingInDict.ContainsKey(material))
             {
                 StopCoroutine(_fadingInDict[material]);
                 _fadingInDict.Remove(material);
             }
 
-            // Start fade out coroutine
+            // Start fade out coroutine. 
             Color fadeColor = new Color(
-                material.color.r, material.color.g, material.color.b, _alphaWhenFaded);
+                material.color.r,
+                material.color.g, 
+                material.color.b, 
+                _alphaWhenFaded);
+
+            // Change material to Transparent here.
+            ToFadeMode(material);
 
             Coroutine coroutine = StartCoroutine(Fade(material, fadeColor, _fadeDuration));
 
-            // Add to fadingOutDict, then add to faded list when coroutine done
+            // Add to fadingOutDict, then add to faded list when coroutine done. 
             _fadingOutDict.Add(material, coroutine);
 
             return material;
@@ -228,7 +217,7 @@ public class Transparentizer : MonoBehaviour
 
         Coroutine coroutine = StartCoroutine(Fade(material, originalColor, _fadeDuration));
 
-        // Add to fadingInDict. Remove from fadingInDict when coroutine done
+        // Add to fadingInDict. Remove from fadingInDict when coroutine done. 
         _fadingInDict.Add(material, coroutine);
 
         return material;
@@ -241,7 +230,7 @@ public class Transparentizer : MonoBehaviour
 
         while (time < duration)
         {
-            // TODO: Fix this lerp. Use idea from CameraControllerFollower comments
+            // TODO: Fix this lerp. Use idea from CameraControllerFollower comments. 
             material.color = Color.Lerp(material.color, fadedColor, time);
             time += Time.deltaTime;
             yield return null;
@@ -252,16 +241,42 @@ public class Transparentizer : MonoBehaviour
         // If material is fading out (not in), ...
         if (_fadingOutDict.ContainsKey(material))
         {
-            // Remove from fadingOutDict
+            // Remove from fadingOutDict. 
             _fadingOutDict.Remove(material);
 
-            // Add to faded list
+            // Add to faded list. 
             _fadedOut.Add(material);
         }
         else if (_fadingInDict.ContainsKey(material))
         {
-            // Remove from fadingInDict
+            // Set material back to Opaque. 
+            ToOpaqueMode(material);
+
+            // Remove from fadingInDict. 
             _fadingInDict.Remove(material);
         }
+    }
+    private void ToOpaqueMode(Material material)
+    {
+        material.SetOverrideTag("RenderType", "");
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+        material.SetInt("_ZWrite", 1);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = -1;
+    }
+
+    private void ToFadeMode(Material material)
+    {
+        material.SetOverrideTag("RenderType", "Transparent");
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.EnableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
     }
 }

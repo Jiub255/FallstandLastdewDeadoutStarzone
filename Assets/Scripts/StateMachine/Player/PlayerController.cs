@@ -15,8 +15,6 @@ public class PlayerController : StateMachine<PlayerController>
     [SerializeField]
     private AnimationClip _lootAnimation;
     [SerializeField]
-    private SOInventory _inventorySO;
-    [SerializeField]
     private LootTimer _lootTimer;
 
     [Header("Combat State Variables")]
@@ -42,33 +40,18 @@ public class PlayerController : StateMachine<PlayerController>
     public LayerMask ExitLayerMask;
     public LayerMask GroundLayerMask;
 
+    // For checking if mouse is over UI. 
     private EventSystem _eventSystem;
-    // Need to use this bool and check in update to avoid a unity error. 
     private bool _pointerOverUI = false;
     private InputAction _mousePositionAction;
 
     // States
     public PlayerIdleState Idle() { return new PlayerIdleState(this, _sightDistance); } 
     public PlayerCombatState Combat(Transform target) { return new PlayerCombatState(this, target, _attackDuration); } 
-    public PlayerLootState Loot(LootContainer lootContainer) { return new PlayerLootState(this, lootContainer, _lootAnimation, _inventorySO, _lootTimer); }
+    public PlayerLootState Loot(LootContainer lootContainer) { return new PlayerLootState(this, lootContainer, _lootAnimation, _lootTimer); }
     public PlayerApproachLocationState ApproachLocation(Vector3 destination) { return new PlayerApproachLocationState(this, destination, _stoppingDistance); } 
     public PlayerApproachEnemyState ApproachEnemy(Transform target) { return new PlayerApproachEnemyState(this, target, _weaponRange); } 
     public PlayerApproachLootState ApproachLoot(LootContainer lootContainer) { return new PlayerApproachLootState(this, lootContainer, _lootDistance); } 
-
-    // Just for testing. 
-/*    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-
-        Debug.Log($"Active state: {_activeState.GetType()}");
-    }*/
-
-    public override void Update()
-    {
-        base.Update();
-
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
-    }
 
     private void Start/*OnEnable*/()
     {
@@ -88,22 +71,34 @@ public class PlayerController : StateMachine<PlayerController>
     private void OnDisable()
     {
         S.I.IM.PC.World.SelectOrCenter./*canceled*/performed -= HandleClick;
-
-        // Send Transparentizer and PCSelector the signal to set current PC transform to null. 
-        // TODO - This is causing problems because it sends this event whenever current PC switches states, 
-        // which makes PCSelector set _currentPCInstance to null. 
-        // Try putting it in NotSelectedSubstate's OnEnable instead?
-        // OnDeselectPC?.Invoke();
     }
 
+    public override void Update()
+    {
+        base.Update();
+
+        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
+    }
+
+    // Just for testing. 
+/*    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        Debug.Log($"Active state: {_activeState.GetType()}");
+    }*/
+
+    // PCSelector and PlayerIdleState set the "Selected" bool when PC selection changes. 
     public void SetSelected(bool selected)
     {
         Selected = selected;
         SelectedPCIcon.ActivateIcon(selected);
     }
 
+    // Checks if player clicked on an enemy, loot, scene exit, or ground. PC clicks are handled by PCSelector. 
     private void HandleClick(InputAction.CallbackContext context)
     {
+        // Only let the selected PC do these checks. 
         if (Selected)
         {
             // RaycastAll to see what was hit. 
@@ -120,11 +115,6 @@ public class PlayerController : StateMachine<PlayerController>
                     //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayerMask & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
                     if (PCLayerMask.Contains(hit.collider.gameObject.layer))
                     {
-                        // TODO - How to handle selecting PCs? Want at most one selected at one time. Having each with its own selected bool
-                        // could cause errors with too many selected. Maybe use a scriptable object? Then just have each PC check if it is the selected one
-                        // inside of HandleClick? 
-                        // Using PCSelector for now, might try some other new idea later. 
-
                         // Return so that multiple hits don't get called. 
                         // PCSelector handles the actual PC hits. In its own class and not here since it can happen with no PC selected. 
                         return;

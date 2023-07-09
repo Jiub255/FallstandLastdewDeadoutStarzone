@@ -93,10 +93,8 @@ MonoBehaviour:
   _stats:
   - StatTypeSO: {fileID: 0}
     _baseValue: 3
-    _moddedValue: 0
   - StatTypeSO: {fileID: 0}
     _baseValue: 2
-    _moddedValue: 0
   _equipment:
     EquipmentItems: []
 --- !u!1 &8080965005213474775
@@ -1071,6 +1069,9 @@ MonoBehaviour:
   LootContainerLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  ExitLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 128

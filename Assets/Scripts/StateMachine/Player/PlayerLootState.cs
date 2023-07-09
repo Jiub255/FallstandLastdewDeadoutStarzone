@@ -1,19 +1,21 @@
+using System;
 using UnityEngine;
 
 public class PlayerLootState : PlayerState
 {
+    public static event Action<ItemAmount> OnLootItems;
+
     private LootContainer _lootContainer;
     private float _lootAnimationDuration;
-    private SOInventory _inventorySO;
+    
     private LootTimer _lootTimer;
 
     private float _timer;
 
-    public PlayerLootState(PlayerController characterController, LootContainer lootContainer, AnimationClip lootAnimation, SOInventory inventorySO, LootTimer lootTimer) : base(characterController)
+    public PlayerLootState(PlayerController characterController, LootContainer lootContainer, AnimationClip lootAnimation, LootTimer lootTimer) : base(characterController)
     {
         _lootContainer = lootContainer;
         _lootAnimationDuration = lootAnimation.length;
-        _inventorySO = inventorySO;
         _lootTimer = lootTimer;
 
         // Set LootContainer's IsBeingLooted to true. 
@@ -31,10 +33,7 @@ public class PlayerLootState : PlayerState
         // Activate timer object. 
         _lootTimer.ActivateTimer(true);
 
-        // Stop character from moving. Not sure how to do it best though. 
-//        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
-//        characterController.NavMeshAgent.isStopped = true;
-//        characterController.NavMeshAgent.ResetPath();
+        // Stop character from moving. 
         characterController.PathNavigator.StopMoving();
     }
 
@@ -73,7 +72,8 @@ public class PlayerLootState : PlayerState
     {
         foreach (ItemAmount itemAmount in _lootContainer.LootItemAmounts)
         {
-            _inventorySO.AddItems(itemAmount.ItemSO, itemAmount.Amount);
+            // Heard by PlayerInventoryManager, adds amount number of items. 
+            OnLootItems?.Invoke(itemAmount);
         }
     }
 
