@@ -134,8 +134,10 @@ MonoBehaviour:
   _transparentableLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  _fadeDuration: 1
+  _fadeDuration: 0.2
   _alphaWhenFaded: 0.1
+  _boxcastHeight: 2
+  _boxcastWidth: 2
 --- !u!1 &5059075228795231347
 GameObject:
   m_ObjectHideFlags: 0

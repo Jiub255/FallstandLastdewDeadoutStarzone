@@ -78,25 +78,19 @@ FIRST!!
         Have end of raid screen with info about loot.
         Go back to home base.
         Build a new building, like another type of workbench or something for now. 
-    
-
-    Fix transparentizer not working on polygon materials. 
-        Maybe need to set render mode to transparent in Transparentizer?
-        Maybe something else?
-
+   
 
     Cancel loot animation when canceling looting. As it is it just keeps playing through even if you cancel or move away. 
         Might need to cancel actual looting too, don't want to get items if it gets canceled. 
         
 
     Don't use the GE/GEL scripts for audio manager. 
-        Not sure how to do audio yet. 
         Have the listener on the selected PC, and camera when none selected. And make each object the source of its own sounds, so you get 3D sound. 
-        Or just have a simple audio manager singleton so all sounds are the same volume with no 3D? No, do it the good way. 
 
 
     For pathfinding, went with Aron Granberg's A* package. Not working perfectly yet, but good, hopefully can fix it.
         Agents still get stuck between obstacles. Might make code to deal with getting stuck/incomplete paths. 
+        Maybe just increase agent radius in the grid graph? But keep the actual characters the same size so they avoid gaps and corners better. 
 
 
 FIX:

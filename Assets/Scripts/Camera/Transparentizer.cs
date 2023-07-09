@@ -26,11 +26,18 @@ public class Transparentizer : MonoBehaviour
     // Dictionary of all materials/coroutines that are currently fading in. 
     private Dictionary<Material, Coroutine> _fadingInDict = new Dictionary<Material, Coroutine>();
 
-    [SerializeField, Range(0, 2f)] 
+    [SerializeField, Range(0f, 2f)] 
     private float _fadeDuration = 1f;
 
-    [SerializeField, Range(0, 1f)] 
+    [SerializeField, Range(0f, 1f)] 
     private float _alphaWhenFaded = 0.1f;
+
+    [SerializeField, Range(0f, 5f)]
+    private float _boxcastHeight = 2f;
+    [SerializeField, Range(0f, 5f)]
+    private float _boxcastWidth = 2f;
+    [SerializeField, Range(0f, 5f)]
+    private float _cursorTransparentRadius = 2f;
 
     private InputAction _mousePositionAction;
     private bool _pointerOverUI = false;
@@ -80,9 +87,15 @@ public class Transparentizer : MonoBehaviour
         // Hits from mouse position 
         if (!_pointerOverUI)
         {
-            hits = Physics.RaycastAll(
+/*            hits = Physics.RaycastAll(
                 _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
-                1000, 
+                1000,
+                _transparentableLayerMask);*/
+
+            hits = Physics.SphereCastAll(
+                _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
+                _cursorTransparentRadius,
+                1000f,
                 _transparentableLayerMask);
         }
 
@@ -93,9 +106,11 @@ public class Transparentizer : MonoBehaviour
             Vector3 direction = _currentPCTransform.position - position;
             float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
 
-            RaycastHit[] selectedPlayerHits = Physics.RaycastAll(
+            RaycastHit[] selectedPlayerHits = Physics.BoxCastAll(
                 position,
+                new Vector3(_boxcastWidth, _boxcastHeight, 0.1f),
                 direction,
+                Quaternion.identity,
                 rayDistance,
                 _transparentableLayerMask);
 
