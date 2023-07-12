@@ -1,4 +1,4 @@
-Shader "Custom/TransparentCircle"
+Shader "Mine/TransparentCircle"
 {
     Properties
     {
