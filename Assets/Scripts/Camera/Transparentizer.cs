@@ -169,15 +169,7 @@ public class Transparentizer : MonoBehaviour
         List<Material> materials = new List<Material>();
         List<Renderer> renderers = new List<Renderer>();
 
-        renderers.AddRange(hit.collider.GetComponents<Renderer>());
-
-        // Uncomment below line if using objects with renderers on children. 
         renderers.AddRange(hit.collider.GetComponentsInChildren<Renderer>());
-        // Uncomment below line if using objects with renderers on grandchildren. 
-        foreach (Transform child in hit.transform)
-        {
-            renderers.AddRange(child.GetComponentsInChildren<Renderer>());
-        }
 
         if (renderers.Count > 0)
         {

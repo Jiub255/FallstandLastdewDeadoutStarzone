@@ -13,6 +13,11 @@ ________________________________________________________________________________
 FIRST!!
 
 
+    Fix Transparentizer3 and/or TransparentCircle shader/shader graph. 
+        All materials using this shader are blank white now. How to keep their colors? 
+        Get sphere cast radius to be the correct size (same size as cutout circle). 
+
+
     Clean up PCSelector, or move it to PlayerController with the rest of the click handling. Or have InputManager handle the click then send events? 
 
 

@@ -36,6 +36,7 @@ public class CameraMoveRotate : MonoBehaviour
     private float _edgeDistance;
 
     [SerializeField, Range(0f, 3f), Header("Drag Camera")]
+    // TODO - Tie drag speed to zoom level? Or camera height? 
     private float _draggingSpeed = 2f;
     private bool _dragging;
     private Vector2 _lastMousePosition;
@@ -127,6 +128,7 @@ public class CameraMoveRotate : MonoBehaviour
         }
     }
 
+    // TODO - Tie drag speed to zoom level? Or camera height? 
     private void DragCamera()
     {
         // Get movement direction. 
