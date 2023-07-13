@@ -13,9 +13,12 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    Fix Transparentizer3 and/or TransparentCircle shader/shader graph. 
-        All materials using this shader are blank white now. How to keep their colors? 
-        Get sphere cast radius to be the correct size (same size as cutout circle). 
+    Fix Transparentizer and/or TransparentCircle shader/shader graph. 
+        Add cursor cutout to graph/Transparentizer. 
+        Do something other than the current OverlapBoxNonAlloc to find in the way materials. 
+            Somehow cone cast?
+        Change CameraZoom to have zoom level, so you can change hole size based on zoom. 
+            Make hole bigger when you're closer. Looks weird otherwise. 
 
 
     Clean up PCSelector, or move it to PlayerController with the rest of the click handling. Or have InputManager handle the click then send events? 

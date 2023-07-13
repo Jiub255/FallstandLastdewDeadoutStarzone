@@ -1,54 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+/*using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;*/
 
-// TODO - Change materials from Opaque to Transparent only while fading/faded. Otherwise seems to cause clipping issues with graphics. 
-// Put this on camera. 
+// TODO - Keep track of which materials just stopped being in the way, like Transparentizer, and reset them. 
+// Not sure if this will work, making all walls fade, not just the ones in the way. 
 public class Transparentizer : MonoBehaviour
 {
-    // Could make multiple transparentable layers if needed, then collect them all into this LayerMask. 
+    [SerializeField, Range(0f, 5f)]
+    private float _size = 1f;
+    [SerializeField, Range(0f, 1f)]
+    private float _smoothness = 0.5f;
+    [SerializeField, Range(0f, 1f)]
+    private float _opacity = 1f;
+	[SerializeField]
+	private LayerMask _transparentableLayerMask;
+
+    // Just for testing/getting values right. 
+    // TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
     [SerializeField]
-    private LayerMask _transparentableLayerMask;
+    private float _boxcastHalfWidth = 50f;
+    [SerializeField]
+    private float _boxcastHalfHeight = 50f;
 
-    // Currently selected PC
-    private Transform _currentPCTransform;
-
-    // A material should be on at most one of these next three lists/dicts at once. 
-    // List of all materials that are currently fully faded out. 
-    private List<Material> _fadedOut = new List<Material>();
-
-    // Dictionary of all materials/coroutines that are currently fading out. 
-    private Dictionary<Material, Coroutine> _fadingOutDict = new Dictionary<Material, Coroutine>();
-
-    // Dictionary of all materials/coroutines that are currently fading in. 
-    private Dictionary<Material, Coroutine> _fadingInDict = new Dictionary<Material, Coroutine>();
-
-    [SerializeField, Range(0f, 2f)] 
-    private float _fadeDuration = 1f;
-
-    [SerializeField, Range(0f, 1f)] 
-    private float _alphaWhenFaded = 0.1f;
-
-    [SerializeField, Range(0f, 5f)]
-    private float _boxcastHeight = 2f;
-    [SerializeField, Range(0f, 5f)]
-    private float _boxcastWidth = 2f;
-    [SerializeField, Range(0f, 5f)]
-    private float _cursorTransparentRadius = 2f;
-
-    private InputAction _mousePositionAction;
-    private bool _pointerOverUI = false;
-    private EventSystem _eventSystem;
     private Transform _transform;
-    private Camera _camera;
+	private Transform _currentPCTransform;
+	private Camera _camera;
+    private List<Material> _fadedMaterials = new();
+    // Just using a big number for now, figure out better amount later. 
+    private Collider[] _colliders = new Collider[256];
+    private List<Material> _inTheWayMaterials = new();
+    /*    private InputAction _mousePositionAction;
+        private EventSystem _eventSystem;
+        private bool _pointerOverUI = false;*/
+
+    private int _pcPositionID = Shader.PropertyToID("_PCPosition");
+    private int _sizeID = Shader.PropertyToID("_Size");
+    private int _smoothnessID = Shader.PropertyToID("_Smoothness");
+    private int _opacityID = Shader.PropertyToID("_Opacity");
 
     private void Start()
     {
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        _eventSystem = EventSystem.current;
+/*        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        _eventSystem = EventSystem.current;*/
         _transform = transform;
         _camera = Camera.main;
     }
@@ -68,7 +62,7 @@ public class Transparentizer : MonoBehaviour
         _currentPCTransform = pcTransform;
     }
 
-    private void Update()
+/*    private void Update()
     {
         if (_eventSystem.IsPointerOverGameObject())
         {
@@ -78,212 +72,128 @@ public class Transparentizer : MonoBehaviour
         {
             _pointerOverUI = false;
         }
-    }
+    }*/
 
+    // TODO - How to handle mouse position? Add to the shader graph? 
     private void FixedUpdate()
     {
-        RaycastHit[] hits = new RaycastHit[0];
-
-        // Hits from mouse position 
-        if (!_pointerOverUI)
-        {
-/*            hits = Physics.RaycastAll(
-                _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
-                1000,
-                _transparentableLayerMask);*/
-
-            hits = Physics.SphereCastAll(
-                _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
-                _cursorTransparentRadius,
-                1000f,
-                _transparentableLayerMask);
-        }
-
-        // Hits from currently selected PC 
         if (_currentPCTransform != null)
         {
-            Vector3 position = _transform.position;
-            Vector3 direction = _currentPCTransform.position - position;
-            float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
+            // Get array of new in the way materials.
 
-            RaycastHit[] selectedPlayerHits = Physics.BoxCastAll(
-                position,
-                new Vector3(_boxcastWidth, _boxcastHeight, 0.1f),
-                direction,
-                Quaternion.identity,
-                rayDistance,
-                _transparentableLayerMask);
+            // Halfway point between camera and PC for the box center. 
+            Vector3 center = (_transform.position + _currentPCTransform.position) / 2f;
 
-            // Combine all hits into one array. 
-            hits = selectedPlayerHits.Concat(hits).ToArray();
-        }
+            float boxHalfDepth = (_currentPCTransform.position - _transform.position).magnitude / 2f;
 
-        // List of all in the way materials, gets remade each fixed update. 
-        List<Material> inTheWayMaterials = new List<Material>();
+            Vector3 halfExtents = new Vector3(
+                _boxcastHalfWidth,
+                _boxcastHalfHeight,
+                boxHalfDepth);
 
-        foreach (RaycastHit hit in hits)
-        {
-            List<Material> hitMaterials = GetMaterialsFromHit(hit);
+            Quaternion orientation = Quaternion.LookRotation(_currentPCTransform.position - _transform.position, Vector3.up);
 
-            foreach (Material material in hitMaterials)
+            // Overlap box is cutting off parts of corner walls to the side of PC, somehow use a different shape/cast?
+            // Ideally some sort of OverlapTetrahedron from camera bounds to PC would work. How to do something like this? 
+            // Or some sort of OverlapCone actually? 
+            // Could just do a "bundle" of raycasts to make a cone approximation. Walls are big so if the points are close enough it might work. 
+
+            // Or, maybe do a spherecast from camera to PC, or right before PC so the tip of the sphere just touches. 
+            // Then all colliders in that "tunnel" get faded. 
+            // Make the circle cutout have a fixed world size or a fixed screen size, like it does now?
+            // How would multiple walls work with fixed world size? It might look weird. 
+            // Might stick with fixed screen size for now. Just make sure it's big enough to see the PC and at least some nearby area. 
+            // But it can look too big when zoomed out too much. Maybe tie the circle size to the zoom level somehow to help, they're both camera scripts. 
+            int maxIndex = Physics.OverlapBoxNonAlloc(
+                center,
+                halfExtents,
+                _colliders,
+                orientation,
+                _transparentableLayerMask)
+                // Subtract 1 to get max index from count. 
+                - 1;
+
+//            Debug.Log($"# of hits: {maxIndex + 1}, half extents: {halfExtents}, orientation: {orientation}");
+
+            // Set PC screen position. 
+            Vector3 pcPosition = _camera.WorldToViewportPoint(_currentPCTransform.position);
+
+            // Get all in the way materials. 
+            _inTheWayMaterials.Clear();
+            // Only go up to maxIndex so you don't use empty entries in colliders array. 
+            for (int i = 0; i < maxIndex; i++)
             {
-                // Adds all in the way materials to list, and starts fading them if they're not already fading/faded. 
-                // Also stops fading-in coroutines and starts fading those materials out. 
-                inTheWayMaterials.Add(AndFadeOutIfNecessary(material));
-            }
-        }
-
-        // If a material is faded out or fading out but no longer in the way, unfade it. 
-        List<Material> materialsToUnfade = new List<Material>();
-
-        for (int i = _fadedOut.Count - 1; i >= 0; i--)
-        {
-            if (!inTheWayMaterials.Contains(_fadedOut[i]))
-            {
-                // If a material is FADED out but no longer in the way, unfade it. 
-                materialsToUnfade.Add(AndUnfade(_fadedOut[i]));
-                _fadedOut.Remove(_fadedOut[i]);
-            }
-        }
-
-        // Why a list of kvps instead of a dictionary? 
-        List<KeyValuePair<Material, Coroutine>> itemsToRemove = new List<KeyValuePair<Material, Coroutine>>();
-        foreach (KeyValuePair<Material, Coroutine> kvp in _fadingOutDict)
-        {
-            if (!inTheWayMaterials.Contains(kvp.Key))
-            {
-                // If a material is FADING out but no longer in the way, unfade it. 
-                itemsToRemove.Add(kvp);
-            }
-        }
-        foreach (KeyValuePair<Material, Coroutine> kvp in itemsToRemove)
-        {
-            StopCoroutine(kvp.Value);
-            materialsToUnfade.Add(AndUnfade(kvp.Key));
-            _fadingOutDict.Remove(kvp.Key);
-        }
-    }
-
-    private List<Material> GetMaterialsFromHit(RaycastHit hit)
-    {
-        List<Material> materials = new List<Material>();
-        List<Renderer> renderers = new List<Renderer>();
-
-        renderers.AddRange(hit.collider.GetComponentsInChildren<Renderer>());
-
-        if (renderers.Count > 0)
-        {
-            foreach (Renderer renderer in renderers)
-            {
-                materials.AddRange(renderer.materials);
-            }
-        }
-
-        return materials;
-    }
-
-    private Material AndFadeOutIfNecessary(Material material)
-    {
-        // If material isn't faded out or fading out, ...
-        if (!_fadedOut.Contains(material) && !_fadingOutDict.ContainsKey(material))
-        {
-            // If material is fading in, stop that coroutine and remove it from dictionary. 
-            if (_fadingInDict.ContainsKey(material))
-            {
-                StopCoroutine(_fadingInDict[material]);
-                _fadingInDict.Remove(material);
+                Renderer[] renderers = _colliders[i].transform.GetComponentsInChildren<Renderer>();
+                foreach (Renderer renderer in renderers)
+                {
+                    _inTheWayMaterials.AddRange(renderer.materials);
+                }
             }
 
-            // Start fade out coroutine. 
-            Color fadeColor = new Color(
-                material.color.r,
-                material.color.g, 
-                material.color.b, 
-                _alphaWhenFaded);
+            // For each one, set its properties, and add it to the list. 
+            foreach (Material material in _inTheWayMaterials)
+            {
+                material.SetVector(_pcPositionID, pcPosition);
+                // TODO - Tie size to zoom level. Have to change CameraZoom as well to work with this. 
+                // Make the cutout bigger the closer you get, play with it to find good values. 
+                material.SetFloat(_sizeID, _size);
+                material.SetFloat(_smoothnessID, _smoothness);
+                material.SetFloat(_opacityID, _opacity);
 
-            // Change material to Transparent here.
-            ToFadeMode(material);
+                if (!_fadedMaterials.Contains(material))
+                {
+                    _fadedMaterials.Add(material);
+                }
+            }
 
-            Coroutine coroutine = StartCoroutine(Fade(material, fadeColor, _fadeDuration));
+            // Get all items on faded materials that aren't on the in the way materials list (so they just stopped being in the way), 
+            // and reset their properties (just set size to 0f, the others don't matter). 
+            // Also remove material from _fadedMaterials. 
+            for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
+            {
+                if (!_inTheWayMaterials.Contains(_fadedMaterials[i]))
+                {
+                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
 
-            // Add to fadingOutDict, then add to faded list when coroutine done. 
-            _fadingOutDict.Add(material, coroutine);
-
-            return material;
+                    _fadedMaterials.RemoveAt(i);
+                }
+            }
         }
         else
         {
-            return material;
+            // Reset all faded materials. 
+            if (_fadedMaterials.Count > 0)
+            {
+                for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
+                {
+                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
+
+                    _fadedMaterials.RemoveAt(i);
+                }
+            }
         }
     }
 
-    private Material AndUnfade(Material material)
+/*    private void OnDrawGizmos()
     {
-        Color originalColor = new Color(
-            material.color.r, material.color.g, material.color.b, 1f);
-
-        Coroutine coroutine = StartCoroutine(Fade(material, originalColor, _fadeDuration));
-
-        // Add to fadingInDict. Remove from fadingInDict when coroutine done. 
-        _fadingInDict.Add(material, coroutine);
-
-        return material;
-    }
-
-    private IEnumerator Fade(Material material, Color fadedColor, float duration)
-    {
-        float time = 0f;
-        Color regularColor = material.color;
-
-        while (time < duration)
+        if (_currentPCTransform != null)
         {
-            // TODO: Fix this lerp. Use idea from CameraControllerFollower comments. 
-            material.color = Color.Lerp(material.color, fadedColor, time);
-            time += Time.deltaTime;
-            yield return null;
+            // Halfway point between camera and PC for the box center. 
+            Vector3 center = (_transform.position + _currentPCTransform.position) / 2f;
+
+            float boxHalfDepth = (_currentPCTransform.position - _transform.position).magnitude / 2f;
+
+            Vector3 halfExtents = new Vector3(
+                _boxcastHalfWidth,
+                _boxcastHalfHeight,
+                boxHalfDepth);
+
+            Quaternion orientation = Quaternion.LookRotation(_currentPCTransform.position - _transform.position, Vector3.up);
+
+            // create a matrix which translates an object by "position", rotates it by "rotation" and scales it by "halfExtends * 2"
+            Gizmos.matrix = Matrix4x4.TRS(center, orientation, halfExtents * 2);
+            // Then use it one a default cube which is not translated nor scaled
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
         }
-
-        material.color = fadedColor;
-
-        // If material is fading out (not in), ...
-        if (_fadingOutDict.ContainsKey(material))
-        {
-            // Remove from fadingOutDict. 
-            _fadingOutDict.Remove(material);
-
-            // Add to faded list. 
-            _fadedOut.Add(material);
-        }
-        else if (_fadingInDict.ContainsKey(material))
-        {
-            // Set material back to Opaque. 
-            ToOpaqueMode(material);
-
-            // Remove from fadingInDict. 
-            _fadingInDict.Remove(material);
-        }
-    }
-    private void ToOpaqueMode(Material material)
-    {
-        material.SetOverrideTag("RenderType", "");
-        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-        material.SetInt("_ZWrite", 1);
-        material.DisableKeyword("_ALPHATEST_ON");
-        material.DisableKeyword("_ALPHABLEND_ON");
-        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        material.renderQueue = -1;
-    }
-
-    private void ToFadeMode(Material material)
-    {
-        material.SetOverrideTag("RenderType", "Transparent");
-        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        material.SetInt("_ZWrite", 0);
-        material.DisableKeyword("_ALPHATEST_ON");
-        material.EnableKeyword("_ALPHABLEND_ON");
-        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-    }
+    }*/
 }

@@ -42,6 +42,8 @@ public class CameraZoom : MonoBehaviour
         _transform.localPosition = new Vector3(0f, 0f, -_defaultZoomDist);
     }
 
+    // TODO - Keep a "zoom level" float and set the distance manually instead of moving the camera like now? 
+    // Then could send a OnZoomChanged event for Transparentizer to listen. 
     private void Zoom(InputAction.CallbackContext context)
     {
         float wheelMovement = _zoomAction.ReadValue<float>();
