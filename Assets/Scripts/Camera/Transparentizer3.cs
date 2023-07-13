@@ -1,40 +1,45 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+/*using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;*/
 
 // TODO - Keep track of which materials just stopped being in the way, like Transparentizer, and reset them. 
 // Not sure if this will work, making all walls fade, not just the ones in the way. 
 public class Transparentizer3 : MonoBehaviour
 {
-    /*private*/ public static int _pcPositionID = Shader.PropertyToID("_PCPosition");
-    /*private*/ public static int _sizeID = Shader.PropertyToID("_Size");
-    /*private*/ public static int _smoothnessID = Shader.PropertyToID("_Smoothness");
-    /*private*/ public static int _opacityID = Shader.PropertyToID("_Opacity");
-
-	private Transform _currentPCTransform;
-
-	[SerializeField]
-	private LayerMask _transparentableLayerMask;
     [SerializeField, Range(0f, 5f)]
     private float _size = 1f;
     [SerializeField, Range(0f, 1f)]
     private float _smoothness = 0.5f;
     [SerializeField, Range(0f, 1f)]
     private float _opacity = 1f;
+	[SerializeField]
+	private LayerMask _transparentableLayerMask;
 
-	private Camera _camera;
-    private InputAction _mousePositionAction;
-    private bool _pointerOverUI = false;
-    private EventSystem _eventSystem;
+    // Just for testing/getting values right. 
+    // TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
+    [SerializeField]
+    private float _boxcastHalfWidth = 50f;
+    [SerializeField]
+    private float _boxcastHalfHeight = 50f;
+
     private Transform _transform;
-    private RaycastHit[] _oldHits = new RaycastHit[0];
-    private bool _materialsReset = false;
+	private Transform _currentPCTransform;
+	private Camera _camera;
+    private List<Material> _fadedMaterials = new();
+/*    private InputAction _mousePositionAction;
+    private EventSystem _eventSystem;
+    private bool _pointerOverUI = false;*/
+
+    private int _pcPositionID = Shader.PropertyToID("_PCPosition");
+    private int _sizeID = Shader.PropertyToID("_Size");
+    private int _smoothnessID = Shader.PropertyToID("_Smoothness");
+    private int _opacityID = Shader.PropertyToID("_Opacity");
 
     private void Start()
     {
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        _eventSystem = EventSystem.current;
+/*        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        _eventSystem = EventSystem.current;*/
         _transform = transform;
         _camera = Camera.main;
     }
@@ -54,7 +59,7 @@ public class Transparentizer3 : MonoBehaviour
         _currentPCTransform = pcTransform;
     }
 
-    private void Update()
+/*    private void Update()
     {
         if (_eventSystem.IsPointerOverGameObject())
         {
@@ -64,98 +69,115 @@ public class Transparentizer3 : MonoBehaviour
         {
             _pointerOverUI = false;
         }
-    }
+    }*/
 
     // TODO - How to handle mouse position? Add to the shader graph? 
     private void FixedUpdate()
     {
-        // TODO - Keep track of which materials just stopped being in the way, like Transparentizer, and reset them. 
         // Get list of new in the way materials.
-        // Set their properties. 
-        // Get all items on old in the way materials that aren't on the new list, so they just stopped being in the way. 
-        // Reset their properties. 
-
-
-        RaycastHit[] newHits = new RaycastHit[0];
-
-        // Hits from mouse position 
-/*        if (!_pointerOverUI)
-        {
-            hits = Physics.RaycastAll(
-                _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
-                1000,
-                _transparentableLayerMask);
-        }*/
-
-        // Hits from currently selected PC 
         if (_currentPCTransform != null)
         {
-            Vector3 position = _transform.position;
-            Vector3 direction = _currentPCTransform.position - position;
-//            float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
+            // Hits from currently selected PC 
+            Collider[] colliders;
 
-            /*RaycastHit[] selectedPlayerHits*/ newHits = Physics.SphereCastAll(
-                position,
-                // Might have to adjust this to be the correct size. 
-                _size, 
-                direction,
-                direction.magnitude,
+            // Halfway point between camera and PC for the box center. 
+            Vector3 center = (_transform.position + _currentPCTransform.position) / 2f;
+
+            float boxHalfDepth = (_currentPCTransform.position - _transform.position).magnitude / 2f;
+
+            Vector3 halfExtents = new Vector3(
+                _boxcastHalfWidth,
+                _boxcastHalfHeight,
+                boxHalfDepth);
+
+            Quaternion orientation = Quaternion.LookRotation(_currentPCTransform.position - _transform.position, Vector3.up);
+
+            // Overlap box is cutting off parts of corner walls to the side of PC, somehow use a different shape/cast?
+            // Ideally some sort of OverlapTetrahedron from camera bounds to PC would work. How to do something like this? 
+            colliders = Physics.OverlapBox(
+                center,
+                halfExtents,
+                orientation,
                 _transparentableLayerMask);
 
-            // Combine all hits into one array. 
-//            hits = selectedPlayerHits.Concat(hits).ToArray();
+            Debug.Log($"# of hits: {colliders.Length}, half extents: {halfExtents}");
 
             // Set PC screen position. 
             Vector3 pcPosition = _camera.WorldToViewportPoint(_currentPCTransform.position);
 
-            foreach (RaycastHit hit in newHits)
+            // Get all in the way materials. 
+            List<Material> inTheWayMaterials = new();
+            foreach (Collider collider in colliders)
             {
-                Renderer[] renderers = hit.transform.GetComponentsInChildren<Renderer>();
-                List<Material> materials = new();
+                Renderer[] renderers = collider.transform.GetComponentsInChildren<Renderer>();
                 foreach (Renderer renderer in renderers)
                 {
-                    materials.AddRange(renderer.materials);   
+                    inTheWayMaterials.AddRange(renderer.materials);
                 }
+            }
 
-                foreach (Material material in materials)
+            // For each one, set its properties, and add it to the list. 
+            foreach (Material material in inTheWayMaterials)
+            {
+//                if (!_fadedMaterials.Contains(material))
                 {
-                    Debug.Log($"{material.name} Size property: {material.GetFloat(_sizeID)}");
                     material.SetVector(_pcPositionID, pcPosition);
                     material.SetFloat(_sizeID, _size);
                     material.SetFloat(_smoothnessID, _smoothness);
                     material.SetFloat(_opacityID, _opacity);
+
+                    _fadedMaterials.Add(material);
                 }
             }
 
-            if (_materialsReset == true)
+            // Get all items on faded materials that aren't on the in the way materials list (so they just stopped being in the way), 
+            // and reset their properties (just set size to 0f, the others don't matter). 
+            // Also remove material from _fadedMaterials. 
+            for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
             {
-                _materialsReset = false;
-            }
-        }
-        else if (!_materialsReset)
-        {
-            if (_oldHits.Length > 0)
-            {
-                foreach(RaycastHit hit in _oldHits)
+                if (!inTheWayMaterials.Contains(_fadedMaterials[i]))
                 {
-                    Renderer[] renderers = hit.transform.GetComponentsInChildren<Renderer>();
-                    List<Material> materials = new();
-                    foreach (Renderer renderer in renderers)
-                    {
-                        materials.AddRange(renderer.materials);
-                    }
+                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
 
-                    foreach (Material material in materials)
-                    {
-                        material.SetFloat(_sizeID, 0f);
-                        Debug.Log("Materials reset."); 
-                    }
+                    _fadedMaterials.RemoveAt(i);
                 }
             }
-
-            _materialsReset = true;
         }
+        else
+        {
+            // Reset all faded materials. 
+            if (_fadedMaterials.Count > 0)
+            {
+                for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
+                {
+                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
 
-        _oldHits = newHits;
+                    _fadedMaterials.RemoveAt(i);
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_currentPCTransform != null)
+        {
+            // Halfway point between camera and PC for the box center. 
+            Vector3 center = (_transform.position + _currentPCTransform.position) / 2f;
+
+            float boxHalfDepth = (_currentPCTransform.position - _transform.position).magnitude / 2f;
+
+            Vector3 halfExtents = new Vector3(
+                _boxcastHalfWidth,
+                _boxcastHalfHeight,
+                boxHalfDepth);
+
+            Quaternion orientation = Quaternion.LookRotation(_currentPCTransform.position - _transform.position, Vector3.up);
+
+            // create a matrix which translates an object by "position", rotates it by "rotation" and scales it by "halfExtends * 2"
+            Gizmos.matrix = Matrix4x4.TRS(center, orientation, halfExtents * 2);
+            // Then use it one a default cube which is not translated nor scaled
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+        }
     }
 }

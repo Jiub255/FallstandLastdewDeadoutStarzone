@@ -16,15 +16,15 @@ public class Transparentizer2 : MonoBehaviour
     private float _falloffSize = 0.05f;
 
 	private Camera _camera;
-    private InputAction _mousePositionAction;
-    private bool _pointerOverUI = false;
+/*    private InputAction _mousePositionAction;
+    private bool _pointerOverUI = false;*/
     private EventSystem _eventSystem;
     private Transform _transform;
     private Vector2 _cutoutPosition;
 
     private void Start()
     {
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
+ //       _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
         _eventSystem = EventSystem.current;
         _transform = transform;
         _camera = Camera.main;
@@ -45,7 +45,7 @@ public class Transparentizer2 : MonoBehaviour
         _currentPCTransform = pcTransform;
     }
 
-    private void Update()
+/*    private void Update()
     {
         if (_eventSystem.IsPointerOverGameObject())
         {
@@ -55,7 +55,7 @@ public class Transparentizer2 : MonoBehaviour
         {
             _pointerOverUI = false;
         }
-    }
+    }*/
 
     private void FixedUpdate()
     {
