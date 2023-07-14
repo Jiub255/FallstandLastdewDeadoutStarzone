@@ -59,7 +59,7 @@ public class PlayerController : StateMachine<PlayerController>
         _eventSystem = EventSystem.current;
 
         // started is single or double click, canceled is single click only. 
-        S.I.IM.PC.World.SelectOrCenter./*canceled*/performed += HandleClick;
+        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ += HandleClick;
 
         // Activate or deactivate selected pc icon. 
         SelectedPCIcon.ActivateIcon(Selected);
@@ -70,7 +70,7 @@ public class PlayerController : StateMachine<PlayerController>
 
     private void OnDisable()
     {
-        S.I.IM.PC.World.SelectOrCenter./*canceled*/performed -= HandleClick;
+        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ -= HandleClick;
     }
 
     public override void Update()

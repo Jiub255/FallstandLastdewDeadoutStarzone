@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Put this on the Crafting and Building canvases. 
-public class UIRecipes : MonoBehaviour
+public abstract class UIRecipes : MonoBehaviour
 {
-	public static event Action<List<SORecipe>> OnSetupRecipes;
+	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetRequirementsRecipes;
 
 	[SerializeField]
 	private RecipeList _recipeList;
@@ -14,22 +14,38 @@ public class UIRecipes : MonoBehaviour
 	[SerializeField]
 	private Transform _slotsParent;
 
-	private void OnEnable()
+	protected List<SORecipe> _metRequirementsRecipes;
+	protected List<SORecipe> _haveEnoughItemsRecipes;
+
+	public virtual void OnEnable()
 	{
-		// Subscribe to OnGetPossibleRecipes before invoking OnSetupRecipes because
-		// OnSetupRecipes triggers OnGetPossibleRecipes in StatManager. 
-		StatManager.OnGetPossibleRecipes += SetupRecipeSlots;
+		// Call this whenever stats change. 
+		GetRecipeLists();
 
-		// StatManager listens, sends back all possible recipes. 
-		OnSetupRecipes(_recipeList.GetAllRecipes());
+		// Toggle between showing _metRequirementsRecipes and _haveEnoughItemsRecipes by calling SetupRecipeSlots and passing whichever list. 
+		SetupRecipeSlots(_haveEnoughItemsRecipes);
+
+		PlayerInventoryManager.OnPlayerInventoryChanged += GetHaveEnoughItemsRecipes;
+		PCStatManager.OnStatsChanged += GetRecipeLists;
 	}
 
-	private void OnDisable()
+    private void OnDisable()
     {
-		StatManager.OnGetPossibleRecipes -= SetupRecipeSlots;
+		PlayerInventoryManager.OnPlayerInventoryChanged -= GetHaveEnoughItemsRecipes;
+		PCStatManager.OnStatsChanged -= GetRecipeLists;
 	}
 
-    // TODO - Gray out the buildings that you don't have enough materials to build. 
+	private void GetRecipeLists()
+    {
+		// StatManager listens, sends back all recipes that you meet the stat requirements for. 
+	    _metRequirementsRecipes = OnGetMetRequirementsRecipes(_recipeList.GetAllRecipes());
+		GetHaveEnoughItemsRecipes();
+	}
+
+	// Overridden by UICrafting and UIBuilding to send the event to the right manager. 
+	protected abstract void GetHaveEnoughItemsRecipes();
+
+    // TODO - Gray out the buildings/items that you don't have enough materials to build. 
     // Will have to call this method every time you use some materials to build something. 
     public void SetupRecipeSlots(List<SORecipe> possibleRecipes)
 	{

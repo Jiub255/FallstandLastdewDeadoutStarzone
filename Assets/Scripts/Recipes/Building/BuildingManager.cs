@@ -46,6 +46,9 @@ public class BuildingManager : MonoBehaviour
 
     private InputAction _rotateBuildingAction;
 
+    [SerializeField]
+    protected SOInventory _craftingInventorySO;
+
     private void Start()
     {
         _rotateBuildingAction = S.I.IM.PC.Build.RotateBuilding;
@@ -56,6 +59,8 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearestAngle;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
+
+        UIBuilding.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
 
         // Don't see why this would ever be true, but just in case. 
         if (_currentBuildingInstance != null)
@@ -76,6 +81,31 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearestAngle;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
         S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
+
+        UIBuilding.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
+    }
+
+    private List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
+    {
+        List<SORecipe> haveEnoughItemsRecipes = new();
+
+        foreach (SORecipe recipe in metRequirementsRecipes)
+        {
+            foreach (RecipeCost recipeCost in recipe.RecipeCosts)
+            {
+                // If you don't have enough items to craft the recipe,  
+                if (_craftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+                {
+                    // Then go to next recipe. 
+                    break;
+                }
+            }
+
+            // Can only reach this point if you have at least recipeCost.Amount of each recipeCost.CraftingItemSO in your inventory.
+            haveEnoughItemsRecipes.Add(recipe);
+        }
+
+        return haveEnoughItemsRecipes;
     }
 
     private void FixedUpdate()
@@ -215,8 +245,7 @@ public class BuildingManager : MonoBehaviour
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
 
                 // Disconnect the actual building from the parent/selected icon. 
-                GameObject justTheBuilding = _currentBuildingInstance.transform.GetComponentInChildren<Collider>().gameObject;
-                justTheBuilding.transform.parent = null;
+                _currentBuildingInstance.transform.GetComponentInChildren<Collider>().transform.parent = null;
 
                 // Destroy the parent/selected icon. 
                 Destroy(_currentBuildingInstance);

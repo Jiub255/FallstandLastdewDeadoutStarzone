@@ -9,7 +9,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     protected SOInventory _craftingInventorySO;
 
-    public void AddItems(SOItem item, int amount)
+    public virtual void AddItems(SOItem item, int amount)
     {
         if (item.GetType() == typeof(SOUsableItem))
         {
@@ -25,7 +25,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveItems(SOItem item, int amount)
+    public virtual void RemoveItems(SOItem item, int amount)
     {
         if (item.GetType() == typeof(SOUsableItem))
         {

@@ -30,7 +30,7 @@ public class PCSelector : MonoBehaviour
         SOPC.OnSelectPC += HandleClick;
 
         // Click on PC instance. 
-        S.I.IM.PC.World.SelectOrCenter.performed += CheckIfPCClicked;
+        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ += CheckIfPCClicked;
         
         PlayerIdleState.OnPCDeselected += () => ChangePC(null);
     }
@@ -41,7 +41,7 @@ public class PCSelector : MonoBehaviour
         SOPC.OnSelectPC -= HandleClick;
 
         // Click on PC instance. 
-        S.I.IM.PC.World.SelectOrCenter.performed -= CheckIfPCClicked;
+        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ -= CheckIfPCClicked;
 
         PlayerIdleState.OnPCDeselected -= () => ChangePC(null);
     }
@@ -78,6 +78,7 @@ public class PCSelector : MonoBehaviour
         // Double click 
         if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
         {
+            Debug.Log("Double click");
             // If the second click was on the same PC as first click, center on that PC. 
             if (pcInstance.GetInstanceID() == _firstClickedObjectID)
             {
@@ -97,6 +98,7 @@ public class PCSelector : MonoBehaviour
         // Single Click 
         else
         {
+            Debug.Log("Single click");
             // Select PC. 
             ChangePC(pcInstance); 
 

@@ -6,8 +6,6 @@ using UnityEngine;
 // Manages the total stats of all PCs.
 public class StatManager : MonoBehaviour
 {
-    public static event Action<List<SORecipe>> OnGetPossibleRecipes;
-
 	[SerializeField]
 	private SOListSOPC _pcSOListSO;
 
@@ -17,20 +15,19 @@ public class StatManager : MonoBehaviour
 
     private void OnEnable()
     {
-        UIRecipes.OnSetupRecipes += GetPossibleRecipes;
+        UIRecipes.OnGetMetRequirementsRecipes += GetMetRequirementsRecipes;
     }
 
     private void OnDisable()
     {
-        UIRecipes.OnSetupRecipes -= GetPossibleRecipes;
+        UIRecipes.OnGetMetRequirementsRecipes -= GetMetRequirementsRecipes;
     }
 
-    public void GetPossibleRecipes(List<SORecipe> unfilteredList)
+    public List<SORecipe> GetMetRequirementsRecipes(List<SORecipe> unfilteredList)
     {
-        List<SORecipe> possibleRecipes = new();
+        List<SORecipe> metRequirementsRecipes = new();
 
         GetStatTotals();
-
 
         foreach (SORecipe recipe in unfilteredList)
         {
@@ -54,11 +51,11 @@ public class StatManager : MonoBehaviour
 
             if (unmetRequirements.Count == 0)
             {
-                possibleRecipes.Add(recipe);
+                metRequirementsRecipes.Add(recipe);
             }
         }
 
-        OnGetPossibleRecipes?.Invoke(possibleRecipes);
+        return metRequirementsRecipes;
     }
 
     private void GetStatTotals()

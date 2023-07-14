@@ -595,3 +595,4 @@ MonoBehaviour:
     m_Bits: 128
   _rotationSpeed: 50
   _snapAngle: 45
+  _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}

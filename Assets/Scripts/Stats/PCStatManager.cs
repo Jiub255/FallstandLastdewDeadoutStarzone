@@ -12,7 +12,7 @@ public class PCStatManager : MonoBehaviour
 
     // Just serialized to see in inspector for testing. 
     [SerializeField, Header("Only Serialized For Testing")]
-    protected Equipment _equipment;
+    protected EquipmentManager _equipmentManager;
 
     public List<Stat> Stats { get { return _stats; } }
 
@@ -21,41 +21,38 @@ public class PCStatManager : MonoBehaviour
         CalculateStatModifiers();
 
         // Have to get in Start, since it gets newed in EquipmentManager's OnEnable. 
-        _equipment = transform.parent.GetComponentInChildren<EquipmentManager>().Equipment;
+        _equipmentManager = transform.parent.GetComponentInChildren<EquipmentManager>();
     }
 
     protected void OnEnable()
     {
-        _equipment.OnEquipmentChanged += CalculateStatModifiers;
+        _equipmentManager.Equipment.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
     }
 
     protected void OnDisable()
     {
-        _equipment.OnEquipmentChanged -= CalculateStatModifiers;
+        _equipmentManager.Equipment.OnEquipmentChanged -= CalculateStatModifiers;
         Stat.OnBaseValueChanged -= CalculateStatModifiers;
     }
 
     protected void CalculateStatModifiers()
     {
-        // TODO - Can this be done better? Without three nested foreach loops? 
-        foreach (Stat stat in _stats/*.StatsList*/)
+        // Keep the bonuses dictionary in EquipmentManager, and change it every time
+        // equipment is changed. Then it's just ready and you can grab it whenever. 
+        foreach (Stat stat in Stats)
         {
             stat.ClearModifiers();
 
-            foreach (SOEquipmentItem equipmentItem in _equipment.EquipmentItems)
+            if (_equipmentManager.EquipmentBonuses.ContainsKey(stat.StatTypeSO))
             {
-                foreach (EquipmentBonus bonus in equipmentItem.Bonuses)
-                {
-                    if (bonus.StatTypeSO == stat.StatTypeSO)
-                    {
-                        stat.AddModifier(bonus.BonusAmount);
-                    }
-                }
+                stat.AddModifier(_equipmentManager.EquipmentBonuses[stat.StatTypeSO]);
             }
         }
 
-        // Heard by UIStats and PlayerMeleeAttack. 
+        // TODO - Set up stats UI and UIStats script. Just show stats on the equipment UI. 
+        // Heard by UIEquipment, updates UI. 
+        // Heard by UIRecipes, gets new metRequirementsRecipes list. 
         OnStatsChanged?.Invoke();
     }
 }

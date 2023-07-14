@@ -9,10 +9,4 @@ public class SOCraftingItem : SOItem
     {
         Debug.Log($"Clicked on crafting item {name}");
     }
-
-    // When clicking on item in crafting menu, add item to items to be used in recipe. 
-    public void OnClickFromCrafting()
-    {
-
-    }
 }

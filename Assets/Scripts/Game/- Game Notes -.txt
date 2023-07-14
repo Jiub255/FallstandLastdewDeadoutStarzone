@@ -13,15 +13,20 @@ ________________________________________________________________________________
 FIRST!!
 
 
+    Setup stats panel in Character panel in Equipment tab in Inventory canvas. 
+
+
     Fix Transparentizer and/or TransparentCircle shader/shader graph. 
         Add cursor cutout to graph/Transparentizer. 
         Do something other than the current OverlapBoxNonAlloc to find in the way materials. 
-            Somehow cone cast?
-        Change CameraZoom to have zoom level, so you can change hole size based on zoom. 
+            Somehow overlap cone? 
+            Ideally want a cone with tip at camera and base as a circle around the player of whatever size you want. 
+                Seems doable with enough raycasts? Any better ways? 
+        Change hole size based on zoom. 
             Make hole bigger when you're closer. Looks weird otherwise. 
-
-
-    Clean up PCSelector, or move it to PlayerController with the rest of the click handling. Or have InputManager handle the click then send events? 
+        Add offset to cutout so it doesn't point at PCs' feet. 
+            Would have to scale based on zoom. Add a child object to PCs that is where the circle should be centered.
+                Center of PC? Or a little higher maybe? 
 
 
     Finish map/scavenging system. 
@@ -39,6 +44,17 @@ FIRST!!
         Or, similarly, healing could take a certain amount of time per injury point (affected by medical items/buildings/skilled PCs), and
             there is always the danger of being raided. So you don't want to have your whole team injured or you could easily get wiped out by a raid. 
             I like this one better. Still have day/night cycle, just don't do discrete day chunks like stardew. Go by healing rates. 
+
+
+    Decide what to do with mouse drag movement. 
+        Get rid of it. 
+                OR
+        Severely limit the camera's x-rotation so no shallow angles can be reached. Then the xz-plane based drag won't be too fast since you won't 
+            be able to click too far away. 
+                OR
+        Keep x-rotation as is, and do screen position based dragging, with speed based on x-rotation and/or camera height, so it doesn't feel too slow when 
+            you're zoomed out or close to the ground. 
+        Third option seems best maybe. Just disabling for now and I'll decide later. 
 
 
     Item

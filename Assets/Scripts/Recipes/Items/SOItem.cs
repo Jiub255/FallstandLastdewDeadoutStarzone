@@ -14,7 +14,8 @@ public abstract class SOItem : SORecipe
     // Called by button on Recipe Slot. 
     public override void OnClickRecipe()
     {
-        // InventoryManager hears this, adds item to inventory. 
+        // InventoryManager hears this, adds item to inventory, and removes crafting items
+        // needed to create it from inventory. 
         OnSelectItem?.Invoke(this);
     }
 

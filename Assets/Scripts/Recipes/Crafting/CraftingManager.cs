@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // TODO - Make this a plain c# class and instantiate it in InventoryManager. 
@@ -11,6 +12,29 @@ public class CraftingManager
     public CraftingManager(SOInventory craftingInventorySO)
     {
         _craftingInventorySO = craftingInventorySO;
+    }
+
+    public List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
+    {
+        List<SORecipe> haveEnoughItemsRecipes = new();
+
+        foreach (SORecipe recipe in metRequirementsRecipes)
+        {
+            foreach (RecipeCost recipeCost in recipe.RecipeCosts)
+            {
+                // If you don't have enough items to craft the recipe,  
+                if (_craftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+                {
+                    // Then go to next recipe. 
+                    break;
+                }
+            }
+
+            // Can only reach this point if you have at least recipeCost.Amount of each recipeCost.CraftingItemSO in your inventory.
+            haveEnoughItemsRecipes.Add(recipe);
+        }
+
+        return haveEnoughItemsRecipes;
     }
 
     public void HandleCrafting(SOItem itemSO)
@@ -37,6 +61,7 @@ public class CraftingManager
         }
 
         // PlayerInventoryManager listens, adds item to inventory. 
+        // TODO - Maybe have a show all toggle, and otherwise it only shows recipes you have the items for? 
         OnCraftItem?.Invoke(itemSO);
     }
 }
