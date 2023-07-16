@@ -16,7 +16,7 @@ public class PlayerPain
         _relief = 0;
     }
 
-    public int Relief { get { return _truePain; } set { _truePain = value; } }
+    public int Relief { get { return _relief; } set { _relief = value; } }
 
     public int EffectivePain 
     { 

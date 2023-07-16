@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe041acecc845a489eed291e91591ff, type: 3}
+  m_Name: PC James
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 21300000, guid: 13e7e6fe43a8aa049bcd610bbc1f5ff8, type: 3}
+  CharacterImage: {fileID: 21300000, guid: b7e2b63185fbb9344a7cd47dbd02e31a, type: 3}
+  PCPrefab: {fileID: 8080965006557006832, guid: 4e8654fa56a8ba64f8aaff9db3cd1745, type: 3}
+  PCInstance: {fileID: 0}

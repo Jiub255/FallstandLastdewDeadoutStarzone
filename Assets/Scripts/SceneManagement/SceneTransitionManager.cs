@@ -14,7 +14,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     public void LoadScavengingScene(GameObject levelPrefab)
     {
-        foreach (SOPC soPC in _pcSOListSO.SOPCs)
+        foreach (SOPC soPC in _pcSOListSO.HomeSOPCSList)
         {
             soPC.PCInstance = null;
         }

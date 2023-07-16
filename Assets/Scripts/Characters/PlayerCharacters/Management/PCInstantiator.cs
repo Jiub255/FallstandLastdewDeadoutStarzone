@@ -5,7 +5,7 @@ public class PCInstantiator : MonoBehaviour
     [SerializeField]
     private SOListSOPC _pcSOListSO;
 
-    private void Awake()
+    private void Start/*Awake*/()
     {
         // Where to put instantiated PCs?
         //     Scavenging: Have a spawn area in each scavenge location and just spawn them in a bunch in the center.
@@ -18,12 +18,18 @@ public class PCInstantiator : MonoBehaviour
         // For now, just instantiating them in a line starting at the spawn point. 
 
         Transform spawnPointTransform = transform;
-        for (int i = 0; i < _pcSOListSO.SOPCs.Count; i++)
+        for (int i = 0; i < _pcSOListSO.HomeSOPCSList.Count; i++)
         {
-            _pcSOListSO.SOPCs[i].PCInstance = Instantiate(
-                _pcSOListSO.SOPCs[i].PCPrefab,
+            _pcSOListSO.HomeSOPCSList[i].PCInstance = Instantiate(
+                _pcSOListSO.HomeSOPCSList[i].PCPrefab,
                 new Vector3(3 * i, 0f, 0f) + spawnPointTransform.position,
                 Quaternion.identity);
+        }
+
+        if (_pcSOListSO.HomeSOPCSList.Count > 0)
+        {
+            _pcSOListSO.SelectedPC = _pcSOListSO.HomeSOPCSList[0].PCInstance;
+            _pcSOListSO.CurrentMenuSOPC = _pcSOListSO.HomeSOPCSList[0];
         }
     }
 }

@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: Enter Item Description
   Icon: {fileID: 0}
+  CombinedStatRequirements: []
+  MinSinglePCStatRequirements: []
+  RecipeCosts: []
   IsReusable: 0
-  Effects: []
+  Effects:
+  - {fileID: 0}

@@ -23,7 +23,7 @@ public class PainInjuryManager : MonoBehaviour
         Slot.UpdatePainBar(PlayerPain.EffectivePain);
     }
 
-    // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time and rest. 
+    // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time (outside of combat) and rest. 
     // Medical items can speed up recovery maybe? And medical buildings and PCs with high medical skill? 
     public void Heal(int amount)
     {
@@ -32,6 +32,7 @@ public class PainInjuryManager : MonoBehaviour
         Slot.UpdatePainBar(PlayerPain.EffectivePain);
     }
 
+    // Called by painkiller items' events. 
     public void TemporarilyRelievePain(int amount, float duration)
     {
         StartCoroutine(RelievePainCoroutine(amount, duration));

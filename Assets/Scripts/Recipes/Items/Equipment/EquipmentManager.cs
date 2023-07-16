@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
-    [SerializeField]
+/*    [SerializeField]
     private Transform _weaponParent;
     [SerializeField]
-    private SOEquipmentType _weaponEquipmentType;
+    private SOEquipmentType _weaponEquipmentType;*/
 
     // So StatManager can get equipment list. 
-    public Equipment Equipment { get; private set; }
+    public SOEquipment EquipmentSO;
 
     public Dictionary<SOStatType, int> EquipmentBonuses { get; private set; } = new();
 
@@ -18,7 +18,10 @@ public class EquipmentManager : MonoBehaviour
         SOEquipmentItem.OnEquip += Equip;
         SOEquipmentItem.OnUnequip += Unequip;
 
-        Equipment = new();
+        if (EquipmentSO != null)
+        {
+            Debug.LogWarning($"No EquipmentSO found on {transform.root.name}");
+        }
     }
 
     private void OnDisable()
@@ -27,9 +30,14 @@ public class EquipmentManager : MonoBehaviour
         SOEquipmentItem.OnUnequip -= Unequip;
     }
 
+    // TODO - As is, this will equip the item on every PC. How to make it only the MenuSelected one?
+    // Could pass an id parameter in the static event and have all EquipmentManagers check. 
+    // But that seems ugly and there's probably a better way. 
+    // Could just subscribe only when selected, so only the selected instance gets the event. 
+    // Then unsubscribe when deselected (and still OnDisable too). 
     public void Equip(SOEquipmentItem equipmentItemSO)
     {
-        Equipment.Equip(equipmentItemSO);
+        EquipmentSO.Equip(equipmentItemSO);
 
         AddEquipmentBonuses(equipmentItemSO);
 
@@ -61,7 +69,7 @@ public class EquipmentManager : MonoBehaviour
 
     public void Unequip(SOEquipmentItem equipmentItemSO)
     {
-        Equipment.Unequip(equipmentItemSO);
+        EquipmentSO.Unequip(equipmentItemSO);
 
         RemoveEquipmentBonuses(equipmentItemSO);
 

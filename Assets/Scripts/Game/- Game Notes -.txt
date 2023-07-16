@@ -476,8 +476,8 @@ FIX:
             Maybe have it like the biblical apocalypse, where a bunch of people just disappear suddenly. 
         OR, Far future, and some technology has wiped us out (AI, some other-dimensional nonsense, whatever). 
         OR, (mixed with above ideas to keep it interesting and not boring old earth or zombies), start as a survival nut 
-            kind of person who is locked in their bunker after shit went down. You have some decent supplies like food, water, and some weapons 
-            and other stuff.
+            kind of person who is locked in their bunker after shit went down (after an alien invasion? so you get cool technology and enemies and stuff).
+            You have some decent supplies like food, water, and some weapons and other stuff.
             But it's a small shelter so you don't want to stay there too long. 
             This could be a good place for a tutorial too. Just teach the basics in the bunker, then in the next location they learn farming and stuff. And so on. 
             You start going out to find survivors and meet random (or not random) people (or not people), some are good, some are bad. 
@@ -493,6 +493,7 @@ FIX:
             Want to focus more on the happy life in the base and have the motivation for going out scavenging be to improve home base life. 
                 A lot more cheerful colorful vibe at home, and dark and scary out scavenging. Almost like two different games. Stardewy at home, scary and deadly outside. 
                 Sometimes the two worlds mix when the home base gets raided. 
+            Instead of random PC's, make a bunch of unique PC's with little stories like stardew? Or at least some personality. 
             Focus more on base building than LS:DZ. 
                 Could even have a cooking skill, and cooking equipment and go with that. Getting pretty complex, but whatever. 
             Can move to new bases when you find new locations. 
@@ -689,3 +690,4 @@ FIX:
 
         Using UnityEditor in SOCraftableItems and SOBuildingRecipes classes to get list. Either run method right before building, 
             or find another way without using UnityEditor. 
+            Maybe just manually fill the lists before building. 

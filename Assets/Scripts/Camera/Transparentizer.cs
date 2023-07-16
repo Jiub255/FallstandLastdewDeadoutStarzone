@@ -15,6 +15,8 @@ public class Transparentizer : MonoBehaviour
     private float _opacity = 1f;
 	[SerializeField]
 	private LayerMask _transparentableLayerMask;
+    [SerializeField]
+    private SOListSOPC _currentTeamSO;
 
     // Just for testing/getting values right. 
     // TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
@@ -49,17 +51,18 @@ public class Transparentizer : MonoBehaviour
 
     private void OnEnable()
     {
-        PCSelector.OnSelectPC += SelectPC;
+        _currentTeamSO.OnSelectedPCChanged += SelectPC;
     }
 
     private void OnDisable()
     {
-        PCSelector.OnSelectPC -= SelectPC;
+        _currentTeamSO.OnSelectedPCChanged -= SelectPC;
     }
 
-    private void SelectPC(Transform pcTransform)
+    // Doing it like this to cache the transform. 
+    private void SelectPC()
     {
-        _currentPCTransform = pcTransform;
+        _currentPCTransform = _currentTeamSO.SelectedPC.transform;
     }
 
 /*    private void Update()

@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fe041acecc845a489eed291e91591ff, type: 3}
-  m_Name: James 3
+  m_Script: {fileID: 11500000, guid: 87497d688dea58741b9e20855ba0f574, type: 3}
+  m_Name: Relieve Pain
   m_EditorClassIdentifier: 
-  Icon: {fileID: 21300000, guid: 13e7e6fe43a8aa049bcd610bbc1f5ff8, type: 3}
-  PCPrefab: {fileID: 8080965006557006832, guid: 4e8654fa56a8ba64f8aaff9db3cd1745, type: 3}
+  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _painReliefAmount: 0
+  _duration: 10

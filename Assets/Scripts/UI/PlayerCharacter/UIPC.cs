@@ -29,11 +29,11 @@ public class UIPC : MonoBehaviour
         ClearInventory();
 
         // Populates UI
-        foreach (SOPC pcInstance in _pcSOsSO.SOPCs)
+        foreach (SOPC pcSO in _pcSOsSO.HomeSOPCSList)
         {
             PCSlot slot = Instantiate(SlotPrefab, SlotParent).GetComponent<PCSlot>();
 
-            slot.SetupSlot(pcInstance);
+            slot.SetupSlot(pcSO);
         }
     }
 

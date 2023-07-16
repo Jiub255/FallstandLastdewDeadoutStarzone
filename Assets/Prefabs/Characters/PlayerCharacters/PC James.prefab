@@ -44,8 +44,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8134dfbcba5716a419e5b48e3fdfd204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponParent: {fileID: 0}
-  _weaponEquipmentType: {fileID: 0}
+  EquipmentSO: {fileID: 11400000, guid: c894b6410c7daa74fa0e51f0ac4aedc4, type: 2}
+--- !u!1 &4955617335596177900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1506534250943683756}
+  - component: {fileID: 5600837956875208153}
+  m_Layer: 9
+  m_Name: SOPC
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1506534250943683756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4955617335596177900}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8080965006557006833}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5600837956875208153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4955617335596177900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cec03add9e9bb41a34607230bbe246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SOPC: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
 --- !u!1 &5903972464820501798
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,12 +135,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stats:
-  - StatTypeSO: {fileID: 0}
+  - StatTypeSO: {fileID: 11400000, guid: 872f20da8afcc9741acd725c1c0d64c1, type: 2}
     _baseValue: 3
-  - StatTypeSO: {fileID: 0}
+  - StatTypeSO: {fileID: 11400000, guid: b3b8487cea324994ba77b61056e4861c, type: 2}
     _baseValue: 2
-  _equipment:
-    EquipmentItems: []
 --- !u!1 &8080965005213474775
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,6 +1046,7 @@ Transform:
   - {fileID: 8080965005896224274}
   - {fileID: 1447599001513682710}
   - {fileID: 8303275576353852552}
+  - {fileID: 1506534250943683756}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1053,7 +1096,6 @@ MonoBehaviour:
   _stoppingDistance: 1
   _lootDistance: 1
   _lootAnimation: {fileID: 7400000, guid: b2f446dd3ba5f484695232260baf54e4, type: 2}
-  _inventorySO: {fileID: 11400000, guid: 94fa74fe4f4aaa9479cd33281411db03, type: 2}
   _lootTimer: {fileID: 7461302068374981788}
   _weaponRange: 5
   _attackDuration: 1
@@ -1092,7 +1134,7 @@ MonoBehaviour:
   _turnSpeed: 500
   _obstaclesLayerMask:
     serializedVersion: 2
-    m_Bits: 840
+    m_Bits: 1864
 --- !u!114 &5561255964109972442
 MonoBehaviour:
   m_ObjectHideFlags: 0

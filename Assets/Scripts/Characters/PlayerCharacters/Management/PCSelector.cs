@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 public class PCSelector : MonoBehaviour
 {
     public static event Action<Transform> OnDoubleClickPC;
-    public static event Action<Transform> OnSelectPC;
 
     [SerializeField]
     private LayerMask _pcLayerMask;
@@ -20,7 +19,7 @@ public class PCSelector : MonoBehaviour
 
     private int _firstClickedObjectID;
 
-    private GameObject _currentPCInstance; 
+    private SOListSOPC _currentTeamSO; 
 
     private void Start()
     {
@@ -112,12 +111,12 @@ public class PCSelector : MonoBehaviour
     private void ChangePC(GameObject clickedPCInstance)
     {
         // If clicked PC is NOT your current PC (true also when _currentPCInstance == null), 
-        if (_currentPCInstance != clickedPCInstance)
+        if (_currentTeamSO.SelectedPC != clickedPCInstance)
         {
             // If there is a currently selected PC, set its Selected to false. 
-            if (_currentPCInstance)
+            if (_currentTeamSO)
             {
-                _currentPCInstance.GetComponent<PlayerController>().SetSelected(false);
+                _currentTeamSO.SelectedPC.GetComponent<PlayerController>().SetSelected(false);
             }
 
             // Set clicked PC's Selected to true.
@@ -126,17 +125,12 @@ public class PCSelector : MonoBehaviour
                 clickedPCInstance.GetComponent<PlayerController>().SetSelected(true);
             }
          
-            _currentPCInstance = clickedPCInstance; 
-        }
-
-        // Transparentizer listens, sets current PC. 
-        if (_currentPCInstance != null)
-        {
-            OnSelectPC?.Invoke(clickedPCInstance.transform);
-        }
-        else
-        {
-            OnSelectPC?.Invoke(null);
+            _currentTeamSO.SelectedPC = clickedPCInstance;
+            // Also set PC as current menu PC so you always see your most recently selected character when you open the inventory. 
+            if (clickedPCInstance != null)
+            {
+                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponentInChildren<SOPCHolder>().SOPC;
+            }
         }
     }
 }

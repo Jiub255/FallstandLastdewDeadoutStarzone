@@ -60,7 +60,7 @@ public class StatManager : MonoBehaviour
 
     private void GetStatTotals()
     {
-		foreach (SOPC pcSO in _pcSOListSO.SOPCs)
+		foreach (SOPC pcSO in _pcSOListSO.HomeSOPCSList)
         {
             foreach (Stat stat in pcSO.PCInstance.GetComponent<PCStatManager>().Stats)
             {

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Transparentizer2 : MonoBehaviour
 {
-	private Transform _currentPCTransform;
+/*	private Transform _currentPCTransform;
 
 	[SerializeField]
 	private LayerMask _transparentableLayerMask;
@@ -16,8 +16,8 @@ public class Transparentizer2 : MonoBehaviour
     private float _falloffSize = 0.05f;
 
 	private Camera _camera;
-/*    private InputAction _mousePositionAction;
-    private bool _pointerOverUI = false;*/
+*//*    private InputAction _mousePositionAction;
+    private bool _pointerOverUI = false;*//*
     private EventSystem _eventSystem;
     private Transform _transform;
     private Vector2 _cutoutPosition;
@@ -45,7 +45,7 @@ public class Transparentizer2 : MonoBehaviour
         _currentPCTransform = pcTransform;
     }
 
-/*    private void Update()
+*//*    private void Update()
     {
         if (_eventSystem.IsPointerOverGameObject())
         {
@@ -55,20 +55,20 @@ public class Transparentizer2 : MonoBehaviour
         {
             _pointerOverUI = false;
         }
-    }*/
+    }*//*
 
     private void FixedUpdate()
     {
         RaycastHit[] hits = new RaycastHit[0];
 
         // Hits from mouse position 
-/*        if (!_pointerOverUI)
+*//*        if (!_pointerOverUI)
         {
             hits = Physics.RaycastAll(
                 _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
                 1000,
                 _transparentableLayerMask);
-        }*/
+        }*//*
 
         // Hits from currently selected PC 
         if (_currentPCTransform != null)
@@ -77,7 +77,7 @@ public class Transparentizer2 : MonoBehaviour
             Vector3 direction = _currentPCTransform.position - position;
 //            float rayDistance = Vector3.Distance(position, _currentPCTransform.position);
 
-            /*RaycastHit[] selectedPlayerHits*/ hits = Physics.RaycastAll(
+            *//*RaycastHit[] selectedPlayerHits*//* hits = Physics.RaycastAll(
                 position,
                 direction,
                 direction.magnitude,
@@ -108,5 +108,5 @@ public class Transparentizer2 : MonoBehaviour
                 material.SetFloat("_FalloffSize", _falloffSize);
             }
         }
-    }
+    }*/
 }

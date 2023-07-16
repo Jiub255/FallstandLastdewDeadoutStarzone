@@ -8,6 +8,7 @@ public class SOPC : ScriptableObject
     public static event Action<GameObject> OnSelectPC;
 
     public Sprite Icon;
+    public Sprite CharacterImage;
     public GameObject PCPrefab;
 //    [HideInInspector]
     public GameObject PCInstance;/* { get; set; }*/

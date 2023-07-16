@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 // Put this on camera. 
 public class OLDTransparentizer : MonoBehaviour
 {
-    // Could make multiple transparentable layers if needed, then collect them all into this LayerMask. 
+/*    // Could make multiple transparentable layers if needed, then collect them all into this LayerMask. 
     [SerializeField]
     private LayerMask _transparentableLayerMask;
 
@@ -87,10 +87,10 @@ public class OLDTransparentizer : MonoBehaviour
         // Hits from mouse position 
         if (!_pointerOverUI)
         {
-/*            hits = Physics.RaycastAll(
+*//*            hits = Physics.RaycastAll(
                 _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
                 1000,
-                _transparentableLayerMask);*/
+                _transparentableLayerMask);*//*
 
             hits = Physics.SphereCastAll(
                 _camera.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
@@ -285,5 +285,5 @@ public class OLDTransparentizer : MonoBehaviour
         material.EnableKeyword("_ALPHABLEND_ON");
         material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-    }
+    }*/
 }

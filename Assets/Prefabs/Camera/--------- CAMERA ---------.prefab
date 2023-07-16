@@ -137,6 +137,7 @@ MonoBehaviour:
   _transparentableLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
   _boxcastHalfWidth: 50
   _boxcastHalfHeight: 50
 --- !u!1 &5059075228795231347
@@ -185,10 +186,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementSpeed: 4
-  _verticalRotationSpeed: 1.5
-  _horizontalRotationSpeed: 1.5
-  _rotationXMin: 7
-  _rotationXMax: 90
+  _xRotationSpeed: 1.5
+  _yRotationSpeed: 1.5
+  _xRotationMin: 7
+  _xRotationMax: 90
   _edgeScrollingSpeed: 4
   _percentDistanceFromEdges: 10
   _draggingSpeed: 2

@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93994b24cb669b945882943615957097, type: 3}
   m_Name: Test Crafting Inventory SO
   m_EditorClassIdentifier: 
+  _itemAmounts:
+  - ItemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
+    Amount: 1

@@ -10,8 +10,6 @@ public class PCStatManager : MonoBehaviour
     [SerializeField]
     protected List<Stat> _stats;
 
-    // Just serialized to see in inspector for testing. 
-    [SerializeField, Header("Only Serialized For Testing")]
     protected EquipmentManager _equipmentManager;
 
     public List<Stat> Stats { get { return _stats; } }
@@ -26,13 +24,13 @@ public class PCStatManager : MonoBehaviour
 
     protected void OnEnable()
     {
-        _equipmentManager.Equipment.OnEquipmentChanged += CalculateStatModifiers;
+        _equipmentManager.EquipmentSO.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
     }
 
     protected void OnDisable()
     {
-        _equipmentManager.Equipment.OnEquipmentChanged -= CalculateStatModifiers;
+        _equipmentManager.EquipmentSO.OnEquipmentChanged -= CalculateStatModifiers;
         Stat.OnBaseValueChanged -= CalculateStatModifiers;
     }
 
