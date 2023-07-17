@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe041acecc845a489eed291e91591ff, type: 3}
   m_Name: PC James
   m_EditorClassIdentifier: 
-  Icon: {fileID: 21300000, guid: 13e7e6fe43a8aa049bcd610bbc1f5ff8, type: 3}
-  CharacterImage: {fileID: 21300000, guid: b7e2b63185fbb9344a7cd47dbd02e31a, type: 3}
-  PCPrefab: {fileID: 8080965006557006832, guid: 4e8654fa56a8ba64f8aaff9db3cd1745, type: 3}
   PCInstance: {fileID: 0}
+  EquipmentItems: []
+  Injury: 0
+  Stats:
+  - StatTypeSO: {fileID: 11400000, guid: 872f20da8afcc9741acd725c1c0d64c1, type: 2}
+    _baseValue: 0
+  - StatTypeSO: {fileID: 11400000, guid: b3b8487cea324994ba77b61056e4861c, type: 2}
+    _baseValue: 0

@@ -16,7 +16,6 @@ public class SOPC : ScriptableObject
 
     public List<SOEquipmentItem> EquipmentItems;
 
-    public int TruePain;
     public int Injury;
 
     public List<Stat> Stats;

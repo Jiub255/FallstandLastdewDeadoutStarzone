@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87497d688dea58741b9e20855ba0f574, type: 3}
-  m_Name: Relieve Pain
+  m_Name: Relieve Pain 10 - 10
   m_EditorClassIdentifier: 
   _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
-  _painReliefAmount: 0
+  _painReliefAmount: 10
   _duration: 10

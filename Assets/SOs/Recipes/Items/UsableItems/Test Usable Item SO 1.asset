@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Test Usable Item SO 1
   m_EditorClassIdentifier: 
   Description: Enter Item Description
-  Icon: {fileID: 0}
-  CombinedStatRequirements: []
+  Icon: {fileID: 21300000, guid: 0525793900d728a42936791a8a6de63b, type: 3}
   MinSinglePCStatRequirements: []
   RecipeCosts: []
   IsReusable: 0
   Effects:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 781d41f4446446f48a2ecb29f88f01bc, type: 2}

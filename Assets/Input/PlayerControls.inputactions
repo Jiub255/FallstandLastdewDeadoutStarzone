@@ -266,7 +266,7 @@
                     "id": "9a3e82be-af03-4d90-b3bf-0f4dcf47a75d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": true
                 },
                 {
@@ -275,7 +275,7 @@
                     "id": "be286cfd-8a5a-4666-899c-38e5458e7d98",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 },
                 {
@@ -284,8 +284,17 @@
                     "id": "5d789d10-f4a6-4085-af61-ae45c7d6c83d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AngleSnapMode",
+                    "type": "PassThrough",
+                    "id": "131c31ce-9fb2-4927-93cc-7756cd487411",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -341,6 +350,17 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "PlaceBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "006d97b6-778f-45c4-9949-4517327c1827",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "AngleSnapMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

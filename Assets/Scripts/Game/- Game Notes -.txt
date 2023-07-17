@@ -13,6 +13,11 @@ ________________________________________________________________________________
 FIRST!!
 
 
+    In SORecipe, added building and item requirements. Check them in UIRecipes/UICrafting/UIBuilding.
+        Also have UIBuilding just send the list to PlayerInventoryManager too, like UICrafting does.
+        Might not even need the child classes and UIRecipes can do the sending. But might for other reasons. Figure it out. 
+
+
     For inventory:
         In scavenging scene, only show usable items, and loot you've found. In two separate tabs.
         In home base scene, show usable, equipment and craftable items. 
@@ -138,6 +143,14 @@ FIX:
             Don't want to have to constantly control fighters, or the others for that matter. 
             Maybe you can control currently selected PC, like aim and shoot/melee/loot. 
                 The others do the task you set them to do, or fight or loot automatically. 
+            Guns will attract more enemies, but melee weapons won't. 
+                Guns are better for killing obviously, so there will be a tradeoff. 
+                If your team can handle the flow of enemies using melee weapons, then you can loot the whole building. 
+                But if they need to use guns to stop the enemies, then they'll only be able to loot so much before being killed or run off, 
+                    since more and more enemies will be attracted to the sound of gunfire. 
+                Could make for a good balance. 
+                Make it realistic, like using guns at all attracts enemies, maybe have a little meter that quickly fills up based off number of gunshots/volume of gun. 
+                    So a few gunshots won't attract a whole lot, but it you keep using it or have a lot of people shooting, a lot of enemies will come. 
         Use Injury/Pain system instead of boring old HP. 
             Have PainInjuryManager : MonoBehaviour class and it has PlayerInjury and PlayerPain plain C# classes as member variables? 
             Pain rises equally with injury (both go from 0 - 100).
@@ -177,6 +190,9 @@ FIX:
             Scavenging inventory size depends on the size and number of wagons/trucks/whatever you have to carry stuff home. 
             Can build new vehicles and hauling equipment to increase scavenging inv size. 
                 Also will allow you to bring more scavenging team members? That could be cool. 
+        Instead of a bunch of empty buildings with enemies coming in, have things like bandit bases and stuff where the enemies are already there.
+            More enemies will also come in if you are too loud (using guns). 
+            Maybe each location has an amount of enemies that come in to the location, some could even have none. And some places could get constantly swarmed. 
 
 
     Figure out how travelling will work.

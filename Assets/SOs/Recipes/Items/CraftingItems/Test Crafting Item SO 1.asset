@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Test Crafting Item SO 1
   m_EditorClassIdentifier: 
   Description: Enter Item Description
-  Icon: {fileID: 0}
-  StatRequirements:
-  - StatTypeSO: {fileID: 11400000, guid: 872f20da8afcc9741acd725c1c0d64c1, type: 2}
-    RequiredAmount: 2
+  Icon: {fileID: 21300000, guid: d677d3d72ce8b7d4d912727b5de70547, type: 3}
+  MinSinglePCStatRequirements: []
   RecipeCosts:
   - CraftingItemSO: {fileID: 11400000, guid: 5e66ac4ef74b8f446becc9fc598e7e2c, type: 2}
-    Amount: 3
+    Amount: 1

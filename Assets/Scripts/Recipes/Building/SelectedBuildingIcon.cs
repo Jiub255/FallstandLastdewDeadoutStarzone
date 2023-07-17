@@ -53,11 +53,11 @@ public class SelectedBuildingIcon : MonoBehaviour
 
     public void SetRedMaterial()
     {
-        _renderer.material = _redMaterial;
+        if (_renderer.material != _redMaterial) _renderer.material = _redMaterial;
     }
 
     public void SetGreenMaterial()
     {
-        _renderer.material = _greenMaterial;
+        if (_renderer.material != _greenMaterial) _renderer.material = _greenMaterial;
     }
 }

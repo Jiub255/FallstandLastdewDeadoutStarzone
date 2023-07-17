@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +8,7 @@ public class StatManager : MonoBehaviour
 	[SerializeField]
 	private SOListSOPC _pcSOListSO;
 
-	private Dictionary<SOStatType, int> _combinedStatTotals = new();
+//	private Dictionary<SOStatType, int> _combinedStatTotals = new();
 	private Dictionary<SOStatType, int> _individualPCStatMaxes = new();
 
     private void OnEnable()
@@ -32,10 +31,8 @@ public class StatManager : MonoBehaviour
         {
             // Check to make sure combined stat totals and individual pc stat maxes have all the keys from the requirements first. 
             // Could delete this missing keys part before final build to improve performance, not sure if it really matters. 
-            List<StatRequirement> missingKeys = 
-                recipe.CombinedStatRequirements.Where(
-                    entry => !_combinedStatTotals.ContainsKey(entry.StatTypeSO))
-                    .ToList();
+            List<StatRequirement> missingKeys = recipe.MinSinglePCStatRequirements.Where(
+                    entry => !_individualPCStatMaxes.ContainsKey(entry.StatTypeSO)).ToList();
 
             if (missingKeys.Count > 0)
             {
@@ -43,10 +40,13 @@ public class StatManager : MonoBehaviour
                 continue;
             }
 
-            List<StatRequirement> unmetRequirements =
-                recipe.CombinedStatRequirements.Where(
-                entry => _combinedStatTotals[entry.StatTypeSO] < entry.RequiredAmount)
-                .ToList();
+            // Combined stat requirements, probably won't use. 
+/*            List<StatRequirement> unmetRequirements = recipe.CombinedStatRequirements.Where(
+                entry => _combinedStatTotals[entry.StatTypeSO] < entry.RequiredAmount).ToList();*/
+
+            // Minimum single PC stat requirements. 
+            List<StatRequirement> unmetRequirements = recipe.MinSinglePCStatRequirements.Where(
+                entry => _individualPCStatMaxes[entry.StatTypeSO] < entry.RequiredAmount).ToList();
 
             if (unmetRequirements.Count == 0)
             {
@@ -64,14 +64,14 @@ public class StatManager : MonoBehaviour
             foreach (Stat stat in pcSO.Stats)
             {
                 // Update _combinedStatTotals dictionary. 
-                if (_combinedStatTotals.ContainsKey(stat.StatTypeSO))
+/*                if (_combinedStatTotals.ContainsKey(stat.StatTypeSO))
                 {
                     _combinedStatTotals[stat.StatTypeSO] += stat.ModdedValue;
                 }
                 else
                 {
                     _combinedStatTotals.Add(stat.StatTypeSO, stat.ModdedValue);
-                }
+                }*/
 
                 // Update _individualPCStatMaxes dictionary. 
                 if (_individualPCStatMaxes.ContainsKey(stat.StatTypeSO))

@@ -288,7 +288,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""9a3e82be-af03-4d90-b3bf-0f4dcf47a75d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -297,7 +297,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""be286cfd-8a5a-4666-899c-38e5458e7d98"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -306,8 +306,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""5d789d10-f4a6-4085-af61-ae45c7d6c83d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AngleSnapMode"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""131c31ce-9fb2-4927-93cc-7756cd487411"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -363,6 +372,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""PlaceBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""006d97b6-778f-45c4-9949-4517327c1827"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""AngleSnapMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -663,6 +683,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Build_RotateBuilding = m_Build.FindAction("RotateBuilding", throwIfNotFound: true);
         m_Build_SnapBuilding = m_Build.FindAction("SnapBuilding", throwIfNotFound: true);
         m_Build_PlaceBuilding = m_Build.FindAction("PlaceBuilding", throwIfNotFound: true);
+        m_Build_AngleSnapMode = m_Build.FindAction("AngleSnapMode", throwIfNotFound: true);
         // Quit
         m_Quit = asset.FindActionMap("Quit", throwIfNotFound: true);
         m_Quit_Quit = m_Quit.FindAction("Quit", throwIfNotFound: true);
@@ -846,6 +867,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Build_RotateBuilding;
     private readonly InputAction m_Build_SnapBuilding;
     private readonly InputAction m_Build_PlaceBuilding;
+    private readonly InputAction m_Build_AngleSnapMode;
     public struct BuildActions
     {
         private @PlayerControls m_Wrapper;
@@ -853,6 +875,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @RotateBuilding => m_Wrapper.m_Build_RotateBuilding;
         public InputAction @SnapBuilding => m_Wrapper.m_Build_SnapBuilding;
         public InputAction @PlaceBuilding => m_Wrapper.m_Build_PlaceBuilding;
+        public InputAction @AngleSnapMode => m_Wrapper.m_Build_AngleSnapMode;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -871,6 +894,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PlaceBuilding.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
                 @PlaceBuilding.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
                 @PlaceBuilding.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnPlaceBuilding;
+                @AngleSnapMode.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnAngleSnapMode;
+                @AngleSnapMode.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnAngleSnapMode;
+                @AngleSnapMode.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnAngleSnapMode;
             }
             m_Wrapper.m_BuildActionsCallbackInterface = instance;
             if (instance != null)
@@ -884,6 +910,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PlaceBuilding.started += instance.OnPlaceBuilding;
                 @PlaceBuilding.performed += instance.OnPlaceBuilding;
                 @PlaceBuilding.canceled += instance.OnPlaceBuilding;
+                @AngleSnapMode.started += instance.OnAngleSnapMode;
+                @AngleSnapMode.performed += instance.OnAngleSnapMode;
+                @AngleSnapMode.canceled += instance.OnAngleSnapMode;
             }
         }
     }
@@ -1071,6 +1100,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnRotateBuilding(InputAction.CallbackContext context);
         void OnSnapBuilding(InputAction.CallbackContext context);
         void OnPlaceBuilding(InputAction.CallbackContext context);
+        void OnAngleSnapMode(InputAction.CallbackContext context);
     }
     public interface IQuitActions
     {

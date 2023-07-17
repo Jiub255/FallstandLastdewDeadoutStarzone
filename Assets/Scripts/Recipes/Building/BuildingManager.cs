@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-// TODO - Use a "Building" prefab with the selected building icon child. Then attach the actual building prefab as a child of it in this script.
+// Uses a "Building" prefab with the selected building icon child. Then attaches the actual building prefab as a child of it when selecting building.
 public class BuildingManager : MonoBehaviour
 {
     /*
@@ -23,7 +23,7 @@ public class BuildingManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _buildingPrefab;
-    private GameObject _currentBuildingPrefab;
+    private SOBuildingRecipe _currentBuildingRecipeSO;
     private GameObject _currentBuildingInstance;
     private SelectedBuildingIcon _selectedBuildingIcon;
 
@@ -37,51 +37,76 @@ public class BuildingManager : MonoBehaviour
     private float _rotationSpeed = 50f;
     private Quaternion _rotation = Quaternion.identity;
 
-    private bool _haveABuildingSelected = false;
     private bool _pointerOverUI = false;
     private EventSystem _eventSystem;
 
-    [SerializeField, Tooltip("Snap angle to the nearest [Snap Angle]. Works best with a divisor of 360.")]
+    [SerializeField, Tooltip("Snap angle to the next [Snap Angle]. Works best with a divisor of 360.")]
     private int _snapAngle = 45;
 
-    private InputAction _rotateBuildingAction;
+    private InputAction _mousePositionAction;
 
     [SerializeField]
     protected SOInventory _craftingInventorySO;
 
+
+    private bool _angleSnapMode = false;
+    [SerializeField, Tooltip("Toggle or hold modifier button (shift) to change angle snap mode")]
+    private bool _toggle = false;
+
     private void Start()
     {
-        _rotateBuildingAction = S.I.IM.PC.Build.RotateBuilding;
-
-        SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
-
-        S.I.IM.PC.Build.PlaceBuilding.performed += PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.performed += SnapToNearestAngle;
-        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
-        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed += DeselectCurrentBuilding;
-
-        UIBuilding.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
-
-        // Don't see why this would ever be true, but just in case. 
-        if (_currentBuildingInstance != null)
-        {
-            _haveABuildingSelected = true;
-        }
-
+        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
         _eventSystem = EventSystem.current;
+
         // For debug gizmos, so they dont draw in editor mode.
        // _started = true;
+
+        S.I.IM.PC.Build.RotateBuilding.started += RotateBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.started += PlaceBuilding;
+        S.I.IM.PC.Build.SnapBuilding.started += SnapToNextAngle;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
+
+        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
+        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;
+
+        SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
+        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
+        UIBuilding.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
+    }
+
+    private void ToggleAngleSnapMode(InputAction.CallbackContext context)
+    {
+        _angleSnapMode = !_angleSnapMode;
+    }
+
+    // Use these two methods to switch between toggle and hold shift for changing angle snap mode. 
+    // Going overboard, just practicing accessibility/customization stuff. 
+    public void ToggleMode()
+    {
+        _toggle = true;
+        S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;
+    }
+    public void HoldMode()
+    {
+        _toggle = false;
+        S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;
     }
 
     private void OnDisable()
     {
+        S.I.IM.PC.Build.RotateBuilding.started -= RotateBuilding;
+        S.I.IM.PC.Build.PlaceBuilding.started -= PlaceBuilding;
+        S.I.IM.PC.Build.SnapBuilding.started -= SnapToNextAngle;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
+
+        S.I.IM.PC.Build.AngleSnapMode.started -= ToggleAngleSnapMode;
+        // TODO - How to check if event is subscribed? So you don't unnecessarily unsubscribe. 
+        // Or could you just subscribe here real quick before unsubscribing to be sure? Seems hacky. 
+        // Or, when you change _toggle, subscribe or unsubscribe there, so this _toggle check will be fine. 
+        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;
+
         SOBuildingRecipe.OnSelectBuilding -= SelectCurrentBuilding;
-
-        S.I.IM.PC.Build.PlaceBuilding.performed -= PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.performed -= SnapToNearestAngle;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
-        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.performed -= DeselectCurrentBuilding;
-
         UIBuilding.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
     }
 
@@ -110,12 +135,10 @@ public class BuildingManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_haveABuildingSelected)
+        if (_currentBuildingInstance != null)
         {
-            RotateBuilding();
-
             // Move building to current mouse position on ground
-            Ray ray = Camera.main.ScreenPointToRay(S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>());
+            Ray ray = Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>());
             RaycastHit hitData;
 
             // TODO - Set maxDistance to zoom level plus a bit? Or is that just going overboard? 
@@ -132,13 +155,13 @@ public class BuildingManager : MonoBehaviour
         _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
-    private void RotateBuilding()
+    private void RotateBuilding(InputAction.CallbackContext context)
     {
         if (_currentBuildingInstance != null)
         {
             _currentBuildingInstance.transform.Rotate(new Vector3(
                 0f,
-                Time.unscaledDeltaTime * _rotationSpeed * _rotateBuildingAction.ReadValue<float>(), 
+                Time.unscaledDeltaTime * _rotationSpeed * context.ReadValue<float>(), 
                 0f));
 
             _rotation = _currentBuildingInstance.transform.rotation;
@@ -147,15 +170,21 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void SnapToNearestAngle(InputAction.CallbackContext context)
+    // TODO - Maybe have a "Snap to angles" mode toggle, and the rotate controls either rotate smoothly or in _snapAngle chunks depending. 
+    // Or at least have the option to snap to previous angle too. 
+    // Maybe holding/pressing shift can turn on/toggle angle snap mode. 
+    private void SnapToNextAngle(InputAction.CallbackContext context)
     {
         if (_currentBuildingInstance != null)
         {
             for (int i = 0; i <= 360; i += _snapAngle)
             {
-                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= (_snapAngle / 2f))
+//                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= (_snapAngle / 2f))
+                if (_rotation.eulerAngles.y < i)
                 {
                     _currentBuildingInstance.transform.rotation = Quaternion.Euler(0f, i , 0f);
+                    
+                    _rotation = _currentBuildingInstance.transform.rotation;
                 }
             }
         }
@@ -177,7 +206,7 @@ public class BuildingManager : MonoBehaviour
 
     private void MakeInstance()
     {
-        if (_currentBuildingPrefab != null)
+        if (_currentBuildingRecipeSO != null)
         {
             if (_currentBuildingInstance != null)
             {
@@ -185,22 +214,10 @@ public class BuildingManager : MonoBehaviour
                 SetBuildingInstance(null);
             }
 
-            SetBuildingInstance(Instantiate(_currentBuildingPrefab));
-//            _currentBuildingInstance = Instantiate(_currentBuildingPrefab);
+            SetBuildingInstance(Instantiate(_currentBuildingRecipeSO.BuildingPrefab));
 
             // Set building's rotation
             _currentBuildingInstance.transform.rotation = _rotation;
-
-            // Put new building in center of screen
-            /*            Ray ray = Camera.main.ScreenPointToRay(
-                            new Vector3(Screen.width / 2, Screen.height / 2, 0f));
-                        RaycastHit hitData;
-                        if (Physics.Raycast(ray, out hitData, 1000, _groundLayer))
-                        {
-                            _currentBuildingInstance.transform.position = hitData.point;
-                        }*/
-
-            _haveABuildingSelected = true;
         }
     }
 
@@ -263,20 +280,20 @@ public class BuildingManager : MonoBehaviour
 
     // Gets called from a button in build menu, which calls event in BuildingItem.
     // Also called when selecting a building the first time, not just changing buildings.
-    public void SelectCurrentBuilding(GameObject newBuilding)
+    public void SelectCurrentBuilding(SOBuildingRecipe newBuildingRecipeSO)
     {
        // Debug.Log("Changing current building to " + newBuilding.name);
 
-        _currentBuildingPrefab = newBuilding;
+        _currentBuildingRecipeSO = newBuildingRecipeSO;
 
         MakeInstance();
     }
 
     private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
-        if (_currentBuildingPrefab != null)
+        if (_currentBuildingRecipeSO != null)
         {
-            _currentBuildingPrefab = null;
+            _currentBuildingRecipeSO = null;
         }
         if (_currentBuildingInstance != null)
         {
@@ -284,8 +301,6 @@ public class BuildingManager : MonoBehaviour
             SetBuildingInstance(null);
 //            _currentBuildingInstance = null;
         }
-
-        _haveABuildingSelected = false;
     }
 
     private bool CanBuildHere()

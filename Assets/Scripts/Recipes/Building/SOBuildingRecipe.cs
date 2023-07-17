@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SOBuildingRecipe : SORecipe
 {
-    public static event Action<GameObject> OnSelectBuilding;
+    public static event Action<SOBuildingRecipe> OnSelectBuilding;
 
     public GameObject BuildingPrefab;
 
@@ -11,6 +11,6 @@ public class SOBuildingRecipe : SORecipe
     public override void OnClickRecipe()
     {
         // BuildingManager hears this.
-        OnSelectBuilding?.Invoke(BuildingPrefab);
+        OnSelectBuilding?.Invoke(this);
     }
 }
