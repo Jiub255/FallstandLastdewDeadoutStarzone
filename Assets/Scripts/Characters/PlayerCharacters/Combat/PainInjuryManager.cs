@@ -1,51 +1,94 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Have this component on each PC, and have it new up a pain and injury class and manage them. One less component at least. 
 public class PainInjuryManager : MonoBehaviour
 {
-	public PlayerPain PlayerPain { get; private set; } 
-	public PlayerInjury PlayerInjury { get; private set; }
+    [SerializeField]
+    private SOPC _pcSO;
+
+    // Only serialized to easily see in inspector for now.
+    [SerializeField]
+    private int _relief = 0;
 
 	public PCSlot Slot { get; set; }
+    public int Relief { get { return _relief; } }
+
+    public int EffectivePain
+    {
+        get
+        {
+            int pain = _pcSO.Injury - _relief;
+            if (pain < 0)
+            {
+                pain = 0;
+            }
+            return pain;
+        }
+    }
 
     private void OnEnable()
     {
-        PlayerPain = new();
-        PlayerInjury = new(PlayerPain);
+        SORelievePain.OnRelievePainEffect += TemporarilyRelievePain;
+    }
+
+    private void OnDisable()
+    {
+        SORelievePain.OnRelievePainEffect -= TemporarilyRelievePain;
     }
 
     public void GetHurt(int damage)
     {
-        PlayerInjury.GetHurt(damage);
-        Slot.UpdateInjuryBar(PlayerInjury.Injury);
-        Slot.UpdatePainBar(PlayerPain.EffectivePain);
+        _pcSO.Injury += damage;
+
+        if (_pcSO.Injury >= 100)
+        {
+            _pcSO.Injury = 100;
+            Debug.Log("Injury >= 100, you died.");
+            Die();
+        }
+
+        Slot.UpdateInjuryBar(_pcSO.Injury);
+        Slot.UpdatePainBar(EffectivePain);
     }
 
     // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time (outside of combat) and rest. 
     // Medical items can speed up recovery maybe? And medical buildings and PCs with high medical skill? 
     public void Heal(int amount)
     {
-        PlayerInjury.Heal(amount);
-        Slot.UpdateInjuryBar(PlayerInjury.Injury);
-        Slot.UpdatePainBar(PlayerPain.EffectivePain);
+        _pcSO.Injury -= amount;
+
+        if (_pcSO.Injury < 0)
+        {
+            _pcSO.Injury = 0;
+        }
+
+        Slot.UpdateInjuryBar(_pcSO.Injury);
+        Slot.UpdatePainBar(EffectivePain);
+    }
+
+    private void Die()
+    {
+        //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // Called by painkiller items' events. 
-    public void TemporarilyRelievePain(int amount, float duration)
+    public void TemporarilyRelievePain(GameObject PCInstance, int amount, float duration)
     {
-        StartCoroutine(RelievePainCoroutine(amount, duration));
+        if (transform.root.gameObject == PCInstance)
+        {
+            StartCoroutine(RelievePainCoroutine(amount, duration));
+        }
     }
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)
     {
-        PlayerPain.Relief += amount;
-        Slot.UpdatePainBar(PlayerPain.EffectivePain);
+        _relief += amount;
+        Slot.UpdatePainBar(EffectivePain);
 
         yield return new WaitForSeconds(duration);
 
-        PlayerPain.Relief -= amount;
-        Slot.UpdatePainBar(PlayerPain.EffectivePain);
+        _relief -= amount;
+        Slot.UpdatePainBar(EffectivePain);
     }
 }

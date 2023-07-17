@@ -31,14 +31,14 @@ public class UIManager : MonoBehaviour
         _inputManager = S.I.IM;
 
         // TODO - Put menu control actions in one map, since OpenCanvas checks if things are already active/inactive. 
-        _inputManager.PC.InventoryMenu.OpenInventory.performed += OpenInventory;
-        _inputManager.PC.InventoryMenu.CloseInventory.performed += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenBuildMenu.performed += OpenBuildMenu;
-        _inputManager.PC.NonCombatMenus.CloseBuildMenu.performed += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.performed += OpenCraftingMenu;
-        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.performed += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenMap.performed += OpenMap;
-        _inputManager.PC.NonCombatMenus.CloseMap.performed += CloseUI;
+        _inputManager.PC.InventoryMenu.OpenInventory.started += OpenInventory;
+        _inputManager.PC.InventoryMenu.CloseInventory.started += CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
+        _inputManager.PC.NonCombatMenus.CloseBuildMenu.started += CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.started += OpenCraftingMenu;
+        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenMap.started += OpenMap;
+        _inputManager.PC.NonCombatMenus.CloseMap.started += CloseUI;
 
         // Setup all menus in beginning of each scene. (Not sure if necessary)
         // Make sure all UIRefresher child classes subscribe in OnEnable, not Start, so they can hear this. 
@@ -47,14 +47,14 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        _inputManager.PC.InventoryMenu.OpenInventory.performed -= OpenInventory;
-        _inputManager.PC.InventoryMenu.CloseInventory.performed -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenBuildMenu.performed -= OpenBuildMenu;
-        _inputManager.PC.NonCombatMenus.CloseBuildMenu.performed -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.performed -= OpenCraftingMenu;
-        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.performed -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenMap.performed -= OpenMap;
-        _inputManager.PC.NonCombatMenus.CloseMap.performed -= CloseUI;
+        _inputManager.PC.InventoryMenu.OpenInventory.started -= OpenInventory;
+        _inputManager.PC.InventoryMenu.CloseInventory.started -= CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenBuildMenu.started -= OpenBuildMenu;
+        _inputManager.PC.NonCombatMenus.CloseBuildMenu.started -= CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.started -= OpenCraftingMenu;
+        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.started -= CloseUI;
+        _inputManager.PC.NonCombatMenus.OpenMap.started -= OpenMap;
+        _inputManager.PC.NonCombatMenus.CloseMap.started -= CloseUI;
     }
 
     private void OpenInventory(InputAction.CallbackContext context)

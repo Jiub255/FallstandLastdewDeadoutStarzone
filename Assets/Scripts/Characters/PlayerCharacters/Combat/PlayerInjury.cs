@@ -3,22 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class PlayerInjury
 {
-    public int Injury { get; private set; } = 0;
+/*//    public int Injury { get; private set; } = 0;
 
     private PlayerPain _playerPain;
+    private SOPC _pcSO;
 
-    public PlayerInjury(PlayerPain playerPain)
+    public PlayerInjury(PlayerPain playerPain, SOPC pcSO)
     {
-        Injury = 0;
         _playerPain = playerPain;
+        _pcSO = pcSO;
     }
 
     public void GetHurt(int damage)
     {
-        Injury += damage;
+        _pcSO.Injury += damage;
         _playerPain.IncreasePain(damage);
 
-        if (Injury >= 100)
+        if (_pcSO.Injury >= 100)
         {
             Debug.Log("Injury >= 100, you died.");
             Die();
@@ -29,17 +30,17 @@ public class PlayerInjury
     // Medical items can speed up recovery maybe? And medical buildings and PCs with high medical skill? 
     public void Heal(int amount)
     {
-        Injury -= amount;
+        _pcSO.Injury -= amount;
         _playerPain.ReducePain(amount);
 
-        if (Injury < 0)
+        if (_pcSO.Injury < 0)
         {
-            Injury = 0;
+            _pcSO.Injury = 0;
         }
     }
 
     private void Die()
     {
 //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+    }*/
 }

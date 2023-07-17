@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
-/*    [SerializeField]
-    private Transform _weaponParent;
-    [SerializeField]
-    private SOEquipmentType _weaponEquipmentType;*/
+    public static event Action<SOEquipmentItem> OnUnequip;
+    public event Action OnEquipmentChanged;
 
     // So StatManager can get equipment list. 
-    public SOEquipment EquipmentSO;
+    [SerializeField]
+    private SOPC _pcSO;
 
     public Dictionary<SOStatType, int> EquipmentBonuses { get; private set; } = new();
 
@@ -18,7 +18,7 @@ public class EquipmentManager : MonoBehaviour
         SOEquipmentItem.OnEquip += Equip;
         SOEquipmentItem.OnUnequip += Unequip;
 
-        if (EquipmentSO != null)
+        if (_pcSO != null)
         {
             Debug.LogWarning($"No EquipmentSO found on {transform.root.name}");
         }
@@ -37,19 +37,28 @@ public class EquipmentManager : MonoBehaviour
     // Then unsubscribe when deselected (and still OnDisable too). 
     public void Equip(SOEquipmentItem equipmentItemSO)
     {
-        EquipmentSO.Equip(equipmentItemSO);
+//        PCSO.Equip(equipmentItemSO);
+
+        SOEquipmentType type = equipmentItemSO.EquipmentType;
+
+        // If there is something equipped in this slot, unequip it. 
+        for (int i = 0; i < _pcSO.EquipmentItems.Count; i++)
+        {
+            if (type.name == _pcSO.EquipmentItems[i].EquipmentType.name)
+            {
+                SOEquipmentItem oldItem = _pcSO.EquipmentItems[i];
+
+                Unequip(oldItem);
+            }
+        }
+
+        // Add new item to EquipmentItems. 
+        _pcSO.EquipmentItems.Add(equipmentItemSO);
+
+        // UIEquipment and StatManager listen. 
+        OnEquipmentChanged?.Invoke();
 
         AddEquipmentBonuses(equipmentItemSO);
-
-/*        if (newItem.EquipmentType == _weaponEquipmentType)
-        {
-            // Destroy old weapon object. 
-            Destroy(_weaponParent.GetChild(0).gameObject);
-
-            // Instantiate new weapon object
-            GameObject weapon = Instantiate(newItem.EquipmentItemPrefab, _weaponParent);
-            weapon.transform.localPosition = Vector3.zero;
-        }*/
     }
 
     private void AddEquipmentBonuses(SOEquipmentItem equipmentItemSO)
@@ -69,12 +78,18 @@ public class EquipmentManager : MonoBehaviour
 
     public void Unequip(SOEquipmentItem equipmentItemSO)
     {
-        EquipmentSO.Unequip(equipmentItemSO);
+//        PCSO.Unequip(equipmentItemSO);
+
+        // Remove old item from EquipmentItems. 
+        _pcSO.EquipmentItems.Remove(equipmentItemSO);
+
+        // UIEquipment (not yet, TODO ) and SOStatManager listen. 
+        OnEquipmentChanged?.Invoke();
+
+        // InventoryManager listens.
+        OnUnequip?.Invoke(equipmentItemSO);
 
         RemoveEquipmentBonuses(equipmentItemSO);
-
-        /*        // Destroy old weapon object. 
-                Destroy(_weaponParent.GetChild(0).gameObject);*/
     }
 
     private void RemoveEquipmentBonuses(SOEquipmentItem equipmentItemSO)

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Put one on each PC. 
@@ -8,11 +7,12 @@ public class PCStatManager : MonoBehaviour
     public static event Action OnStatsChanged;
 
     [SerializeField]
-    protected List<Stat> _stats;
+    private SOPC _pcSO;
 
-    protected EquipmentManager _equipmentManager;
+    private EquipmentManager _equipmentManager;
 
-    public List<Stat> Stats { get { return _stats; } }
+    // Just making a getter for PCSelector to use have access to the SOPC from the PC instance. 
+    public SOPC PCSO { get { return _pcSO; } }
 
     protected void Start()
     {
@@ -24,13 +24,13 @@ public class PCStatManager : MonoBehaviour
 
     protected void OnEnable()
     {
-        _equipmentManager.EquipmentSO.OnEquipmentChanged += CalculateStatModifiers;
+        _equipmentManager.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
     }
 
     protected void OnDisable()
     {
-        _equipmentManager.EquipmentSO.OnEquipmentChanged -= CalculateStatModifiers;
+        _equipmentManager.OnEquipmentChanged -= CalculateStatModifiers;
         Stat.OnBaseValueChanged -= CalculateStatModifiers;
     }
 
@@ -38,7 +38,7 @@ public class PCStatManager : MonoBehaviour
     {
         // Keep the bonuses dictionary in EquipmentManager, and change it every time
         // equipment is changed. Then it's just ready and you can grab it whenever. 
-        foreach (Stat stat in Stats)
+        foreach (Stat stat in _pcSO.Stats)
         {
             stat.ClearModifiers();
 
@@ -49,7 +49,7 @@ public class PCStatManager : MonoBehaviour
         }
 
         // TODO - Set up stats UI and UIStats script. Just show stats on the equipment UI. 
-        // Heard by UIEquipment, updates UI. 
+        // TODO - Heard by UIEquipment, updates UI. 
         // Heard by UIRecipes, gets new metRequirementsRecipes list. 
         OnStatsChanged?.Invoke();
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Characters/SOEquipment", fileName = "New Equipment SO")]
 public class SOEquipment : ScriptableObject
 {
-    public static event Action<SOEquipmentItem> OnUnequip;
+/*    public static event Action<SOEquipmentItem> OnUnequip;
     public event Action OnEquipmentChanged;
 
     public List<SOEquipmentItem> EquipmentItems;
@@ -42,5 +42,5 @@ public class SOEquipment : ScriptableObject
 
         // InventoryManager listens.
         OnUnequip?.Invoke(oldItem);
-    }
+    }*/
 }

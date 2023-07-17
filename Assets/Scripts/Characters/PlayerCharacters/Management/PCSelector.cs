@@ -129,7 +129,7 @@ public class PCSelector : MonoBehaviour
             // Also set PC as current menu PC so you always see your most recently selected character when you open the inventory. 
             if (clickedPCInstance != null)
             {
-                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponentInChildren<SOPCHolder>().SOPC;
+                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponentInChildren<PCStatManager>().PCSO;
             }
         }
     }

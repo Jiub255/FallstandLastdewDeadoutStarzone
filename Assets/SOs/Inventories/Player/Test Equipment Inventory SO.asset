@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93994b24cb669b945882943615957097, type: 3}
   m_Name: Test Equipment Inventory SO
   m_EditorClassIdentifier: 
+  _itemAmounts:
+  - ItemSO: {fileID: 11400000, guid: fe9b0d81090acd249bbf8c77f8fdac05, type: 2}
+    Amount: 1
+  - ItemSO: {fileID: 11400000, guid: ebb83712ab9ce324f925fab5367f6f13, type: 2}
+    Amount: 1

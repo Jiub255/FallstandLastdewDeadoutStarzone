@@ -13,7 +13,16 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    Setup stats panel in Character panel in Equipment tab in Inventory canvas. 
+    For inventory:
+        In scavenging scene, only show usable items, and loot you've found. In two separate tabs.
+        In home base scene, show usable, equipment and craftable items. 
+            Things like painkillers can only be used during combat. 
+            Medical items that heal injury levels faster can only be used at home NOT in combat. 
+            Maybe there will be scavenging/looting items that can only be used during scavenging scenes. 
+
+                
+    Have crafting menu accessible through workbench? Or just push "c"? Just do push "c" for now. 
+        Could have different workbenches and other crafting buildings that open new recipes. 
 
 
     Fix Transparentizer and/or TransparentCircle shader/shader graph. 
@@ -69,11 +78,11 @@ FIRST!!
         Equipment item
     Recipes
         Building and crafting recipes (all items can be crafted, SOItem inherits SORecipe) share a base class. 
-            List<StatRequirement>, where StatRequirement holds SOStat and int. 
+            List<StatRequirement>, where StatRequirement holds SOStat and int. Combined skill level of all PCs. 
                 Maybe don't do this one, doesn't really make sense and adds too much confusion/complexity. 
             List<StatRequirement>, Minimum single PC skills needed. 
                 Keep this one, it makes sense. You only need one person to understand things enough to make a blueprint, then just direct everyone else to build it. 
-                Or they could build it themselves and just take a long time. 
+                Or the one person could build it themselves and just take a long time. 
             List<RecipeCost>, SOItems and amounts needed to build/craft recipe. 
         Have separate types of building and crafting recipes, which require different skills to uncover. 
             That way you could get recipes that makes sense for the characters/skills you have.
@@ -88,7 +97,7 @@ FIRST!!
             Medical
             Weapons and armor
             Tools
-            Building materials? Or is that just tedious? Probably. 
+            Building/crafting materials? Or is that just tedious? Probably. 
                 Maybe just occasional, special, unique ones. Like advanced stuff like circuit boards and batteries or something. 
             Vehicles? 
 

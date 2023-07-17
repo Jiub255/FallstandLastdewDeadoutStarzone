@@ -34,8 +34,8 @@ public class PCSlot : MonoBehaviour
         PainInjuryManager painInjuryManager = pcSO.PCInstance.GetComponentInChildren<PainInjuryManager>();
 
         // Set the fill bars here initially, but they get changed from the pain and injury scripts.
-        UpdatePainBar(painInjuryManager.PlayerPain.EffectivePain);
-        UpdateInjuryBar(painInjuryManager.PlayerInjury.Injury);
+        UpdatePainBar(painInjuryManager.EffectivePain);
+        UpdateInjuryBar(pcSO.Injury);
 
         // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
         painInjuryManager.Slot = this;

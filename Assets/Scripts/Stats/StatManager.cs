@@ -9,7 +9,6 @@ public class StatManager : MonoBehaviour
 	[SerializeField]
 	private SOListSOPC _pcSOListSO;
 
-	private List<StatManager> _statManagers = new();
 	private Dictionary<SOStatType, int> _combinedStatTotals = new();
 	private Dictionary<SOStatType, int> _individualPCStatMaxes = new();
 
@@ -62,7 +61,7 @@ public class StatManager : MonoBehaviour
     {
 		foreach (SOPC pcSO in _pcSOListSO.HomeSOPCSList)
         {
-            foreach (Stat stat in pcSO.PCInstance.GetComponent<PCStatManager>().Stats)
+            foreach (Stat stat in pcSO.Stats)
             {
                 // Update _combinedStatTotals dictionary. 
                 if (_combinedStatTotals.ContainsKey(stat.StatTypeSO))

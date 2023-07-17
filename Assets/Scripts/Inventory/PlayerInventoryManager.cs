@@ -23,7 +23,7 @@ public class PlayerInventoryManager : InventoryManager
 
         UICrafting.OnGetHaveEnoughItemsRecipes += _craftingManager.GetHaveEnoughItemsRecipes;
 
-        SOEquipment.OnUnequip += (equipmentItem) => AddItems(equipmentItem);
+        EquipmentManager.OnUnequip += (equipmentItem) => AddItems(equipmentItem);
     }
 
     protected void OnDisable()
@@ -38,7 +38,7 @@ public class PlayerInventoryManager : InventoryManager
 
         UICrafting.OnGetHaveEnoughItemsRecipes -= _craftingManager.GetHaveEnoughItemsRecipes;
 
-        SOEquipment.OnUnequip -= (equipmentItem) => AddItems(equipmentItem);
+        EquipmentManager.OnUnequip -= (equipmentItem) => AddItems(equipmentItem);
     }
 
     public override void AddItems(SOItem item, int amount = 1)

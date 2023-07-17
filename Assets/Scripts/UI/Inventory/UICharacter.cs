@@ -41,7 +41,7 @@ public class UICharacter : MonoBehaviour
 		if (_index < 0) _index = _currentTeamSO.HomeSOPCSList.Count - 1;
 
 		_currentTeamSO.CurrentMenuSOPC = _currentTeamSO.HomeSOPCSList[_index];
-	
+		
 		SetupCharacterPanel();
 	}
 
@@ -56,16 +56,14 @@ public class UICharacter : MonoBehaviour
 		_pcImage.sprite = _currentTeamSO.CurrentMenuSOPC.CharacterImage;
 
 		// Set injury and pain. 
-		PainInjuryManager painInjuryManager = _currentTeamSO.CurrentMenuSOPC.PCInstance.GetComponentInChildren<PainInjuryManager>();
-
 		StatTextBox injuryTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-		injuryTextBox.SetupText($"Injury: {painInjuryManager.PlayerInjury.Injury}");
+		injuryTextBox.SetupText($"Injury: {_currentTeamSO.CurrentMenuSOPC.Injury}");
 
 		StatTextBox painTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-		painTextBox.SetupText($"Pain: {painInjuryManager.PlayerPain.EffectivePain}");
+		painTextBox.SetupText($"Pain: {_currentTeamSO.CurrentMenuSOPC.PCInstance.GetComponentInChildren<PainInjuryManager>().EffectivePain}");
 
 		// Set stats. 
-		List<Stat> stats = _currentTeamSO.CurrentMenuSOPC.PCInstance.GetComponentInChildren<PCStatManager>().Stats;
+		List<Stat> stats = _currentTeamSO.CurrentMenuSOPC.Stats;
 		foreach (Stat stat in stats)
         {
 			StatTextBox statTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();

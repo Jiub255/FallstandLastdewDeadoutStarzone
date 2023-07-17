@@ -79,6 +79,6 @@ public class SOInventory/*<T>*/ : ScriptableObject, IResettable/*, IGenericSOInv
     // Clear inventory when exiting play mode. 
     public void ResetOnExitPlayMode()
     {
-        ItemAmounts.Clear();
+//        ItemAmounts.Clear();
     }
 }

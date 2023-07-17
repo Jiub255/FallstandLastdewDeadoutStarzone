@@ -12,7 +12,7 @@ public class SOEquipmentItem : SOItem
 
     public List<EquipmentBonus> Bonuses;
 
-    public GameObject EquipmentItemPrefab;
+//    public GameObject EquipmentItemPrefab;
 
     // Equip the item. Send signal to equipment and inventory managers. 
     // Called by "use" button on inventory slot prefab. 

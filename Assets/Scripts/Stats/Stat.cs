@@ -18,13 +18,13 @@ public class Stat
     // aren't recalculating it every time you use it. 
     public int ModdedValue { get; private set; }
 
-/*    public Stat(SOStatType statSO, int baseValue = 1)
+    public Stat(SOStatType statSO, int baseValue = 1)
     {
         StatTypeSO = statSO;
 
         _baseValue = baseValue;
         _modifiers = new();
-    }*/
+    }
 
     public int GetValue()
     {

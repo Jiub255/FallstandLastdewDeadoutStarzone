@@ -1,19 +1,24 @@
-using System.Collections;
 using UnityEngine;
 
+// TODO - Just get rid of PlayerPain class? Since true pain is always equal to injury, could just have 
+// a relief field and EffectivePain property in PlayerInjury. Or even just in the manager, no need for these classes. 
+// Unless there is going to be a pain tolerance stat. But that seems over involved. 
 public class PlayerPain
 {
-    // Only serialized to easily see in inspector for now.
+/*    // Only serialized to easily see in inspector for now.
     [SerializeField]
-    private int _truePain = 0;
+    private int _truePain = 0;*//*
     // Only serialized to easily see in inspector for now.
     [SerializeField]
     private int _relief = 0;
 
-    public PlayerPain()
+    private SOPC _pcSO;
+
+    public PlayerPain(SOPC pcSO)
     {
-        _truePain = 0;
         _relief = 0;
+
+        _pcSO = pcSO;
     }
 
     public int Relief { get { return _relief; } set { _relief = value; } }
@@ -22,7 +27,7 @@ public class PlayerPain
     { 
         get 
         {
-            int pain = _truePain - _relief;
+            int pain = _pcSO.TruePain - _relief;
             if (pain < 0)
             {
                 pain = 0;
@@ -33,15 +38,15 @@ public class PlayerPain
 
     public void IncreasePain(int amount)
     {
-        _truePain += amount;
+        _pcSO.TruePain += amount;
     }
 
     public void ReducePain(int amount)
     {
-        _truePain -= amount;
-        if (_truePain < 0)
+        _pcSO.TruePain -= amount;
+        if (_pcSO.TruePain < 0)
         {
-            _truePain = 0;
+            _pcSO.TruePain = 0;
         }
-    }
+    }*/
 }
