@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class UICrafting : UIRecipes
 {
-	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
+/*	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
 
     public override void OnEnable()
     {
@@ -16,5 +16,5 @@ public class UICrafting : UIRecipes
     {
         // PlayerInventoryManager listens, sends back all recipes that you have enough items to craft/build. 
         _haveEnoughItemsRecipes = OnGetHaveEnoughItemsRecipes(_metRequirementsRecipes);
-    }
+    }*/
 }

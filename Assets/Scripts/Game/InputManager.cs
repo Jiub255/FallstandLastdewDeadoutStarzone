@@ -20,6 +20,10 @@ public class InputManager : MonoBehaviour
     public GameStates GameState { get; private set; }
 
     // Probably a cleaner way to do this. 
+    // Maybe do a proper game state machine? 
+    // Have it control which menus/scenes are open, and which controls to go with them. Would be 
+    // cleaner and less breakable than this. 
+    // Also will make it a lot easier to temporarily disable all controls (while loading between scenes, etc). 
     private GameStates MostRecentActionMap = GameStates.World;
 
     private Vector2 _startingMousePosition;
@@ -49,12 +53,17 @@ public class InputManager : MonoBehaviour
         _startingMousePosition = PC.Camera.MousePosition.ReadValue<Vector2>();
     }
 
-    public void HandleRightClick(InputAction.CallbackContext context)
+    private void HandleRightClick(InputAction.CallbackContext context)
     {
         if ((PC.Camera.MousePosition.ReadValue<Vector2>() - _startingMousePosition).sqrMagnitude < _mouseMovementThresholdSquared)
         {
             OnDeselectOrCancel?.Invoke(context);
         }
+    }
+
+    public void DisableAllActions()
+    {
+        PC.Disable();
     }
 
     public void ChangeGameState(GameStates gameState)
@@ -63,7 +72,11 @@ public class InputManager : MonoBehaviour
         ActivateStateActionMaps(gameState);
     }
 
-    private void ActivateStateActionMaps(GameStates gameState)
+    /// <summary>
+    /// Activates all action maps for gameState. 
+    /// </summary>
+    /// <param name="gameState"></param>
+    public void ActivateStateActionMaps(GameStates gameState)
     {
         switch (gameState)
         {

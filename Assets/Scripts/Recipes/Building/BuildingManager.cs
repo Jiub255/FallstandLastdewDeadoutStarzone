@@ -71,7 +71,6 @@ public class BuildingManager : MonoBehaviour
 
         SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
-        UIBuilding.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
     }
 
     private void ToggleAngleSnapMode(InputAction.CallbackContext context)
@@ -107,30 +106,6 @@ public class BuildingManager : MonoBehaviour
 
         SOBuildingRecipe.OnSelectBuilding -= SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
-        UIBuilding.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
-    }
-
-    private List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
-    {
-        List<SORecipe> haveEnoughItemsRecipes = new();
-
-        foreach (SORecipe recipe in metRequirementsRecipes)
-        {
-            foreach (RecipeCost recipeCost in recipe.RecipeCosts)
-            {
-                // If you don't have enough items to craft the recipe,  
-                if (_craftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
-                {
-                    // Then go to next recipe. 
-                    break;
-                }
-            }
-
-            // Can only reach this point if you have at least recipeCost.Amount of each recipeCost.CraftingItemSO in your inventory.
-            haveEnoughItemsRecipes.Add(recipe);
-        }
-
-        return haveEnoughItemsRecipes;
     }
 
     private void FixedUpdate()
@@ -243,19 +218,13 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         // TODO: This might not work in builds, especially for android. Figure it out. 
-        // Not sure what that means, look into it. 
+        // Not sure what that means, look into it. Maybe the _pointerOverUI/eventSystem bit? 
         if (_currentBuildingInstance != null && !_pointerOverUI)
         {
             // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
             if (CanBuildHere())
             {
-                // TODO: Set this up better, don't use GetChild, use GetComponent or something. 
-                // Turn off red/green highlights
-//                _selectedBuildingIcon.DeactivateIcon();
-
-/*                _currentBuildingInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                _currentBuildingInstance.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);*/
-
+                // TODO - Figure this out. 
                 // Collider not working unless I switch it off and on again.
                 // Could make it disabled in prefab then just enable it after placing?
                 _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;

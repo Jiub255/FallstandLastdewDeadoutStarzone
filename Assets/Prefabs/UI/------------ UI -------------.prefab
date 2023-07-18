@@ -3382,7 +3382,7 @@ GameObject:
   - component: {fileID: 8639684219032754031}
   - component: {fileID: 2584844754858328908}
   - component: {fileID: 4712953966793208901}
-  - component: {fileID: 5187754644391171153}
+  - component: {fileID: 4060312540539044664}
   m_Layer: 5
   m_Name: Crafting Canvas
   m_TagString: Untagged
@@ -3472,7 +3472,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5187754644391171153
+--- !u!114 &4060312540539044664
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3481,7 +3481,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5290609741861204813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 640b4c0e9055c3b49a26b302e30b7617, type: 3}
+  m_Script: {fileID: 11500000, guid: 34473425980b48840b9638d5d1b9620f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _recipeList: {fileID: 11400000, guid: cf415609b5aec9a498ebac80b8698a48, type: 2}
@@ -4772,7 +4772,7 @@ GameObject:
   - component: {fileID: 1882185910805079561}
   - component: {fileID: 2733192860451691045}
   - component: {fileID: 133313265172613609}
-  - component: {fileID: 7802375769368220988}
+  - component: {fileID: 5713571628588877014}
   m_Layer: 5
   m_Name: Build Canvas
   m_TagString: Untagged
@@ -4862,7 +4862,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7802375769368220988
+--- !u!114 &5713571628588877014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4871,7 +4871,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7977803640239919478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd1168543f2b9ff48af1bb28f553813e, type: 3}
+  m_Script: {fileID: 11500000, guid: 34473425980b48840b9638d5d1b9620f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _recipeList: {fileID: 11400000, guid: fe38649df7e7b2c449aecbf5a2da3ba4, type: 2}

@@ -13,15 +13,15 @@ public class StatManager : MonoBehaviour
 
     private void OnEnable()
     {
-        UIRecipes.OnGetMetRequirementsRecipes += GetMetRequirementsRecipes;
+        UIRecipes.OnGetMetStatRequirementsRecipes += GetMetStatRequirementsRecipes;
     }
 
     private void OnDisable()
     {
-        UIRecipes.OnGetMetRequirementsRecipes -= GetMetRequirementsRecipes;
+        UIRecipes.OnGetMetStatRequirementsRecipes -= GetMetStatRequirementsRecipes;
     }
 
-    public List<SORecipe> GetMetRequirementsRecipes(List<SORecipe> unfilteredList)
+    public List<SORecipe> GetMetStatRequirementsRecipes(List<SORecipe> unfilteredList)
     {
         List<SORecipe> metRequirementsRecipes = new();
 

@@ -13,10 +13,25 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    In SORecipe, added building and item requirements. Check them in UIRecipes/UICrafting/UIBuilding.
-        Also have UIBuilding just send the list to PlayerInventoryManager too, like UICrafting does.
-        Might not even need the child classes and UIRecipes can do the sending. But might for other reasons. Figure it out. 
+    Make a game state machine, put it in GameManager. Can have the different states from InputManager, and a pause state. Probably others too. 
+        Then the state change can all be controlled from GameManager instead of being broken up all over the place. 
+        It will control which action maps are enabled, other stuff probably... 
 
+
+    Setup "Always Open" scene, keep singleton and PC data in it. 
+        Load data from file onto SOs when starting playing, then that data will persist between scenes for the gameplay session.
+            Then just save the data to file whenever you want to save. 
+        Is async scene loading even needed? 
+            Could just pause gameplay/disable controls, 
+            fade to black or whatever, 
+            then load the new scene, 
+            initialize new scene (instantiate PCs, enemies, etc.), 
+            then fade back in from black,
+            and unpause gameplay/reenable controls. 
+
+            
+
+    In SORecipe, added building and item requirements. Check them in UIRecipes.
 
     For inventory:
         In scavenging scene, only show usable items, and loot you've found. In two separate tabs.
@@ -25,7 +40,7 @@ FIRST!!
             Medical items that heal injury levels faster can only be used at home NOT in combat. 
             Maybe there will be scavenging/looting items that can only be used during scavenging scenes. 
 
-                
+        
     Have crafting menu accessible through workbench? Or just push "c"? Just do push "c" for now. 
         Could have different workbenches and other crafting buildings that open new recipes. 
 
@@ -44,10 +59,10 @@ FIRST!!
 
 
     Finish map/scavenging system. 
-
-    
+        
+        
     Use particle system for magic effects (and other stuff). 
-
+        
 
     How to handle injury/pain? 
         Getting hit raises injury, which raises pain, which negatively affects stats. 

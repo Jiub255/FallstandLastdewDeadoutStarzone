@@ -1,6 +1,7 @@
 using UnityEngine;
 
-// Treat health like player pain kinda, as in the enemies stats get weaker as they get more and more hurt. 
+// Treat health like player pain kinda, as in the enemies stats get weaker as they get more and more hurt. Maybe? 
+// Maybe just do straight health instead, especially if there's going to be mobs of enemies. 
 public class EnemyHealth : MonoBehaviour
 {
 	[SerializeField]

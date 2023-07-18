@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Put this on the Crafting and Building canvases. 
-public abstract class UIRecipes : MonoBehaviour
+public class UIRecipes : MonoBehaviour
 {
-	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetRequirementsRecipes;
+	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetStatRequirementsRecipes;
+	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
 
 	[SerializeField]
 	private RecipeList _recipeList;
@@ -14,7 +15,7 @@ public abstract class UIRecipes : MonoBehaviour
 	[SerializeField]
 	private Transform _slotsParent;
 
-	protected List<SORecipe> _metRequirementsRecipes;
+	protected List<SORecipe> _metStatRequirementsRecipes;
 	protected List<SORecipe> _haveEnoughItemsRecipes;
 
 	public virtual void OnEnable()
@@ -37,13 +38,21 @@ public abstract class UIRecipes : MonoBehaviour
 
 	private void GetRecipeLists()
     {
-		// StatManager listens, sends back all recipes that you meet the stat requirements for. 
-	    _metRequirementsRecipes = OnGetMetRequirementsRecipes(_recipeList.GetAllRecipes());
+		GetMetStatRequirementsRecipes();
 		GetHaveEnoughItemsRecipes();
 	}
 
-	// Overridden by UICrafting and UIBuilding to send the event to the right manager. 
-	protected abstract void GetHaveEnoughItemsRecipes();
+	private void GetMetStatRequirementsRecipes()
+    {
+		// StatManager listens, sends back all recipes that you meet the stat requirements for. 
+	    _metStatRequirementsRecipes = OnGetMetStatRequirementsRecipes(_recipeList.GetAllRecipes());
+    }
+
+	private void GetHaveEnoughItemsRecipes()
+	{
+		// PlayerInventoryManager listens, sends back all recipes that you have enough items to craft/build. 
+		_haveEnoughItemsRecipes = OnGetHaveEnoughItemsRecipes(_metStatRequirementsRecipes);
+	}
 
     // TODO - Gray out the buildings/items that you don't have enough materials to build. 
     // Will have to call this method every time you use some materials to build something. 

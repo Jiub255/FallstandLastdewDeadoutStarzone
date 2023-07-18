@@ -11,6 +11,14 @@ public class GameManager : MonoBehaviour
         {
             Paused = pause;
             Time.timeScale = pause ? 0f : 1f;
+            if (pause)
+            {
+                S.I.IM.DisableAllActions();
+            }
+            else
+            {
+                S.I.IM.ActivateStateActionMaps(S.I.IM.GameState);
+            }
         }
     }
 

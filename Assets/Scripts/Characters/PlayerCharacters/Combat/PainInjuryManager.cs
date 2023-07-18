@@ -72,10 +72,18 @@ public class PainInjuryManager : MonoBehaviour
         //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Called by painkiller items' events. 
-    public void TemporarilyRelievePain(GameObject PCInstance, int amount, float duration)
+    /// <summary>
+    /// Called by painkiller items' events. 
+    /// </summary>
+    /// <remarks>
+    /// Actually called by events in classes that inherit SOEffect, which get called by SOUsableItem. 
+    /// </remarks>
+    /// <param name="PCInstanceID"></param>
+    /// <param name="amount"></param>
+    /// <param name="duration"></param>
+    public void TemporarilyRelievePain(int PCInstanceID, int amount, float duration)
     {
-        if (transform.root.gameObject == PCInstance)
+        if (transform.root.gameObject.GetInstanceID() == PCInstanceID)
         {
             StartCoroutine(RelievePainCoroutine(amount, duration));
         }
