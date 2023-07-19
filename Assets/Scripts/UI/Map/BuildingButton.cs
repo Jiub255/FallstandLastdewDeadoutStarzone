@@ -10,6 +10,6 @@ public class BuildingButton : MonoBehaviour
     // Just load a blank scavenging scene, then instantiate the actual level's prefab. 
     public void LoadScene()
     {
-        S.I.SceneTransitionManager.LoadScavengingScene(_levelPrefab);
+//        S.I.SceneTransitionManager.LoadScavengingScene(_levelPrefab);
     }
 }

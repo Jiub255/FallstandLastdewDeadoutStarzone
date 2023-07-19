@@ -8,18 +8,16 @@ public class SOPC : ScriptableObject
     // Or do Transform for PC instances? 
     public static event Action<GameObject> OnSelectPC;
 
-    public readonly Sprite Icon;
-    public readonly Sprite CharacterImage;
-    public readonly GameObject PCPrefab;
+    // These variables don't change during runtime. 
+    public Sprite Icon;
+    public Sprite CharacterImage;
+    public GameObject PCPrefab;
 
+    // These variables do change during runtime. 
     public GameObject PCInstance;
-
     public List<SOEquipmentItem> EquipmentItems;
-
     public int Injury;
-
     public List<Stat> Stats;
-
 
     // Called by clicking PC icon button. 
     public void Use()

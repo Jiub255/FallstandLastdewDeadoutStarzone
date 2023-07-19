@@ -18,9 +18,9 @@ public class EquipmentManager : MonoBehaviour
         SOEquipmentItem.OnEquip += Equip;
         SOEquipmentItem.OnUnequip += Unequip;
 
-        if (_pcSO != null)
+        if (_pcSO == null)
         {
-            Debug.LogWarning($"No EquipmentSO found on {transform.root.name}");
+            Debug.LogWarning($"No SOPC found on {transform.root.name}");
         }
     }
 

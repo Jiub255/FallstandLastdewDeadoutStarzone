@@ -7,8 +7,8 @@ public class S : MonoBehaviour
     public static S I { get; private set; }
 
     public InputManager IM { get; private set; }
-    public GameManager GameManager { get; private set; }
-    public SceneTransitionManager SceneTransitionManager { get; private set; }
+    public GameStateMachine GSM { get; private set; }
+    public SceneTransitionManager STM { get; private set; }
 
     private void Awake()
     {
@@ -22,8 +22,8 @@ public class S : MonoBehaviour
         I = this;
 
         IM = GetComponentInChildren<InputManager>();
-        GameManager = GetComponentInChildren<GameManager>();
-        SceneTransitionManager = GetComponentInChildren<SceneTransitionManager>();
+        GSM = GetComponentInChildren<GameStateMachine>();
+        STM = GetComponentInChildren<SceneTransitionManager>();
 
         DontDestroyOnLoad(gameObject);
     }

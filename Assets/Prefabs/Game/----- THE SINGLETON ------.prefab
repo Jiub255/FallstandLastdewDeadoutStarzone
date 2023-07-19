@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pcSOListSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _fadeTime: 0.5
 --- !u!1 &8429050033905496426
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,9 +525,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8429050034460973232}
-  - component: {fileID: 8429050034460973246}
   - component: {fileID: 8429050034460973244}
   - component: {fileID: 8429050034460973235}
+  - component: {fileID: 1332224178036465294}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -549,18 +550,6 @@ Transform:
   m_Father: {fileID: 8429050034455999761}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8429050034460973246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8429050034460973233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c01fccaa7576ae419addc7b1179b772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8429050034460973244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,6 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3dc01df2e816a438ddd383e3274548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
   _pcLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -596,3 +586,17 @@ MonoBehaviour:
   _rotationSpeed: 50
   _snapAngle: 45
   _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}
+  _toggle: 0
+--- !u!114 &1332224178036465294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429050034460973233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167f0b4d9163cf94592a736acc9bf681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}

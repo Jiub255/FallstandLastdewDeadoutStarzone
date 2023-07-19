@@ -22,12 +22,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _hUDCanvas;
 
-    private GameManager _gameManager;
+    private GameStateMachine _gameManager;
     private InputManager _inputManager;
 
     private void Start()
     {
-        _gameManager = S.I.GameManager;
+        _gameManager = S.I.GSM;
         _inputManager = S.I.IM;
 
         // TODO - Put menu control actions in one map, since OpenCanvas checks if things are already active/inactive. 
@@ -88,7 +88,7 @@ public class UIManager : MonoBehaviour
         OnOpenedMenu?.Invoke();
 
         // Pause gameplay. 
-        _gameManager.Pause(true);
+//        _gameManager.Pause(true);
     }
 
     private void CloseUI(InputAction.CallbackContext context)
@@ -102,7 +102,7 @@ public class UIManager : MonoBehaviour
         OnOpenedMenu?.Invoke();
 
         // Unpause gameplay. 
-        _gameManager.Pause(false);
+//        _gameManager.Pause(false);
     }
 
     private void OpenCanvas(GameObject canvas)

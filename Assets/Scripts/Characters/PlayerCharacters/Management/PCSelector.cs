@@ -8,22 +8,24 @@ public class PCSelector : MonoBehaviour
     public static event Action<Transform> OnDoubleClickPC;
 
     [SerializeField]
+    private SOListSOPC _currentTeamSO; 
+
+    [SerializeField]
     private LayerMask _pcLayerMask;
 
     [SerializeField]
     private float _doubleClickTimeLimit = 0.5f;
-    private float _lastClickTime = 0f;
 
     private EventSystem _eventSystem;
     private bool _pointerOverUI = false;
-
+    private float _lastClickTime = 0f;
     private int _firstClickedObjectID;
-
-    private SOListSOPC _currentTeamSO; 
+    private InputAction _mousePositionAction;
 
     private void Start()
     {
         _eventSystem = EventSystem.current;
+        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
         // Click on PC icon. 
         SOPC.OnSelectPC += HandleClick;
@@ -56,7 +58,7 @@ public class PCSelector : MonoBehaviour
         {
             // Only raycast to PC layer. 
             RaycastHit[] hits = Physics.RaycastAll(
-                Camera.main.ScreenPointToRay(S.I.IM.PC.Camera.MousePosition.ReadValue<Vector2>()),
+                Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
                 1000,
                 _pcLayerMask);
 
@@ -110,11 +112,11 @@ public class PCSelector : MonoBehaviour
 
     private void ChangePC(GameObject clickedPCInstance)
     {
-        // If clicked PC is NOT your current PC (true also when _currentPCInstance == null), 
-        if (_currentTeamSO.SelectedPC != clickedPCInstance)
+        // If clicked PC is NOT your selected PC, or selected PC is null, 
+        if (_currentTeamSO.SelectedPC == null || _currentTeamSO.SelectedPC != clickedPCInstance)
         {
             // If there is a currently selected PC, set its Selected to false. 
-            if (_currentTeamSO)
+            if (_currentTeamSO.SelectedPC != null)
             {
                 _currentTeamSO.SelectedPC.GetComponent<PlayerController>().SetSelected(false);
             }

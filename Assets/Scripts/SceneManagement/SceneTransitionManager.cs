@@ -1,57 +1,86 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneTransitionManager : MonoBehaviour
 {
+    public static event Func<float, IEnumerator> OnFadeOut;
+    public static event Func<float, IEnumerator> OnFadeIn;
+
     [SerializeField]
     private SOListSOPC _pcSOListSO;
     [SerializeField]
     private float _fadeTime = 0.5f;
 
-    public void LoadHomeScene2()
+    public void LoadHomeScene()
     {
-        StartCoroutine(LoadHomeScene2Coroutine());
+        StartCoroutine(LoadHomeSceneCoroutine());
     }
 
     /// <summary>
-    /// This method beep boops.
+    /// Loads HomeScene and handles fade in/fade out canvases. 
     /// </summary>
     /// <remarks>
-    /// This method exists. asldkf asdf asdlk asdk asd vja.s dvlsad.v asdv sadvl sadvn esiandlvi . salvd s.a d
-    /// asdlvk dls.as dvkas.dv kjdsamndv. asdfasdfasdf asdf asdfasdfas df af asdf asdf afas fa dfas fasd fasd asd ad asd adas das das d
-    /// This method beep boops. asldkf asdf asdlk asdk asd vja.s dvlsad.v asdv sadvl sadvn esiandlvi . salvd s.a d
-    /// asdlvk dls.as dvkas.dv kjdsamndv. asdfasdfasdf asdf asdfasdfas df af asdf asdf afas fa dfas fasd fasd asd ad asd adas das das d 
+    /// Sends OnFadeOut Func event to Fade canvas object in previous scene to fade out, and
+    /// sends OnFadeIn Func event to HomeScene after loading. 
     /// </remarks>
-    /// <returns>A boop. </returns>
-    public IEnumerator LoadHomeScene2Coroutine()
+    private IEnumerator LoadHomeSceneCoroutine()
     {
         // Pause gameplay/ disable controls. 
-        S.I.GameManager.Pause(true);
+//        S.I.GameManager.Pause(true);
 
         // Fade to black or whatever. 
         // Send event to some fade UI object in whichever scene is open and active? 
         // How to do this? Can this coroutine have a while(other coroutine is running) thing?
-        yield return new WaitForSeconds(_fadeTime);
+        // Use yield return [Coroutine](); But how with an event/Func? 
+        yield return OnFadeOut?.Invoke(_fadeTime);
 
-        // Load the new scene. 
-        SceneManager.LoadScene("HomeScene", LoadSceneMode.Additive);
+        // Cache current scene index to unload after setting HomeScene to active. 
+        int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+
+        // Load the new scene. Do this async? Or does it matter if the frame stalls since the screen is blank by now? 
+        yield return LoadScene("HomeScene");
 
         // Initialize new scene(instantiate PCs, enemies, etc.). 
         // Some stuff happens automatically through OnEnable/Awake/Start, like PCInstantiator. 
 
 
+        // Once HomeScene is loaded (and initialized? Or initialize after?), set it as the active scene. 
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("HomeScene"));
+
+        // Unload 
+        yield return UnloadScene(currentSceneBuildIndex);
+
         // Fade back in from black. 
         // Send event to some fade UI object in whichever scene is open and active? 
         // How to do this? Can this coroutine have a while(other coroutine is running) thing?
-        yield return new WaitForSeconds(_fadeTime);
+        yield return OnFadeIn?.Invoke(_fadeTime);
 
         // Unpause gameplay/ reenable controls.
-        S.I.GameManager.Pause(false);
+//        S.I.GameManager.Pause(false);
 
     }
 
-    public void LoadHomeScene()
+    private IEnumerator LoadScene(string sceneName)
+    {
+        AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!loadSceneAsync.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    private IEnumerator UnloadScene(int sceneBuildIndex)
+    {
+        AsyncOperation unloadSceneAsync = SceneManager.UnloadSceneAsync(sceneBuildIndex);
+        while (!unloadSceneAsync.isDone)
+        {
+            yield return null;
+        }
+    }
+
+/*    public void LoadHomeScene()
     {
         StartCoroutine(LoadHomeSceneCoroutine());
     }
@@ -112,5 +141,5 @@ public class SceneTransitionManager : MonoBehaviour
 
         // Unload previous scene. 
         SceneManager.UnloadSceneAsync(currentScene);
-    }
+    }*/
 }

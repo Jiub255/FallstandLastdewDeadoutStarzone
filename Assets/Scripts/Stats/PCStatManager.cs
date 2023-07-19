@@ -14,18 +14,13 @@ public class PCStatManager : MonoBehaviour
     // Just making a getter for PCSelector to use have access to the SOPC from the PC instance. 
     public SOPC PCSO { get { return _pcSO; } }
 
-    protected void Start()
-    {
-        CalculateStatModifiers();
-
-        // Have to get in Start, since it gets newed in EquipmentManager's OnEnable. 
-        _equipmentManager = transform.parent.GetComponentInChildren<EquipmentManager>();
-    }
-
     protected void OnEnable()
     {
+        _equipmentManager = transform.parent.GetComponentInChildren<EquipmentManager>();
         _equipmentManager.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
+
+        CalculateStatModifiers();
     }
 
     protected void OnDisable()

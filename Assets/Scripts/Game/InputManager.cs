@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 
 public enum GameStates
 {
-    World,
-    WorldMenus,
+    Home,
+    HomeMenus,
     Combat,
     CombatMenus,
     Build
@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
     // Have it control which menus/scenes are open, and which controls to go with them. Would be 
     // cleaner and less breakable than this. 
     // Also will make it a lot easier to temporarily disable all controls (while loading between scenes, etc). 
-    private GameStates MostRecentActionMap = GameStates.World;
+    private GameStates MostRecentActionMap = GameStates.Home;
 
     private Vector2 _startingMousePosition;
     [SerializeField]
@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
         PC = new PlayerControls();
 
         // Enable default action maps
-        ChangeGameState(GameStates.World);
+        ChangeGameState(GameStates.Home);
 
         PC.Camera.RightClick.started += GetStartingMousePosition;
         PC.Camera.RightClick.canceled += HandleRightClick;
@@ -72,6 +72,23 @@ public class InputManager : MonoBehaviour
         ActivateStateActionMaps(gameState);
     }
 
+    public void EnableStateActionMaps(GameState gameState)
+    {
+        EnableStatesActionMaps(gameState as dynamic);
+    }
+
+    private void EnableStatesActionMaps(GamePauseState pauseState)
+    {
+        PC.Disable();
+    }
+
+
+
+
+
+
+
+
     /// <summary>
     /// Activates all action maps for gameState. 
     /// </summary>
@@ -80,20 +97,20 @@ public class InputManager : MonoBehaviour
     {
         switch (gameState)
         {
-            case GameStates.World:
-                WorldMap();
+            case GameStates.Home:
+                HomeActionMaps();
                 break;
-            case GameStates.WorldMenus:
-                WorldMenusMap();
+            case GameStates.HomeMenus:
+                HomeMenusActionMaps();
                 break;
             case GameStates.Combat:
-                CombatMap();
+                CombatActionMaps();
                 break;
             case GameStates.CombatMenus:
-                CombatMenusMap();
+                CombatMenusActionMaps();
                 break;
             case GameStates.Build:
-                BuildMap();
+                BuildActionMaps();
                 break;
             default:
                 Debug.Log($"No state matching {gameState} found. Add {gameState} to InputManager.ActivateStateActionMaps(). ");
@@ -105,15 +122,15 @@ public class InputManager : MonoBehaviour
     {
         if (open)
         {
-            if (GameState == GameStates.World)
+            if (GameState == GameStates.Home)
             {
-                MostRecentActionMap = GameStates.World;
-                ChangeGameState(GameStates.WorldMenus);
+                MostRecentActionMap = GameStates.Home;
+                ChangeGameState(GameStates.HomeMenus);
             }
             else if (GameState == GameStates.Build)
             {
                 MostRecentActionMap = GameStates.Build;
-                ChangeGameState(GameStates.WorldMenus);
+                ChangeGameState(GameStates.HomeMenus);
             }
             else if(GameState == GameStates.Combat)
             {
@@ -122,11 +139,11 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            if (GameState == GameStates.WorldMenus)
+            if (GameState == GameStates.HomeMenus)
             {
-                if (MostRecentActionMap == GameStates.World)
+                if (MostRecentActionMap == GameStates.Home)
                 {
-                    ChangeGameState(GameStates.World);
+                    ChangeGameState(GameStates.Home);
                 }
                 else if(MostRecentActionMap == GameStates.Build)
                 {
@@ -141,7 +158,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used at home base (not during combat/raids/invasions).
-    public void WorldMap()
+    public void HomeActionMaps()
     {
         PC.Disable();
         PC.Camera.Enable();
@@ -152,7 +169,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in non-combat menus. 
-    public void WorldMenusMap()
+    public void HomeMenusActionMaps()
     {
         PC.Disable();
         PC.Quit.Enable();
@@ -161,7 +178,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in scavenging scenes and home base combat. 
-    public void CombatMap()
+    public void CombatActionMaps()
     {
         PC.Disable();
         PC.Camera.Enable();
@@ -171,7 +188,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in combat menus. 
-    public void CombatMenusMap()
+    public void CombatMenusActionMaps()
     {
         PC.Disable();
         PC.Quit.Enable();
@@ -179,7 +196,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in build mode in home base. 
-    public void BuildMap()
+    public void BuildActionMaps()
     {
         PC.Disable();
         PC.Camera.Enable();

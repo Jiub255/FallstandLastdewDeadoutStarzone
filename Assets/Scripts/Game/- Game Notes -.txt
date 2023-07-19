@@ -13,7 +13,20 @@ ________________________________________________________________________________
 FIRST!!
 
 
-    Make a game state machine, put it in GameManager. Can have the different states from InputManager, and a pause state. Probably others too. 
+    Try MVC stuff.
+
+    Look into EventHandler. Instead of Action/Func? 
+
+
+    Make scavenging (and home?) scene "entrance point" game objects. 
+        Big enough to instantiate whole team there. 
+            Could do intro animation, PCs run in and get into position. 
+
+
+    Make a game state machine, put it in GameManager (Or maybe InputManager, since the game state really only affects action maps for now at least). 
+        Controls active action maps, timeScale, and resetting PCInstance references in PCSOs. 
+        Keep the action map changing methods in InputManager, and call them from GameManager with the game state as a parameter. 
+        Can have the different states from InputManager, and a pause state. Probably others too. 
         Then the state change can all be controlled from GameManager instead of being broken up all over the place. 
         It will control which action maps are enabled, other stuff probably... 
 
@@ -43,6 +56,7 @@ FIRST!!
         
     Have crafting menu accessible through workbench? Or just push "c"? Just do push "c" for now. 
         Could have different workbenches and other crafting buildings that open new recipes. 
+        Maybe can only work with certain materials with the right workstation. Like woodshop for wood, welding stuff/forge/other metal tools for metal, etc. 
 
 
     Fix Transparentizer and/or TransparentCircle shader/shader graph. 
