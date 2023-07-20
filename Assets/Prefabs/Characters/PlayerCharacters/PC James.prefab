@@ -827,8 +827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1071a4bec87b94a857d31f2ebb2edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 8080965006105525510}
-  _fillBarTransform: {fileID: 8080965005825535725}
 --- !u!1 &8080965006269113668
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,11 +967,11 @@ GameObject:
   - component: {fileID: 8080965006557006833}
   - component: {fileID: 979327382676080073}
   - component: {fileID: 5123034392192844336}
-  - component: {fileID: 2876730837047733713}
   - component: {fileID: 1729663205511615171}
   - component: {fileID: 5561255964109972442}
   - component: {fileID: -2959890244567075316}
   - component: {fileID: 2019331262560048302}
+  - component: {fileID: 5356483139934781856}
   m_Layer: 9
   m_Name: PC James
   m_TagString: PlayerCharacter
@@ -1032,43 +1030,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &2876730837047733713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8080965006557006832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f624fad47bfd94ca7e0242201cb88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sightDistance: 5
-  _stoppingDistance: 1
-  _lootDistance: 1
-  _lootAnimation: {fileID: 7400000, guid: b2f446dd3ba5f484695232260baf54e4, type: 2}
-  _lootTimer: {fileID: 7461302068374981788}
-  _weaponRange: 5
-  _attackDuration: 1
-  Animator: {fileID: 8080965005752804064}
-  SelectedPCIcon: {fileID: 8080965005502691794}
-  PathNavigator: {fileID: 1729663205511615171}
-  PCLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  EnemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  LootContainerLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  ExitLayerMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!114 &1729663205511615171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1153,6 +1114,37 @@ MonoBehaviour:
   uniqueID: 465948509222771536
   updateError: 1
   checkTime: 0.2
+--- !u!114 &5356483139934781856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8080965006557006832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0766191a0b51e534faf6a2a3f761d698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pcSO: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
+  _weaponRange: 5
+  _attackDuration: 1
+  _lootAnimation: {fileID: 7400000, guid: b2f446dd3ba5f484695232260baf54e4, type: 2}
+  _pCLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  _enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _lootContainerLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _exitLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &8080965006581660998
 GameObject:
   m_ObjectHideFlags: 0

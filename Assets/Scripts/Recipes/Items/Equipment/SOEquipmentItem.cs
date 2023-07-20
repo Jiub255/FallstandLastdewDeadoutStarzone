@@ -2,13 +2,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EquipmentType
+{
+    Weapon,
+    Armor
+}
+
 [CreateAssetMenu(fileName = "New Equipment Item SO", menuName = "Items/SOEquipmentItem")]
 public class SOEquipmentItem : SOItem
 {
     public static event Action<SOEquipmentItem> OnEquip;
     public static event Action<SOEquipmentItem> OnUnequip;
 
-    public SOEquipmentType EquipmentType;
+    public EquipmentType EquipmentType;
 
     public List<EquipmentBonus> Bonuses;
 

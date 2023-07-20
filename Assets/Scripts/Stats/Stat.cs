@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum StatType
+{
+    Attack,
+    Defense
+}
+
 [Serializable]
 public class Stat
 {
     public static event Action OnBaseValueChanged;
 
-    public SOStatType StatTypeSO;
+    public StatType StatType;
     [SerializeField]
     protected int _baseValue;
 
@@ -18,9 +24,9 @@ public class Stat
     // aren't recalculating it every time you use it. 
     public int ModdedValue { get; private set; }
 
-    public Stat(SOStatType statSO, int baseValue = 1)
+    public Stat(StatType statType, int baseValue = 1)
     {
-        StatTypeSO = statSO;
+        StatType = statType;
 
         _baseValue = baseValue;
         _modifiers = new();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombatState : CharacterState<EnemyController>
+public class EnemyCombatState : CharacterState<EnemyStateMachine>
 {
     private Transform _target;
     private float _attackRadiusSquared;
@@ -12,11 +12,11 @@ public class EnemyCombatState : CharacterState<EnemyController>
     // For changing animation eventually. Maybe use an animation controlling class instead?
 //    private Animator _animator;
 
-    public EnemyCombatState(EnemyController characterController, Transform target, float attackRadius, float timeBetweenAttacks) : base(characterController)
+    public EnemyCombatState(EnemyStateMachine characterController, Transform target, SOEnemyCombatState enemyCombatStateSO) : base(characterController)
     {
         _target = target;
-        _attackRadiusSquared = attackRadius * attackRadius;
-        _timeBetweenAttacks = timeBetweenAttacks;
+        _attackRadiusSquared = enemyCombatStateSO.AttackRadiusSquared;
+        _timeBetweenAttacks = enemyCombatStateSO.TimeBetweenAttacks;
 
         _timer = 0f;
         _transform = characterController.transform;

@@ -8,20 +8,15 @@ public class EquipmentManager : MonoBehaviour
     public event Action OnEquipmentChanged;
 
     // So StatManager can get equipment list. 
-    [SerializeField]
     private SOPC _pcSO;
 
-    public Dictionary<SOStatType, int> EquipmentBonuses { get; private set; } = new();
+    public Dictionary<StatType, int> EquipmentBonuses { get; private set; } = new();
 
     private void OnEnable()
     {
         SOEquipmentItem.OnEquip += Equip;
         SOEquipmentItem.OnUnequip += Unequip;
-
-        if (_pcSO == null)
-        {
-            Debug.LogWarning($"No SOPC found on {transform.root.name}");
-        }
+        _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
     }
 
     private void OnDisable()
@@ -39,12 +34,12 @@ public class EquipmentManager : MonoBehaviour
     {
 //        PCSO.Equip(equipmentItemSO);
 
-        SOEquipmentType type = equipmentItemSO.EquipmentType;
+        EquipmentType type = equipmentItemSO.EquipmentType;
 
         // If there is something equipped in this slot, unequip it. 
         for (int i = 0; i < _pcSO.EquipmentItems.Count; i++)
         {
-            if (type.name == _pcSO.EquipmentItems[i].EquipmentType.name)
+            if (type == _pcSO.EquipmentItems[i].EquipmentType)
             {
                 SOEquipmentItem oldItem = _pcSO.EquipmentItems[i];
 
@@ -65,13 +60,13 @@ public class EquipmentManager : MonoBehaviour
     {
         foreach (EquipmentBonus equipmentBonus in equipmentItemSO.Bonuses)
         {
-            if (EquipmentBonuses.ContainsKey(equipmentBonus.StatTypeSO))
+            if (EquipmentBonuses.ContainsKey(equipmentBonus.StatType))
             {
-                EquipmentBonuses[equipmentBonus.StatTypeSO] += equipmentBonus.BonusAmount;
+                EquipmentBonuses[equipmentBonus.StatType] += equipmentBonus.BonusAmount;
             }
             else
             {
-                EquipmentBonuses.Add(equipmentBonus.StatTypeSO, equipmentBonus.BonusAmount);
+                EquipmentBonuses.Add(equipmentBonus.StatType, equipmentBonus.BonusAmount);
             }
         }
     }
@@ -96,22 +91,22 @@ public class EquipmentManager : MonoBehaviour
     {
         foreach (EquipmentBonus equipmentBonus in equipmentItemSO.Bonuses)
         {
-            if (EquipmentBonuses.ContainsKey(equipmentBonus.StatTypeSO))
+            if (EquipmentBonuses.ContainsKey(equipmentBonus.StatType))
             {
-                EquipmentBonuses[equipmentBonus.StatTypeSO] -= equipmentBonus.BonusAmount;
-                if (EquipmentBonuses[equipmentBonus.StatTypeSO] < 0)
+                EquipmentBonuses[equipmentBonus.StatType] -= equipmentBonus.BonusAmount;
+                if (EquipmentBonuses[equipmentBonus.StatType] < 0)
                 {
-                    Debug.LogWarning($"{equipmentBonus.StatTypeSO}'s equipment bonus is below zero, this should never happen. ");
-                    EquipmentBonuses.Remove(equipmentBonus.StatTypeSO);
+                    Debug.LogWarning($"{equipmentBonus.StatType}'s equipment bonus is below zero, this should never happen. ");
+                    EquipmentBonuses.Remove(equipmentBonus.StatType);
                 }
-                else if (EquipmentBonuses[equipmentBonus.StatTypeSO] == 0)
+                else if (EquipmentBonuses[equipmentBonus.StatType] == 0)
                 {
-                    EquipmentBonuses.Remove(equipmentBonus.StatTypeSO);
+                    EquipmentBonuses.Remove(equipmentBonus.StatType);
                 }
             }
             else
             {
-                Debug.LogWarning($"Key {equipmentBonus.StatTypeSO} not found on _equipmentBonuses. This should never happen. ");
+                Debug.LogWarning($"Key {equipmentBonus.StatType} not found on _equipmentBonuses. This should never happen. ");
             }
         }
     }

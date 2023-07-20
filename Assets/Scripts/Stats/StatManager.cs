@@ -9,7 +9,7 @@ public class StatManager : MonoBehaviour
 	private SOListSOPC _pcSOListSO;
 
 //	private Dictionary<SOStatType, int> _combinedStatTotals = new();
-	private Dictionary<SOStatType, int> _individualPCStatMaxes = new();
+	private Dictionary<StatType, int> _individualPCStatMaxes = new();
 
     private void OnEnable()
     {
@@ -32,7 +32,7 @@ public class StatManager : MonoBehaviour
             // Check to make sure combined stat totals and individual pc stat maxes have all the keys from the requirements first. 
             // Could delete this missing keys part before final build to improve performance, not sure if it really matters. 
             List<StatRequirement> missingKeys = recipe.MinSinglePCStatRequirements.Where(
-                    entry => !_individualPCStatMaxes.ContainsKey(entry.StatTypeSO)).ToList();
+                    entry => !_individualPCStatMaxes.ContainsKey(entry.StatType)).ToList();
 
             if (missingKeys.Count > 0)
             {
@@ -46,7 +46,7 @@ public class StatManager : MonoBehaviour
 
             // Minimum single PC stat requirements. 
             List<StatRequirement> unmetRequirements = recipe.MinSinglePCStatRequirements.Where(
-                entry => _individualPCStatMaxes[entry.StatTypeSO] < entry.RequiredAmount).ToList();
+                entry => _individualPCStatMaxes[entry.StatType] < entry.RequiredAmount).ToList();
 
             if (unmetRequirements.Count == 0)
             {
@@ -74,16 +74,16 @@ public class StatManager : MonoBehaviour
                 }*/
 
                 // Update _individualPCStatMaxes dictionary. 
-                if (_individualPCStatMaxes.ContainsKey(stat.StatTypeSO))
+                if (_individualPCStatMaxes.ContainsKey(stat.StatType))
                 {
-                    if (stat.ModdedValue > _individualPCStatMaxes[stat.StatTypeSO])
+                    if (stat.ModdedValue > _individualPCStatMaxes[stat.StatType])
                     {
-                        _individualPCStatMaxes[stat.StatTypeSO] = stat.ModdedValue;
+                        _individualPCStatMaxes[stat.StatType] = stat.ModdedValue;
                     }
                 }
                 else
                 {
-                    _individualPCStatMaxes.Add(stat.StatTypeSO, stat.ModdedValue);
+                    _individualPCStatMaxes.Add(stat.StatType, stat.ModdedValue);
                 }
             }
         }

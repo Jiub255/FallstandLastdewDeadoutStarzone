@@ -1,22 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class EnemyApproachPCState : CharacterState<EnemyController>
+public class EnemyApproachPCState : CharacterState<EnemyStateMachine>
 {
     private Transform _target;
     private Collider _targetCollider;
-    private float _attackRadius;
+    private float _attackRadiusSquared;
 
     private PathNavigator _pathNavigator;
 //    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
     private Vector3 _lastPositionChecked;
 
-    public EnemyApproachPCState(EnemyController characterController, float attackRadius) : base(characterController)
+    public EnemyApproachPCState(EnemyStateMachine characterController, SOEnemyCombatState enemyCombatStateSO) : base(characterController)
     {
-        _attackRadius = attackRadius;
-
+        _attackRadiusSquared = enemyCombatStateSO.AttackRadiusSquared;
 
         _pathNavigator = characterController.PathNavigator;
 //        _navMeshAgent = characterController.NavMeshAgent;
@@ -42,7 +40,7 @@ public class EnemyApproachPCState : CharacterState<EnemyController>
 
     public override void Update()
     {
-        if (Vector3.Distance(_target.position, _transform.position) <= _attackRadius)
+        if ((_target.position - _transform.position).sqrMagnitude <= _attackRadiusSquared)
         {
             // Switch to EnemyCombatState. 
             _stateMachine.ChangeStateTo(_stateMachine.Combat(_target));

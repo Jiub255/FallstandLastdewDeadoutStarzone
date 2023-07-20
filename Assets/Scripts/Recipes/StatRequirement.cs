@@ -1,6 +1,6 @@
 ﻿[System.Serializable]
 public class StatRequirement
 {
-	public SOStatType StatTypeSO;
+	public StatType StatType;
 	public int RequiredAmount;
 }

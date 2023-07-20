@@ -67,7 +67,7 @@ public class UICharacter : MonoBehaviour
 		foreach (Stat stat in stats)
         {
 			StatTextBox statTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-            statTextBox.SetupText(stat.StatTypeSO.name + ": " + stat.ModdedValue);
+            statTextBox.SetupText(stat.StatType.ToString() + ": " + stat.ModdedValue);
         }
     }
 

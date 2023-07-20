@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 
 // Just serializable for testing, to see in inspector. 
-[Serializable]
+//[Serializable]
 public class Equipment
 {
-    public static event Action<SOEquipmentItem> OnUnequip;
+/*    public static event Action<SOEquipmentItem> OnUnequip;
     public event Action OnEquipmentChanged;
 
     // TODO - Set up a PC equipment SO instead of this? Then just split this class between EquipmentManager and the SO. 
@@ -19,12 +19,12 @@ public class Equipment
 
     public void Equip(SOEquipmentItem newItem)
     {
-        SOEquipmentType type = newItem.EquipmentType;
+        EquipmentType type = newItem.EquipmentType;
 
         // If there is something equipped in this slot, unequip it. 
         for (int i = 0; i < EquipmentItems.Count; i++)
         {
-            if (type.name == EquipmentItems[i].EquipmentType.name)
+            if (type == EquipmentItems[i].EquipmentType)
             {
                 SOEquipmentItem oldItem = EquipmentItems[i];
 
@@ -49,5 +49,5 @@ public class Equipment
 
         // InventoryManager listens.
         OnUnequip?.Invoke(oldItem);
-    }
+    }*/
 }
