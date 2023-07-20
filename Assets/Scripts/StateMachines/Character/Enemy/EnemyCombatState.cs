@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombatState : State<EnemyController>
+public class EnemyCombatState : CharacterState<EnemyController>
 {
     private Transform _target;
     private float _attackRadiusSquared;

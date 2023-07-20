@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Gets set from mouse click event, or from non-selected PC detecting loot container while idle. 
-public class PlayerApproachLootState : PlayerState
+public class PlayerApproachLootState : PlayerCharacterState
 {
     private LootContainer _lootContainer;
     private Vector3 _lootingPosition;

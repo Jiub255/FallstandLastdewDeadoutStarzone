@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerApproachLocationState : PlayerState
+public class PlayerApproachLocationState : PlayerCharacterState
 {
     private float _stoppingDistanceSquared;
     private Transform _transform;

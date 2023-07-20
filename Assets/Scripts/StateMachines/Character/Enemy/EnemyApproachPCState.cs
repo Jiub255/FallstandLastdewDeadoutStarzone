@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyApproachPCState : State<EnemyController>
+public class EnemyApproachPCState : CharacterState<EnemyController>
 {
     private Transform _target;
     private Collider _targetCollider;

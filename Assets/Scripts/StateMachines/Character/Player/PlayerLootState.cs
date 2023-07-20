@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerLootState : PlayerState
+public class PlayerLootState : PlayerCharacterState
 {
     public static event Action<ItemAmount> OnLootItems;
 

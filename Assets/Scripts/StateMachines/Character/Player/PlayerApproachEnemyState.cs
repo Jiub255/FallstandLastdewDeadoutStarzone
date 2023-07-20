@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerApproachEnemyState : PlayerState
+public class PlayerApproachEnemyState : PlayerCharacterState
 {
     private Transform _target;
     private Collider _targetCollider;

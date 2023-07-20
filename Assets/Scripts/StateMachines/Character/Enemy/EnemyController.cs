@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyController : StateMachine<EnemyController>
+public class EnemyController : CharacterStateMachine<EnemyController>
 {
     [SerializeField, Header("Combat State Variables")]
     private float _attackRadius = 2f;

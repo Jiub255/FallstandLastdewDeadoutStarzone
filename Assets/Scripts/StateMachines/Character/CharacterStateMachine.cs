@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public abstract class StateMachine<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class CharacterStateMachine<T> : MonoBehaviour where T : MonoBehaviour
 {
-    protected State<T> _activeState;
+    protected CharacterState<T> _activeState;
 
     public virtual void Update()
     {
@@ -28,7 +28,7 @@ public abstract class StateMachine<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    public void ChangeStateTo(State<T> state)
+    public void ChangeStateTo(CharacterState<T> state)
     {
         if (_activeState != null)
         {

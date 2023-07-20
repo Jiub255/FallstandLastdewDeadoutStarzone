@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCombatState : PlayerState
+public class PCState : PlayerCharacterState
 {
     private Transform _target;
     private float _attackDuration;
@@ -9,7 +9,7 @@ public class PlayerCombatState : PlayerState
     private Animator _animator;
     private Transform _transform;
 
-    public PlayerCombatState(PlayerController characterController, Transform target, float attackDuration) : base(characterController)
+    public PCState(PlayerController characterController, Transform target, float attackDuration) : base(characterController)
     {
         _target = target;
         _attackDuration = attackDuration;

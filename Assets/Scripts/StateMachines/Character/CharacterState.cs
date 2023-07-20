@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public abstract class State<T> where T : MonoBehaviour
+public abstract class CharacterState<T> where T : MonoBehaviour
 {
     protected T _stateMachine;
 
-    public State(T characterController)
+    public CharacterState(T characterController)
     {
         _stateMachine = characterController;
     }

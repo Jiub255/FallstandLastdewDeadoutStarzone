@@ -1,8 +1,8 @@
 using UnityEngine.InputSystem;
 
-public abstract class PlayerState : State<PlayerController>
+public abstract class PlayerCharacterState : CharacterState<PlayerController>
 {
-    public PlayerState(PlayerController characterController) : base(characterController)
+    public PlayerCharacterState(PlayerController characterController) : base(characterController)
     {
         InputManager.OnDeselectOrCancel += CancelOrDeselect;
     }

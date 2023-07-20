@@ -13,7 +13,7 @@ public class EnemyHealth : MonoBehaviour
 		_health = _maxHealth;
     }
 
-    public void GetHurt(int damage, PlayerCombatState attackingPC)
+    public void GetHurt(int damage, PCState attackingPC)
     {
 		_health -= damage;
 
@@ -27,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-	private void Die(PlayerCombatState attackingPC)
+	private void Die(PCState attackingPC)
     {
 		Debug.Log("Health <= 0, " + transform.parent.name + " died.");
 

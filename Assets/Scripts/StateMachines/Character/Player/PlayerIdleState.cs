@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerIdleState : PlayerState
+public class PlayerIdleState : PlayerCharacterState
 {
     public static event Action OnPCDeselected;
 

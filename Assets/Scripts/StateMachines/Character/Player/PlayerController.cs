@@ -2,42 +2,60 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerController : StateMachine<PlayerController>
+// TODO - have a list of SOPCStates here, and construct the new states from those as templates. 
+// But how exactly? Especially for enemies, how to construct states from list of SOs? 
+public class PlayerController : CharacterStateMachine<PlayerController>
 {
     [SerializeField, Header("Idle/Movement State Variables")]
+    // SHARED
     private float _sightDistance = 5f;
     [SerializeField]
+    // SHARED
     private float _stoppingDistance = 1f;
 
     [SerializeField, Header("Loot State Variables")]
+    // SHARED
     private float _lootDistance = 0.1f;
     // For getting the duration of the loot animation. 
     [SerializeField]
+    // SHARED
     private AnimationClip _lootAnimation;
     [SerializeField]
+    // SHARED
     private LootTimer _lootTimer;
 
     [Header("Combat State Variables")]
     // Only serialized for testing. Will get this value from weapon/stats eventually. 
     [SerializeField]
+    // INDIVIDUAL
     private float _weaponRange = 5f;
     // Only serialized for testing. Will get this value from weapon/stats eventually. 
     [SerializeField]
+    // INDIVIDUAL
     private float _attackDuration = 1f;
 
     [Header("Any State Variables")]
+    // SHARED
     public Animator Animator;
+    // SHARED
     public SelectedPCIcon SelectedPCIcon;
+    // SHARED
     public PathNavigator PathNavigator;
     // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
     // acts differently when not selected (unselected characters automatically loot and fight things within range). 
+    // SHARED
     public bool Selected { get; private set; } = false;
 
     [Header("Individual Layers")]
+    // SHARED
     public LayerMask PCLayerMask;
+    // SHARED
     public LayerMask EnemyLayerMask;
+    // SHARED
     public LayerMask LootContainerLayerMask;
+    // SHARED
     public LayerMask ExitLayerMask;
+    // SHARED
     public LayerMask GroundLayerMask;
 
     // For checking if mouse is over UI. 
@@ -45,9 +63,13 @@ public class PlayerController : StateMachine<PlayerController>
     private bool _pointerOverUI = false;
     private InputAction _mousePositionAction;
 
+    // TODO - have a list of SOPCStates here, and construct the new states from those as templates. 
+    // Have each state have a stateArguments class to pass to constructor? Or just pass the SO? Just pass the SO. 
+    // The SO is not the state, just the state's data. 
     // States
+    // GET DATA FOR THESE FROM SOs. 
     public PlayerIdleState Idle() { return new PlayerIdleState(this, _sightDistance); } 
-    public PlayerCombatState Combat(Transform target) { return new PlayerCombatState(this, target, _attackDuration); } 
+    public PCState Combat(Transform target) { return new PCState(this, target, _attackDuration); } 
     public PlayerLootState Loot(LootContainer lootContainer) { return new PlayerLootState(this, lootContainer, _lootAnimation, _lootTimer); }
     public PlayerApproachLocationState ApproachLocation(Vector3 destination) { return new PlayerApproachLocationState(this, destination, _stoppingDistance); } 
     public PlayerApproachEnemyState ApproachEnemy(Transform target) { return new PlayerApproachEnemyState(this, target, _weaponRange); } 
