@@ -59,9 +59,9 @@ public class StatManager : MonoBehaviour
 
     private void GetStatTotals()
     {
-		foreach (SOPC pcSO in _pcSOListSO.HomeSOPCSList)
+		foreach (SOPCData pcSO in _pcSOListSO.HomeSOPCSList)
         {
-            foreach (Stat stat in pcSO.Stats)
+            foreach (Stat stat in pcSO.Stats.StatList)
             {
                 // Update _combinedStatTotals dictionary. 
 /*                if (_combinedStatTotals.ContainsKey(stat.StatTypeSO))

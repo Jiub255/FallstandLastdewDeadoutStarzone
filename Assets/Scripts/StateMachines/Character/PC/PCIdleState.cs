@@ -39,12 +39,12 @@ public class PCIdleState : PCState
 
             if (enemyCollidersInRange.Length > 0)
             {
-                // ApproachEnemy state to enemyCollidersInRange[0]. 
+                // ApproachEnemy state, with target == enemyCollidersInRange[0]. 
                 _stateMachine.ChangeStateTo(_stateMachine.ApproachEnemy(enemyCollidersInRange[0].transform));
             }
             else if (lootCollidersInRange.Length > 0)
             {
-                // ApproachLoot state to lootCollidersInRange[0].
+                // ApproachLoot state, with lootContainer == lootCollidersInRange[0].GetComponent<LootContainer>().
                 _stateMachine.ChangeStateTo(_stateMachine.ApproachLoot(lootCollidersInRange[0].GetComponent<LootContainer>()));
             }
         }

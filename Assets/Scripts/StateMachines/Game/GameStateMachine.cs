@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameStateMachine : MonoBehaviour
 {
@@ -7,10 +6,18 @@ public class GameStateMachine : MonoBehaviour
     // Might just have an enter and maybe exit method. 
 
     public GameState ActiveState { get; private set; }
+    private GameState _mostRecentState;
 
     [SerializeField]
     private SOListSOPC _currentTeamSO;
     public SOListSOPC CurrentTeamSO { get { return _currentTeamSO; } }
+
+    private void Start()
+    {
+        // Start game in Pause state, in main menu. 
+        // FOR NOW, start in home state for testing, until main menu is built. 
+        ChangeStateTo(/*Pause*/Home());
+    }
 
     public void ChangeStateTo(GameState gameState)
     {
@@ -24,14 +31,19 @@ public class GameStateMachine : MonoBehaviour
         // Initialize new game state. 
         ActiveState.SetActionMaps();
         ActiveState.SetTimeScale();
-        ActiveState.ResetPCInstanceReferencesOnSOs();
+
+        // TODO - Do this here? Or on scene transition manager? 
+//        ActiveState.ResetPCInstanceReferencesOnSOs();
 
         Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }
 
     public GamePauseState Pause() { return new GamePauseState(this); }
-
-
+    public GameHomeState Home() { return new GameHomeState(this); }
+    public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(this); }
+    public GameCombatState Combat() { return new GameCombatState(this); }
+    public GameCombatMenusState CombatMenus() { return new GameCombatMenusState(this); }
+    public GameBuildState Build() { return new GameBuildState(this); }
 
 
 

@@ -15,7 +15,14 @@ public class SceneTransitionManager : MonoBehaviour
 
     public void LoadHomeScene()
     {
-        StartCoroutine(LoadHomeSceneCoroutine());
+        // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
+        foreach (SOPCData pcDataSO in _pcSOListSO.HomeSOPCSList)
+        {
+            pcDataSO.PCInstance = null;
+        }
+        // TODO - Use game state machine instead. 
+        S.I.GSM.ChangeStateTo(S.I.GSM.Home());
+        StartCoroutine(LoadSceneCoroutine("HomeScene"));
     }
 
     /// <summary>
@@ -25,7 +32,7 @@ public class SceneTransitionManager : MonoBehaviour
     /// Sends OnFadeOut Func event to Fade canvas object in previous scene to fade out, and
     /// sends OnFadeIn Func event to HomeScene after loading. 
     /// </remarks>
-    private IEnumerator LoadHomeSceneCoroutine()
+    private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         // Pause gameplay/ disable controls. 
 //        S.I.GameManager.Pause(true);
@@ -40,14 +47,14 @@ public class SceneTransitionManager : MonoBehaviour
         int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
 
         // Load the new scene. Do this async? Or does it matter if the frame stalls since the screen is blank by now? 
-        yield return LoadScene("HomeScene");
+        yield return LoadScene(sceneName);
 
         // Initialize new scene(instantiate PCs, enemies, etc.). 
         // Some stuff happens automatically through OnEnable/Awake/Start, like PCInstantiator. 
 
 
         // Once HomeScene is loaded (and initialized? Or initialize after?), set it as the active scene. 
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("HomeScene"));
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
         // Unload 
         yield return UnloadScene(currentSceneBuildIndex);
@@ -59,7 +66,6 @@ public class SceneTransitionManager : MonoBehaviour
 
         // Unpause gameplay/ reenable controls.
 //        S.I.GameManager.Pause(false);
-
     }
 
     private IEnumerator LoadScene(string sceneName)
@@ -80,20 +86,23 @@ public class SceneTransitionManager : MonoBehaviour
         }
     }
 
+    public void LoadScavengingScene(GameObject levelPrefab)
+    {
+        // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
+        foreach (SOPCData pcDataSO in _pcSOListSO.HomeSOPCSList)
+        {
+            pcDataSO.PCInstance = null;
+        }
+        S.I.GSM.ChangeStateTo(S.I.GSM.Combat());
+        StartCoroutine(LoadSceneCoroutine("ScavengingScene"));
+    }
+
+
 /*    public void LoadHomeScene()
     {
         StartCoroutine(LoadHomeSceneCoroutine());
     }
 
-    public void LoadScavengingScene(GameObject levelPrefab)
-    {
-        foreach (SOPC soPC in _pcSOListSO.HomeSOPCSList)
-        {
-            soPC.PCInstance = null;
-        }
-        S.I.IM.ChangeGameState(GameStates.Combat);
-        StartCoroutine(LoadScavengingSceneCoroutine(levelPrefab));
-    }
 
     public IEnumerator LoadScavengingSceneCoroutine(GameObject levelPrefab)
     {

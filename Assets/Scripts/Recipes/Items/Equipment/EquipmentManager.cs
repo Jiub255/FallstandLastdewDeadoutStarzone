@@ -7,22 +7,22 @@ public class EquipmentManager : MonoBehaviour
     public static event Action<SOEquipmentItem> OnUnequip;
     public event Action OnEquipmentChanged;
 
-    // So StatManager can get equipment list. 
-    private SOPC _pcSO;
+    // To get equipment list. 
+    private SOPCData _pcSO;
 
     public Dictionary<StatType, int> EquipmentBonuses { get; private set; } = new();
 
     private void OnEnable()
     {
-        SOEquipmentItem.OnEquip += Equip;
-        SOEquipmentItem.OnUnequip += Unequip;
+/*        SOEquipmentItem.OnEquip += Equip;
+        SOEquipmentItem.OnUnequip += Unequip;*/
         _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
     }
 
     private void OnDisable()
     {
-        SOEquipmentItem.OnEquip -= Equip;
-        SOEquipmentItem.OnUnequip -= Unequip;
+/*        SOEquipmentItem.OnEquip -= Equip;
+        SOEquipmentItem.OnUnequip -= Unequip;*/
     }
 
     // TODO - As is, this will equip the item on every PC. How to make it only the MenuSelected one?
@@ -32,28 +32,24 @@ public class EquipmentManager : MonoBehaviour
     // Then unsubscribe when deselected (and still OnDisable too). 
     public void Equip(SOEquipmentItem equipmentItemSO)
     {
-//        PCSO.Equip(equipmentItemSO);
-
-        EquipmentType type = equipmentItemSO.EquipmentType;
-
         // If there is something equipped in this slot, unequip it. 
-        for (int i = 0; i < _pcSO.EquipmentItems.Count; i++)
+        for (int i = 0; i < _pcSO.Equipment.Count; i++)
         {
-            if (type == _pcSO.EquipmentItems[i].EquipmentType)
+            if (equipmentItemSO.EquipmentType == _pcSO.Equipment[i].EquipmentType)
             {
-                SOEquipmentItem oldItem = _pcSO.EquipmentItems[i];
+                SOEquipmentItem oldItem = _pcSO.Equipment[i];
 
                 Unequip(oldItem);
             }
         }
 
         // Add new item to EquipmentItems. 
-        _pcSO.EquipmentItems.Add(equipmentItemSO);
+        _pcSO.Equipment.Add(equipmentItemSO);
+
+        AddEquipmentBonuses(equipmentItemSO);
 
         // UIEquipment and StatManager listen. 
         OnEquipmentChanged?.Invoke();
-
-        AddEquipmentBonuses(equipmentItemSO);
     }
 
     private void AddEquipmentBonuses(SOEquipmentItem equipmentItemSO)
@@ -73,18 +69,16 @@ public class EquipmentManager : MonoBehaviour
 
     public void Unequip(SOEquipmentItem equipmentItemSO)
     {
-//        PCSO.Unequip(equipmentItemSO);
-
         // Remove old item from EquipmentItems. 
-        _pcSO.EquipmentItems.Remove(equipmentItemSO);
+        _pcSO.Equipment.Remove(equipmentItemSO);
+
+        RemoveEquipmentBonuses(equipmentItemSO);
 
         // UIEquipment (not yet, TODO ) and SOStatManager listen. 
         OnEquipmentChanged?.Invoke();
 
         // InventoryManager listens.
         OnUnequip?.Invoke(equipmentItemSO);
-
-        RemoveEquipmentBonuses(equipmentItemSO);
     }
 
     private void RemoveEquipmentBonuses(SOEquipmentItem equipmentItemSO)

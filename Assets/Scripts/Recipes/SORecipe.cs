@@ -6,8 +6,11 @@ using UnityEngine;
 // SOBuildingRecipe and SOItem inherit this. 
 public abstract class SORecipe : ScriptableObject
 {
-	public string Description = "Enter Description";
-	public Sprite Icon;
+	private string _description = "Enter Description";
+	private Sprite _icon;
+
+	public string Description { get { return _description; } }
+	public Sprite Icon { get { return _icon; } }
 
 //	[Header("Total of all PCs' stats must be at this level or higher")]
 //	public List<StatRequirement> CombinedStatRequirements;

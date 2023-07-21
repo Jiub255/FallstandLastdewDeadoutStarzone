@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8134dfbcba5716a419e5b48e3fdfd204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSO: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
 --- !u!1 &5903972464820501798
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,7 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 631389ca4bd183e40ac805dadc9a16be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSO: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
 --- !u!1 &8080965005213474775
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +726,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4083c6bbd4b5a429ae5ad6f8101380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSO: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
   _relief: 0
 --- !u!1 &8080965006105525627
 GameObject:
@@ -1126,7 +1123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0766191a0b51e534faf6a2a3f761d698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSO: {fileID: 11400000, guid: 0c18b3a53b7783443844ff67d4d927c6, type: 2}
+  _pcSO: {fileID: 11400000, guid: f3e28bd68cc2beb46947dc20d8cdafd5, type: 2}
+  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
   _weaponRange: 5
   _attackDuration: 1
   _lootAnimation: {fileID: 7400000, guid: b2f446dd3ba5f484695232260baf54e4, type: 2}

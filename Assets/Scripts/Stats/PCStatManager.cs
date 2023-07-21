@@ -6,7 +6,7 @@ public class PCStatManager : MonoBehaviour
 {
     public static event Action OnStatsChanged;
 
-    private SOPC _pcSO;
+    private SOPCData _pcSO;
     private EquipmentManager _equipmentManager;
 
     protected void OnEnable()
@@ -29,24 +29,15 @@ public class PCStatManager : MonoBehaviour
     {
         // Keep the bonuses dictionary in EquipmentManager, and change it every time
         // equipment is changed. Then it's just ready and you can grab it whenever. 
-        for (int i = 0; i < _pcSO.StatsSerDict.Count(); i++)
+        foreach (Stat stat in _pcSO.Stats.StatList)
         {
-            _pcSO.StatsSerDict[i].Value.ClearModifiers();
+            stat.ClearModifiers();
 
-            if (_equipmentManager.EquipmentBonuses.ContainsKey(_pcSO.StatsSerDict[i].Value.StatType))
+            if (_equipmentManager.EquipmentBonuses.ContainsKey(stat.StatType))
             {
-                _pcSO.StatsSerDict[i].Value.AddModifier(_equipmentManager.EquipmentBonuses[_pcSO.StatsSerDict[i].Value.StatType]);
+                stat.AddModifier(_equipmentManager.EquipmentBonuses[stat.StatType]);
             }
         }
-/*        foreach (SKVP<string, Stat> skvp in _pcSO.StatsSerDict)
-        {
-            skvp.ClearModifiers();
-
-            if (_equipmentManager.EquipmentBonuses.ContainsKey(skvp.StatType))
-            {
-                skvp.AddModifier(_equipmentManager.EquipmentBonuses[skvp.StatType]);
-            }
-        }*/
 
         // TODO - Set up stats UI and UIStats script. Just show stats on the equipment UI. 
         // TODO - Heard by UIEquipment, updates UI. 

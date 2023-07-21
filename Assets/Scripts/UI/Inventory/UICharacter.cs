@@ -63,8 +63,8 @@ public class UICharacter : MonoBehaviour
 		painTextBox.SetupText($"Pain: {_currentTeamSO.CurrentMenuSOPC.PCInstance.GetComponentInChildren<PainInjuryManager>().EffectivePain}");
 
 		// Set stats. 
-		List<Stat> stats = _currentTeamSO.CurrentMenuSOPC.Stats;
-		foreach (Stat stat in stats)
+		Stats stats = _currentTeamSO.CurrentMenuSOPC.Stats;
+		foreach (Stat stat in stats.StatList)
         {
 			StatTextBox statTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
             statTextBox.SetupText(stat.StatType.ToString() + ": " + stat.ModdedValue);

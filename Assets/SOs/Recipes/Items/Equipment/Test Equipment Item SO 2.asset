@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: Test Weapon
   Icon: {fileID: 21300000, guid: de252f87501795643b3f50da4470b2b3, type: 3}
-  CombinedStatRequirements: []
   MinSinglePCStatRequirements: []
+  RequiredBuildings: []
+  RequiredItems: []
   RecipeCosts: []
-  EquipmentType: {fileID: 11400000, guid: d9410e90c06f8ac488099ad275fc5eb4, type: 2}
+  EquipmentType: 0
   Bonuses:
-  - StatTypeSO: {fileID: 11400000, guid: 872f20da8afcc9741acd725c1c0d64c1, type: 2}
+  - StatType: 0
     BonusAmount: 1
-  EquipmentItemPrefab: {fileID: 0}

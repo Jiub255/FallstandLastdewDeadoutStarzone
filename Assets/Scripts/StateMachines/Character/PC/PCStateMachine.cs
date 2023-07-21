@@ -8,7 +8,10 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
 {
     [SerializeField, Header("Idle/Movement State Variables")]
     // TODO - Put PC state SOs on SOPC, and only reference that here. 
-    private SOPC _pcSO;
+    private SOPCData _pcSO;
+    // For checking CurrentMenuPC instance ID on item events. 
+    [SerializeField]
+    private SOListSOPC _currentTeamSO;
 
 /*    // SHARED
     private float _sightDistance = 5f;
@@ -56,15 +59,17 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
     public LayerMask _groundLayerMask;
 
     // Using property to have a centralized place to reference this SO in the player game object. And for PCSelector. 
-    public SOPC PCSO { get { return _pcSO; } }
+    public SOPCData PCSO { get { return _pcSO; } }
+    // Using property to have a centralized place to reference this SO in the player game object. 
+    public SOListSOPC CurrentTeamSO { get { return _currentTeamSO; } }
     public Animator Animator { get { return _animator; } private set { _animator = value; } }
     public SelectedPCIcon SelectedPCIcon { get { return _selectedPCIcon; } private set { _selectedPCIcon = value; } }
     public PathNavigator PathNavigator { get { return _pathNavigator; } private set { _pathNavigator = value; } }
     public LayerMask PCLayerMask { get { return _pCLayerMask; } }
-    public LayerMask EnemyLayerMask { get { return _pCLayerMask; } }
-    public LayerMask LootContainerLayerMask { get { return _pCLayerMask; } }
-    public LayerMask ExitLayerMask { get { return _pCLayerMask; } }
-    public LayerMask GroundLayerMask { get { return _pCLayerMask; } }
+    public LayerMask EnemyLayerMask { get { return _enemyLayerMask; } }
+    public LayerMask LootContainerLayerMask { get { return _lootContainerLayerMask; } }
+    public LayerMask ExitLayerMask { get { return _exitLayerMask; } }
+    public LayerMask GroundLayerMask { get { return _groundLayerMask; } }
 
     // For checking if mouse is over UI. 
     private EventSystem _eventSystem;
@@ -123,6 +128,8 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
         Debug.Log($"Active state: {_activeState.GetType()}");
     }*/
 
+    // TODO - Subscribe/unsubscribe to item events based on this? Then won't need to check CurrentMenuPC instance ID. 
+    // OR, send the events to SOListSOPC or some other PC manager, and it will do whatever to the specific PC? 
     // PCSelector and PlayerIdleState set the "Selected" bool when PC selection changes. 
     public void SetSelected(bool selected)
     {
@@ -130,6 +137,7 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
         SelectedPCIcon.ActivateIcon(selected);
     }
 
+    // TODO - Handle this through PCItemUseManager too? Maybe not, using the bool in PlayerIdleState anyway for all non-selected PCs. 
     // Checks if player clicked on an enemy, loot, scene exit, or ground. PC clicks are handled by PCSelector. 
     private void HandleClick(InputAction.CallbackContext context)
     {

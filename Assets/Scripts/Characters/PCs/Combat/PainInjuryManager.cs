@@ -4,10 +4,8 @@ using UnityEngine;
 // Have this component on each PC, and have it new up a pain and injury class and manage them. One less component at least. 
 public class PainInjuryManager : MonoBehaviour
 {
-    private SOPC _pcSO;
+    private SOPCData _pcSO;
 
-    // Only serialized to easily see in inspector for now.
-    [SerializeField]
     private int _relief = 0;
 
 	public PCSlot Slot { get; set; }
@@ -30,12 +28,12 @@ public class PainInjuryManager : MonoBehaviour
     {
         _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
 
-        SORelievePain.OnRelievePainEffect += TemporarilyRelievePain;
+//        SORelievePain.OnRelievePainEffect += TemporarilyRelievePain;
     }
 
     private void OnDisable()
     {
-        SORelievePain.OnRelievePainEffect -= TemporarilyRelievePain;
+//        SORelievePain.OnRelievePainEffect -= TemporarilyRelievePain;
     }
 
     public void GetHurt(int damage)
@@ -82,9 +80,9 @@ public class PainInjuryManager : MonoBehaviour
     /// <param name="PCInstanceID"></param>
     /// <param name="amount"></param>
     /// <param name="duration"></param>
-    public void TemporarilyRelievePain(int PCInstanceID, int amount, float duration)
+    public void TemporarilyRelievePain(/*int PCInstanceID, */int amount, float duration)
     {
-        if (transform.root.gameObject.GetInstanceID() == PCInstanceID)
+//        if (transform.root.gameObject.GetInstanceID() == PCInstanceID)
         {
             StartCoroutine(RelievePainCoroutine(amount, duration));
         }

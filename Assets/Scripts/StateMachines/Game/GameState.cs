@@ -7,15 +7,16 @@ public abstract class GameState
 	public GameState(GameStateMachine gameStateMachine)
     {
         _gameStateMachine = gameStateMachine;
-
-        Debug.Log($"GameState's this == {this}");
     }
 
     /// <summary>
     /// Set game state action maps through InputManager, set time scale, and reset PCInstance references if necessary. 
     /// </summary>
-    /// Maybe reset instances on Exit instead? 
-    public abstract void SetActionMaps();
+    /// Maybe reset instances on Exit instead? Or in SceneTransitionManager, game state doesn't affect it, scene change does. 
+    public void SetActionMaps()
+    {
+        S.I.IM.EnableStateActionMaps(this);
+    }
+
     public abstract void SetTimeScale();
-    public virtual void ResetPCInstanceReferencesOnSOs() {}
 }

@@ -13,7 +13,7 @@ public class PCSlot : MonoBehaviour
     [SerializeField]
     private Image _injuryFillbar;
 
-    private SOPC _pcSO;
+    private SOPCData _pcSO;
 
     public void UpdatePainBar(int pain)
     {
@@ -25,7 +25,7 @@ public class PCSlot : MonoBehaviour
         _injuryFillbar.fillAmount = (float)injury / 100f;
     }
 
-    public void SetupSlot(SOPC pcSO)
+    public void SetupSlot(SOPCData pcSO)
     {
         _pcSO = pcSO;
         _icon.sprite = pcSO.Icon;

@@ -12,7 +12,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Canvases")]
     [SerializeField]
-    private GameObject _inventoryCanvas;
+    private GameObject _homeInventoryCanvas;
+    [SerializeField]
+    private GameObject _combatInventoryCanvas;
     [SerializeField]
     private GameObject _buildCanvas;
     [SerializeField]
@@ -59,57 +61,75 @@ public class UIManager : MonoBehaviour
 
     private void OpenInventory(InputAction.CallbackContext context)
     {
-        OpenMenu(_inventoryCanvas);
+        if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeState) || 
+            S.I.GSM.ActiveState.GetType() == typeof(GameBuildState))
+        {
+            // Open home menus. 
+            S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+
+            OpenMenu(_homeInventoryCanvas);
+        }
+        else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatState))
+        {
+            // Open combat menus. 
+            S.I.GSM.ChangeStateTo(S.I.GSM.CombatMenus());
+
+            OpenMenu(_combatInventoryCanvas);
+        }
     }
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
+        S.I.GSM.ChangeStateTo(S.I.GSM.Build());
+        
         OpenMenu(_buildCanvas);
     }
 
     private void OpenCraftingMenu(InputAction.CallbackContext context)
     {
+        S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+
         OpenMenu(_craftingCanvas);
     }
 
     private void OpenMap(InputAction.CallbackContext context)
     {
+        S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+
         OpenMenu(_mapCanvas);
     }
 
     private void OpenMenu(GameObject canvas)
     {
-        // Change Action Maps
-        _inputManager.OpenInventory(true);
-
         OpenCanvas(canvas);
 
         // CanvasUI listens to setup display
         OnOpenedMenu?.Invoke();
-
-        // Pause gameplay. 
-//        _gameManager.Pause(true);
     }
 
     private void CloseUI(InputAction.CallbackContext context)
     {
-        // Change Action Maps
-        _inputManager.OpenInventory(false);
+        // Change game state. 
+        if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeMenusState))
+        {
+            S.I.GSM.ChangeStateTo(S.I.GSM.Home());
+        }
+        else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatMenusState))
+        {
+            S.I.GSM.ChangeStateTo(S.I.GSM.Combat());
+        }
 
         OpenCanvas(_hUDCanvas);
 
         // PCUI listens to setup display
         OnOpenedMenu?.Invoke();
-
-        // Unpause gameplay. 
-//        _gameManager.Pause(false);
     }
 
     private void OpenCanvas(GameObject canvas)
     {
         if (_buildCanvas.activeInHierarchy) _buildCanvas.gameObject.SetActive(false);
         if (_craftingCanvas.activeInHierarchy) _craftingCanvas.gameObject.SetActive(false);
-        if (_inventoryCanvas.activeInHierarchy) _inventoryCanvas.gameObject.SetActive(false);
+        if (_homeInventoryCanvas.activeInHierarchy) _homeInventoryCanvas.gameObject.SetActive(false);
         if (_hUDCanvas.activeInHierarchy) _hUDCanvas.gameObject.SetActive(false);
         if (!canvas.activeInHierarchy) canvas.SetActive(true);
     }

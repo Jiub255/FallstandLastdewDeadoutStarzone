@@ -143,6 +143,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LootItemAmounts:
-  - ItemSO: {fileID: 11400000, guid: 897701a14012b0f4e94d859e13e1b2c7, type: 2}
+  - ItemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
     Amount: 5
   LootPositionTransform: {fileID: 1972459140982444096}

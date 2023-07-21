@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62ba7ea8c31ebc64d8aa619a14378356, type: 3}
-  m_Name: Weapon
+  m_Script: {fileID: 11500000, guid: 07f23eb0eaccdd84194c384d0eebbe88, type: 3}
+  m_Name: PC Movement State SO
   m_EditorClassIdentifier: 
-  AttacksPerSecond: 1
+  _sightDistance: 5

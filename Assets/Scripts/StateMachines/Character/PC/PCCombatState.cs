@@ -63,8 +63,9 @@ public class PCCombatState : PCState
         // Set attack animation trigger. 
         _animator.SetTrigger("Attack");
 
+        // TODO - Use IDamageable interface here?
+        // Just check that enemy is within range, and then if so hit connects. No need for overlapBox or any physics stuff. 
         // JUST FOR TESTING
-        // TODO - Use IDamageable interface and do an OverlapBox in front of player. Same as in 3D-RPG. 
         _target.GetComponentInChildren<EnemyHealth>().GetHurt(25, this);
     }
 

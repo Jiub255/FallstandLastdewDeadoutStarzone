@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class SOCurrentMenuPC : ScriptableObject
 {
-	public SOPC CurrentMenuPC;
+	public SOPCData CurrentMenuPC;
 }

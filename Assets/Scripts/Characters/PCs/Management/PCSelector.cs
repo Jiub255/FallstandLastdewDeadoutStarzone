@@ -28,7 +28,7 @@ public class PCSelector : MonoBehaviour
         _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
         // Click on PC icon. 
-        SOPC.OnSelectPC += HandleClick;
+        SOPCData.OnSelectPC += HandleClick;
 
         // Click on PC instance. 
         S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ += CheckIfPCClicked;
@@ -39,7 +39,7 @@ public class PCSelector : MonoBehaviour
     private void OnDisable()
     {
         // Click on PC icon. 
-        SOPC.OnSelectPC -= HandleClick;
+        SOPCData.OnSelectPC -= HandleClick;
 
         // Click on PC instance. 
         S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ -= CheckIfPCClicked;

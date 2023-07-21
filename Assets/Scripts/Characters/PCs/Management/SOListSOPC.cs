@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO - Use this as a PCManager, and recieve Usable/Equipment item events and send them to the correct PC? 
+// OR, have a separate MonoBehavoiur PCManager, and do that there, just reference this SO? 
 [CreateAssetMenu(menuName = "Player Characters/SOListSOPC", fileName = "New SOPC List SO")]
 public class SOListSOPC : ScriptableObject
 {
@@ -11,16 +13,16 @@ public class SOListSOPC : ScriptableObject
 	public event Action OnScavengingSOPCListChanged;
 
 	[SerializeField]
-	private List<SOPC> _homeSOPCSList = new();
+	private List<SOPCData> _homeSOPCSList = new();
 	[SerializeField]
-	private List<SOPC> _scavengingPCSList = new();
+	private List<SOPCData> _scavengingPCSList = new();
 	[SerializeField]
 	private GameObject _selectedPC;
 	[SerializeField]
-	private SOPC _currentMenuSOPC;
+	private SOPCData _currentMenuSOPC;
 
-	public List<SOPC> HomeSOPCSList { get { return _homeSOPCSList; } }
-	public List<SOPC> ScavengingPCSList { get { return _scavengingPCSList; } }
+	public List<SOPCData> HomeSOPCSList { get { return _homeSOPCSList; } }
+	public List<SOPCData> ScavengingPCSList { get { return _scavengingPCSList; } }
 	public GameObject SelectedPC 
 	{
 		get { return _selectedPC; } 
@@ -30,7 +32,7 @@ public class SOListSOPC : ScriptableObject
 			OnSelectedPCChanged?.Invoke();
 		}
 	}
-	public SOPC CurrentMenuSOPC 
+	public SOPCData CurrentMenuSOPC 
 	{ 
 		get { return _currentMenuSOPC; } 
 		set
@@ -40,17 +42,21 @@ public class SOListSOPC : ScriptableObject
 		} 
 	}
 
-	public void AddPCToHomeList(SOPC sopc)
+	public void AddPCToHomeList(SOPCData sopc)
     {
 		HomeSOPCSList.Add(sopc);
+
+		// PCItemUseManager listens, updates dictionary. 
 		OnHomeSOPCListChanged?.Invoke();
     }
 
-	public void RemovePCFromHomeList(SOPC sopc)
+	public void RemovePCFromHomeList(SOPCData sopc)
     {
 		if (HomeSOPCSList.Contains(sopc))
         {
 			HomeSOPCSList.Remove(sopc);
+
+			// PCItemUseManager listens, updates dictionary. 
 			OnHomeSOPCListChanged?.Invoke();
         }
         else
@@ -59,13 +65,13 @@ public class SOListSOPC : ScriptableObject
         }
     }
 
-	public void AddPCToScavengingList(SOPC sopc)
+	public void AddPCToScavengingList(SOPCData sopc)
     {
 		ScavengingPCSList.Add(sopc);
 		OnScavengingSOPCListChanged?.Invoke();
     }
 
-	public void RemovePCFromScavengingList(SOPC sopc)
+	public void RemovePCFromScavengingList(SOPCData sopc)
     {
 		if (ScavengingPCSList.Contains(sopc))
         {
