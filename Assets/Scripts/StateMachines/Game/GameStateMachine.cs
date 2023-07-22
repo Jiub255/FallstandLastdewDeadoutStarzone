@@ -2,24 +2,20 @@ using UnityEngine;
 
 public class GameStateMachine : MonoBehaviour
 {
-    // Make a game state machine. Similar to the character state machine, but not sure if update methods are needed. 
-    // Might just have an enter and maybe exit method. 
-
-    public GameState ActiveState { get; private set; }
-    private GameState _mostRecentState;
-
     [SerializeField]
     private SOListSOPC _currentTeamSO;
+
     public SOListSOPC CurrentTeamSO { get { return _currentTeamSO; } }
+    public GameState ActiveState { get; private set; }
 
     private void Start()
     {
         // Start game in Pause state, in main menu. 
         // FOR NOW, start in home state for testing, until main menu is built. 
-        ChangeStateTo(/*Pause*/Home());
+        ChangeGameStateTo(/*Pause*/Home());
     }
 
-    public void ChangeStateTo(GameState gameState)
+    public void ChangeGameStateTo(GameState gameState)
     {
 /*        if (ActiveState != null)
         {
@@ -31,9 +27,6 @@ public class GameStateMachine : MonoBehaviour
         // Initialize new game state. 
         ActiveState.SetActionMaps();
         ActiveState.SetTimeScale();
-
-        // TODO - Do this here? Or on scene transition manager? 
-//        ActiveState.ResetPCInstanceReferencesOnSOs();
 
         Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }

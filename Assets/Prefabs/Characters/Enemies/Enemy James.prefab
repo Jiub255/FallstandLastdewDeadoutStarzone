@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509de9d0a140c904088e22ee4a9cb024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyCombatStateSO: {fileID: 11400000, guid: ef6151327b29fe0408d7dc7f16de50ba, type: 2}
+  _enemyDataSO: {fileID: 11400000, guid: 57aeb523dd1ad1e4ea6dc7bfed453a9d, type: 2}
   PathNavigator: {fileID: 4708031746986318797}
 --- !u!1 &856440080927056781
 GameObject:

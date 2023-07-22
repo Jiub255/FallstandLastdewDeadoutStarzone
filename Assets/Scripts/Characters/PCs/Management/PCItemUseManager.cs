@@ -6,12 +6,6 @@ public class PCItemUseManager : MonoBehaviour
 	[SerializeField]
 	private SOListSOPC _currentTeamSO;
 
-    // TODO - Will checking for home/scavenging be necessary? 
-    // If just using the list of all PCs and the CurrentMenuPC, then it shouldn't be a problem as long as the 
-    // CurrentMenuPC gets changed to someone on the scavenging team when going scavenging. 
-/*    // True if at home, false if scavenging. 
-    public bool Home = true; */
-
 	private class PCManagers
     {
 		public PainInjuryManager PainInjuryManager { get; }
@@ -26,7 +20,7 @@ public class PCItemUseManager : MonoBehaviour
         }
     }
 
-	private Dictionary<int, PCManagers> _idsAndManagers = new();
+	private Dictionary<SOPCData, PCManagers> _pcDataSOsAndManagers = new();
 
     // Subscribe to all Usable and Equipment item events here. 
     private void Start()
@@ -36,17 +30,17 @@ public class PCItemUseManager : MonoBehaviour
         // Equipment 
         SOEquipmentItem.OnEquip += (item) =>
         {
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].EquipmentManager.Equip(item);
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].EquipmentManager.Equip(item);
         };
         SOEquipmentItem.OnUnequip += (item) =>
         {
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].EquipmentManager.Unequip(item);
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].EquipmentManager.Unequip(item);
         };
 
         // Usable items 
         SORelievePain.OnRelievePainEffect += (amount, duration) => 
         { 
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].PainInjuryManager.TemporarilyRelievePain(amount, duration); 
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].PainInjuryManager.TemporarilyRelievePain(amount, duration); 
         };
 
         _currentTeamSO.OnHomeSOPCListChanged += PopulateDictionary;
@@ -57,17 +51,17 @@ public class PCItemUseManager : MonoBehaviour
         // Equipment 
         SOEquipmentItem.OnEquip -= (item) =>
         {
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].EquipmentManager.Equip(item);
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].EquipmentManager.Equip(item);
         };
         SOEquipmentItem.OnUnequip -= (item) =>
         {
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].EquipmentManager.Unequip(item);
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].EquipmentManager.Unequip(item);
         };
 
         // Usable items 
         SORelievePain.OnRelievePainEffect -= (amount, duration) => 
         { 
-            _idsAndManagers[_currentTeamSO.CurrentMenuSOPC.GetInstanceID()].PainInjuryManager.TemporarilyRelievePain(amount, duration);
+            _pcDataSOsAndManagers[_currentTeamSO.CurrentMenuSOPC].PainInjuryManager.TemporarilyRelievePain(amount, duration);
         };
 
         _currentTeamSO.OnHomeSOPCListChanged += PopulateDictionary;
@@ -76,6 +70,8 @@ public class PCItemUseManager : MonoBehaviour
     // Call this on Awake and whenever the list changes. 
     private void PopulateDictionary()
     {
+        _pcDataSOsAndManagers.Clear();
+
         foreach (SOPCData pcDataSO in _currentTeamSO.HomeSOPCSList)
         {
             if (pcDataSO.PCInstance != null)
@@ -84,7 +80,7 @@ public class PCItemUseManager : MonoBehaviour
                 PCStatManager pcStatManager = pcDataSO.PCInstance.GetComponentInChildren<PCStatManager>();
                 EquipmentManager equipmentManager = pcDataSO.PCInstance.GetComponentInChildren<EquipmentManager>();
 
-                _idsAndManagers.Add(pcDataSO.PCInstance.GetInstanceID(), new PCManagers(painInjuryManager, pcStatManager, equipmentManager));
+                _pcDataSOsAndManagers.Add(pcDataSO, new PCManagers(painInjuryManager, pcStatManager, equipmentManager));
             }
             else
             {

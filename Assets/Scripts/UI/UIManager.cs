@@ -65,14 +65,14 @@ public class UIManager : MonoBehaviour
             S.I.GSM.ActiveState.GetType() == typeof(GameBuildState))
         {
             // Open home menus. 
-            S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+            S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
 
             OpenMenu(_homeInventoryCanvas);
         }
         else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatState))
         {
             // Open combat menus. 
-            S.I.GSM.ChangeStateTo(S.I.GSM.CombatMenus());
+            S.I.GSM.ChangeGameStateTo(S.I.GSM.CombatMenus());
 
             OpenMenu(_combatInventoryCanvas);
         }
@@ -80,21 +80,21 @@ public class UIManager : MonoBehaviour
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeStateTo(S.I.GSM.Build());
+        S.I.GSM.ChangeGameStateTo(S.I.GSM.Build());
         
         OpenMenu(_buildCanvas);
     }
 
     private void OpenCraftingMenu(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+        S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
 
         OpenMenu(_craftingCanvas);
     }
 
     private void OpenMap(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeStateTo(S.I.GSM.HomeMenus());
+        S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
 
         OpenMenu(_mapCanvas);
     }
@@ -112,11 +112,11 @@ public class UIManager : MonoBehaviour
         // Change game state. 
         if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeMenusState))
         {
-            S.I.GSM.ChangeStateTo(S.I.GSM.Home());
+            S.I.GSM.ChangeGameStateTo(S.I.GSM.Home());
         }
         else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatMenusState))
         {
-            S.I.GSM.ChangeStateTo(S.I.GSM.Combat());
+            S.I.GSM.ChangeGameStateTo(S.I.GSM.Combat());
         }
 
         OpenCanvas(_hUDCanvas);

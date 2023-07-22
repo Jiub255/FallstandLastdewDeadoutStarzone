@@ -10,6 +10,7 @@ public class PainInjuryManager : MonoBehaviour
 
 	public PCSlot Slot { get; set; }
     public int Relief { get { return _relief; } }
+    private bool _healing = false;
 
     public int EffectivePain
     {
@@ -36,6 +37,10 @@ public class PainInjuryManager : MonoBehaviour
 //        SORelievePain.OnRelievePainEffect -= TemporarilyRelievePain;
     }
 
+    /// <summary>
+    /// Adds <c>damage</c> amount to Injury, calls <c>Die()</c> if over 100. Updates PC slot's UI. 
+    /// </summary>
+    /// <param name="damage"></param>
     public void GetHurt(int damage)
     {
         _pcSO.Injury += damage;
@@ -51,8 +56,38 @@ public class PainInjuryManager : MonoBehaviour
         Slot.UpdatePainBar(EffectivePain);
     }
 
+    // TODO - Have a "Healing" bool, and a healing rate.  
     // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time (outside of combat) and rest. 
-    // Medical items can speed up recovery maybe? And medical buildings and PCs with high medical skill? 
+    // Medical items can speed up recovery. And medical buildings and PCs with high medical skill. 
+    /// <summary>
+    /// When healing == true, call heal every x seconds based on healing rate until full or healing == false.
+    /// </summary>
+    /// <param name="healingRate">Injury points healed per second. </param>
+    public void StartHealing(float healingRate)
+    {
+        _healing = true;
+        StartCoroutine(HealingCoroutine(healingRate));
+    }
+
+    public void StopHealing()
+    {
+        if (_healing) _healing = false;
+    }
+
+    private IEnumerator HealingCoroutine(float healingRate)
+    {
+        while (_healing)
+        {
+            yield return HealCoroutine(healingRate);
+        }
+    }
+
+    private IEnumerator HealCoroutine(float healingRate)
+    {
+        yield return new WaitForSeconds(1f / healingRate);
+        Heal(1);
+    }
+
     public void Heal(int amount)
     {
         _pcSO.Injury -= amount;
@@ -66,26 +101,22 @@ public class PainInjuryManager : MonoBehaviour
         Slot.UpdatePainBar(EffectivePain);
     }
 
+    /// <summary>
+    /// Not sure what to do here yet. 
+    /// </summary>
     private void Die()
     {
         //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     /// <summary>
-    /// Called by painkiller items' events. 
+    /// Called by painkiller items' events. Actually called by events in classes that inherit SOEffect, which get called by SOUsableItem. 
     /// </summary>
-    /// <remarks>
-    /// Actually called by events in classes that inherit SOEffect, which get called by SOUsableItem. 
-    /// </remarks>
-    /// <param name="PCInstanceID"></param>
     /// <param name="amount"></param>
     /// <param name="duration"></param>
-    public void TemporarilyRelievePain(/*int PCInstanceID, */int amount, float duration)
+    public void TemporarilyRelievePain(int amount, float duration)
     {
-//        if (transform.root.gameObject.GetInstanceID() == PCInstanceID)
-        {
-            StartCoroutine(RelievePainCoroutine(amount, duration));
-        }
+        StartCoroutine(RelievePainCoroutine(amount, duration));
     }
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)

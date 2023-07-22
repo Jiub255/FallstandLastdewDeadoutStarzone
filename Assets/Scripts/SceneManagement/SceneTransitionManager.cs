@@ -21,7 +21,7 @@ public class SceneTransitionManager : MonoBehaviour
             pcDataSO.PCInstance = null;
         }
         // TODO - Use game state machine instead. 
-        S.I.GSM.ChangeStateTo(S.I.GSM.Home());
+        S.I.GSM.ChangeGameStateTo(S.I.GSM.Home());
         StartCoroutine(LoadSceneCoroutine("HomeScene"));
     }
 
@@ -93,7 +93,7 @@ public class SceneTransitionManager : MonoBehaviour
         {
             pcDataSO.PCInstance = null;
         }
-        S.I.GSM.ChangeStateTo(S.I.GSM.Combat());
+        S.I.GSM.ChangeGameStateTo(S.I.GSM.Combat());
         StartCoroutine(LoadSceneCoroutine("ScavengingScene"));
     }
 

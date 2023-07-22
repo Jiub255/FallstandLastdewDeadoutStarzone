@@ -17,4 +17,4 @@ MonoBehaviour:
   _scavengingPCSList:
   - {fileID: 11400000, guid: f3e28bd68cc2beb46947dc20d8cdafd5, type: 2}
   _selectedPC: {fileID: 0}
-  _currentMenuSOPC: {fileID: 11400000, guid: f3e28bd68cc2beb46947dc20d8cdafd5, type: 2}
+  _currentMenuSOPC: {fileID: 0}
