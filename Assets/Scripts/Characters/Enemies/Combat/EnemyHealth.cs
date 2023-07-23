@@ -4,8 +4,10 @@ using UnityEngine;
 // Maybe just do straight health instead, especially if there's going to be mobs of enemies. 
 public class EnemyHealth : MonoBehaviour
 {
+	// TODO - Get this from EnemyData SO. 
 	[SerializeField]
 	private int _maxHealth = 100;
+
 	private int _health = 0;
 
     private void Awake()
@@ -13,6 +15,12 @@ public class EnemyHealth : MonoBehaviour
 		_health = _maxHealth;
     }
 
+	/// <summary>
+	/// Lowers enemy health by <c>damage</c>. Attacking PC passes reference to their combat state,
+	/// so OnEnemyDied can be called by enemy if GetHurt kills the enemy. 
+	/// </summary>
+	/// <param name="damage"></param>
+	/// <param name="attackingPC">Reference to the PC's combat state </param>
     public void GetHurt(int damage, PCCombatState attackingPC)
     {
 		_health -= damage;

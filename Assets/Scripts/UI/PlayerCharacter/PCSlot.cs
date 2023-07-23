@@ -31,13 +31,12 @@ public class PCSlot : MonoBehaviour
         _icon.sprite = pcSO.Icon;
         _nameText.text = pcSO.name;
 
-        PainInjuryManager painInjuryManager = pcSO.PCInstance.GetComponentInChildren<PainInjuryManager>();
-
         // Set the fill bars here initially, but they get changed from the pain and injury scripts.
-        UpdatePainBar(painInjuryManager.EffectivePain);
+        UpdatePainBar(pcSO.Pain);
         UpdateInjuryBar(pcSO.Injury);
 
         // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
+        PainInjuryManager painInjuryManager = pcSO.PCInstance.GetComponentInChildren<PainInjuryManager>();
         painInjuryManager.Slot = this;
     }
 

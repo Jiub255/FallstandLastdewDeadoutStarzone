@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// TODO - Use this enum or have subclasses? What exactly will the different buildings do? 
+/// </summary>
 public enum BuildingType
 {
     Medical,
@@ -10,20 +13,26 @@ public enum BuildingType
     Farming // Or production? 
 }
 
-public class SOBuildingRecipe : SORecipe
+public class SOBuildingItem : SORecipe
 {
-    public static event Action<SOBuildingRecipe> OnSelectBuilding;
+    /// <summary>
+    /// BuildingManager listens, sets this as current building SO. 
+    /// </summary>
+    public static event Action<SOBuildingItem> OnSelectBuilding;
 
+    [SerializeField]
     private BuildingType _buildingType;
+    [SerializeField]
     private GameObject _buildingPrefab;
 
     public BuildingType BuildingType { get { return _buildingType; } }
     public GameObject BuildingPrefab { get { return _buildingPrefab; } }
 
-    // Called by button on Building Slot. 
+    /// <summary>
+    /// Called by button on Building Slot. 
+    /// </summary>
     public override void OnClickRecipe()
     {
-        // BuildingManager hears this.
         OnSelectBuilding?.Invoke(this);
     }
 }

@@ -15,6 +15,9 @@ public class GameStateMachine : MonoBehaviour
         ChangeGameStateTo(/*Pause*/Home());
     }
 
+    /// <summary>
+    /// Changes action maps and sets time scale. 
+    /// </summary>
     public void ChangeGameStateTo(GameState gameState)
     {
 /*        if (ActiveState != null)

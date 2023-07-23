@@ -4,15 +4,18 @@ public class PCCombatState : PCState
 {
     private Transform _target;
     private float _attackDuration;
+    private int _attack;
 
     private float _timer; 
     private Animator _animator;
     private Transform _transform;
 
-    public PCCombatState(PCStateMachine characterController, Transform target, float attackDuration) : base(characterController)
+    public PCCombatState(PCController characterController, Transform target) : base(characterController)
     {
         _target = target;
-        _attackDuration = attackDuration;
+
+        _attackDuration = 1f / _stateMachine.PCSO.Equipment.Weapon().AttackPerSecond;
+        _attack = _stateMachine.PCSO.Attack();
 
         _timer = 0f;
         _animator = characterController.Animator;
@@ -54,9 +57,6 @@ public class PCCombatState : PCState
 
     private void Attack()
     {
-        // Get attack damage and duration from current weapon/stats. 
-
-
         // Reset timer. 
         _timer = 0f;
 
@@ -65,8 +65,7 @@ public class PCCombatState : PCState
 
         // TODO - Use IDamageable interface here?
         // Just check that enemy is within range, and then if so hit connects. No need for overlapBox or any physics stuff. 
-        // JUST FOR TESTING
-        _target.GetComponentInChildren<EnemyHealth>().GetHurt(25, this);
+        _target.GetComponentInChildren<EnemyHealth>().GetHurt(_attack, this);
     }
 
     // How to check if enemy is dead? Dying enemy could send a signal with its instanceID.

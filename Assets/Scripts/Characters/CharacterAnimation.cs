@@ -11,10 +11,8 @@ public class CharacterAnimation : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         _animator.SetBool("Running", _pathNavigator.Moving);
-//        float speed = _pathNavigator.Moving ? 1 : 0;
-//        _animator.SetFloat("Speed", speed);
     }
 }

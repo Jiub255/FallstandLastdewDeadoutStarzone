@@ -20,7 +20,7 @@ public class SOBuildingRecipes : RecipeList
         foreach (string SOName in assetNames)
         {
             var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
-            var character = AssetDatabase.LoadAssetAtPath<SOBuildingRecipe>(SOpath);
+            var character = AssetDatabase.LoadAssetAtPath<SOBuildingItem>(SOpath);
             Recipes.Add(character);
         }
 

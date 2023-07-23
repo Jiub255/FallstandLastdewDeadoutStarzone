@@ -23,7 +23,7 @@ public class BuildingManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _buildingPrefab;
-    private SOBuildingRecipe _currentBuildingRecipeSO;
+    private SOBuildingItem _currentBuildingRecipeSO;
     private GameObject _currentBuildingInstance;
     private SelectedBuildingIcon _selectedBuildingIcon;
 
@@ -69,7 +69,7 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;
 
-        SOBuildingRecipe.OnSelectBuilding += SelectCurrentBuilding;
+        SOBuildingItem.OnSelectBuilding += SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
     }
 
@@ -78,7 +78,7 @@ public class BuildingManager : MonoBehaviour
         _angleSnapMode = !_angleSnapMode;
     }
 
-    // Use these two methods to switch between toggle and hold shift for changing angle snap mode. 
+    // Use these two methods to switch between toggling and holding shift to change angle snap mode. 
     // Going overboard, just practicing accessibility/customization stuff. 
     public void ToggleMode()
     {
@@ -104,7 +104,7 @@ public class BuildingManager : MonoBehaviour
         // Or, when you change _toggle, subscribe or unsubscribe there, so this _toggle check will be fine. 
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;
 
-        SOBuildingRecipe.OnSelectBuilding -= SelectCurrentBuilding;
+        SOBuildingItem.OnSelectBuilding -= SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
     }
 
@@ -249,7 +249,7 @@ public class BuildingManager : MonoBehaviour
 
     // Gets called from a button in build menu, which calls event in BuildingItem.
     // Also called when selecting a building the first time, not just changing buildings.
-    public void SelectCurrentBuilding(SOBuildingRecipe newBuildingRecipeSO)
+    public void SelectCurrentBuilding(SOBuildingItem newBuildingRecipeSO)
     {
        // Debug.Log("Changing current building to " + newBuilding.name);
 

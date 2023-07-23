@@ -6,36 +6,27 @@ public class PCApproachLootState : PCState
     private LootContainer _lootContainer;
     private Vector3 _lootingPosition;
     private float _lootDistanceSquared;
-//    private NavMeshAgent _navMeshAgent;
-    private PathNavigator _pathNavigator;
     private Transform _transform;
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
     // Get lootingPosition and whatever else from LootContainer. 
-    public PCApproachLootState(PCStateMachine characterController, LootContainer lootContainer) : base(characterController)
+    public PCApproachLootState(PCController characterController, LootContainer lootContainer) : base(characterController)
     {
         _lootContainer = lootContainer;
 
-        // Not sure about this, might need to make it smaller/bigger. 
-//        _lootDistanceSquared = characterController.NavMeshAgent.stoppingDistance * characterController.NavMeshAgent.stoppingDistance * 1.2f;
-//        _lootDistanceSquared = lootDistance * lootDistance;
+        // Not sure about this, might need to make it smaller/bigger.
         _lootDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
 
         _lootingPosition = lootContainer.LootPositionTransform.position;
-//        _navMeshAgent = characterController.NavMeshAgent;
-        _pathNavigator = characterController.PathNavigator;
         _transform = characterController.transform;
 
         // Set destination. 
         characterController.PathNavigator.TravelPath(_lootingPosition, _lootContainer.GetComponent<Collider>());
-//        _navMeshAgent.destination = lootContainer.LootPositionTransform.position;
-//        _navMeshAgent.SetDestination(lootContainer.LootPositionTransform.position);
     }
 
     public override void Update()
     {
-        // What if container gets looted while you're on the way? 
-        // Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
+        // What if container gets looted while you're on the way? Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
         if (_lootContainer.IsBeingLooted || _lootContainer.Looted)
         {
             // Set state back to idle. 
@@ -43,9 +34,6 @@ public class PCApproachLootState : PCState
         }
         else if (HaveReachedLoot())
         {
-            // Set stopping distance back to normal in case it got changed to 0f in HaveReachedLoot. 
-//            _agent.stoppingDistance = _stoppingDistance;
-
             _stateMachine.ChangeStateTo(_stateMachine.Loot(_lootContainer));
         }
     }
@@ -55,49 +43,9 @@ public class PCApproachLootState : PCState
     // Check to see if it reached its destination in update instead of doing this check here. 
     private bool HaveReachedLoot()
     {
-        // Debug.Log($"NavMeshAgent.destination: {_agent.destination}, Looting Position: {_lootingPosition}");
-
-        // NOT WORKING (the stopping distance stuff). 
-        // Solves the problem of PC not moving towards loot if it was already close by temporarily setting stopping distance to zero.  
-        // Stopping distance gets set back once it reaches the loot position. 
-        /*        if (Vector3.Distance(_transform.position, _lootingPosition) < _agent.stoppingDistance)
-                {
-                    _stoppingDistance = _agent.stoppingDistance;
-
-                    _agent.stoppingDistance = 0f; 
-                }*/
-
-/*        Debug.Log($"Squared distance: {(_lootingPosition*//*_navMeshAgent.destination*//* - _transform.position).sqrMagnitude}," +
-            $"Looting position: {_lootingPosition}, Position: {_transform.position}, Looting distance squared: {_lootDistanceSquared}");*/
-        return (_lootingPosition/*_navMeshAgent.destination*/ - _transform.position).sqrMagnitude < _lootDistanceSquared;
+        return (_lootingPosition - _transform.position).sqrMagnitude < _lootDistanceSquared;
     }
 
-    /*    private bool HaveReachedDestination()
-        {
-            float distance = 0.0f;
-
-            Vector3[] corners = _agent.path.corners;
-
-            for (int c = 0; c < corners.Length - 1; ++c)
-            {
-                distance += Mathf.Abs((corners[c] - corners[c + 1]).magnitude);
-            }
-
-            return distance < _lootDistance;
-        }*/
-
-    public override void Exit()
-    {
-        // Unset NavMeshAgent destination? Can't set Vector3 to null. 
-/*        _navMeshAgent.isStopped = true;
-        _navMeshAgent.ResetPath();*/
-    }
-
-    public override void FixedUpdate() 
-    {
-        // Recalculate path every fixed update in case something got in the way. 
-        // Not anymore, this gets handled in PathNavigator. 
-//        _navMeshAgent.SetDestination(_lootingPosition);
-//        _stateMachine.PathNavigator.TravelPath(_lootingPosition);
-    }
+    public override void FixedUpdate() {}
+    public override void Exit() {}
 }

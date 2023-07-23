@@ -1,17 +1,10 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 // Put this on Canvases object. 
 public class UIManager : MonoBehaviour
 {
-    // TODO - Do this better. Send individual events for menus, don't rebuild entire UI each time. 
-    // MenuUIRefresher listens to initialize the UI displays
-    // Split into separate events for each menu? Or does it really affect performance enough to matter?
-    public static event Action OnOpenedMenu;
-
-    [Header("Canvases")]
-    [SerializeField]
+    [SerializeField, Header("Canvases")]
     private GameObject _homeInventoryCanvas;
     [SerializeField]
     private GameObject _combatInventoryCanvas;
@@ -32,7 +25,6 @@ public class UIManager : MonoBehaviour
         _gameManager = S.I.GSM;
         _inputManager = S.I.IM;
 
-        // TODO - Put menu control actions in one map, since OpenCanvas checks if things are already active/inactive. 
         _inputManager.PC.InventoryMenu.OpenInventory.started += OpenInventory;
         _inputManager.PC.InventoryMenu.CloseInventory.started += CloseUI;
         _inputManager.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
@@ -41,10 +33,6 @@ public class UIManager : MonoBehaviour
         _inputManager.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
         _inputManager.PC.NonCombatMenus.OpenMap.started += OpenMap;
         _inputManager.PC.NonCombatMenus.CloseMap.started += CloseUI;
-
-        // Setup all menus in beginning of each scene. (Not sure if necessary)
-        // Make sure all UIRefresher child classes subscribe in OnEnable, not Start, so they can hear this. 
-        OnOpenedMenu?.Invoke();
     }
 
     private void OnDisable()
@@ -64,14 +52,12 @@ public class UIManager : MonoBehaviour
         if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeState) || 
             S.I.GSM.ActiveState.GetType() == typeof(GameBuildState))
         {
-            // Open home menus. 
             S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
 
             OpenMenu(_homeInventoryCanvas);
         }
         else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatState))
         {
-            // Open combat menus. 
             S.I.GSM.ChangeGameStateTo(S.I.GSM.CombatMenus());
 
             OpenMenu(_combatInventoryCanvas);
@@ -102,14 +88,10 @@ public class UIManager : MonoBehaviour
     private void OpenMenu(GameObject canvas)
     {
         OpenCanvas(canvas);
-
-        // CanvasUI listens to setup display
-        OnOpenedMenu?.Invoke();
     }
 
     private void CloseUI(InputAction.CallbackContext context)
     {
-        // Change game state. 
         if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeMenusState))
         {
             S.I.GSM.ChangeGameStateTo(S.I.GSM.Home());
@@ -120,9 +102,6 @@ public class UIManager : MonoBehaviour
         }
 
         OpenCanvas(_hUDCanvas);
-
-        // PCUI listens to setup display
-        OnOpenedMenu?.Invoke();
     }
 
     private void OpenCanvas(GameObject canvas)

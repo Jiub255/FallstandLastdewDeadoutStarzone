@@ -15,18 +15,19 @@ public class SOEquipmentItem : SOItem
     public static event Action<SOEquipmentItem> OnEquip;
     public static event Action<SOEquipmentItem> OnUnequip;
 
-
     // TODO - Have each armor type inherit this class, or use the enum? 
-    // If it's just gonna be armor and weapons then yes. 
-    // Or, with multiple armor types, could do SOWeaponItem and SOArmorItem and have an ArmorType enum.
-    // Then weapon can have attack and weapon range fields, and armor can have defense. Might not even need EquipmentBonus class, just use an int and code. 
-    // Weapons only affect attack and armor only affects defense, the equipment bonus bit is good for more complicated stuff, but not needed here. 
-    // OR, just do each equipment type as its own subclass. It'd be like the equipmentType enum, but hold data too. 
-    public EquipmentType EquipmentType;
+    // Keep Equipment type, so Equipment can use it as an index. Have SOWeaponItem extend SOEquipmentItem so it can have a guaranteed attack stat
+    // (can also have bonuses), and an attack range stat (some small number for melee/unarmed). Also have SOArmorItem with a defense stat and maybe more. 
+    // Otherwise, keep Equipment class as an "indexed by type" List of SOEquipmentItems and have the manager only allow one of each type. 
 
-    public List<EquipmentBonus> Bonuses;
+    [SerializeField, Header("-------- General Equipment Data --------")]
+    protected EquipmentType _equipmentType;
+    [SerializeField]
+    protected List<EquipmentBonus> _bonuses;
 
-//    public GameObject EquipmentItemPrefab;
+    // Overridden by SOWeaponItem with { return EquipmentType.Weapon; }
+    public virtual EquipmentType EquipmentType { get { return _equipmentType; } }
+    public List<EquipmentBonus> Bonuses { get { return _bonuses; } }
 
     // Equip the item. Send signal to equipment and inventory managers. 
     // Called by "use" button on inventory slot prefab. 

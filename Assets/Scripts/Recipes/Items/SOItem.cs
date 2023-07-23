@@ -4,28 +4,37 @@ using UnityEngine;
 // SOCraftingItem, SOEquipmentItem, and SOUsableItem all inherit from this. 
 public abstract class SOItem : SORecipe
 {
+    /// <summary>
+    /// Heard by PlayerInventoryManager. 
+    /// </summary>
     public static event Action<SOItem> OnRemoveItem;
+    /// <summary>
+    /// Heard by PlayerInventoryManager. 
+    /// </summary>
     public static event Action<SOItem> OnAddItem;
+    /// <summary>
+    /// PlayerInventoryManager hears this, adds item to inventory, and removes the crafting items necessary to create item. 
+    /// </summary>
     public static event Action<SOItem> OnSelectItem;
 
-    // Called by clicking on Inventory Slot. 
+    /// <summary>
+    /// Called by button on Inventory Slot. 
+    /// </summary>
     public abstract void OnClickInventory();
 
-    // Called by button on Recipe Slot. 
+    /// <summary>
+    /// Called by button on Recipe Slot. 
+    /// </summary>
     public override void OnClickRecipe()
     {
-        // InventoryManager hears this, adds item to inventory, and removes crafting items
-        // needed to create it from inventory. 
         OnSelectItem?.Invoke(this);
     }
 
-    // Heard by PlayerInventoryManager. 
     protected void AddToInventory()
     {
         OnAddItem?.Invoke(this);
     }
 
-    // Heard by PlayerInventoryManager. 
     protected void RemoveFromInventory()
     {
         OnRemoveItem?.Invoke(this);

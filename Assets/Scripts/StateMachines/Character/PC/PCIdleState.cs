@@ -8,7 +8,7 @@ public class PCIdleState : PCState
 
     protected float _sightDistance;
 
-    public PCIdleState(PCStateMachine characterController, SOPCMovementState pcMovementStateSO) : base(characterController)
+    public PCIdleState(PCController characterController, SOPCMovementState pcMovementStateSO) : base(characterController)
     {
         _sightDistance = pcMovementStateSO.SightDistance;
 
@@ -34,18 +34,48 @@ public class PCIdleState : PCState
         // Use OverlapSphere to check for enemies loot here? (if not selected)
         if (!_stateMachine.Selected)
         {
-            Collider[] enemyCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.EnemyLayerMask);
-            Collider[] lootCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.LootContainerLayerMask);
+            Collider[] enemyCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.PCSO.PCSharedDataSO.EnemyLayerMask);
+            Collider[] lootCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.PCSO.PCSharedDataSO.LootContainerLayerMask);
 
             if (enemyCollidersInRange.Length > 0)
             {
-                // ApproachEnemy state, with target == enemyCollidersInRange[0]. 
-                _stateMachine.ChangeStateTo(_stateMachine.ApproachEnemy(enemyCollidersInRange[0].transform));
+                // Get the closest enemy transform in range. 
+                Transform enemyTransform = null;
+                foreach (Collider collider in enemyCollidersInRange)
+                {
+                    // If this enemy is closer than closest so far, or transform is null because this is the first enemy checked, 
+                    // (null check first to avoid null reference exception)
+                    if (enemyTransform == null ||
+                        (collider.transform.position - _stateMachine.transform.position).sqrMagnitude <
+                        (enemyTransform.position - _stateMachine.transform.position).sqrMagnitude)
+                    {
+                        // Set this enemy transform as closest so far. 
+                        enemyTransform = collider.transform;
+                    }
+                }
+
+                // Change to ApproachEnemyState, with target as the closest enemy in range. 
+                _stateMachine.ChangeStateTo(_stateMachine.ApproachEnemy(enemyTransform));
             }
             else if (lootCollidersInRange.Length > 0)
             {
-                // ApproachLoot state, with lootContainer == lootCollidersInRange[0].GetComponent<LootContainer>().
-                _stateMachine.ChangeStateTo(_stateMachine.ApproachLoot(lootCollidersInRange[0].GetComponent<LootContainer>()));
+                // Get the closest enemy transform in range. 
+                Transform lootTransform = null;
+                foreach (Collider collider in lootCollidersInRange)
+                {
+                    // If this loot is closer than closest so far, or transform is null because this is the first loot checked, 
+                    // (null check first to avoid null reference exception)
+                    if (lootTransform == null ||
+                        (collider.transform.position - _stateMachine.transform.position).sqrMagnitude <
+                        (lootTransform.position - _stateMachine.transform.position).sqrMagnitude)
+                    {
+                        // Set this loot transform as closest so far. 
+                        lootTransform = collider.transform;
+                    }
+                }
+
+                // Change to ApproachLootState, with target as the closest loot container in range. 
+                _stateMachine.ChangeStateTo(_stateMachine.ApproachLoot(lootTransform.GetComponent<LootContainer>()));
             }
         }
     }

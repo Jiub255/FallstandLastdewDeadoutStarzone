@@ -11,16 +11,6 @@ public class UIPC : MonoBehaviour
 
     private void OnEnable()
     {
-        UIManager.OnOpenedMenu += PopulateInventory;
-    }
-
-    private void OnDisable()
-    {
-        UIManager.OnOpenedMenu -= PopulateInventory;
-    }
-
-    private void Start()
-    {
         PopulateInventory();
     }
 

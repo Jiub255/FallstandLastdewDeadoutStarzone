@@ -1,9 +1,9 @@
-// Extending InventoryManager to listen for add/remove item events, 
-// so that those events don't affect every inventory in the scene, only the player's. 
-// Also to handle crafting. 
 using System;
 using System.Collections.Generic;
 
+// Extending InventoryManager to listen for add/remove item events, 
+// so that those events don't affect every inventory in the scene, only the player's. 
+// Also to handle crafting. 
 public class PlayerInventoryManager : InventoryManager
 {
     public static event Action OnPlayerInventoryChanged;
@@ -14,40 +14,33 @@ public class PlayerInventoryManager : InventoryManager
     {
         _craftingManager = new(_craftingInventorySO);
 
-        SOItem.OnSelectItem += _craftingManager.HandleCrafting;
-        _craftingManager.OnCraftItem += (itemSO) => AddItems(itemSO);
-
+        SOItem.OnSelectItem += (itemSO) => AddItems(_craftingManager.HandleCrafting(itemSO));
         SOItem.OnAddItem += (item) => AddItems(item);
-        SOItem.OnRemoveItem += (item) => RemoveItems(item);
-
-        PCLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
-
-        UIRecipes.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
-
         EquipmentManager.OnUnequip += (equipmentItem) => AddItems(equipmentItem);
+        PCLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
+        SOItem.OnRemoveItem += (item) => RemoveItems(item);
+        UIRecipes.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
     }
 
     protected void OnDisable()
     {
-        SOItem.OnSelectItem -= _craftingManager.HandleCrafting;
-        _craftingManager.OnCraftItem -= (itemSO) => AddItems(itemSO, 1);
-
-        SOItem.OnAddItem -= (item) => AddItems(item, 1);
-        SOItem.OnRemoveItem -= (item) => RemoveItems(item, 1);
-   
-        PCLootState.OnLootItems -= (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
-
-        UIRecipes.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
-
+        SOItem.OnSelectItem -= (itemSO) => AddItems(_craftingManager.HandleCrafting(itemSO));
+        SOItem.OnAddItem -= (item) => AddItems(item);
         EquipmentManager.OnUnequip -= (equipmentItem) => AddItems(equipmentItem);
+        PCLootState.OnLootItems -= (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
+        SOItem.OnRemoveItem -= (item) => RemoveItems(item);
+        UIRecipes.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
     }
 
     public override void AddItems(SOItem item, int amount = 1)
     {
-        base.AddItems(item, amount);
+        if (item != null)
+        {
+            base.AddItems(item, amount);
 
-        // Heard by UIRecipes, updates haveEnoughItemsRecipes list. 
-        OnPlayerInventoryChanged?.Invoke();
+            // Heard by UIRecipes, updates haveEnoughItemsRecipes list. 
+            OnPlayerInventoryChanged?.Invoke();
+        }
     }
 
     public override void RemoveItems(SOItem item, int amount = 1)

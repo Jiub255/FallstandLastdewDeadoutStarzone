@@ -6,17 +6,21 @@ public class PCLootState : PCState
     public static event Action<ItemAmount> OnLootItems;
 
     private LootContainer _lootContainer;
-    private float _lootAnimationDuration;
+
+    private float _lootDuration; 
     
     private LootTimer _lootTimer;
 
     private float _timer;
 
-    public PCLootState(PCStateMachine characterController, LootContainer lootContainer, AnimationClip lootAnimation, LootTimer lootTimer) : base(characterController)
+    public PCLootState(PCController characterController, LootContainer lootContainer) : base(characterController)
     {
         _lootContainer = lootContainer;
-        _lootAnimationDuration = lootAnimation.length;
-        _lootTimer = lootTimer;
+
+        // (For now) Scavenging skill goes from 1 to 5, longest loot duration is 5 seconds, fastest is 1 second. So 6 - skill = duration. 
+        _lootDuration = 6 - characterController.PCSO.Stats[StatType.Scavenging].ModdedValue;
+
+        _lootTimer = characterController.gameObject.GetComponentInChildren<LootTimer>();
 
         // Set LootContainer's IsBeingLooted to true. 
         _lootContainer.IsBeingLooted = true;
@@ -63,7 +67,7 @@ public class PCLootState : PCState
         }
         else
         {
-            float percentOfTimeElapsed = (_lootAnimationDuration - _timer) / _lootAnimationDuration;
+            float percentOfTimeElapsed = (_lootDuration - _timer) / _lootDuration;
             _lootTimer.Tick(percentOfTimeElapsed);
         }
     }

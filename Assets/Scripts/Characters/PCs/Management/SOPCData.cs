@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Player Characters/SOPCData", fileName = "New PC Data SO")]
@@ -8,35 +7,45 @@ public class SOPCData : ScriptableObject
     // Or do Transform for PC instances? 
     public static event Action<GameObject> OnSelectPC;
 
-    // SHARED
-    public SOPCMovementState PCMovementStateSO; 
+    [SerializeField, Header("These variables DON'T change during runtime")]
+    private Sprite _icon;
+    [SerializeField]
+    private Sprite _characterImage;
+    [SerializeField]
+    private GameObject _pcPrefab;
+    [SerializeField]
+    private SOPCMovementState _pcMovementStateSO;
+    [SerializeField]
+    private SOPCSharedData _pcSharedDataSO;
 
-    // These variables don't change during runtime. 
-    // INDIVIDUAL
-    public Sprite Icon;
-    // INDIVIDUAL
-    public Sprite CharacterImage;
-    // INDIVIDUAL
-    public GameObject PCPrefab;
+    [Header("These variables DO change during runtime")]
+    [SerializeField]
+    private Equipment _equipment = new();
+    [SerializeField]
+    private Stats _stats;
+    private GameObject _pcInstance;
+    private int _injury;
+    private int _pain;
 
-    // These variables do change during runtime. 
-    // INDIVIDUAL
-    public GameObject PCInstance;
-    // INDIVIDUAL
-    public List<SOEquipmentItem> Equipment;
-    // INDIVIDUAL
-    public int Injury;
-    // INDIVIDUAL - keep starting stats on shared, with randomization? 
-    public Stats Stats;
+    public Sprite Icon { get { return _icon; } }
+    public Sprite CharacterImage { get { return _characterImage; } }
+    public GameObject PCPrefab { get { return _pcPrefab; } }
+    public SOPCMovementState PCMovementStateSO { get { return _pcMovementStateSO;} }
+    public SOPCSharedData PCSharedDataSO { get { return _pcSharedDataSO; } }
 
-    public int Attack
+    public GameObject PCInstance { get { return _pcInstance; } set { _pcInstance = value; } }
+    public Equipment Equipment { get { return _equipment; } }
+    public int Injury { get { return _injury; } set { _injury = value; } }
+    public int Pain { get { return _pain; } set { _pain = value; } }
+    public Stats Stats { get { return _stats; } }
+
+    public int Attack()
     {
-        get
-        { 
-            return Stats[StatType.Attack].ModdedValue; 
-        } 
+        int weaponAttack = Equipment.Weapon().WeaponAttack;
+        int attackStat = Stats[StatType.Attack].ModdedValue;
+        // TODO - Probably use different formula eventually. 
+        return weaponAttack + attackStat;
     }
-    public int Defense { get { return Stats[StatType.Defense].ModdedValue; } }
 
     // Called by clicking PC icon button. 
     public void Use()

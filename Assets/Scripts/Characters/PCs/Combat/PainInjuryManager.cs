@@ -1,18 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-// Have this component on each PC, and have it new up a pain and injury class and manage them. One less component at least. 
+// TODO - Make this a plain C# class, and pass the EquipmentManager in the constructor? No reason for it to be a MB.
 public class PainInjuryManager : MonoBehaviour
 {
     private SOPCData _pcSO;
-
     private int _relief = 0;
-
-	public PCSlot Slot { get; set; }
-    public int Relief { get { return _relief; } }
     private bool _healing = false;
+    private PCSlot _slot;
 
-    public int EffectivePain
+    /// <summary>
+    /// Gets set by PCSlot, in SetupSlot(), right after being instantiated. 
+    /// </summary>
+	public PCSlot Slot { get { return _slot; } set { _slot = value; } }
+
+    private int Pain
     {
         get
         {
@@ -27,14 +29,7 @@ public class PainInjuryManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
-
-//        SORelievePain.OnRelievePainEffect += TemporarilyRelievePain;
-    }
-
-    private void OnDisable()
-    {
-//        SORelievePain.OnRelievePainEffect -= TemporarilyRelievePain;
+        _pcSO = GetComponentInParent<PCController>().PCSO;
     }
 
     /// <summary>
@@ -44,23 +39,25 @@ public class PainInjuryManager : MonoBehaviour
     public void GetHurt(int damage)
     {
         _pcSO.Injury += damage;
+        _pcSO.Pain = Pain;
 
         if (_pcSO.Injury >= 100)
         {
             _pcSO.Injury = 100;
+            _pcSO.Pain = Pain;
             Debug.Log("Injury >= 100, you died.");
             Die();
         }
 
         Slot.UpdateInjuryBar(_pcSO.Injury);
-        Slot.UpdatePainBar(EffectivePain);
+        Slot.UpdatePainBar(Pain);
     }
 
     // TODO - Have a "Healing" bool, and a healing rate.  
     // Should items be able to heal injury during combat? I think no, only painkillers during combat, actual healing takes time (outside of combat) and rest. 
     // Medical items can speed up recovery. And medical buildings and PCs with high medical skill. 
     /// <summary>
-    /// When healing == true, call heal every x seconds based on healing rate until full or healing == false.
+    /// When healing, call heal every x seconds based on healing rate until full or healing is set to false.
     /// </summary>
     /// <param name="healingRate">Injury points healed per second. </param>
     public void StartHealing(float healingRate)
@@ -91,14 +88,16 @@ public class PainInjuryManager : MonoBehaviour
     public void Heal(int amount)
     {
         _pcSO.Injury -= amount;
+        _pcSO.Pain = Pain;
 
         if (_pcSO.Injury < 0)
         {
             _pcSO.Injury = 0;
+            _pcSO.Pain = Pain;
         }
 
         Slot.UpdateInjuryBar(_pcSO.Injury);
-        Slot.UpdatePainBar(EffectivePain);
+        Slot.UpdatePainBar(Pain);
     }
 
     /// <summary>
@@ -106,14 +105,12 @@ public class PainInjuryManager : MonoBehaviour
     /// </summary>
     private void Die()
     {
-        //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+//        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     /// <summary>
     /// Called by painkiller items' events. Actually called by events in classes that inherit SOEffect, which get called by SOUsableItem. 
     /// </summary>
-    /// <param name="amount"></param>
-    /// <param name="duration"></param>
     public void TemporarilyRelievePain(int amount, float duration)
     {
         StartCoroutine(RelievePainCoroutine(amount, duration));
@@ -122,11 +119,13 @@ public class PainInjuryManager : MonoBehaviour
     private IEnumerator RelievePainCoroutine(int amount, float duration)
     {
         _relief += amount;
-        Slot.UpdatePainBar(EffectivePain);
+        _pcSO.Pain = Pain;
+        Slot.UpdatePainBar(Pain);
 
         yield return new WaitForSeconds(duration);
 
         _relief -= amount;
-        Slot.UpdatePainBar(EffectivePain);
+        _pcSO.Pain = Pain;
+        Slot.UpdatePainBar(Pain);
     }
 }

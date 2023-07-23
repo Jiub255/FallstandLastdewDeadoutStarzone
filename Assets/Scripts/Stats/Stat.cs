@@ -5,66 +5,56 @@ using UnityEngine;
 public enum StatType
 {
     Attack,
-    Defense
+    Defense, 
+    Scavenging, 
+    Medical, 
+    Engineering, 
+    Farming
 }
 
 [Serializable]
 public class Stat
 {
+    /// <summary>
+    /// Heard by PCStatManager, recalculates stat modifiers. 
+    /// </summary>
     public static event Action OnBaseValueChanged;
 
-    public StatType StatType;
     [SerializeField]
-    protected int _baseValue;
+    private StatType _statType;
+    [SerializeField]
+    private int _baseValue;
 
-    protected List<int> _modifiers = new();
+    private List<int> _modifiers;
+    private int _moddedValue;
 
-    // Only serialized to see in the editor. 
-    // TODO - Keep this and just update it whenever stat/modifiers change, so you
-    // aren't recalculating it every time you use it. 
-    public int ModdedValue { get; private set; }
+    public StatType StatType { get { return _statType; } }
+    public int ModdedValue { get { return _moddedValue; } }
 
-    public Stat(StatType statType, int baseValue = 1)
-    {
-        StatType = statType;
-
-        _baseValue = baseValue;
-        _modifiers = new();
-    }
-
-    public int GetValue()
+    private void CalculateModdedValue()
     {
         int finalValue = _baseValue;
         _modifiers.ForEach(x => finalValue += x);
-        return finalValue;
+        _moddedValue = finalValue;
     }
 
     public void ChangeBaseValue(int amount)
     {
         _baseValue += amount;
-        ModdedValue = GetValue();
-        // StatManager listens. 
+        CalculateModdedValue();
+
         OnBaseValueChanged?.Invoke();
     }
 
     public void AddModifier(int modifier)
     {
         _modifiers.Add(modifier);
-
-        ModdedValue = GetValue();
-    }
-
-    public void RemoveModifier(int modifier)
-    {
-        _modifiers.Remove(modifier);
-
-        ModdedValue = GetValue();
+        CalculateModdedValue();
     }
 
     public void ClearModifiers()
     {
         _modifiers.Clear();
-
-        ModdedValue = GetValue();
+        CalculateModdedValue();
     }
 }

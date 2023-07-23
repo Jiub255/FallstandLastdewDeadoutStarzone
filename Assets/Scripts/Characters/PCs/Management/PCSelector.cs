@@ -71,7 +71,9 @@ public class PCSelector : MonoBehaviour
         }
     }
 
-    // Still get double click if you click on two different buttons within time limit?
+    /// <summary>
+    /// Selects PC if single click, selects and centers camera on PC if double click. 
+    /// </summary>
     private void HandleClick(GameObject pcInstance)
     {
         float currentClickTime = Time.realtimeSinceStartup;
@@ -109,7 +111,11 @@ public class PCSelector : MonoBehaviour
 
         _lastClickTime = currentClickTime;
     }
-
+    /// <summary>
+    /// Changes SelectedPC in Current Team SO. Also changes CurrentMenuPC so when you open the menu, it's on the 
+    /// most recently selected character. 
+    /// </summary>
+    /// <param name="clickedPCInstance"></param>
     private void ChangePC(GameObject clickedPCInstance)
     {
         // If clicked PC is NOT your selected PC, or selected PC is null, 
@@ -118,20 +124,20 @@ public class PCSelector : MonoBehaviour
             // If there is a currently selected PC, set its Selected to false. 
             if (_currentTeamSO.SelectedPC != null)
             {
-                _currentTeamSO.SelectedPC.GetComponent<PCStateMachine>().SetSelected(false);
+                _currentTeamSO.SelectedPC.GetComponent<PCController>().SetSelected(false);
             }
 
             // Set clicked PC's Selected to true.
             if (clickedPCInstance != null)
             {
-                clickedPCInstance.GetComponent<PCStateMachine>().SetSelected(true);
+                clickedPCInstance.GetComponent<PCController>().SetSelected(true);
             }
          
             _currentTeamSO.SelectedPC = clickedPCInstance;
             // Also set PC as current menu PC so you always see your most recently selected character when you open the inventory. 
             if (clickedPCInstance != null)
             {
-                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponent<PCStateMachine>().PCSO;
+                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponent<PCController>().PCSO;
             }
         }
     }

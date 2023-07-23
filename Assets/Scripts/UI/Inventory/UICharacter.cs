@@ -22,7 +22,14 @@ public class UICharacter : MonoBehaviour
 
     private void OnEnable()
     {
+		PCStatManager.OnStatsChanged += SetupCharacterPanel;
+
         SetupCharacterPanel();
+    }
+
+    private void OnDisable()
+    {
+        PCStatManager.OnStatsChanged -= SetupCharacterPanel;
     }
 
     public void NextPC()
@@ -60,7 +67,7 @@ public class UICharacter : MonoBehaviour
 		injuryTextBox.SetupText($"Injury: {_currentTeamSO.CurrentMenuSOPC.Injury}");
 
 		StatTextBox painTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-		painTextBox.SetupText($"Pain: {_currentTeamSO.CurrentMenuSOPC.PCInstance.GetComponentInChildren<PainInjuryManager>().EffectivePain}");
+		painTextBox.SetupText($"Pain: {_currentTeamSO.CurrentMenuSOPC.Pain}");
 
 		// Set stats. 
 		Stats stats = _currentTeamSO.CurrentMenuSOPC.Stats;

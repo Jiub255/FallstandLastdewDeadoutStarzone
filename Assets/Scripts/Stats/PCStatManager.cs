@@ -1,18 +1,23 @@
 using System;
 using UnityEngine;
 
-// Put one on each PC. 
+// TODO - Make this a plain C# class, and pass the EquipmentManager in the constructor? No reason for it to be a MB.
+// Maybe even combine it with Stats class?
 public class PCStatManager : MonoBehaviour
 {
-    public static event Action OnStatsChanged;
+    /// <summary>
+    /// Heard by UICharacter, updates UI. Heard by UIRecipes, gets new metRequirementsRecipes list. 
+    /// </summary>
+public static event Action OnStatsChanged;
 
     private SOPCData _pcSO;
     private EquipmentManager _equipmentManager;
 
     protected void OnEnable()
     {
-        _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
+        _pcSO = GetComponentInParent<PCController>().PCSO;
         _equipmentManager = transform.parent.GetComponentInChildren<EquipmentManager>();
+
         _equipmentManager.OnEquipmentChanged += CalculateStatModifiers;
         Stat.OnBaseValueChanged += CalculateStatModifiers;
 
@@ -39,9 +44,6 @@ public class PCStatManager : MonoBehaviour
             }
         }
 
-        // TODO - Set up stats UI and UIStats script. Just show stats on the equipment UI. 
-        // TODO - Heard by UIEquipment, updates UI. 
-        // Heard by UIRecipes, gets new metRequirementsRecipes list. 
         OnStatsChanged?.Invoke();
     }
 }

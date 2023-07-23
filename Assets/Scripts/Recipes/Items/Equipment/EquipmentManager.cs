@@ -2,9 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO - Make this a plain C# class, and pass the SOPCData in the constructor? No reason for it to be a MB.
+// Maybe even combine it with Equipment class? 
+// Where to new these three managers from? PCStateMachine? Rename it PCController or something? 
 public class EquipmentManager : MonoBehaviour
 {
+    /// <summary>
+    /// Heard by PlayerInventoryManager, adds item back into inventory. 
+    /// </summary>
     public static event Action<SOEquipmentItem> OnUnequip;
+    /// <summary>
+    /// Heard by PCStatManager, recalculates stat modifiers. 
+    /// </summary>
     public event Action OnEquipmentChanged;
 
     // To get equipment list. 
@@ -14,33 +23,17 @@ public class EquipmentManager : MonoBehaviour
 
     private void OnEnable()
     {
-/*        SOEquipmentItem.OnEquip += Equip;
-        SOEquipmentItem.OnUnequip += Unequip;*/
-        _pcSO = GetComponentInParent<PCStateMachine>().PCSO;
+        _pcSO = GetComponentInParent<PCController>().PCSO;
     }
 
-    private void OnDisable()
-    {
-/*        SOEquipmentItem.OnEquip -= Equip;
-        SOEquipmentItem.OnUnequip -= Unequip;*/
-    }
-
-    // TODO - As is, this will equip the item on every PC. How to make it only the MenuSelected one?
-    // Could pass an id parameter in the static event and have all EquipmentManagers check. 
-    // But that seems ugly and there's probably a better way. 
-    // Could just subscribe only when selected, so only the selected instance gets the event. 
-    // Then unsubscribe when deselected (and still OnDisable too). 
     public void Equip(SOEquipmentItem equipmentItemSO)
     {
         // If there is something equipped in this slot, unequip it. 
-        for (int i = 0; i < _pcSO.Equipment.Count; i++)
+        if (_pcSO.Equipment[equipmentItemSO.EquipmentType] != null)
         {
-            if (equipmentItemSO.EquipmentType == _pcSO.Equipment[i].EquipmentType)
-            {
-                SOEquipmentItem oldItem = _pcSO.Equipment[i];
+            SOEquipmentItem oldItem = _pcSO.Equipment[equipmentItemSO.EquipmentType];
 
-                Unequip(oldItem);
-            }
+            Unequip(oldItem);
         }
 
         // Add new item to EquipmentItems. 
@@ -48,7 +41,6 @@ public class EquipmentManager : MonoBehaviour
 
         AddEquipmentBonuses(equipmentItemSO);
 
-        // UIEquipment and StatManager listen. 
         OnEquipmentChanged?.Invoke();
     }
 
@@ -77,7 +69,6 @@ public class EquipmentManager : MonoBehaviour
         // UIEquipment (not yet, TODO ) and SOStatManager listen. 
         OnEquipmentChanged?.Invoke();
 
-        // InventoryManager listens.
         OnUnequip?.Invoke(equipmentItemSO);
     }
 
