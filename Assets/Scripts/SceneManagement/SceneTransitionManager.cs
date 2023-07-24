@@ -9,7 +9,7 @@ public class SceneTransitionManager : MonoBehaviour
     public static event Func<float, IEnumerator> OnFadeIn;
 
     [SerializeField]
-    private SOListSOPC _pcSOListSO;
+    private SOCurrentTeam _pcSOListSO;
     [SerializeField]
     private float _fadeTime = 0.5f;
 

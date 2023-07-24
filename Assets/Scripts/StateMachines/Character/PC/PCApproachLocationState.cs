@@ -6,7 +6,7 @@ public class PCApproachLocationState : PCState
     private Transform _transform;
     private Vector3 _destination;
          
-    public PCApproachLocationState(PCController characterController, Vector3 destination) : base(characterController)
+    public PCApproachLocationState(PCStateMachine characterController, Vector3 destination) : base(characterController)
     {
         _destination = destination;
 

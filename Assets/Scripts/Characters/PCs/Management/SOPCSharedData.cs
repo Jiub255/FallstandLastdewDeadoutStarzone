@@ -4,6 +4,9 @@ using UnityEngine;
 public class SOPCSharedData : ScriptableObject
 {
     [SerializeField]
+    private Stats _startingStats;
+
+    [SerializeField]
     private LayerMask _pCLayerMask;
     [SerializeField]
     private LayerMask _enemyLayerMask;
@@ -14,6 +17,7 @@ public class SOPCSharedData : ScriptableObject
     [SerializeField]
     private LayerMask _groundLayerMask;
 
+    public Stats StartingStats { get { return _startingStats; } }
     public LayerMask PCLayerMask { get { return _pCLayerMask; } }
     public LayerMask EnemyLayerMask { get { return _enemyLayerMask; } }
     public LayerMask LootContainerLayerMask { get { return _lootContainerLayerMask; } }

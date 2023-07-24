@@ -7,7 +7,7 @@ public class PCApproachEnemyState : PCState
     private float _weaponRangeSquared;
     private Transform _transform;
 
-    public PCApproachEnemyState(PCController characterController, Transform target) : base(characterController)
+    public PCApproachEnemyState(PCStateMachine characterController, Transform target) : base(characterController)
     {
         _transform = characterController.transform;
 

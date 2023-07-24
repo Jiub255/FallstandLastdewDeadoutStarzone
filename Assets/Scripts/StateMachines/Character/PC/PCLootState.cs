@@ -13,7 +13,7 @@ public class PCLootState : PCState
 
     private float _timer;
 
-    public PCLootState(PCController characterController, LootContainer lootContainer) : base(characterController)
+    public PCLootState(PCStateMachine characterController, LootContainer lootContainer) : base(characterController)
     {
         _lootContainer = lootContainer;
 

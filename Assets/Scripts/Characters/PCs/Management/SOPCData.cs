@@ -26,6 +26,7 @@ public class SOPCData : ScriptableObject
     private GameObject _pcInstance;
     private int _injury;
     private int _pain;
+    private bool _healing = false;
 
     public Sprite Icon { get { return _icon; } }
     public Sprite CharacterImage { get { return _characterImage; } }

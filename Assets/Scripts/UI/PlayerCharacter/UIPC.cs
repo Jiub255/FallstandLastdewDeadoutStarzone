@@ -3,7 +3,7 @@ using UnityEngine;
 public class UIPC : MonoBehaviour
 {
     [SerializeField]
-    private SOListSOPC _pcSOsSO;
+    private SOCurrentTeam _pcSOsSO;
     [SerializeField]
     protected GameObject SlotPrefab;
     [SerializeField]

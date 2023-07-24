@@ -8,7 +8,7 @@ public class PCSelector : MonoBehaviour
     public static event Action<Transform> OnDoubleClickPC;
 
     [SerializeField]
-    private SOListSOPC _currentTeamSO; 
+    private SOCurrentTeam _currentTeamSO; 
 
     [SerializeField]
     private LayerMask _pcLayerMask;
@@ -124,20 +124,20 @@ public class PCSelector : MonoBehaviour
             // If there is a currently selected PC, set its Selected to false. 
             if (_currentTeamSO.SelectedPC != null)
             {
-                _currentTeamSO.SelectedPC.GetComponent<PCController>().SetSelected(false);
+                _currentTeamSO.SelectedPC.GetComponent<PCStateMachine>().SetSelected(false);
             }
 
             // Set clicked PC's Selected to true.
             if (clickedPCInstance != null)
             {
-                clickedPCInstance.GetComponent<PCController>().SetSelected(true);
+                clickedPCInstance.GetComponent<PCStateMachine>().SetSelected(true);
             }
          
             _currentTeamSO.SelectedPC = clickedPCInstance;
             // Also set PC as current menu PC so you always see your most recently selected character when you open the inventory. 
             if (clickedPCInstance != null)
             {
-                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponent<PCController>().PCSO;
+                _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponent<PCStateMachine>().PCSO;
             }
         }
     }

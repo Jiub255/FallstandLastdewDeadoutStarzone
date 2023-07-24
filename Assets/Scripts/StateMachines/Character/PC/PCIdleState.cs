@@ -8,7 +8,7 @@ public class PCIdleState : PCState
 
     protected float _sightDistance;
 
-    public PCIdleState(PCController characterController, SOPCMovementState pcMovementStateSO) : base(characterController)
+    public PCIdleState(PCStateMachine characterController, SOPCMovementState pcMovementStateSO) : base(characterController)
     {
         _sightDistance = pcMovementStateSO.SightDistance;
 

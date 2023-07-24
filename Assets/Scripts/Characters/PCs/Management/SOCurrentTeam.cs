@@ -4,8 +4,11 @@ using UnityEngine;
 
 // TODO - Use this as a PCManager, and recieve Usable/Equipment item events and send them to the correct PC? 
 // OR, have a separate MonoBehavoiur PCManager, and do that there, just reference this SO? 
+/// <summary>
+/// Holds a home SOPCDatas list, a scavenging one, a selected PC instance GameObject, and a current menu SOPCData. 
+/// </summary>
 [CreateAssetMenu(menuName = "Player Characters/SOListSOPC", fileName = "New SOPC List SO")]
-public class SOListSOPC : ScriptableObject
+public class SOCurrentTeam : ScriptableObject
 {
 	public event Action OnSelectedPCChanged;
 	public event Action OnCurrentMenuPCChanged;
@@ -41,6 +44,23 @@ public class SOListSOPC : ScriptableObject
 			OnCurrentMenuPCChanged?.Invoke();
 		} 
 	}
+
+	public SOPCData this[GameObject pcInstance]
+    {
+        get
+        {
+			foreach (SOPCData pcDataSO in _homeSOPCSList)
+            {
+				if (pcDataSO.PCInstance == pcInstance)
+                {
+					return pcDataSO;
+                }
+            }
+
+			Debug.LogWarning($"No SOPCData found with this PCInstance: {pcInstance.name}");
+			return null;
+        }
+    }
 
 	public void AddPCToHomeList(SOPCData sopc)
     {

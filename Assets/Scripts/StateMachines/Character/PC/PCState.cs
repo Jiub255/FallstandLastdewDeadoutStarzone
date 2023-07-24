@@ -1,8 +1,8 @@
 using UnityEngine.InputSystem;
 
-public abstract class PCState : CharacterState<PCController>
+public abstract class PCState : CharacterState<PCStateMachine>
 {
-    public PCState(PCController characterController) : base(characterController)
+    public PCState(PCStateMachine characterController) : base(characterController)
     {
         InputManager.OnDeselectOrCancel += CancelOrDeselect;
     }

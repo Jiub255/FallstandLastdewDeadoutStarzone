@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Will this be necessary with new PCController class? No, make a PCManager class though, and put these event subscriptions there. 
 public class PCItemUseManager : MonoBehaviour
 {
 	[SerializeField]
-	private SOListSOPC _currentTeamSO;
+	private SOCurrentTeam _currentTeamSO;
 
 	private class PCManagers
     {

@@ -1,36 +1,48 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-// TODO - Make this a plain C# class, and pass the EquipmentManager in the constructor? No reason for it to be a MB.
-// Maybe even combine it with Stats class?
-public class PCStatManager : MonoBehaviour
+/// <summary>
+/// TODO - Use _pcSO.Pain to affect stats. The higher the pain, the lower the stats. Work out a formula/formulas. 
+/// </summary>
+public class PCStatManager
 {
     /// <summary>
-    /// Heard by UICharacter, updates UI. Heard by UIRecipes, gets new metRequirementsRecipes list. 
+    /// Heard by UICharacter, updates UI. <br/>
+    /// Heard by UIRecipes, gets new metRequirementsRecipes list.
     /// </summary>
-public static event Action OnStatsChanged;
+    public static event Action OnStatsChanged;
 
     private SOPCData _pcSO;
-    private EquipmentManager _equipmentManager;
+    private Dictionary<StatType, int> _equipmentBonuses;
 
-    protected void OnEnable()
+    public PCStatManager(SOPCData pcDataSO, Dictionary<StatType, int> equipmentBonuses)
     {
-        _pcSO = GetComponentInParent<PCController>().PCSO;
-        _equipmentManager = transform.parent.GetComponentInChildren<EquipmentManager>();
+        _pcSO = pcDataSO;
+        _equipmentBonuses = equipmentBonuses;
 
-        _equipmentManager.OnEquipmentChanged += CalculateStatModifiers;
-        Stat.OnBaseValueChanged += CalculateStatModifiers;
+        SetupStartingStats();
 
         CalculateStatModifiers();
     }
 
-    protected void OnDisable()
+    /// <summary>
+    /// Make a new list of stats in SOPCData based on presets in SOPCSharedData. <br/>
+    /// Also ensures you have a complete list of stats, instead of setting it up on each character individually. 
+    /// </summary>
+    private void SetupStartingStats()
     {
-        _equipmentManager.OnEquipmentChanged -= CalculateStatModifiers;
-        Stat.OnBaseValueChanged -= CalculateStatModifiers;
+        _pcSO.Stats.StatList.Clear();
+        foreach(Stat stat in _pcSO.PCSharedDataSO.StartingStats.StatList)
+        {
+            _pcSO.Stats.StatList.Add(new Stat(stat.StatType, stat.ModdedValue, this));
+        }
     }
 
-    protected void CalculateStatModifiers()
+    /// <summary>
+    /// Calculates stat modifiers from equipment, then updates UICharacter. 
+    /// </summary>
+    public void CalculateStatModifiers()
     {
         // Keep the bonuses dictionary in EquipmentManager, and change it every time
         // equipment is changed. Then it's just ready and you can grab it whenever. 
@@ -38,12 +50,25 @@ public static event Action OnStatsChanged;
         {
             stat.ClearModifiers();
 
-            if (_equipmentManager.EquipmentBonuses.ContainsKey(stat.StatType))
+            if (_equipmentBonuses.ContainsKey(stat.StatType))
             {
-                stat.AddModifier(_equipmentManager.EquipmentBonuses[stat.StatType]);
+                stat.AddModifier(_equipmentBonuses[stat.StatType]);
             }
+
+            SubtractPainPenalty(stat);
         }
 
         OnStatsChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// TESTING - Subtract from stat based on pain.
+    /// </summary>
+    /// <param name="stat"></param>
+    private void SubtractPainPenalty(Stat stat)
+    {
+        // Integer division truncates. 
+        int painPenalty = (-1 * _pcSO.Pain) / 10;
+        stat.AddModifier(painPenalty);
     }
 }

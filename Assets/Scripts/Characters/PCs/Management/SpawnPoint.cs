@@ -1,12 +1,16 @@
+using System;
 using UnityEngine;
 
-public class PCInstantiator : MonoBehaviour
+public class SpawnPoint : MonoBehaviour
 {
+    public static event Action<Vector3> OnSceneStart;
+
     [SerializeField]
-    private SOListSOPC _pcSOListSO;
+    private SOCurrentTeam _currentTeamSO;
 
     private void /*Start*/Awake()
     {
+        OnSceneStart?.Invoke(transform.position);
         // Where to put instantiated PCs?
         //     Scavenging: Have a spawn area in each scavenge location and just spawn them in a bunch in the center.
         //         Make area big enough for max amount of PCs
@@ -17,19 +21,19 @@ public class PCInstantiator : MonoBehaviour
 
         // For now, just instantiating them in a line starting at the spawn point. 
 
-        if (_pcSOListSO.HomeSOPCSList.Count > 0)
+/*        if (_currentTeamSO.HomeSOPCSList.Count > 0)
         {
             Transform spawnPointTransform = transform;
-            for (int i = 0; i < _pcSOListSO.HomeSOPCSList.Count; i++)
+            for (int i = 0; i < _currentTeamSO.HomeSOPCSList.Count; i++)
             {
-                _pcSOListSO.HomeSOPCSList[i].PCInstance = Instantiate(
-                    _pcSOListSO.HomeSOPCSList[i].PCPrefab,
+                _currentTeamSO.HomeSOPCSList[i].PCInstance = Instantiate(
+                    _currentTeamSO.HomeSOPCSList[i].PCPrefab,
                     new Vector3(3 * i, 0f, 0f) + spawnPointTransform.position,
                     Quaternion.identity);
             }
 
             // Set first instantiated as CurrentMenuSOPC. 
-            _pcSOListSO.CurrentMenuSOPC = _pcSOListSO.HomeSOPCSList[0];
-        }
+            _currentTeamSO.CurrentMenuSOPC = _currentTeamSO.HomeSOPCSList[0];
+        }*/
     }
 }

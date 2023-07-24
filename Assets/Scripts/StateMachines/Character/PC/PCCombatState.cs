@@ -10,7 +10,7 @@ public class PCCombatState : PCState
     private Animator _animator;
     private Transform _transform;
 
-    public PCCombatState(PCController characterController, Transform target) : base(characterController)
+    public PCCombatState(PCStateMachine characterController, Transform target) : base(characterController)
     {
         _target = target;
 

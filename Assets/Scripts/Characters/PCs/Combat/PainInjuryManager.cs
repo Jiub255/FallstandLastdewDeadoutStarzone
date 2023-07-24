@@ -1,18 +1,23 @@
+//using System;
 using System.Collections;
+//using System.Threading;
 using UnityEngine;
 
 // TODO - Make this a plain C# class, and pass the EquipmentManager in the constructor? No reason for it to be a MB.
-public class PainInjuryManager : MonoBehaviour
+public class PainInjuryManager
 {
     private SOPCData _pcSO;
+    private PCSlot _slot;
+
+    // Should these two be in SOPCData instead? 
     private int _relief = 0;
     private bool _healing = false;
-    private PCSlot _slot;
+//    private Timer _timer; 
 
     /// <summary>
     /// Gets set by PCSlot, in SetupSlot(), right after being instantiated. 
     /// </summary>
-	public PCSlot Slot { get { return _slot; } set { _slot = value; } }
+    public PCSlot Slot { get { return _slot; } set { _slot = value; } }
 
     private int Pain
     {
@@ -27,9 +32,9 @@ public class PainInjuryManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public PainInjuryManager(SOPCData pcDataSO)
     {
-        _pcSO = GetComponentInParent<PCController>().PCSO;
+        _pcSO = pcDataSO;
     }
 
     /// <summary>
@@ -58,16 +63,38 @@ public class PainInjuryManager : MonoBehaviour
     // Medical items can speed up recovery. And medical buildings and PCs with high medical skill. 
     /// <summary>
     /// When healing, call heal every x seconds based on healing rate until full or healing is set to false.
+    /// <br/> Called by getting in bed to rest? 
     /// </summary>
+    /// <remarks>
+    /// TODO - Get healingRate from StatManager somehow, instead of taking a float. 
+    /// </remarks>
     /// <param name="healingRate">Injury points healed per second. </param>
     public void StartHealing(float healingRate)
     {
         _healing = true;
-        StartCoroutine(HealingCoroutine(healingRate));
+
+        S.I.StartCoroutine(HealingCoroutine(healingRate));
+
+        // TESTING trying c# timer instead of coroutine.
+/*        int healingPeriodMS = Mathf.RoundToInt(1000 / healingRate);
+        _timer = new Timer(HealTimer, 1, 0, healingPeriodMS);
+        _timer = new Timer(new TimerCallback(HealTimer));*/
     }
 
+/*    void HealTimer(object state)
+    {
+        Debug.Log($"HealTimer called at {DateTime.Now.TimeOfDay}");
+        int amount = (int)state;
+        Heal(amount);
+    }*/
+    
+    /// <summary>
+    /// Called by getting out of bed? 
+    /// </summary>
     public void StopHealing()
     {
+//        _timer.Dispose();
+
         if (_healing) _healing = false;
     }
 
@@ -85,7 +112,7 @@ public class PainInjuryManager : MonoBehaviour
         Heal(1);
     }
 
-    public void Heal(int amount)
+    private void Heal(int amount)
     {
         _pcSO.Injury -= amount;
         _pcSO.Pain = Pain;
@@ -113,8 +140,23 @@ public class PainInjuryManager : MonoBehaviour
     /// </summary>
     public void TemporarilyRelievePain(int amount, float duration)
     {
-        StartCoroutine(RelievePainCoroutine(amount, duration));
+        S.I.StartCoroutine(RelievePainCoroutine(amount, duration));
+
+/*        _relief += amount;
+
+        int msDuration = Mathf.RoundToInt(duration * 1000);
+        Timer timer = null;
+        (Timer, int) timerAndAmount = new(timer, amount);
+        timer = new(delegate { StopPainRelief(timerAndAmount); }, null, 0, msDuration);*/
     }
+
+/*    private void StopPainRelief(object state)
+    {
+        (Timer, int) timerAndAmount = ((Timer, int))state;
+
+        _relief -= timerAndAmount.Item2;
+        timerAndAmount.Item1.Dispose();
+    }*/
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)
     {

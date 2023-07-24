@@ -4,12 +4,15 @@ using UnityEngine.InputSystem;
 
 // TODO - have a list of SOPCStates here, and construct the new states from those as templates. 
 // But how exactly? Especially for enemies, how to construct states from list of SOs? 
-public class PCController : CharacterStateMachine<PCController>
+
+// TODO - Make this a non-monobehaviour and put it on PCController? Could pass in the PathNavigator, Animator, transform, etc components
+// that the state machine needs right as (or after) PCs get instantiated (by PCInstantiator or maybe soon by PCManager). 
+public class PCStateMachine : CharacterStateMachine<PCStateMachine>
 {
     [SerializeField]
     private SOPCData _pcSO;
     [SerializeField]
-    private SOListSOPC _currentTeamSO;
+    private SOCurrentTeam _currentTeamSO;
 
     private Animator _animator;
     private SelectedPCIcon _selectedPCIcon;
@@ -28,7 +31,7 @@ public class PCController : CharacterStateMachine<PCController>
     public SOPCData PCSO { get { return _pcSO; } }
     // TODO - Is this necessary? 
     // Using property to have a centralized place to reference this SO in the player game object. 
-    public SOListSOPC CurrentTeamSO { get { return _currentTeamSO; } }
+    public SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
     public Animator Animator { get { return _animator; } private set { _animator = value; } }
     public SelectedPCIcon SelectedPCIcon { get { return _selectedPCIcon; } private set { _selectedPCIcon = value; } }
     public PathNavigator PathNavigator { get { return _pathNavigator; } private set { _pathNavigator = value; } }

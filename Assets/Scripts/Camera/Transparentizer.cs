@@ -16,7 +16,7 @@ public class Transparentizer : MonoBehaviour
 	[SerializeField]
 	private LayerMask _transparentableLayerMask;
     [SerializeField]
-    private SOListSOPC _currentTeamSO;
+    private SOCurrentTeam _currentTeamSO;
 
     // Just for testing/getting values right. 
     // TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 

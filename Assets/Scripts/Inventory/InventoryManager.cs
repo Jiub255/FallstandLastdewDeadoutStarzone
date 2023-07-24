@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    // TODO - Put these in SOPCSharedData? 
     [SerializeField]
     protected SOInventory _usableInventorySO;
     [SerializeField]

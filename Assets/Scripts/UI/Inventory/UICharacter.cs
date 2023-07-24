@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UICharacter : MonoBehaviour
 {
 	[SerializeField]
-	private SOListSOPC _currentTeamSO;
+	private SOCurrentTeam _currentTeamSO;
 	[SerializeField]
 	private TextMeshProUGUI _pcName;
 	[SerializeField]

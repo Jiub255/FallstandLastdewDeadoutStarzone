@@ -6,7 +6,7 @@ using UnityEngine;
 public class StatManager : MonoBehaviour
 {
 	[SerializeField]
-	private SOListSOPC _pcSOListSO;
+	private SOCurrentTeam _currentTeamSO;
 
 //	private Dictionary<SOStatType, int> _combinedStatTotals = new();
 	private Dictionary<StatType, int> _individualPCStatMaxes = new();
@@ -59,7 +59,7 @@ public class StatManager : MonoBehaviour
 
     private void GetStatTotals()
     {
-		foreach (SOPCData pcSO in _pcSOListSO.HomeSOPCSList)
+		foreach (SOPCData pcSO in _currentTeamSO.HomeSOPCSList)
         {
             foreach (Stat stat in pcSO.Stats.StatList)
             {
@@ -86,6 +86,22 @@ public class StatManager : MonoBehaviour
                     _individualPCStatMaxes.Add(stat.StatType, stat.ModdedValue);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Use this to get the healing rate, at least for now. 
+    /// </summary>
+    public int TotalMedicalSkill
+    {
+        get
+        {
+            int totalMedicalSkill = 0;
+            foreach (SOPCData pcSO in _currentTeamSO.HomeSOPCSList)
+            {
+                totalMedicalSkill += pcSO.Stats[StatType.Medical].ModdedValue;
+            }
+            return totalMedicalSkill;
         }
     }
 }

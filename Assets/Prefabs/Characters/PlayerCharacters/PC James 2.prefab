@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2738557541473417177}
-  - component: {fileID: 8672273159014734717}
   m_Layer: 9
   m_Name: Stats
   m_TagString: Untagged
@@ -32,18 +31,6 @@ Transform:
   m_Father: {fileID: 2674923138821894304}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8672273159014734717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348317702685902455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 631389ca4bd183e40ac805dadc9a16be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2674923138821894305
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +46,8 @@ GameObject:
   - component: {fileID: 1736113889429346443}
   - component: {fileID: 276475732600655197}
   - component: {fileID: 5277230999929450495}
-  - component: {fileID: 2264303179701975793}
+  - component: {fileID: 214921392696509220}
+  - component: {fileID: 8830783900022981823}
   m_Layer: 9
   m_Name: PC James 2
   m_TagString: PlayerCharacter
@@ -199,10 +187,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 465948509222771536
+  uniqueID: 1039979120501309440
   updateError: 1
   checkTime: 0.2
---- !u!114 &2264303179701975793
+--- !u!114 &214921392696509220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,29 +199,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 2674923138821894305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0766191a0b51e534faf6a2a3f761d698, type: 3}
+  m_Script: {fileID: 11500000, guid: fbbd640c6ee158e46b68ed77580c6e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _pcSO: {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
   _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
-  _weaponRange: 5
-  _attackDuration: 1
-  _lootAnimation: {fileID: 7400000, guid: b2f446dd3ba5f484695232260baf54e4, type: 2}
-  _pCLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  _enemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _lootContainerLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _exitLayerMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  _groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
+--- !u!114 &8830783900022981823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2674923138821894305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c93426c677fa0624fa41ebd6ee7eaef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pcDataSO: {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
 --- !u!1 &2674923139435775530
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,7 +406,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2674923139746264387}
-  - component: {fileID: 7204031236529537662}
   m_Layer: 0
   m_Name: Pain/Injury
   m_TagString: Untagged
@@ -446,18 +428,6 @@ Transform:
   m_Father: {fileID: 2674923138821894304}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7204031236529537662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2674923139746264388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed4083c6bbd4b5a429ae5ad6f8101380, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2674923139906617989
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +533,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4696270523303992391}
-  - component: {fileID: 4294975794572088585}
   m_Layer: 9
   m_Name: Equipment
   m_TagString: Untagged
@@ -586,18 +555,6 @@ Transform:
   m_Father: {fileID: 2674923138821894304}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4294975794572088585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5952190154262389646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8134dfbcba5716a419e5b48e3fdfd204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7417479632241405711
 GameObject:
   m_ObjectHideFlags: 0

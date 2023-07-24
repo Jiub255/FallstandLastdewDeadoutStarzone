@@ -38,8 +38,9 @@ public class SOEquipmentItem : SOItem
         // Sends signal to EquipmentManager. 
         OnEquip?.Invoke(this);
 
+        // Do this in EquipmentManager's Equip instead. 
         // Sends signal to PlayerInventoryManager. 
-        RemoveFromInventory();
+//        RemoveFromInventory();
 
         Debug.Log($"Equipped {name}");
     }
@@ -51,8 +52,9 @@ public class SOEquipmentItem : SOItem
         // Sends signal to EquipmentManager. 
         OnUnequip?.Invoke(this);
 
+        // Do this in EquipmentManager's Equip instead. 
         // Sends signal to PlayerInventoryManager. 
-        AddToInventory();
+//        AddToInventory();
 
         Debug.Log($"Unequipped {name}");
     }
