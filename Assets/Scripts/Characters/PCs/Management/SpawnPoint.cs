@@ -8,7 +8,7 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField]
     private SOCurrentTeam _currentTeamSO;
 
-    private void /*Start*/Awake()
+    private void Start/*Awake*/()
     {
         OnSceneStart?.Invoke(transform.position);
         // Where to put instantiated PCs?

@@ -137,6 +137,8 @@ public class PCSelector : MonoBehaviour
             // Also set PC as current menu PC so you always see your most recently selected character when you open the inventory. 
             if (clickedPCInstance != null)
             {
+                // TODO - How to get to PCSOData from instance with new system? 
+                // Had circular references before with SO -> instance -> statemachine -> SO. Need to fix anyway. 
                 _currentTeamSO.CurrentMenuSOPC = clickedPCInstance.GetComponent<PCStateMachine>().PCSO;
             }
         }

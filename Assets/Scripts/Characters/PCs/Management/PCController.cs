@@ -5,6 +5,8 @@ using UnityEngine;
 // TODO - Make Equipment, PCStat, and PainInjury Managers and PCStateMachine into plain c# classes and construct them and keep references here. 
 // Do similar with EnemyController, and EnemyStateMachine and EnemyHealthManager. 
 // What to do with InventoryManager/PlayerInventoryManager? Put them on S? On each PC? 
+// Putting them on GameManager, at least trying it out. 
+// Where to put PCStateMachine? Here or PCManager? How to deal with selected vs not? 
 public class PCController
 {
     private PainInjuryManager _painInjuryManager;

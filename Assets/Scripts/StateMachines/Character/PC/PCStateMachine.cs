@@ -91,9 +91,13 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
     }
 
     // Checks if player clicked on an enemy, loot, scene exit, or ground. PC clicks are handled by PCSelector. 
-    private void HandleClick(InputAction.CallbackContext context)
+    public void HandleClick(InputAction.CallbackContext context)
     {
         // Only let the selected PC do these checks. 
+        // TODO - Better way to handle this? Use PCManager? 
+        // Yes, subscribe to the inputAction in PCManager, and have it trigger a method that first checks if any PC is selected,
+        // then if so, calls this method on only the selected PC. 
+        // TODO - Need to setup non-MB PCStateMachine in PCController first. 
         if (Selected)
         {
             // RaycastAll to see what was hit. 
