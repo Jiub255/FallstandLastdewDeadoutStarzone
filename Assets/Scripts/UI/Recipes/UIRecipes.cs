@@ -5,18 +5,18 @@ using UnityEngine;
 // Put this on the Crafting and Building canvases. 
 public class UIRecipes : MonoBehaviour
 {
-	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetStatRequirementsRecipes;
-	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
+//	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetStatRequirementsRecipes;
+//	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
 
 	[SerializeField]
-	private RecipeList _recipeList;
+	private SORecipeList _recipeList;
 	[SerializeField]
 	private GameObject _recipeSlotPrefab;
 	[SerializeField]
 	private Transform _slotsParent;
 
-	protected List<SORecipe> _metStatRequirementsRecipes;
-	protected List<SORecipe> _haveEnoughItemsRecipes;
+//	protected List<SORecipe> _metStatRequirementsRecipes;
+//	protected List<SORecipe> _haveEnoughItemsRecipes;
 
 	public virtual void OnEnable()
 	{
@@ -24,20 +24,23 @@ public class UIRecipes : MonoBehaviour
 		GetRecipeLists();
 
 		// Toggle between showing _metRequirementsRecipes and _haveEnoughItemsRecipes by calling SetupRecipeSlots and passing whichever list. 
-		SetupRecipeSlots(_haveEnoughItemsRecipes);
+//		SetupRecipeSlots(_haveEnoughItemsRecipes);
 
-		PlayerInventoryManager.OnPlayerInventoryChanged += GetHaveEnoughItemsRecipes;
+		InventoryManager.OnInventoryChanged += GetHaveEnoughItemsRecipes;
 		PCStatManager.OnStatsChanged += GetRecipeLists;
 	}
 
     private void OnDisable()
     {
-		PlayerInventoryManager.OnPlayerInventoryChanged -= GetHaveEnoughItemsRecipes;
+		InventoryManager.OnInventoryChanged -= GetHaveEnoughItemsRecipes;
 		PCStatManager.OnStatsChanged -= GetRecipeLists;
 	}
 
 	private void GetRecipeLists()
     {
+		// TODO - Put these on InventoryManager instead? Or even on CurrentTeamSO or something? 
+		// Or even put in GameManager and keep data on CurrentTeamSO? Need to use Inventory and Stat Managers to get list,
+		// so it makes sense. 
 		GetMetStatRequirementsRecipes();
 		GetHaveEnoughItemsRecipes();
 	}
@@ -45,13 +48,13 @@ public class UIRecipes : MonoBehaviour
 	private void GetMetStatRequirementsRecipes()
     {
 		// StatManager listens, sends back all recipes that you meet the stat requirements for. 
-	    _metStatRequirementsRecipes = OnGetMetStatRequirementsRecipes(_recipeList.GetAllRecipes());
+//	    _metStatRequirementsRecipes = OnGetMetStatRequirementsRecipes(_recipeList.GetAllRecipes());
     }
 
 	private void GetHaveEnoughItemsRecipes()
 	{
 		// PlayerInventoryManager listens, sends back all recipes that you have enough items to craft/build. 
-		_haveEnoughItemsRecipes = OnGetHaveEnoughItemsRecipes(_metStatRequirementsRecipes);
+//		_haveEnoughItemsRecipes = OnGetHaveEnoughItemsRecipes(_metStatRequirementsRecipes);
 	}
 
     // TODO - Gray out the buildings/items that you don't have enough materials to build. 

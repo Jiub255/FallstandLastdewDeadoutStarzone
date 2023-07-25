@@ -11,11 +11,11 @@ public class InventorySlot : MonoBehaviour
 
     private SOItem _itemSO;
 
-    public void SetupSlot(SOItem itemSO, int amount = 1/*ItemAmount<SOItem> newItemAmount*/)
+    public void SetupSlot(ItemAmount itemAmount)
     {
-        _itemSO = itemSO;
-        _icon.sprite = itemSO.Icon; 
-        _amountText.text = (amount == 1) ? "" : amount.ToString();
+        _itemSO = itemAmount.ItemSO;
+        _icon.sprite = _itemSO.Icon; 
+        _amountText.text = (itemAmount.Amount == 1) ? "" : itemAmount.Amount.ToString();
     }
 
     // Called by clicking on inventory slot

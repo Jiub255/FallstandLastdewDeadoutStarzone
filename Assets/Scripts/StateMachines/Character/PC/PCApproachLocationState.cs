@@ -6,20 +6,20 @@ public class PCApproachLocationState : PCState
     private Transform _transform;
     private Vector3 _destination;
          
-    public PCApproachLocationState(PCStateMachine characterController, Vector3 destination) : base(characterController)
+    public PCApproachLocationState(PCStateMachine pcStateMachine, Vector3 destination) : base(pcStateMachine)
     {
         _destination = destination;
 
         // Not sure about this, might need to make it smaller/bigger. 
-        _stoppingDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
+        _stoppingDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
 
         // Start traveling path. 
-        characterController.PathNavigator.TravelPath(_destination, null);
+        pcStateMachine.PathNavigator.TravelPath(_destination, null);
     
-        _transform = characterController.transform;
+        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
     }
 
-    public override void Update()
+    public override void Update(bool selected)
     {
         // Check to see if within stopping distance. 
         if ((_transform.position - _destination).sqrMagnitude < _stoppingDistanceSquared)
@@ -28,6 +28,6 @@ public class PCApproachLocationState : PCState
         }
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate(bool selected) {}
     public override void Exit() {}
 }

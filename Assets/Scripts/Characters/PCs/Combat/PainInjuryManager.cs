@@ -1,29 +1,25 @@
-//using System;
 using System.Collections;
-//using System.Threading;
 using UnityEngine;
 
-// TODO - Make this a plain C# class, and pass the EquipmentManager in the constructor? No reason for it to be a MB.
 public class PainInjuryManager
 {
-    private SOPCData _pcSO;
-    private PCSlot _slot;
-
-    // Should these two be in SOPCData instead? 
-    private int _relief = 0;
-    private bool _healing = false;
-//    private Timer _timer; 
-
     /// <summary>
     /// Gets set by PCSlot, in SetupSlot(), right after being instantiated. 
     /// </summary>
-    public PCSlot Slot { get { return _slot; } set { _slot = value; } }
-
+    public PCSlot Slot { get; set; }
+    private SOPCData PCDataSO { get; }
+    /// <summary>
+    /// Just to get Healing Rate. Might do differently later. 
+    /// </summary>
+    private SOCurrentTeam CurrentTeamSO { get; }
+    // Should these two be in SOPCData instead? 
+    private int Relief { get; set; }
+    private bool Healing { get; set; }
     private int Pain
     {
         get
         {
-            int pain = _pcSO.Injury - _relief;
+            int pain = PCDataSO.Injury - Relief;
             if (pain < 0)
             {
                 pain = 0;
@@ -32,9 +28,10 @@ public class PainInjuryManager
         }
     }
 
-    public PainInjuryManager(SOPCData pcDataSO)
+    public PainInjuryManager(SOPCData pcDataSO, SOCurrentTeam currentTeamSO)
     {
-        _pcSO = pcDataSO;
+        PCDataSO = pcDataSO;
+        CurrentTeamSO = currentTeamSO;
     }
 
     /// <summary>
@@ -43,18 +40,18 @@ public class PainInjuryManager
     /// <param name="damage"></param>
     public void GetHurt(int damage)
     {
-        _pcSO.Injury += damage;
-        _pcSO.Pain = Pain;
+        PCDataSO.Injury += damage;
+        PCDataSO.Pain = Pain;
 
-        if (_pcSO.Injury >= 100)
+        if (PCDataSO.Injury >= 100)
         {
-            _pcSO.Injury = 100;
-            _pcSO.Pain = Pain;
+            PCDataSO.Injury = 100;
+            PCDataSO.Pain = Pain;
             Debug.Log("Injury >= 100, you died.");
             Die();
         }
 
-        Slot.UpdateInjuryBar(_pcSO.Injury);
+        Slot.UpdateInjuryBar(PCDataSO.Injury);
         Slot.UpdatePainBar(Pain);
     }
 
@@ -69,38 +66,24 @@ public class PainInjuryManager
     /// TODO - Get healingRate from StatManager somehow, instead of taking a float. 
     /// </remarks>
     /// <param name="healingRate">Injury points healed per second. </param>
-    public void StartHealing(float healingRate)
+    public void StartHealing()
     {
-        _healing = true;
+        Healing = true;
 
-        S.I.StartCoroutine(HealingCoroutine(healingRate));
-
-        // TESTING trying c# timer instead of coroutine.
-/*        int healingPeriodMS = Mathf.RoundToInt(1000 / healingRate);
-        _timer = new Timer(HealTimer, 1, 0, healingPeriodMS);
-        _timer = new Timer(new TimerCallback(HealTimer));*/
+        S.I.StartCoroutine(HealingCoroutine(CurrentTeamSO.HealingRate));
     }
-
-/*    void HealTimer(object state)
-    {
-        Debug.Log($"HealTimer called at {DateTime.Now.TimeOfDay}");
-        int amount = (int)state;
-        Heal(amount);
-    }*/
     
     /// <summary>
     /// Called by getting out of bed? 
     /// </summary>
     public void StopHealing()
     {
-//        _timer.Dispose();
-
-        if (_healing) _healing = false;
+        if (Healing) Healing = false;
     }
 
     private IEnumerator HealingCoroutine(float healingRate)
     {
-        while (_healing)
+        while (Healing)
         {
             yield return HealCoroutine(healingRate);
         }
@@ -114,16 +97,16 @@ public class PainInjuryManager
 
     private void Heal(int amount)
     {
-        _pcSO.Injury -= amount;
-        _pcSO.Pain = Pain;
+        PCDataSO.Injury -= amount;
+        PCDataSO.Pain = Pain;
 
-        if (_pcSO.Injury < 0)
+        if (PCDataSO.Injury < 0)
         {
-            _pcSO.Injury = 0;
-            _pcSO.Pain = Pain;
+            PCDataSO.Injury = 0;
+            PCDataSO.Pain = Pain;
         }
 
-        Slot.UpdateInjuryBar(_pcSO.Injury);
+        Slot.UpdateInjuryBar(PCDataSO.Injury);
         Slot.UpdatePainBar(Pain);
     }
 
@@ -141,33 +124,18 @@ public class PainInjuryManager
     public void TemporarilyRelievePain(int amount, float duration)
     {
         S.I.StartCoroutine(RelievePainCoroutine(amount, duration));
-
-/*        _relief += amount;
-
-        int msDuration = Mathf.RoundToInt(duration * 1000);
-        Timer timer = null;
-        (Timer, int) timerAndAmount = new(timer, amount);
-        timer = new(delegate { StopPainRelief(timerAndAmount); }, null, 0, msDuration);*/
     }
-
-/*    private void StopPainRelief(object state)
-    {
-        (Timer, int) timerAndAmount = ((Timer, int))state;
-
-        _relief -= timerAndAmount.Item2;
-        timerAndAmount.Item1.Dispose();
-    }*/
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)
     {
-        _relief += amount;
-        _pcSO.Pain = Pain;
+        Relief += amount;
+        PCDataSO.Pain = Pain;
         Slot.UpdatePainBar(Pain);
 
         yield return new WaitForSeconds(duration);
 
-        _relief -= amount;
-        _pcSO.Pain = Pain;
+        Relief -= amount;
+        PCDataSO.Pain = Pain;
         Slot.UpdatePainBar(Pain);
     }
 }

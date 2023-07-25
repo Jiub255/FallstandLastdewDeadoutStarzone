@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-
-public abstract class CharacterStateMachine<T> : MonoBehaviour where T : MonoBehaviour
+﻿public abstract class CharacterStateMachine<T>/* : MonoBehaviour where T : MonoBehaviour*/
 {
     protected CharacterState<T> _activeState;
 
-    public virtual void Update()
+/*    public virtual void Update()
     {
         if (_activeState != null)
         {
@@ -12,7 +10,7 @@ public abstract class CharacterStateMachine<T> : MonoBehaviour where T : MonoBeh
         }
         else
         {
-            Debug.LogWarning($"No active state in {name}");
+            Debug.LogWarning($"No active state");
         }
     }
 
@@ -24,9 +22,9 @@ public abstract class CharacterStateMachine<T> : MonoBehaviour where T : MonoBeh
         }
         else
         {
-            Debug.LogWarning($"No active state in {name}");
+            Debug.LogWarning($"No active state");
         }
-    }
+    }*/
 
     public void ChangeStateTo(CharacterState<T> state)
     {
@@ -35,7 +33,7 @@ public abstract class CharacterStateMachine<T> : MonoBehaviour where T : MonoBeh
             _activeState.Exit();
         }
 
-        _activeState = state;
+        _activeState = state; 
 
 //        Debug.Log($"{gameObject.name} changed state to: {_activeState.GetType()}");
     }

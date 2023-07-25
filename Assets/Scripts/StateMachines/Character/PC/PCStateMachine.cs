@@ -1,50 +1,45 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 // TODO - have a list of SOPCStates here, and construct the new states from those as templates. 
 // But how exactly? Especially for enemies, how to construct states from list of SOs? 
 
 // TODO - Make this a non-monobehaviour and put it on PCController? Could pass in the PathNavigator, Animator, transform, etc components
 // that the state machine needs right as (or after) PCs get instantiated (by PCInstantiator or maybe soon by PCManager). 
-public class PCStateMachine : CharacterStateMachine<PCStateMachine>
+/// <summary>
+/// TODO - Combine with CharacterStateMachine, name whole thing PCStateMachine. 
+/// </summary>
+public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
 {
-    [SerializeField]
-    private SOPCData _pcSO;
-    [SerializeField]
-    private SOCurrentTeam _currentTeamSO;
+    private PCState ActiveState { get; set; }
+    private InputAction MousePositionAction { get; }
+    private SelectedPCIcon SelectedPCIcon { get; }
+    public SOPCData PCDataSO { get; } 
+    public Animator Animator { get; }
+    public PathNavigator PathNavigator{ get; }
 
-    private Animator _animator;
-    private SelectedPCIcon _selectedPCIcon;
-    private PathNavigator _pathNavigator;
+    public PCStateMachine(SOPCData pcDataSO)
+    {
+        PCDataSO = pcDataSO;
+        GameObject pcGO = pcDataSO.PCInstance;
+        SelectedPCIcon = pcGO.GetComponentInChildren<SelectedPCIcon>();
+        Animator = pcGO.GetComponentInChildren<Animator>();
+        PathNavigator = pcGO.GetComponent<PathNavigator>();
 
+        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
-    // TODO - Put the three managers here. 
+        // Activate or deactivate selected pc icon. 
+        SelectedPCIcon.ActivateIcon(pcDataSO.Selected);
 
-
-
-    // Use this bool for "any state" stuff here, and check for _selected == false in idle state, since that state
-    // acts differently when not selected (unselected characters automatically loot and fight things within range). 
-    public bool Selected { get; private set; } = false;
-    // Using property to have a centralized place to reference this SO in the player game object. And for PCSelector. 
-    // Also for states to get individual PC data (ex. scavenging skill to calculate loot duration). 
-    public SOPCData PCSO { get { return _pcSO; } }
-    // TODO - Is this necessary? 
-    // Using property to have a centralized place to reference this SO in the player game object. 
-    public SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
-    public Animator Animator { get { return _animator; } private set { _animator = value; } }
-    public SelectedPCIcon SelectedPCIcon { get { return _selectedPCIcon; } private set { _selectedPCIcon = value; } }
-    public PathNavigator PathNavigator { get { return _pathNavigator; } private set { _pathNavigator = value; } }
-
-    // For checking if mouse is over UI. 
-    private EventSystem _eventSystem;
-    private bool _pointerOverUI = false;
-    private InputAction _mousePositionAction;
+        // Start in idle state.
+        ChangeStateTo(Idle());
+    }
 
     // GET DATA FOR THESE FROM SOs. 
     // Data from SOPCMovementState. 
     public PCApproachLocationState ApproachLocation(Vector3 destination) { return new PCApproachLocationState(this, destination); } 
-    public PCIdleState Idle() { return new PCIdleState(this, _pcSO.PCMovementStateSO); }
+    public PCIdleState Idle() { return new PCIdleState(this, PCDataSO.PCMovementStateSO); }
 
     // Data from SOPCCombatState. 
     public PCApproachEnemyState ApproachEnemy(Transform target) { return new PCApproachEnemyState(this, target); } 
@@ -54,136 +49,99 @@ public class PCStateMachine : CharacterStateMachine<PCStateMachine>
     public PCApproachLootState ApproachLoot(LootContainer lootContainer) { return new PCApproachLootState(this, lootContainer); } 
     public PCLootState Loot(LootContainer lootContainer) { return new PCLootState(this, lootContainer); }
 
-    private void Start/*OnEnable*/()
-    {
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        _eventSystem = EventSystem.current;
-        _selectedPCIcon = GetComponentInChildren<SelectedPCIcon>();
-        _animator = GetComponentInChildren<Animator>();
-        _pathNavigator = GetComponent<PathNavigator>();
-
-        // started is single or double click, canceled is single click only. 
-        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ += HandleClick;
-
-        // Activate or deactivate selected pc icon. 
-        SelectedPCIcon.ActivateIcon(Selected);
-
-        // Start in idle state.
-        ChangeStateTo(Idle());
-    }
-
-    private void OnDisable()
-    {
-        S.I.IM.PC.World.SelectOrCenter.canceled/*performed*/ -= HandleClick;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
-    }
-
     public void SetSelected(bool selected)
     {
-        Selected = selected;
+        PCDataSO.Selected = selected;
         SelectedPCIcon.ActivateIcon(selected);
     }
 
-    // Checks if player clicked on an enemy, loot, scene exit, or ground. PC clicks are handled by PCSelector. 
-    public void HandleClick(InputAction.CallbackContext context)
+    public void ChangeStateTo(PCState state)
     {
-        // Only let the selected PC do these checks. 
-        // TODO - Better way to handle this? Use PCManager? 
-        // Yes, subscribe to the inputAction in PCManager, and have it trigger a method that first checks if any PC is selected,
-        // then if so, calls this method on only the selected PC. 
-        // TODO - Need to setup non-MB PCStateMachine in PCController first. 
-        if (Selected)
+        if (ActiveState != null)
         {
-            // RaycastAll to see what was hit. 
-            RaycastHit[] hits = Physics.RaycastAll(
-                Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
-                1000);
+            ActiveState.Exit();
+        }
 
-            // If raycast hits anything, and mouse is not over UI, 
-            if (hits.Length > 0 && !_pointerOverUI)
+        ActiveState = state;
+
+//        Debug.Log($"{gameObject.name} changed state to: {_activeState.GetType()}");
+    }
+
+    // 
+    /// <summary>
+    /// Checks if player clicked on an enemy, loot, scene exit, or ground, then changes state accordingly. PC clicks are handled by PCSelector (before this ever gets run). <br/>
+    /// Called by PCManager's HandleClick. 
+    /// </summary>
+    public void HandleClick()
+    {
+        // RaycastAll to see what was hit. 
+        RaycastHit[] hits = Physics.RaycastAll(
+            Camera.main.ScreenPointToRay(MousePositionAction.ReadValue<Vector2>()),
+            1000);
+
+        // If raycast hits anything, 
+        if (hits.Length > 0)
+        {
+            // Check to see if raycast hit a PC first. 
+            foreach (RaycastHit hit in hits)
             {
-                // Check to see if raycast hit a PC first. 
-                foreach (RaycastHit hit in hits)
+                //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayerMask & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
+                if (PCDataSO.PCSharedDataSO.PCLayerMask.Contains(hit.collider.gameObject.layer))
                 {
-                    //Using "LayerMask.Contains()" extension method instead of writing "if ((_pCLayerMask & (1 << hit.collider.gameObject.layer)) != 0)" each time. 
-                    if (PCSO.PCSharedDataSO.PCLayerMask.Contains(hit.collider.gameObject.layer))
-                    {
-                        // Return so that multiple hits don't get called. 
-                        // PCSelector handles the actual PC hits. In its own class and not here since it can happen with no PC selected. 
-                        return;
-                    }
+                    // Return so that multiple hits don't get called. 
+                    // PCSelector handles the actual PC hits. In its own class and not here since it can happen with no PC selected. 
+                    return;
                 }
+            }
 
-                // Check for enemy clicks second. 
-                foreach (RaycastHit hit in hits)
+            // Check for enemy clicks second. 
+            foreach (RaycastHit hit in hits.Where(hit => PCDataSO.PCSharedDataSO.EnemyLayerMask.Contains(hit.collider.gameObject.layer)))
+            {
+                ChangeStateTo(ApproachEnemy(hit.transform));
+                // Return so that multiple hits don't get called. 
+                return;
+            }
+
+            // Check for loot clicks third. 
+            foreach (RaycastHit hit in hits.Where(hit => PCDataSO.PCSharedDataSO.LootContainerLayerMask.Contains(hit.collider.gameObject.layer)))
+            {
+                LootContainer lootContainer = hit.transform.GetComponent<LootContainer>();
+                if (lootContainer != null)
                 {
-                    if (PCSO.PCSharedDataSO.EnemyLayerMask.Contains(hit.collider.gameObject.layer))
+                    // Make sure container hasn't been looted and isn't currently being looted, 
+                    if (!lootContainer.Looted && !lootContainer.IsBeingLooted)
                     {
-                        ChangeStateTo(ApproachEnemy(hit.transform));
-
-                        // Return so that multiple hits don't get called. 
-                        return;
-                    }
-                }
-
-                // Check for loot clicks third. 
-                foreach (RaycastHit hit in hits)
-                {
-                    if (PCSO.PCSharedDataSO.LootContainerLayerMask.Contains(hit.collider.gameObject.layer))
-                    {
-                        LootContainer lootContainer = hit.transform.GetComponent<LootContainer>();
-                        if (lootContainer != null)
-                        {
-                            // Make sure container hasn't been looted and isn't currently being looted, 
-                            if (!lootContainer.Looted && !lootContainer.IsBeingLooted)
-                            {
-                                Debug.Log($"Changing state to ApproachLoot from PlayerController. ");
-                                ChangeStateTo(ApproachLoot(lootContainer));
-
-                                // Return so that multiple hits don't get called. 
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            Debug.LogWarning("No LootContainer found. ");
-                        }
-                    }
-                }
-
-                // Check for exit clicks fourth. 
-                // TODO - Would it be more performant to just skip the scene check? 
-                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene() == UnityEngine.SceneManagement.SceneManager.GetSceneByName("ScavengingScene"))
-                {
-                    foreach (RaycastHit hit in hits)
-                    {
-                        if (PCSO.PCSharedDataSO.ExitLayerMask.Contains(hit.collider.gameObject.layer))
-                        {
-                            ChangeStateTo(ApproachLocation(hit.point));
-
-                            // Return so that multiple hits don't get called. 
-                            return;
-                        }
-                    }
-                }
-
-                // Check for ground clicks last. 
-                foreach (RaycastHit hit in hits)
-                {
-                    if (PCSO.PCSharedDataSO.GroundLayerMask.Contains(hit.collider.gameObject.layer))
-                    {
-                        ChangeStateTo(ApproachLocation(hit.point));
+                        Debug.Log($"Changing state to ApproachLoot from PlayerController. ");
+                        ChangeStateTo(ApproachLoot(lootContainer));
 
                         // Return so that multiple hits don't get called. 
                         return;
                     }
                 }
+                else
+                {
+                    Debug.LogWarning("No LootContainer found. ");
+                }
+            }
+
+            // Check for exit clicks fourth. 
+            // TODO - Would it be more performant to just skip the scene check? 
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene() == UnityEngine.SceneManagement.SceneManager.GetSceneByName("ScavengingScene"))
+            {
+                foreach (RaycastHit hit in hits.Where(hit => PCDataSO.PCSharedDataSO.ExitLayerMask.Contains(hit.collider.gameObject.layer)))
+                {
+                    ChangeStateTo(ApproachLocation(hit.point));
+                    // Return so that multiple hits don't get called. 
+                    return;
+                }
+            }
+
+            // Check for ground clicks last. 
+            foreach (var hit in hits.Where(hit => PCDataSO.PCSharedDataSO.GroundLayerMask.Contains(hit.collider.gameObject.layer)))
+            {
+                ChangeStateTo(ApproachLocation(hit.point));
+                // Return so that multiple hits don't get called. 
+                return;
             }
         }
     }

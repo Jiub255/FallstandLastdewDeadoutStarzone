@@ -430,7 +430,6 @@ GameObject:
   - component: {fileID: 1425273709587792981}
   - component: {fileID: 9141656000614453096}
   - component: {fileID: -3817262052016518055}
-  - component: {fileID: 7730543382871956711}
   m_Layer: 8
   m_Name: Enemy James
   m_TagString: Enemy
@@ -569,20 +568,6 @@ MonoBehaviour:
   uniqueID: 2385613739250259462
   updateError: 1
   checkTime: 0.2
---- !u!114 &7730543382871956711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856440080918140219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 509de9d0a140c904088e22ee4a9cb024, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyDataSO: {fileID: 11400000, guid: 57aeb523dd1ad1e4ea6dc7bfed453a9d, type: 2}
-  PathNavigator: {fileID: 4708031746986318797}
 --- !u!1 &856440080927056781
 GameObject:
   m_ObjectHideFlags: 0

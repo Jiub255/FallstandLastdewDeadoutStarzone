@@ -22,7 +22,7 @@ public class Stat
     /// How to know which PC this affects? Could new these in SOPCData (from PCStatManager) based on presets in SOPCSharedData, and pass in the 
     /// PCStatManager in the constructor. Then the stat could call CalculateModdedValues or whatever itself. 
     /// </remarks>
-    public static event Action OnBaseValueChanged;
+//    public static event Action OnBaseValueChanged;
 
     [SerializeField]
     private StatType _statType;

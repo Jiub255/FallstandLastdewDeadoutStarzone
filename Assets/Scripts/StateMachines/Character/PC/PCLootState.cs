@@ -13,32 +13,32 @@ public class PCLootState : PCState
 
     private float _timer;
 
-    public PCLootState(PCStateMachine characterController, LootContainer lootContainer) : base(characterController)
+    public PCLootState(PCStateMachine pcStateMachine, LootContainer lootContainer) : base(pcStateMachine)
     {
         _lootContainer = lootContainer;
 
         // (For now) Scavenging skill goes from 1 to 5, longest loot duration is 5 seconds, fastest is 1 second. So 6 - skill = duration. 
-        _lootDuration = 6 - characterController.PCSO.Stats[StatType.Scavenging].ModdedValue;
+        _lootDuration = 6 - pcStateMachine.PCDataSO.Stats[StatType.Scavenging].ModdedValue;
 
-        _lootTimer = characterController.gameObject.GetComponentInChildren<LootTimer>();
+        _lootTimer = pcStateMachine.PCDataSO.PCInstance.GetComponentInChildren<LootTimer>();
 
         // Set LootContainer's IsBeingLooted to true. 
         _lootContainer.IsBeingLooted = true;
 
         // Move to exact position in front of loot. In Loot container game object, have a looting position child object to mark where to move. 
-        characterController.transform.position = _lootContainer.LootPositionTransform.position;
+        pcStateMachine.PCDataSO.PCInstance.transform.position = _lootContainer.LootPositionTransform.position;
 
         // Face the loot container. 
-        characterController.transform.LookAt(_lootContainer.transform);
+        pcStateMachine.PCDataSO.PCInstance.transform.LookAt(_lootContainer.transform);
 
         // Set animation to looting. 
-        characterController.Animator.SetTrigger("Loot");
+        pcStateMachine.Animator.SetTrigger("Loot");
 
         // Activate timer object. 
         _lootTimer.ActivateTimer(true);
 
         // Stop character from moving. 
-        characterController.PathNavigator.StopMoving();
+        pcStateMachine.PathNavigator.StopMoving();
     }
 
     public override void Exit()
@@ -50,7 +50,7 @@ public class PCLootState : PCState
         _lootContainer.IsBeingLooted = false;
     }
 
-    public override void Update()
+    public override void Update(bool selected)
     {
         // Increment timer. 
         _timer -= Time.deltaTime;
@@ -81,5 +81,5 @@ public class PCLootState : PCState
         }
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate(bool selected) {}
 }

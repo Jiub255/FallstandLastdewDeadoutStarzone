@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +7,11 @@ using UnityEngine.UI;
 // when clicked from inventory. 
 public class UICharacter : MonoBehaviour
 {
+	/// <summary>
+	/// PCManager listens, updates CurrentMenuPC. 
+	/// </summary>
+	public static event Action<SOPCData> OnMenuPCChanged;
+
 	[SerializeField]
 	private SOCurrentTeam _currentTeamSO;
 	[SerializeField]
@@ -18,7 +23,11 @@ public class UICharacter : MonoBehaviour
 	[SerializeField]
 	private RectTransform _statsParent;
 
+	// TODO - Keep reference to currentMenu SOPCData instead? 
 	private int _index;
+	private SOPCData _currentMenuSOPCData;
+
+	public SOPCData CurrentMenuSOPCData { get { return _currentMenuSOPCData; } private set { _currentMenuSOPCData = value; } }
 
     private void OnEnable()
     {
@@ -34,22 +43,46 @@ public class UICharacter : MonoBehaviour
 
     public void NextPC()
     {
-		_index++;
-		if (_index >= _currentTeamSO.HomeSOPCSList.Count) _index = 0;
+	    int currentIndex = _currentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
 
-		_currentTeamSO.CurrentMenuSOPC = _currentTeamSO.HomeSOPCSList[_index];
+		if (currentIndex != -1)
+        {
+			currentIndex++;
 
-		SetupCharacterPanel();
+			if (currentIndex >= _currentTeamSO.HomeSOPCSList.Count) currentIndex = 0;
+
+			CurrentMenuSOPCData = _currentTeamSO.HomeSOPCSList[currentIndex];
+
+			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
+
+			SetupCharacterPanel();
+        }
+        else
+        {
+			Debug.LogWarning($"{CurrentMenuSOPCData.name} not found on HomeSOPCsList, index returned as -1 from GetIndex. ");
+        }
     }
 
 	public void PreviousPC()
     {
-		_index--;
-		if (_index < 0) _index = _currentTeamSO.HomeSOPCSList.Count - 1;
+		int currentIndex = _currentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
 
-		_currentTeamSO.CurrentMenuSOPC = _currentTeamSO.HomeSOPCSList[_index];
-		
-		SetupCharacterPanel();
+		if (currentIndex != -1)
+		{
+			currentIndex--;
+
+			if (currentIndex > 0) currentIndex = _currentTeamSO.HomeSOPCSList.Count - 1;
+
+			CurrentMenuSOPCData = _currentTeamSO.HomeSOPCSList[currentIndex];
+
+			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
+
+			SetupCharacterPanel();
+		}
+		else
+		{
+			Debug.LogWarning($"{CurrentMenuSOPCData.name} not found on HomeSOPCsList, index returned as -1 from GetIndex. ");
+		}
 	}
 
 	private void SetupCharacterPanel()
@@ -57,20 +90,20 @@ public class UICharacter : MonoBehaviour
 		ClearStatTextBoxes();
 
 		// Set character name. 
-		_pcName.text = _currentTeamSO.CurrentMenuSOPC.name;
+		_pcName.text = CurrentMenuSOPCData.name;
 
 		// Set character menu picture.
-		_pcImage.sprite = _currentTeamSO.CurrentMenuSOPC.CharacterImage;
+		_pcImage.sprite = CurrentMenuSOPCData.CharacterImage;
 
 		// Set injury and pain. 
 		StatTextBox injuryTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-		injuryTextBox.SetupText($"Injury: {_currentTeamSO.CurrentMenuSOPC.Injury}");
+		injuryTextBox.SetupText($"Injury: {CurrentMenuSOPCData.Injury}");
 
 		StatTextBox painTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
-		painTextBox.SetupText($"Pain: {_currentTeamSO.CurrentMenuSOPC.Pain}");
+		painTextBox.SetupText($"Pain: {CurrentMenuSOPCData.Pain}");
 
 		// Set stats. 
-		Stats stats = _currentTeamSO.CurrentMenuSOPC.Stats;
+		Stats stats = CurrentMenuSOPCData.Stats;
 		foreach (Stat stat in stats.StatList)
         {
 			StatTextBox statTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90f5f6c9b416a74cac3eb88c06bdc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSOListSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _pcSOListSO: {fileID: 11400000, guid: 86b3ab5c7e2b5004995a73c22eb895f1, type: 2}
   _fadeTime: 0.5
 --- !u!1 &8429050033905496426
 GameObject:
@@ -525,10 +525,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8429050034460973232}
-  - component: {fileID: 8429050034460973244}
   - component: {fileID: 8429050034460973235}
   - component: {fileID: 1332224178036465294}
-  - component: {fileID: 5281340385474446560}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -551,23 +549,6 @@ Transform:
   m_Father: {fileID: 8429050034455999761}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8429050034460973244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8429050034460973233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a3dc01df2e816a438ddd383e3274548, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
-  _pcLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  _doubleClickTimeLimit: 0.5
 --- !u!114 &8429050034460973235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,17 +581,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167f0b4d9163cf94592a736acc9bf681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
---- !u!114 &5281340385474446560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8429050034460973233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b32f01a1f77714f9cac1f69de0d83a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _currentTeamSO: {fileID: 11400000, guid: 86b3ab5c7e2b5004995a73c22eb895f1, type: 2}

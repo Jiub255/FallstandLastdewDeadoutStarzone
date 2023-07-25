@@ -37,7 +37,7 @@ public class UIInventory : MonoBehaviour
 		foreach (ItemAmount itemAmount in _inventorySO.ItemAmounts)
 		{
 			GameObject slot = Instantiate(_inventorySlotPrefab, _slotsParent);
-			slot.GetComponent<InventorySlot>().SetupSlot(itemAmount.ItemSO, itemAmount.Amount);
+			slot.GetComponent<InventorySlot>().SetupSlot(itemAmount);
 		}
 	}
 

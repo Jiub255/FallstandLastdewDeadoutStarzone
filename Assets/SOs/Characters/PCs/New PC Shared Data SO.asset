@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220299d0687707c44823335d20fb19dd, type: 3}
   m_Name: New PC Shared Data SO
   m_EditorClassIdentifier: 
+  _startingStats:
+    _statList:
+    - _statType: 0
+      _baseValue: 1
+    - _statType: 1
+      _baseValue: 1
+    - _statType: 2
+      _baseValue: 1
+    - _statType: 3
+      _baseValue: 1
+    - _statType: 4
+      _baseValue: 1
+    - _statType: 5
+      _baseValue: 1
   _pCLayerMask:
     serializedVersion: 2
     m_Bits: 512

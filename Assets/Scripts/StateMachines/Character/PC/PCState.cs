@@ -1,13 +1,22 @@
 using UnityEngine.InputSystem;
 
-public abstract class PCState : CharacterState<PCStateMachine>
+/// <summary>
+/// TODO - Combine with CharacterState, rename whole thing PCState. 
+/// </summary>
+public abstract class PCState/* : CharacterState<PCStateMachine>*/
 {
-    public PCState(PCStateMachine characterController) : base(characterController)
+    protected PCStateMachine _stateMachine;
+
+
+    public PCState(PCStateMachine characterController)/* : base(characterController)*/
     {
         InputManager.OnDeselectOrCancel += CancelOrDeselect;
     }
 
-    public override void Exit()
+    public abstract void Update(bool selected = false);
+    public abstract void FixedUpdate(bool selected = false);
+
+    public virtual void Exit()
     {
         InputManager.OnDeselectOrCancel -= CancelOrDeselect;
     }

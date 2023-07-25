@@ -13,13 +13,13 @@ public class PCStatManager
     /// </summary>
     public static event Action OnStatsChanged;
 
-    private SOPCData _pcSO;
-    private Dictionary<StatType, int> _equipmentBonuses;
+    private SOPCData PCDataSO { get; }
+    private Dictionary<StatType, int> EquipmentBonuses { get; }
 
     public PCStatManager(SOPCData pcDataSO, Dictionary<StatType, int> equipmentBonuses)
     {
-        _pcSO = pcDataSO;
-        _equipmentBonuses = equipmentBonuses;
+        PCDataSO = pcDataSO;
+        EquipmentBonuses = equipmentBonuses;
 
         SetupStartingStats();
 
@@ -32,10 +32,10 @@ public class PCStatManager
     /// </summary>
     private void SetupStartingStats()
     {
-        _pcSO.Stats.StatList.Clear();
-        foreach(Stat stat in _pcSO.PCSharedDataSO.StartingStats.StatList)
+        PCDataSO.Stats.StatList.Clear();
+        foreach(Stat stat in PCDataSO.PCSharedDataSO.StartingStats.StatList)
         {
-            _pcSO.Stats.StatList.Add(new Stat(stat.StatType, stat.ModdedValue, this));
+            PCDataSO.Stats.StatList.Add(new Stat(stat.StatType, stat.ModdedValue, this));
         }
     }
 
@@ -46,13 +46,13 @@ public class PCStatManager
     {
         // Keep the bonuses dictionary in EquipmentManager, and change it every time
         // equipment is changed. Then it's just ready and you can grab it whenever. 
-        foreach (Stat stat in _pcSO.Stats.StatList)
+        foreach (Stat stat in PCDataSO.Stats.StatList)
         {
             stat.ClearModifiers();
 
-            if (_equipmentBonuses.ContainsKey(stat.StatType))
+            if (EquipmentBonuses.ContainsKey(stat.StatType))
             {
-                stat.AddModifier(_equipmentBonuses[stat.StatType]);
+                stat.AddModifier(EquipmentBonuses[stat.StatType]);
             }
 
             SubtractPainPenalty(stat);
@@ -68,7 +68,7 @@ public class PCStatManager
     private void SubtractPainPenalty(Stat stat)
     {
         // Integer division truncates. 
-        int painPenalty = (-1 * _pcSO.Pain) / 10;
+        int painPenalty = (-1 * PCDataSO.Pain) / 10;
         stat.AddModifier(painPenalty);
     }
 }

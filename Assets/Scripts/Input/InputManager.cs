@@ -4,11 +4,15 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    /// <summary>
+    /// Only called if mouse hasn't moved more than <c>_mouseMovementThreshold</c> between pressing and releasing button. 
+    /// </summary>
     public static event Action<InputAction.CallbackContext> OnDeselectOrCancel;
 
     public PlayerControls PC { get; private set; }
 
     private Vector2 _startingMousePosition;
+
     [SerializeField]
     private float _mouseMovementThreshold = 0.1f;
     private float _mouseMovementThresholdSquared { get { return _mouseMovementThreshold * _mouseMovementThreshold; } }

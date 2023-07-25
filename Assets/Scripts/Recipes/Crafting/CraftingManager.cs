@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CraftingManager
 {
-    protected SOInventory _craftingInventorySO;
+    private SOInventory _craftingInventorySO;
 
     public CraftingManager(SOInventory craftingInventorySO)
     {

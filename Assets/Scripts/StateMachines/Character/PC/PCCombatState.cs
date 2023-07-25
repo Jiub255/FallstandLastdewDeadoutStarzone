@@ -10,18 +10,18 @@ public class PCCombatState : PCState
     private Animator _animator;
     private Transform _transform;
 
-    public PCCombatState(PCStateMachine characterController, Transform target) : base(characterController)
+    public PCCombatState(PCStateMachine pcStateMachine, Transform target) : base(pcStateMachine)
     {
         _target = target;
 
-        _attackDuration = 1f / _stateMachine.PCSO.Equipment.Weapon().AttackPerSecond;
-        _attack = _stateMachine.PCSO.Attack();
+        _attackDuration = 1f / _stateMachine.PCDataSO.Equipment.Weapon().AttackPerSecond;
+        _attack = _stateMachine.PCDataSO.Attack();
 
         _timer = 0f;
-        _animator = characterController.Animator;
+        _animator = pcStateMachine.Animator;
         _animator.SetBool("GunIdle", true);
 
-        _transform = characterController.transform;
+        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
         // Face the enemy. 
         _transform.LookAt(_target);
@@ -30,7 +30,7 @@ public class PCCombatState : PCState
 //        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
 //        characterController.NavMeshAgent.isStopped = true;
 //        characterController.NavMeshAgent.ResetPath();
-        characterController.PathNavigator.StopMoving();
+        pcStateMachine.PathNavigator.StopMoving();
     }
 
     public override void Exit()
@@ -38,7 +38,7 @@ public class PCCombatState : PCState
         _animator.SetBool("GunIdle", false);
     }
 
-    public override void Update()
+    public override void Update(bool selected)
     {
         // TODO: Check if enemy is still in range first. 
 
@@ -77,5 +77,5 @@ public class PCCombatState : PCState
         _stateMachine.ChangeStateTo(_stateMachine.Idle());
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate(bool selected) {}
 }

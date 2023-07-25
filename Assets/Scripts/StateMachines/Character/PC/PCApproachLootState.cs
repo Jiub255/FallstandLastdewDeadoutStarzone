@@ -10,21 +10,21 @@ public class PCApproachLootState : PCState
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
     // Get lootingPosition and whatever else from LootContainer. 
-    public PCApproachLootState(PCStateMachine characterController, LootContainer lootContainer) : base(characterController)
+    public PCApproachLootState(PCStateMachine pcStateMachine, LootContainer lootContainer) : base(pcStateMachine)
     {
         _lootContainer = lootContainer;
 
         // Not sure about this, might need to make it smaller/bigger.
-        _lootDistanceSquared = characterController.PathNavigator.StoppingDistance * characterController.PathNavigator.StoppingDistance * 1.2f;
+        _lootDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
 
         _lootingPosition = lootContainer.LootPositionTransform.position;
-        _transform = characterController.transform;
+        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
         // Set destination. 
-        characterController.PathNavigator.TravelPath(_lootingPosition, _lootContainer.GetComponent<Collider>());
+        pcStateMachine.PathNavigator.TravelPath(_lootingPosition, _lootContainer.GetComponent<Collider>());
     }
 
-    public override void Update()
+    public override void Update(bool selected)
     {
         // What if container gets looted while you're on the way? Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
         if (_lootContainer.IsBeingLooted || _lootContainer.Looted)
@@ -46,6 +46,6 @@ public class PCApproachLootState : PCState
         return (_lootingPosition - _transform.position).sqrMagnitude < _lootDistanceSquared;
     }
 
-    public override void FixedUpdate() {}
+    public override void FixedUpdate(bool selected) {}
     public override void Exit() {}
 }

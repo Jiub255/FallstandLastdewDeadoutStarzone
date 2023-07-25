@@ -4,19 +4,20 @@ using UnityEngine.InputSystem;
 
 public class PCIdleState : PCState
 {
+    /// <summary>
+    /// Called by right clicking while selected PC is in idle state. 
+    /// </summary>
     public static event Action OnPCDeselected;
 
-    protected float _sightDistance;
+    private float _sightDistance;
+    private Transform _transform;
 
-    public PCIdleState(PCStateMachine characterController, SOPCMovementState pcMovementStateSO) : base(characterController)
+    public PCIdleState(PCStateMachine pcStateMachine, SOPCMovementState pcMovementStateSO) : base(pcStateMachine)
     {
         _sightDistance = pcMovementStateSO.SightDistance;
+        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
-        // Stop character from moving. Not sure how to do it best though. 
-//        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
-//        characterController.NavMeshAgent.isStopped = true;
-//        characterController.NavMeshAgent.ResetPath();
-        characterController.PathNavigator.StopMoving();
+        pcStateMachine.PathNavigator.StopMoving();
     }
 
     // Override to deselect instead of cancel action, only in idle state. 
@@ -29,13 +30,13 @@ public class PCIdleState : PCState
         OnPCDeselected?.Invoke();
     }
 
-    public override void FixedUpdate()
+    public override void FixedUpdate(bool selected)
     {
         // Use OverlapSphere to check for enemies loot here? (if not selected)
-        if (!_stateMachine.Selected)
+        if (!selected)
         {
-            Collider[] enemyCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.PCSO.PCSharedDataSO.EnemyLayerMask);
-            Collider[] lootCollidersInRange = Physics.OverlapSphere(_stateMachine.transform.position, _sightDistance, _stateMachine.PCSO.PCSharedDataSO.LootContainerLayerMask);
+            Collider[] enemyCollidersInRange = Physics.OverlapSphere(_transform.position, _sightDistance, _stateMachine.PCDataSO.PCSharedDataSO.EnemyLayerMask);
+            Collider[] lootCollidersInRange = Physics.OverlapSphere(_transform.position, _sightDistance, _stateMachine.PCDataSO.PCSharedDataSO.LootContainerLayerMask);
 
             if (enemyCollidersInRange.Length > 0)
             {
@@ -46,8 +47,8 @@ public class PCIdleState : PCState
                     // If this enemy is closer than closest so far, or transform is null because this is the first enemy checked, 
                     // (null check first to avoid null reference exception)
                     if (enemyTransform == null ||
-                        (collider.transform.position - _stateMachine.transform.position).sqrMagnitude <
-                        (enemyTransform.position - _stateMachine.transform.position).sqrMagnitude)
+                        (collider.transform.position - _transform.position).sqrMagnitude <
+                        (enemyTransform.position - _transform.position).sqrMagnitude)
                     {
                         // Set this enemy transform as closest so far. 
                         enemyTransform = collider.transform;
@@ -66,8 +67,8 @@ public class PCIdleState : PCState
                     // If this loot is closer than closest so far, or transform is null because this is the first loot checked, 
                     // (null check first to avoid null reference exception)
                     if (lootTransform == null ||
-                        (collider.transform.position - _stateMachine.transform.position).sqrMagnitude <
-                        (lootTransform.position - _stateMachine.transform.position).sqrMagnitude)
+                        (collider.transform.position - _transform.position).sqrMagnitude <
+                        (lootTransform.position - _transform.position).sqrMagnitude)
                     {
                         // Set this loot transform as closest so far. 
                         lootTransform = collider.transform;
@@ -80,5 +81,5 @@ public class PCIdleState : PCState
         }
     }
 
-    public override void Update() {}
+    public override void Update(bool selected) {}
 }

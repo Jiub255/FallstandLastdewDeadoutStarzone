@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombatState : CharacterState<EnemyStateMachine>
+public class EnemyCombatState : EnemyState
 {
     private Transform _target;
     private float _attackRadiusSquared;
@@ -12,22 +12,16 @@ public class EnemyCombatState : CharacterState<EnemyStateMachine>
     // For changing animation eventually. Maybe use an animation controlling class instead?
 //    private Animator _animator;
 
-    public EnemyCombatState(EnemyStateMachine characterController, Transform target, SOEnemyCombatState enemyCombatStateSO) : base(characterController)
+    public EnemyCombatState(EnemyStateMachine enemyStateMachine, Transform target, SOEnemyCombatState enemyCombatStateSO) : base(enemyStateMachine)
     {
+        _transform = enemyStateMachine.transform;
         _target = target;
         _attackRadiusSquared = enemyCombatStateSO.AttackRadiusSquared;
         _timeBetweenAttacks = enemyCombatStateSO.TimeBetweenAttacks;
-
         _timer = 0f;
-        _transform = characterController.transform;
 
         // Stop character from moving. Not sure how to do it best though. 
-        characterController.PathNavigator.StopMoving();
-//        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
-//        characterController.NavMeshAgent.isStopped = true;
-//        characterController.NavMeshAgent.ResetPath();
-
-//      _animator = characterController.GetComponentInChildren<Animator>();
+        enemyStateMachine.PathNavigator.StopMoving();
     }
 
     public override void Update()
@@ -43,7 +37,7 @@ public class EnemyCombatState : CharacterState<EnemyStateMachine>
             {
                 // Switch back to EnemyMoveToPCState. 
                 // Just chooses another random target for now, but this should pass back target eventually. 
-                _stateMachine.ChangeStateTo(_stateMachine.ApproachPC());
+                _enemyStateMachine.ChangeStateTo(_enemyStateMachine.ApproachPC());
                 return;
             }
 
@@ -54,7 +48,7 @@ public class EnemyCombatState : CharacterState<EnemyStateMachine>
     private void Attack()
     {
         // face PC
-        _stateMachine.transform.LookAt(_target);
+        _enemyStateMachine.transform.LookAt(_target);
 
         // play attack animation
         // _animator.SetTrigger("Attack");
@@ -62,25 +56,8 @@ public class EnemyCombatState : CharacterState<EnemyStateMachine>
 
         // JUST FOR TESTING. Will use events and a better system eventually. 
         _target.GetComponentInChildren<PainInjuryManager>().GetHurt(10);
-        Debug.Log("Got injured for 10 by " + _stateMachine.transform.name);
+        Debug.Log("Got injured for 10 by " + _enemyStateMachine.transform.name);
     }
-
-    // Animation event at the end of attack animation calls this method
-    // TODO: Wont work with readonly animations from mixamo. Can't change them at all.
-    // Maybe use a timer instead? Set to the animation's length? 
-    /*    public void DoDamage()
-        {
-            RaycastHit hit;
-            // boxcast immediately after animation to check if PC is still there
-            bool didBoxcastHit = Physics.BoxCast(_enemyCollider.bounds.center, transform.localScale, transform.forward, out hit, transform.rotation, 3f, _playerCharacterLayer);
-            // if so, send damage signal to PC
-            if (didBoxcastHit)
-            {
-                OnHitPC.Invoke(_damage, hit.transform);
-            }
-
-            // If killed PC, go back to EnemyMoveToPCState. 
-        }*/
 
     public override void Exit() {}
     public override void FixedUpdate() {}

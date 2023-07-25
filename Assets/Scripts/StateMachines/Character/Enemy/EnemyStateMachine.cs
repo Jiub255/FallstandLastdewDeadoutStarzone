@@ -1,15 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemyStateMachine : CharacterStateMachine<EnemyStateMachine>
+public abstract class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField]
     private SOEnemyData _enemyDataSO;
-/*    private float _attackRadius = 2f;
-    [SerializeField]
-    private float _timeBetweenAttacks = 2f;*/
 
-    [Header("Any State Variables")]
-    public PathNavigator PathNavigator;
+    private PathNavigator _pathNavigator;
+    private EnemyState _activeState;
+
+    public PathNavigator PathNavigator { get { return _pathNavigator; } }
 
     public EnemyCombatState Combat(Transform target) { return new EnemyCombatState(this, target, _enemyDataSO.EnemyCombatStateSO); }
     public EnemyApproachPCState ApproachPC() { return new EnemyApproachPCState(this, _enemyDataSO.EnemyCombatStateSO); }
@@ -18,6 +17,44 @@ public class EnemyStateMachine : CharacterStateMachine<EnemyStateMachine>
     // in its EnemyApproachPCState constructor. 
     private void /*Awake*/Start()
     {
+        _pathNavigator = GetComponent<PathNavigator>();
+
         ChangeStateTo(ApproachPC());
+    }
+
+    public virtual void Update()
+    {
+        if (_activeState != null)
+        {
+            _activeState.Update();
+        }
+        else
+        {
+            Debug.LogWarning($"No active state");
+        }
+    }
+
+    public virtual void FixedUpdate()
+    {
+        if (_activeState != null)
+        {
+            _activeState.FixedUpdate();
+        }
+        else
+        {
+            Debug.LogWarning($"No active state");
+        }
+    }
+
+    public void ChangeStateTo(EnemyState state)
+    {
+        if (_activeState != null)
+        {
+            _activeState.Exit();
+        }
+
+        _activeState = state; 
+
+//        Debug.Log($"{gameObject.name} changed state to: {_activeState.GetType()}");
     }
 }
