@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
 
 // TODO - Put this functionality on PCManager instead? Had it here so it wouldn't be on individual state machines, 
 // so it might be better there. 
@@ -23,35 +22,28 @@ public class PCSelector/* : MonoBehaviour*/
     /// </summary>
     public static event Action<SOPCData> OnSelectedNewPC;
 
-    private SOCurrentTeam _currentTeamSO; 
-
-    [SerializeField]
-    private LayerMask _pcLayerMask;
-
-    [SerializeField]
-    private float _doubleClickTimeLimit = 0.5f;
-
-    private float _lastClickTime = 0f;
-    private int _firstClickedObjectID;
-    private InputAction _mousePositionAction;
-    private PCManager _pcManager;
+    private SOCurrentTeam CurrentTeamSO { get; }
+    private LayerMask PCLayerMask { get; }
+    private float DoubleClickTimeLimit { get; } = 0.5f;
+    private float LastClickTime { get; set; }
+    private int FirstClickedObjectID { get; set; }
+    private InputAction MousePositionAction { get; }
 
 //    private void Start()
-    public PCSelector(PCManager pcManager, SOCurrentTeam currentTeamSO)
+    public PCSelector(SOCurrentTeam currentTeamSO)
     {
-        _pcManager = pcManager;
-        _currentTeamSO = currentTeamSO;
+        CurrentTeamSO = currentTeamSO;
 
         if (currentTeamSO.HomeSOPCSList.Count > 0)
         {
-            _pcLayerMask = currentTeamSO.HomeSOPCSList[0].PCSharedDataSO.PCLayerMask;
+            PCLayerMask = currentTeamSO.HomeSOPCSList[0].PCSharedDataSO.PCLayerMask;
         }
         else
         {
             Debug.LogWarning("No PCs on SOCurrentTeam.HomeSOPCSList. Can't play game without PCs. ");
         }
 
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
         SOPCData.OnSelectPC += HandleClick;
         PCIdleState.OnPCDeselected += () => ChangePC(null);
@@ -72,9 +64,9 @@ public class PCSelector/* : MonoBehaviour*/
     {
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
-            Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>()),
+            Camera.main.ScreenPointToRay(MousePositionAction.ReadValue<Vector2>()),
             1000,
-            _pcLayerMask);
+            PCLayerMask);
 
         // If there were any hits, they must have been PCs. 
         if (hits.Length > 0)
@@ -95,11 +87,11 @@ public class PCSelector/* : MonoBehaviour*/
         float currentClickTime = Time.realtimeSinceStartup;
 
         // Double click 
-        if ((currentClickTime - _lastClickTime) < _doubleClickTimeLimit)
+        if ((currentClickTime - LastClickTime) < DoubleClickTimeLimit)
         {
             Debug.Log("Double click");
             // If the second click was on the same PC as first click, center on that PC. 
-            if (pcInstance.GetInstanceID() == _firstClickedObjectID)
+            if (pcInstance.GetInstanceID() == FirstClickedObjectID)
             {
                 // CameraMoveRotate listens, centers on PC. 
                 OnDoubleClickPC?.Invoke(pcInstance.transform);
@@ -111,7 +103,7 @@ public class PCSelector/* : MonoBehaviour*/
                 ChangePC(pcInstance); 
 
                 // Get reference to first object clicked, to compare on second click. 
-                _firstClickedObjectID = pcInstance.GetInstanceID(); 
+                FirstClickedObjectID = pcInstance.GetInstanceID(); 
             }
         }
         // Single Click 
@@ -122,10 +114,10 @@ public class PCSelector/* : MonoBehaviour*/
             ChangePC(pcInstance); 
 
             // Get reference to first object clicked, to compare on second click. 
-            _firstClickedObjectID = pcInstance.GetInstanceID(); 
+            FirstClickedObjectID = pcInstance.GetInstanceID(); 
         }
 
-        _lastClickTime = currentClickTime;
+        LastClickTime = currentClickTime;
     }
     /// <summary>
     /// Changes SelectedPC in Current Team SO. Also changes CurrentMenuPC so when you open the menu, it's on the 
@@ -137,7 +129,7 @@ public class PCSelector/* : MonoBehaviour*/
         // TODO - Could do this better with selected bool I think. If clicked pc has Selected == true, then do nothing, otherwise
         // Select this PC and deselect other. Maybe deselect all first then select this one? This is the problem between having a bool
         // Or having a selectedPC field. With the bool, multiple could theoretically be selected, but only want at most one at a time to be. 
-        foreach (SOPCData pcDataSO in _currentTeamSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
         {
             // Deselect all PCs first, 
             pcDataSO.Selected = false;

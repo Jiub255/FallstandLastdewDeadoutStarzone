@@ -3,38 +3,38 @@ using UnityEngine;
 // Gets set from mouse click event, or from non-selected PC detecting loot container while idle. 
 public class PCApproachLootState : PCState
 {
-    private LootContainer _lootContainer;
-    private Vector3 _lootingPosition;
-    private float _lootDistanceSquared;
-    private Transform _transform;
+    private LootContainer LootContainer { get; }
+    private Vector3 LootingPosition { get; }
+    private float LootDistanceSquared { get; }
+    private Transform Transform { get; }
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
     // Get lootingPosition and whatever else from LootContainer. 
     public PCApproachLootState(PCStateMachine pcStateMachine, LootContainer lootContainer) : base(pcStateMachine)
     {
-        _lootContainer = lootContainer;
+        LootContainer = lootContainer;
 
         // Not sure about this, might need to make it smaller/bigger.
-        _lootDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
+        LootDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
 
-        _lootingPosition = lootContainer.LootPositionTransform.position;
-        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
+        LootingPosition = lootContainer.LootPositionTransform.position;
+        Transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
         // Set destination. 
-        pcStateMachine.PathNavigator.TravelPath(_lootingPosition, _lootContainer.GetComponent<Collider>());
+        pcStateMachine.PathNavigator.TravelPath(LootingPosition, LootContainer.GetComponent<Collider>());
     }
 
     public override void Update(bool selected)
     {
         // What if container gets looted while you're on the way? Have an IsBeingLooted bool on LootContainer and check for it each frame here. 
-        if (_lootContainer.IsBeingLooted || _lootContainer.Looted)
+        if (LootContainer.IsBeingLooted || LootContainer.Looted)
         {
             // Set state back to idle. 
-            _stateMachine.ChangeStateTo(_stateMachine.Idle());
+            StateMachine.ChangeStateTo(StateMachine.Idle());
         }
         else if (HaveReachedLoot())
         {
-            _stateMachine.ChangeStateTo(_stateMachine.Loot(_lootContainer));
+            StateMachine.ChangeStateTo(StateMachine.Loot(LootContainer));
         }
     }
 
@@ -43,7 +43,7 @@ public class PCApproachLootState : PCState
     // Check to see if it reached its destination in update instead of doing this check here. 
     private bool HaveReachedLoot()
     {
-        return (_lootingPosition - _transform.position).sqrMagnitude < _lootDistanceSquared;
+        return (LootingPosition - Transform.position).sqrMagnitude < LootDistanceSquared;
     }
 
     public override void FixedUpdate(bool selected) {}

@@ -3,34 +3,32 @@ using UnityEngine;
 
 public class EnemyApproachPCState : EnemyState
 {
-    private Transform _target;
-    private Collider _targetCollider;
-    private float _attackRadiusSquared;
-    private PathNavigator _pathNavigator;
-    private Transform _transform;
-//    private Vector3 _lastPositionChecked;
+    private Transform Target { get; }
+    private Collider TargetCollider { get; }
+    private float AttackRadiusSquared { get; }
+    private PathNavigator PathNavigator { get; }
+    private Transform Transform { get; }
 
     public EnemyApproachPCState(EnemyStateMachine enemyStateMachine, SOEnemyCombatState enemyCombatStateSO) : base(enemyStateMachine)
     {
-        _transform = enemyStateMachine.transform;
-        _pathNavigator = enemyStateMachine.PathNavigator;
-        _attackRadiusSquared = enemyCombatStateSO.AttackRadiusSquared;
+        Transform = enemyStateMachine.transform;
+        PathNavigator = enemyStateMachine.PathNavigator;
+        AttackRadiusSquared = enemyCombatStateSO.AttackRadiusSquared;
 
         // Set random PC as target (for now). 
-        _target = ChooseRandomTarget();
-        _targetCollider = _target.GetComponent<Collider>();
-//        _lastPositionChecked = _target.position;
+        Target = ChooseRandomTarget();
+        TargetCollider = Target.GetComponent<Collider>();
 
         // Set target position as destination and start traveling path. 
-        _pathNavigator.TravelPath(_target.position, _targetCollider);
+        PathNavigator.TravelPath(Target.position, TargetCollider);
     }
 
     public override void Update()
     {
-        if ((_target.position - _transform.position).sqrMagnitude <= _attackRadiusSquared)
+        if ((Target.position - Transform.position).sqrMagnitude <= AttackRadiusSquared)
         {
             // Switch to EnemyCombatState. 
-            _enemyStateMachine.ChangeStateTo(_enemyStateMachine.Combat(_target));
+            EnemyStateMachine.ChangeStateTo(EnemyStateMachine.Combat(Target));
         }
     }
 
@@ -40,7 +38,6 @@ public class EnemyApproachPCState : EnemyState
         List<GameObject> potentialTargets = new();
         potentialTargets.AddRange(GameObject.FindGameObjectsWithTag("PlayerCharacter"));
         int randomIndex = Random.Range(0, potentialTargets.Count);
-//        Debug.Log($"{_stateMachine.transform.name}'s potential targets: {potentialTargets.Count}, random index: {randomIndex}");
         return potentialTargets[randomIndex].transform;
     }
 

@@ -12,14 +12,11 @@ public class PainInjuryManager
     /// Just to get Healing Rate. Might do differently later. 
     /// </summary>
     private SOCurrentTeam CurrentTeamSO { get; }
-    // Should these two be in SOPCData instead? 
-    private int Relief { get; set; }
-    private bool Healing { get; set; }
     private int Pain
     {
         get
         {
-            int pain = PCDataSO.Injury - Relief;
+            int pain = PCDataSO.Injury - PCDataSO.Relief;
             if (pain < 0)
             {
                 pain = 0;
@@ -68,7 +65,7 @@ public class PainInjuryManager
     /// <param name="healingRate">Injury points healed per second. </param>
     public void StartHealing()
     {
-        Healing = true;
+        PCDataSO.Healing = true;
 
         S.I.StartCoroutine(HealingCoroutine(CurrentTeamSO.HealingRate));
     }
@@ -78,12 +75,12 @@ public class PainInjuryManager
     /// </summary>
     public void StopHealing()
     {
-        if (Healing) Healing = false;
+        if (PCDataSO.Healing) PCDataSO.Healing = false;
     }
 
     private IEnumerator HealingCoroutine(float healingRate)
     {
-        while (Healing)
+        while (PCDataSO.Healing)
         {
             yield return HealCoroutine(healingRate);
         }
@@ -128,13 +125,13 @@ public class PainInjuryManager
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)
     {
-        Relief += amount;
+        PCDataSO.Relief += amount;
         PCDataSO.Pain = Pain;
         Slot.UpdatePainBar(Pain);
 
         yield return new WaitForSeconds(duration);
 
-        Relief -= amount;
+        PCDataSO.Relief -= amount;
         PCDataSO.Pain = Pain;
         Slot.UpdatePainBar(Pain);
     }

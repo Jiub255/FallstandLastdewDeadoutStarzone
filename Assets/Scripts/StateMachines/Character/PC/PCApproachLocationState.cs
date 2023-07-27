@@ -2,29 +2,29 @@ using UnityEngine;
 
 public class PCApproachLocationState : PCState
 {
-    private float _stoppingDistanceSquared;
-    private Transform _transform;
-    private Vector3 _destination;
+    private float StoppingDistanceSquared { get; }
+    private Transform Transform { get; }
+    private Vector3 Destination { get; }
          
     public PCApproachLocationState(PCStateMachine pcStateMachine, Vector3 destination) : base(pcStateMachine)
     {
-        _destination = destination;
+        Destination = destination;
 
         // Not sure about this, might need to make it smaller/bigger. 
-        _stoppingDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
+        StoppingDistanceSquared = pcStateMachine.PathNavigator.StoppingDistance * pcStateMachine.PathNavigator.StoppingDistance * 1.2f;
 
         // Start traveling path. 
-        pcStateMachine.PathNavigator.TravelPath(_destination, null);
+        pcStateMachine.PathNavigator.TravelPath(Destination, null);
     
-        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
+        Transform = pcStateMachine.PCDataSO.PCInstance.transform;
     }
 
     public override void Update(bool selected)
     {
         // Check to see if within stopping distance. 
-        if ((_transform.position - _destination).sqrMagnitude < _stoppingDistanceSquared)
+        if ((Transform.position - Destination).sqrMagnitude < StoppingDistanceSquared)
         {
-            _stateMachine.ChangeStateTo(_stateMachine.Idle());
+            StateMachine.ChangeStateTo(StateMachine.Idle());
         }
     }
 

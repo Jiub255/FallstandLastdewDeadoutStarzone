@@ -23,11 +23,10 @@ public class SOCurrentTeam : ScriptableObject
 	private GameObject _selectedPC;
 	[SerializeField]
 	private SOPCData _currentMenuSOPC;*/
-	private List<SORecipe> _possibleRecipes = new();
 
 	public List<SOPCData> HomeSOPCSList { get { return _homeSOPCSList; } }
 	public List<SOPCData> ScavengingPCSList { get { return _scavengingPCSList; } }
-	public List <SORecipe> PossibleRecipes { get { return _possibleRecipes; } set { _possibleRecipes = value; } }
+	public List <SORecipe> PossibleRecipes { get; set; }
 
 	/// <summary>
 	/// Could just have selected bool on SOPCData and send event whenever it changes to true?

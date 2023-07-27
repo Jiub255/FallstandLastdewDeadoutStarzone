@@ -2,29 +2,28 @@ using UnityEngine;
 
 public class PCCombatState : PCState
 {
-    private Transform _target;
-    private float _attackDuration;
-    private int _attack;
-
-    private float _timer; 
-    private Animator _animator;
-    private Transform _transform;
+    private Transform Target { get; }
+    private float AttackDuration { get; }
+    private int WeaponDamage { get; }
+    private float Timer { get; set; }
+    private Animator Animator { get; }
+    private Transform Transform { get; }
 
     public PCCombatState(PCStateMachine pcStateMachine, Transform target) : base(pcStateMachine)
     {
-        _target = target;
+        Target = target;
 
-        _attackDuration = 1f / _stateMachine.PCDataSO.Equipment.Weapon().AttackPerSecond;
-        _attack = _stateMachine.PCDataSO.Attack();
+        AttackDuration = 1f / StateMachine.PCDataSO.Equipment.Weapon().AttackPerSecond;
+        WeaponDamage = StateMachine.PCDataSO.WeaponDamage();
 
-        _timer = 0f;
-        _animator = pcStateMachine.Animator;
-        _animator.SetBool("GunIdle", true);
+        Timer = 0f;
+        Animator = pcStateMachine.Animator;
+        Animator.SetBool("GunIdle", true);
 
-        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
+        Transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
         // Face the enemy. 
-        _transform.LookAt(_target);
+        Transform.LookAt(Target);
 
         // Stop character from moving. Not sure how to do it best though. 
 //        characterController.NavMeshAgent.SetDestination(characterController.transform.position);
@@ -35,7 +34,7 @@ public class PCCombatState : PCState
 
     public override void Exit()
     {
-        _animator.SetBool("GunIdle", false);
+        Animator.SetBool("GunIdle", false);
     }
 
     public override void Update(bool selected)
@@ -44,12 +43,12 @@ public class PCCombatState : PCState
 
 
         // Face the enemy. 
-        _transform.LookAt(_target);
+        Transform.LookAt(Target);
 
-        _timer += Time.deltaTime;
+        Timer += Time.deltaTime;
 
         // Attack duration depends on your weapon and combat or speed stats. 
-        if (_timer > _attackDuration)
+        if (Timer > AttackDuration)
         {
             Attack();
         }
@@ -58,14 +57,14 @@ public class PCCombatState : PCState
     private void Attack()
     {
         // Reset timer. 
-        _timer = 0f;
+        Timer = 0f;
 
         // Set attack animation trigger. 
-        _animator.SetTrigger("Attack");
+        Animator.SetTrigger("Attack");
 
         // TODO - Use IDamageable interface here?
         // Just check that enemy is within range, and then if so hit connects. No need for overlapBox or any physics stuff. 
-        _target.GetComponentInChildren<EnemyHealth>().GetHurt(_attack, this);
+        Target.GetComponentInChildren<EnemyHealth>().GetHurt(WeaponDamage, this);
     }
 
     // How to check if enemy is dead? Dying enemy could send a signal with its instanceID.
@@ -74,7 +73,7 @@ public class PCCombatState : PCState
     {
         Debug.Log("OnEnemyKilled called");
 
-        _stateMachine.ChangeStateTo(_stateMachine.Idle());
+        StateMachine.ChangeStateTo(StateMachine.Idle());
     }
 
     public override void FixedUpdate(bool selected) {}

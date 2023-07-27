@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-/*using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;*/
 
-// TODO - Keep track of which materials just stopped being in the way, like Transparentizer, and reset them. 
-// Not sure if this will work, making all walls fade, not just the ones in the way. 
 public class Transparentizer : MonoBehaviour
 {
     [SerializeField, Range(0f, 5f)]
@@ -16,35 +12,42 @@ public class Transparentizer : MonoBehaviour
 	[SerializeField]
 	private LayerMask _transparentableLayerMask;
 
-    // Just for testing/getting values right. 
     // TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
     [SerializeField]
     private float _boxcastHalfWidth = 50f;
     [SerializeField]
     private float _boxcastHalfHeight = 50f;
 
-    private Transform _transform;
-	private Transform _currentPCTransform;
-	private Camera _camera;
-    private List<Material> _fadedMaterials = new();
+    private float Size { get { return _size; } }
+    private float Smoothness { get { return _smoothness; } }
+    private float Opacity { get { return _opacity; } }
+    private LayerMask TransparentableLayerMask { get { return _transparentableLayerMask; } }
+    /// <summary>
+    /// TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
+    /// </summary>
+    private float BoxcastHalfWidth { get { return _boxcastHalfWidth; } }
+    /// <summary>
+    /// TODO - Hopefully find a better fix for the PC box/sphere/ray cast eventually. 
+    /// </summary>
+    private float BoxcastHalfHeight { get { return _boxcastHalfHeight; } }
+    private Transform Transform { get; set; }
+	private Transform CurrentPCTransform { get; set; }
+	private Camera Camera { get; set; }
+    private List<Material> FadedMaterials { get; } = new();
     // Just using a big number for now, figure out better amount later. 
-    private Collider[] _colliders = new Collider[256];
-    private List<Material> _inTheWayMaterials = new();
-    /*    private InputAction _mousePositionAction;
-        private EventSystem _eventSystem;
-        private bool _pointerOverUI = false;*/
-
-    private int _pcPositionID = Shader.PropertyToID("_PCPosition");
-    private int _sizeID = Shader.PropertyToID("_Size");
-    private int _smoothnessID = Shader.PropertyToID("_Smoothness");
-    private int _opacityID = Shader.PropertyToID("_Opacity");
+    private Collider[] Colliders { get; } = new Collider[256];
+    private List<Material> InTheWayMaterials { get; } = new();
+    private int PCPositionID { get; } = Shader.PropertyToID("_PCPosition");
+    private int SizeID { get; } = Shader.PropertyToID("_Size");
+    private int SmoothnessID { get; } = Shader.PropertyToID("_Smoothness");
+    private int OpacityID { get; } = Shader.PropertyToID("_Opacity");
 
     private void Start()
     {
 /*        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
         _eventSystem = EventSystem.current;*/
-        _transform = transform;
-        _camera = Camera.main;
+        Transform = transform;
+        Camera = Camera.main;
     }
 
     private void OnEnable()
@@ -60,39 +63,27 @@ public class Transparentizer : MonoBehaviour
     // Doing it like this to cache the transform. 
     private void SelectPC(SOPCData pcDataSO)
     {
-        _currentPCTransform = pcDataSO.PCInstance.transform;
+        CurrentPCTransform = pcDataSO.PCInstance.transform;
     }
-
-/*    private void Update()
-    {
-        if (_eventSystem.IsPointerOverGameObject())
-        {
-            _pointerOverUI = true;
-        }
-        else
-        {
-            _pointerOverUI = false;
-        }
-    }*/
 
     // TODO - How to handle mouse position? Add to the shader graph? 
     private void FixedUpdate()
     {
-        if (_currentPCTransform != null)
+        if (CurrentPCTransform != null)
         {
             // Get array of new in the way materials.
 
             // Halfway point between camera and PC for the box center. 
-            Vector3 center = (_transform.position + _currentPCTransform.position) / 2f;
+            Vector3 center = (Transform.position + CurrentPCTransform.position) / 2f;
 
-            float boxHalfDepth = (_currentPCTransform.position - _transform.position).magnitude / 2f;
+            float boxHalfDepth = (CurrentPCTransform.position - Transform.position).magnitude / 2f;
 
             Vector3 halfExtents = new Vector3(
-                _boxcastHalfWidth,
-                _boxcastHalfHeight,
+                BoxcastHalfWidth,
+                BoxcastHalfHeight,
                 boxHalfDepth);
 
-            Quaternion orientation = Quaternion.LookRotation(_currentPCTransform.position - _transform.position, Vector3.up);
+            Quaternion orientation = Quaternion.LookRotation(CurrentPCTransform.position - Transform.position, Vector3.up);
 
             // Overlap box is cutting off parts of corner walls to the side of PC, somehow use a different shape/cast?
             // Ideally some sort of OverlapTetrahedron from camera bounds to PC would work. How to do something like this? 
@@ -108,68 +99,68 @@ public class Transparentizer : MonoBehaviour
             int maxIndex = Physics.OverlapBoxNonAlloc(
                 center,
                 halfExtents,
-                _colliders,
+                Colliders,
                 orientation,
-                _transparentableLayerMask)
+                TransparentableLayerMask)
                 // Subtract 1 to get max index from count. 
                 - 1;
 
 //            Debug.Log($"# of hits: {maxIndex + 1}, half extents: {halfExtents}, orientation: {orientation}");
 
             // Set PC screen position. 
-            Vector3 pcPosition = _camera.WorldToViewportPoint(_currentPCTransform.position);
+            Vector3 pcPosition = Camera.WorldToViewportPoint(CurrentPCTransform.position);
 
             // Get all in the way materials. 
-            _inTheWayMaterials.Clear();
+            InTheWayMaterials.Clear();
             // Only go up to maxIndex so you don't use empty entries in colliders array. 
             for (int i = 0; i < maxIndex; i++)
             {
-                Renderer[] renderers = _colliders[i].transform.GetComponentsInChildren<Renderer>();
+                Renderer[] renderers = Colliders[i].transform.GetComponentsInChildren<Renderer>();
                 foreach (Renderer renderer in renderers)
                 {
-                    _inTheWayMaterials.AddRange(renderer.materials);
+                    InTheWayMaterials.AddRange(renderer.materials);
                 }
             }
 
             // For each one, set its properties, and add it to the list. 
-            foreach (Material material in _inTheWayMaterials)
+            foreach (Material material in InTheWayMaterials)
             {
-                material.SetVector(_pcPositionID, pcPosition);
+                material.SetVector(PCPositionID, pcPosition);
                 // TODO - Tie size to zoom level. Have to change CameraZoom as well to work with this. 
                 // Make the cutout bigger the closer you get, play with it to find good values. 
-                material.SetFloat(_sizeID, _size);
-                material.SetFloat(_smoothnessID, _smoothness);
-                material.SetFloat(_opacityID, _opacity);
+                material.SetFloat(SizeID, Size);
+                material.SetFloat(SmoothnessID, Smoothness);
+                material.SetFloat(OpacityID, Opacity);
 
-                if (!_fadedMaterials.Contains(material))
+                if (!FadedMaterials.Contains(material))
                 {
-                    _fadedMaterials.Add(material);
+                    FadedMaterials.Add(material);
                 }
             }
 
             // Get all items on faded materials that aren't on the in the way materials list (so they just stopped being in the way), 
             // and reset their properties (just set size to 0f, the others don't matter). 
             // Also remove material from _fadedMaterials. 
-            for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
+            for (int i = FadedMaterials.Count - 1; i >= 0; i--)
             {
-                if (!_inTheWayMaterials.Contains(_fadedMaterials[i]))
+                if (!InTheWayMaterials.Contains(FadedMaterials[i]))
                 {
-                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
+                    FadedMaterials[i].SetFloat(SizeID, 0f);
 
-                    _fadedMaterials.RemoveAt(i);
+                    FadedMaterials.RemoveAt(i);
                 }
             }
         }
         else
         {
             // Reset all faded materials. 
-            if (_fadedMaterials.Count > 0)
+            if (FadedMaterials.Count > 0)
             {
-                for (int i = _fadedMaterials.Count - 1; i >= 0; i--)
+                for (int i = FadedMaterials.Count - 1; i >= 0; i--)
                 {
-                    _fadedMaterials[i].SetFloat(_sizeID, 0f);
+                    FadedMaterials[i].SetFloat(SizeID, 0f);
 
-                    _fadedMaterials.RemoveAt(i);
+                    FadedMaterials.RemoveAt(i);
                 }
             }
         }

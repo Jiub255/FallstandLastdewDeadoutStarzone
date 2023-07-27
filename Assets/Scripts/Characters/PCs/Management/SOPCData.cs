@@ -20,37 +20,32 @@ public class SOPCData : ScriptableObject
     [SerializeField]
     private SOPCSharedData _pcSharedDataSO;
 
-    [Header("These variables DO change during runtime")]
-    private int _injury;
-    private int _pain;
-    [SerializeField]
+    [SerializeField, Header("These variables DO change during runtime")]
     private Stats _stats;
     [SerializeField]
     private Equipment _equipment = new();
-    private GameObject _pcInstance;
-    private bool _healing = false;
-    private PCState _activeState;
-    // TODO - Keep selected bool here? Or use SelectedPC on current team SO?
-    private bool _selected = false;
 
+    // These don't change during runtime. 
     public Sprite Icon { get { return _icon; } }
     public Sprite CharacterImage { get { return _characterImage; } }
     public GameObject PCPrefab { get { return _pcPrefab; } }
     public SOPCMovementState PCMovementStateSO { get { return _pcMovementStateSO;} }
     public SOPCSharedData PCSharedDataSO { get { return _pcSharedDataSO; } }
 
-    public int Injury { get { return _injury; } set { _injury = value; } }
-    public int Pain { get { return _pain; } set { _pain = value; } }
+    // These do change during runtime. 
+    public int Injury { get; set; }
+    public int Relief { get; set; }
+    public int Pain { get; set; }
+    public bool Healing { get; set; }
     public Stats Stats { get { return _stats; } }
     public Equipment Equipment { get { return _equipment; } }
-    public GameObject PCInstance { get { return _pcInstance; } set { _pcInstance = value; } }
-    public bool Healing { get { return _healing; } set { _healing = value; } }
-    public PCState ActiveState { get { return _activeState; } set { _activeState = value; } }
-    public bool Selected { get { return _selected; } set { _selected = value; } }
+    public GameObject PCInstance { get; set; }
+    public PCState ActiveState { get; set; }
+    public bool Selected { get; set; }
 
-    public int Attack()
+    public int WeaponDamage()
     {
-        int weaponAttack = Equipment.Weapon().WeaponAttack;
+        int weaponAttack = Equipment.Weapon().WeaponDamage;
         int attackStat = Stats[StatType.Attack].ModdedValue;
         // TODO - Probably use different formula eventually. 
         return weaponAttack + attackStat;

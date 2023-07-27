@@ -12,6 +12,9 @@ public class UICharacter : MonoBehaviour
 	/// </summary>
 	public static event Action<SOPCData> OnMenuPCChanged;
 
+	/// <summary>
+	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
+	/// </summary>
 	[SerializeField]
 	private SOCurrentTeam _currentTeamSO;
 	[SerializeField]
@@ -24,10 +27,17 @@ public class UICharacter : MonoBehaviour
 	private RectTransform _statsParent;
 
 	// TODO - Keep reference to currentMenu SOPCData instead? 
-	private int _index;
 	private SOPCData _currentMenuSOPCData;
 
-	public SOPCData CurrentMenuSOPCData { get { return _currentMenuSOPCData; } private set { _currentMenuSOPCData = value; } }
+	/// <summary>
+	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
+	/// </summary>
+	private SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
+	private TextMeshProUGUI PCName { get { return _pcName; } }
+	private Image PCImage { get { return _pcImage; } }
+	private GameObject StatTextPrefab { get { return _statTextPrefab; } }
+	private RectTransform StatsParent { get { return _statsParent; } }
+	private SOPCData CurrentMenuSOPCData { get { return _currentMenuSOPCData; } set { _currentMenuSOPCData = value; } }
 
     private void OnEnable()
     {
@@ -43,15 +53,15 @@ public class UICharacter : MonoBehaviour
 
     public void NextPC()
     {
-	    int currentIndex = _currentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
+	    int currentIndex = CurrentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
         {
 			currentIndex++;
 
-			if (currentIndex >= _currentTeamSO.HomeSOPCSList.Count) currentIndex = 0;
+			if (currentIndex >= CurrentTeamSO.HomeSOPCSList.Count) currentIndex = 0;
 
-			CurrentMenuSOPCData = _currentTeamSO.HomeSOPCSList[currentIndex];
+			CurrentMenuSOPCData = CurrentTeamSO.HomeSOPCSList[currentIndex];
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
 
@@ -65,15 +75,15 @@ public class UICharacter : MonoBehaviour
 
 	public void PreviousPC()
     {
-		int currentIndex = _currentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
+		int currentIndex = CurrentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
 		{
 			currentIndex--;
 
-			if (currentIndex > 0) currentIndex = _currentTeamSO.HomeSOPCSList.Count - 1;
+			if (currentIndex > 0) currentIndex = CurrentTeamSO.HomeSOPCSList.Count - 1;
 
-			CurrentMenuSOPCData = _currentTeamSO.HomeSOPCSList[currentIndex];
+			CurrentMenuSOPCData = CurrentTeamSO.HomeSOPCSList[currentIndex];
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
 
@@ -90,30 +100,30 @@ public class UICharacter : MonoBehaviour
 		ClearStatTextBoxes();
 
 		// Set character name. 
-		_pcName.text = CurrentMenuSOPCData.name;
+		PCName.text = CurrentMenuSOPCData.name;
 
 		// Set character menu picture.
-		_pcImage.sprite = CurrentMenuSOPCData.CharacterImage;
+		PCImage.sprite = CurrentMenuSOPCData.CharacterImage;
 
 		// Set injury and pain. 
-		StatTextBox injuryTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
+		StatTextBox injuryTextBox = Instantiate(StatTextPrefab, StatsParent).GetComponent<StatTextBox>();
 		injuryTextBox.SetupText($"Injury: {CurrentMenuSOPCData.Injury}");
 
-		StatTextBox painTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
+		StatTextBox painTextBox = Instantiate(StatTextPrefab, StatsParent).GetComponent<StatTextBox>();
 		painTextBox.SetupText($"Pain: {CurrentMenuSOPCData.Pain}");
 
 		// Set stats. 
 		Stats stats = CurrentMenuSOPCData.Stats;
 		foreach (Stat stat in stats.StatList)
         {
-			StatTextBox statTextBox = Instantiate(_statTextPrefab, _statsParent).GetComponent<StatTextBox>();
+			StatTextBox statTextBox = Instantiate(StatTextPrefab, StatsParent).GetComponent<StatTextBox>();
             statTextBox.SetupText(stat.StatType.ToString() + ": " + stat.ModdedValue);
         }
     }
 
     private void ClearStatTextBoxes()
     {
-        foreach (Transform child in _statsParent)
+        foreach (Transform child in StatsParent)
         {
 			Destroy(child.gameObject);
         }

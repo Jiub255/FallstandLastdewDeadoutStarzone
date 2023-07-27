@@ -4,7 +4,7 @@ using UnityEngine;
 public class SOWeaponItem : SOEquipmentItem
 {
     [SerializeField, Header("------------- Weapon Data --------------")]
-    private int _attack;
+    private int _weaponDamage;
     [SerializeField]
     private float _attackRange;
     [SerializeField]
@@ -14,7 +14,7 @@ public class SOWeaponItem : SOEquipmentItem
     /// <summary>
     /// This is only the weapon's attack stat, get the total attack stat from SOPCData.Attack(); 
     /// </summary>
-    public int WeaponAttack { get { return _attack; } }
+    public int WeaponDamage { get { return _weaponDamage; } }
     public float AttackRange { get { return _attackRange; } }
     public float AttackPerSecond { get { return _attacksPerSecond; } }
 }

@@ -11,19 +11,23 @@ public class InventorySlot : MonoBehaviour
 
     private SOItem _itemSO;
 
+    private Image Icon { get { return _icon; } }
+    private TextMeshProUGUI AmountText { get { return _amountText; } }
+    private SOItem ItemSO { get { return _itemSO; } set { _itemSO = value; } }
+
     public void SetupSlot(ItemAmount itemAmount)
     {
-        _itemSO = itemAmount.ItemSO;
-        _icon.sprite = _itemSO.Icon; 
-        _amountText.text = (itemAmount.Amount == 1) ? "" : itemAmount.Amount.ToString();
+        ItemSO = itemAmount.ItemSO;
+        Icon.sprite = ItemSO.Icon; 
+        AmountText.text = (itemAmount.Amount == 1) ? "" : itemAmount.Amount.ToString();
     }
 
     // Called by clicking on inventory slot
 	public void OnClickInventoryItem()
     {
-        if (_itemSO != null)
+        if (ItemSO != null)
         {
-            _itemSO.OnClickInventory();
+            ItemSO.OnClickInventory();
         }
     }
 }

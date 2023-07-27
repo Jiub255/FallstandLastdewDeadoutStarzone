@@ -6,17 +6,16 @@ public class SOGameData : ScriptableObject
 {
     [SerializeField]
     private SOInventoryData _inventoryDataSO;
-
     [SerializeField]
     private SOCurrentTeam _currentTeamSO;
-
-    // TODO - Put these in SOStatsData? Like how SOInventoryData works? 
-    private Dictionary<StatType, int> _individualPCStatMaxes = new();
 
     public SOInventoryData InventoryDataSO { get { return _inventoryDataSO; } }
     public SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
     /// <summary>
     /// Using dictionary instead of StatValue so you can change value and get by key. 
     /// </summary>
-    public Dictionary<StatType, int> IndividualPCStatMaxes { get { return _individualPCStatMaxes;} }
+    /// <remarks>
+    /// TODO - Put these in SOStatsData? Like how SOInventoryData works? 
+    /// </remarks>
+    public Dictionary<StatType, int> IndividualPCStatMaxes { get; }
 }

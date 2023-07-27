@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Player Characters/SOEquipment", fileName = "New Equipment SO")]
+//[CreateAssetMenu(menuName = "Player Characters/SOEquipment", fileName = "New Equipment SO")]
 public class SOEquipment : ScriptableObject
 {
 /*    public static event Action<SOEquipmentItem> OnUnequip;

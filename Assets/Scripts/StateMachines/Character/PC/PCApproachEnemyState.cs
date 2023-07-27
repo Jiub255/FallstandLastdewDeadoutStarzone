@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class PCApproachEnemyState : PCState
 {
-    private Transform _target;
-    private Collider _targetCollider;
-    private float _weaponRangeSquared;
-    private Transform _transform;
+    private Transform Target { get; }
+    private Collider TargetCollider { get; }
+    private float WeaponRangeSquared { get; }
+    private Transform Transform { get; }
 
     public PCApproachEnemyState(PCStateMachine pcStateMachine, Transform target) : base(pcStateMachine)
     {
-        _transform = pcStateMachine.PCDataSO.PCInstance.transform;
+        Transform = pcStateMachine.PCDataSO.PCInstance.transform;
 
-        _target = target;
-        _targetCollider = target.GetComponent<Collider>();
+        Target = target;
+        TargetCollider = target.GetComponent<Collider>();
 
         // TODO - Does this work? Seems a bit sloppy. 
-        float weaponRange = _stateMachine.PCDataSO.Equipment.Weapon().AttackRange;
-        _weaponRangeSquared = weaponRange * weaponRange;
+        float weaponRange = StateMachine.PCDataSO.Equipment.Weapon().AttackRange;
+        WeaponRangeSquared = weaponRange * weaponRange;
 
         if (CharacterWithinRangeOfEnemy())
         {
@@ -24,7 +24,7 @@ public class PCApproachEnemyState : PCState
         }
 
         // Set destination. 
-        pcStateMachine.PathNavigator.TravelPath(_target.position, _targetCollider);
+        pcStateMachine.PathNavigator.TravelPath(Target.position, TargetCollider);
     }
 
     public override void FixedUpdate(bool selected)
@@ -32,16 +32,16 @@ public class PCApproachEnemyState : PCState
         // Check if PC is within range of target (depends on the range of the weapon you're using). 
         if (CharacterWithinRangeOfEnemy())
         {
-            _stateMachine.ChangeStateTo(_stateMachine.Combat(_target));
+            StateMachine.ChangeStateTo(StateMachine.Combat(Target));
         }
     }
 
     private bool CharacterWithinRangeOfEnemy()
     {
         // TODO - What if target dies while you're running toward them? 
-        if (_target != null)
+        if (Target != null)
         {
-            if ((_target.position - _transform.position).sqrMagnitude < _weaponRangeSquared)
+            if ((Target.position - Transform.position).sqrMagnitude < WeaponRangeSquared)
             {
                 return true;
             }

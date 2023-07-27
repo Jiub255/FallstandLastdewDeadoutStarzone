@@ -1,18 +1,18 @@
 using UnityEngine;
 
-// Treat health like player pain kinda, as in the enemies stats get weaker as they get more and more hurt. Maybe? 
-// Maybe just do straight health instead, especially if there's going to be mobs of enemies. 
+// Treat health like player pain kinda, as in the enemies stats get weaker as they get more and more hurt. 
 public class EnemyHealth : MonoBehaviour
 {
-	// TODO - Get this from EnemyData SO. 
+	// TODO - Get this from enemy data SO. 
 	[SerializeField]
 	private int _maxHealth = 100;
 
-	private int _health = 0;
+	private int CurrentHealth { get; set; }
+	private int MaxHealth { get { return _maxHealth; } }
 
     private void Awake()
     {
-		_health = _maxHealth;
+		CurrentHealth = MaxHealth;
     }
 
 	/// <summary>
@@ -23,13 +23,13 @@ public class EnemyHealth : MonoBehaviour
 	/// <param name="attackingPC">Reference to the PC's combat state </param>
     public void GetHurt(int damage, PCCombatState attackingPC)
     {
-		_health -= damage;
+		CurrentHealth -= damage;
 
-		Debug.Log(transform.parent.name + "'s health: " + _health);
+		Debug.Log(transform.parent.name + "'s health: " + CurrentHealth);
 
-		if (_health <= 0)
+		if (CurrentHealth <= 0)
         {
-			_health = 0;
+			CurrentHealth = 0;
 
 			Die(attackingPC);
         }

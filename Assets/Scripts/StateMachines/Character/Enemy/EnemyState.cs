@@ -1,10 +1,10 @@
 ﻿public abstract class EnemyState
 {
-    protected EnemyStateMachine _enemyStateMachine;
+    protected EnemyStateMachine EnemyStateMachine { get; }
 
     public EnemyState(EnemyStateMachine enemyStateMachine)
     {
-        _enemyStateMachine = enemyStateMachine;
+        EnemyStateMachine = enemyStateMachine;
     }
 
     public abstract void Update();

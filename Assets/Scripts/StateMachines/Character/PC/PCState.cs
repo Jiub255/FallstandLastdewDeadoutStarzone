@@ -5,11 +5,11 @@ using UnityEngine.InputSystem;
 /// </summary>
 public abstract class PCState/* : CharacterState<PCStateMachine>*/
 {
-    protected PCStateMachine _stateMachine;
+    protected PCStateMachine StateMachine { get; }
 
-
-    public PCState(PCStateMachine characterController)/* : base(characterController)*/
+    public PCState(PCStateMachine pcStateMachine)/* : base(characterController)*/
     {
+        StateMachine = pcStateMachine;
         InputManager.OnDeselectOrCancel += CancelOrDeselect;
     }
 
@@ -25,6 +25,6 @@ public abstract class PCState/* : CharacterState<PCStateMachine>*/
     {
         // Cancel for most states, deselect only in idle state. 
         // So override this in idle state only. 
-        _stateMachine.ChangeStateTo(_stateMachine.Idle());
+        StateMachine.ChangeStateTo(StateMachine.Idle());
     }
 }

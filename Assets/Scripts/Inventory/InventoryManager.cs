@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Have BuildingManager created in here? So it can get required items? Kinda functions like CraftingManager so it makes sense. 
+/// </summary>
 public class InventoryManager
 {
     /// <summary>
@@ -12,7 +15,6 @@ public class InventoryManager
     private SOInventoryData InventoryDataSO { get; set; }
     private CraftingManager CraftingManager { get; set; }
 
-//    protected void OnEnable()
     public InventoryManager(SOInventoryData inventoryDataSO)
     {
         InventoryDataSO = inventoryDataSO;
@@ -25,7 +27,6 @@ public class InventoryManager
         PCLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
         EquipmentManager.OnEquip += (equipmentItem) => RemoveItems(equipmentItem);
         SOItem.OnRemoveItem += (item) => RemoveItems(item);
-//        UIRecipes.OnGetHaveEnoughItemsRecipes += GetHaveEnoughItemsRecipes;
     }
 
     public void OnDisable()
@@ -36,7 +37,6 @@ public class InventoryManager
         PCLootState.OnLootItems -= (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
         EquipmentManager.OnEquip -= (equipmentItem) => RemoveItems(equipmentItem);
         SOItem.OnRemoveItem -= (item) => RemoveItems(item);
-//        UIRecipes.OnGetHaveEnoughItemsRecipes -= GetHaveEnoughItemsRecipes;
     }
 
     // TODO - Do this in CraftingManager instead? 

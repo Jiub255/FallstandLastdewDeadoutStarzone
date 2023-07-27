@@ -3,10 +3,16 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
+    /// <summary>
+    /// Heard by GameManager, instantiates PCs, gets their instance references in SOPCData,
+    /// and populates PCManager's PCController dictionary. 
+    /// </summary>
     public static event Action<Vector3> OnSceneStart;
 
-    [SerializeField]
+/*    [SerializeField]
     private SOCurrentTeam _currentTeamSO;
+
+    private SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }*/
 
     private void Start/*Awake*/()
     {

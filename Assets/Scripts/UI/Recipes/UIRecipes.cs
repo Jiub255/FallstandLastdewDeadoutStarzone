@@ -1,65 +1,56 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Put this on the Crafting and Building canvases. 
+/// <summary>
+/// TODO - How to decide between Building and Crafting recipes?
+/// Might just make two scripts, UIBuilding and UICrafting instead of UIRecipes. 
+/// Or this stupid little BuildOrCraft enum might work just fine. 
+/// </summary>
 public class UIRecipes : MonoBehaviour
 {
-//	public static event Func<List<SORecipe>, List<SORecipe>> OnGetMetStatRequirementsRecipes;
-//	public static event Func<List<SORecipe>, List<SORecipe>> OnGetHaveEnoughItemsRecipes;
+	private enum BuildOrCraft
+    {
+		Build,
+		Craft
+    }
 
 	[SerializeField]
-	private SORecipeList _recipeList;
+	private BuildOrCraft _buildOrCraft;
 	[SerializeField]
 	private GameObject _recipeSlotPrefab;
 	[SerializeField]
 	private Transform _slotsParent;
 
-//	protected List<SORecipe> _metStatRequirementsRecipes;
-//	protected List<SORecipe> _haveEnoughItemsRecipes;
+	/// <summary>
+	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
+	/// </summary>
+	[SerializeField]
+	private SOGameData _gameDataSO;
+
+	private BuildOrCraft BuildCraftEnum { get { return _buildOrCraft; } }
+	private GameObject RecipeSlotPrefab { get { return _recipeSlotPrefab; } }
+	private Transform SlotsParent { get { return _slotsParent; } }
+	private SOGameData GameDataSO { get { return _gameDataSO; } }
 
 	public virtual void OnEnable()
 	{
 		// Call this whenever stats change. 
-		GetRecipeLists();
+		SetupRecipeSlots();
 
-		// Toggle between showing _metRequirementsRecipes and _haveEnoughItemsRecipes by calling SetupRecipeSlots and passing whichever list. 
-//		SetupRecipeSlots(_haveEnoughItemsRecipes);
-
-		InventoryManager.OnInventoryChanged += GetHaveEnoughItemsRecipes;
-		PCStatManager.OnStatsChanged += GetRecipeLists;
+		InventoryManager.OnInventoryChanged += SetupRecipeSlots;
+		PCStatManager.OnStatsChanged += SetupRecipeSlots;
 	}
 
     private void OnDisable()
     {
-		InventoryManager.OnInventoryChanged -= GetHaveEnoughItemsRecipes;
-		PCStatManager.OnStatsChanged -= GetRecipeLists;
-	}
-
-	private void GetRecipeLists()
-    {
-		// TODO - Put these on InventoryManager instead? Or even on CurrentTeamSO or something? 
-		// Or even put in GameManager and keep data on CurrentTeamSO? Need to use Inventory and Stat Managers to get list,
-		// so it makes sense. 
-		GetMetStatRequirementsRecipes();
-		GetHaveEnoughItemsRecipes();
-	}
-
-	private void GetMetStatRequirementsRecipes()
-    {
-		// StatManager listens, sends back all recipes that you meet the stat requirements for. 
-//	    _metStatRequirementsRecipes = OnGetMetStatRequirementsRecipes(_recipeList.GetAllRecipes());
-    }
-
-	private void GetHaveEnoughItemsRecipes()
-	{
-		// PlayerInventoryManager listens, sends back all recipes that you have enough items to craft/build. 
-//		_haveEnoughItemsRecipes = OnGetHaveEnoughItemsRecipes(_metStatRequirementsRecipes);
+		InventoryManager.OnInventoryChanged -= SetupRecipeSlots;
+		PCStatManager.OnStatsChanged -= SetupRecipeSlots;
 	}
 
     // TODO - Gray out the buildings/items that you don't have enough materials to build. 
     // Will have to call this method every time you use some materials to build something. 
-    public void SetupRecipeSlots(List<SORecipe> possibleRecipes)
+    public void SetupRecipeSlots()
 	{
 //		Debug.Log("SetupRecipeSlots called. ");
 		ClearSlots();
@@ -67,16 +58,23 @@ public class UIRecipes : MonoBehaviour
 		// TODO - Use object pooling instead of instantiate/destroy. 
 		// Might need to rework InventorySlot a bit, not sure. Or move the slot somewhere else? Not sure yet. 
 		// Maybe just unparenting it from _inventoryContent will be enough. 
-		foreach (SORecipe recipeSO in possibleRecipes)
+
+		// TODO - How to decide between Building and Crafting recipes? 
+		// Might just make two scripts, UIBuilding and UICrafting instead of UIRecipes. 
+		List<SORecipe> recipeList = BuildCraftEnum == BuildOrCraft.Build ?
+			GameDataSO.InventoryDataSO.PossibleBuildingRecipes : 
+			GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
+
+		foreach (SORecipe recipeSO in recipeList)
 		{
-			GameObject slot = Instantiate(_recipeSlotPrefab, _slotsParent);
+			GameObject slot = Instantiate(RecipeSlotPrefab, SlotsParent);
 			slot.GetComponent<RecipeSlot>().SetupSlot(recipeSO);
 		}
 	}
 
 	private void ClearSlots()
 	{
-		foreach (Transform slotTransform in _slotsParent)
+		foreach (Transform slotTransform in SlotsParent)
 		{
 			Destroy(slotTransform.gameObject);
 		}

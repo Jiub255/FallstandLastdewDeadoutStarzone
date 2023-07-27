@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +37,10 @@ public class GameManager : MonoBehaviour
         PCManager = new(GameDataSO.CurrentTeamSO);
 
         SpawnPoint.OnSceneStart += InitializeScene;
+        InventoryManager.OnInventoryChanged += GetPossibleBuildingRecipes;
+        PCStatManager.OnStatsChanged += GetPossibleBuildingRecipes;
+        InventoryManager.OnInventoryChanged += GetPossibleCraftingRecipes;
+        PCStatManager.OnStatsChanged += GetPossibleCraftingRecipes;
     }
 
     private void OnDisable()
@@ -48,6 +51,10 @@ public class GameManager : MonoBehaviour
         PCManager.OnDisable();
 
         SpawnPoint.OnSceneStart -= InitializeScene;
+        InventoryManager.OnInventoryChanged -= GetPossibleBuildingRecipes;
+        PCStatManager.OnStatsChanged -= GetPossibleBuildingRecipes;
+        InventoryManager.OnInventoryChanged -= GetPossibleCraftingRecipes;
+        PCStatManager.OnStatsChanged -= GetPossibleCraftingRecipes;
     }
 
     private void InitializeScene(Vector3 spawnPosition)
@@ -82,12 +89,12 @@ public class GameManager : MonoBehaviour
     /// TODO - Check BuildingManager for required building stuff, and inv for required held items stuff. 
     /// </summary>
     /// <returns>List of all recipes that you meet requirements for, and have enough items to craft. </returns>
-    public List<SORecipe> GetPossibleCraftingRecipes()
+    public /*List<SORecipe>*/void GetPossibleCraftingRecipes()
     {
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Clear();
         List<SORecipe> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(CraftingRecipesList.ItemsWithRecipeCosts);
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
-        return GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
+//        return GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
     }
 
     /// <summary>
@@ -96,12 +103,12 @@ public class GameManager : MonoBehaviour
     /// TODO - Check BuildingManager for required building stuff, and inv for required held items stuff. 
     /// </summary>
     /// <returns>List of all recipes that you meet requirements for, and have enough items to craft. </returns>
-    public List<SORecipe> GetPossibleBuildingRecipes()
+    public /*List<SORecipe>*/void GetPossibleBuildingRecipes()
     {
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Clear();
         List<SORecipe> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(BuildingRecipesList.AllBuildingRecipes);
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
-        return GameDataSO.InventoryDataSO.PossibleBuildingRecipes;
+//        return GameDataSO.InventoryDataSO.PossibleBuildingRecipes;
     }
 
     private void Update()

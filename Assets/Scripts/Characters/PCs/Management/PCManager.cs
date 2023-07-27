@@ -31,7 +31,7 @@ public class PCManager
     {
         CurrentTeamSO = currentTeamSO;
 
-        PCSelector = new(this, CurrentTeamSO);
+        PCSelector = new(CurrentTeamSO);
         PCItemUseManager = new(PCControllerDict, CurrentMenuPC);
         EventSystem = EventSystem.current;
         PointerOverUI = EventSystem.IsPointerOverGameObject();
