@@ -45,8 +45,14 @@ public class InventoryManager
     public List<T> GetHaveEnoughItemsRecipes<T>(List<T> metRequirementsRecipes) where T : SORecipe
     {
         // Does this fancy LINQ work? 
-        return metRequirementsRecipes.Where(recipeSO => recipeSO.RecipeCosts.Where(
-            recipeCost => InventoryDataSO.CraftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null).ToList().Count == 0).ToList();
+        // Returns the SORecipes that you have enough items to build, and have the required tools for. 
+        return metRequirementsRecipes
+            .Where(recipeSO => recipeSO.RecipeCosts
+                .Where(recipeCost => InventoryDataSO.CraftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+                .ToList().Count == 0 && recipeSO.RequiredTools
+                .Where(toolSO => InventoryDataSO.ToolInventorySO.Contains(toolSO) == null)
+                .ToList().Count == 0)
+            .ToList();
 
 /*        List<T> haveEnoughItemsRecipes = new();
 
@@ -85,6 +91,10 @@ public class InventoryManager
             {
                 InventoryDataSO.CraftingInventorySO.AddItems(item, amount);
             }
+            else if (item.GetType() == typeof(SOTool))
+            {
+                InventoryDataSO.ToolInventorySO.AddItems(item, amount);
+            }
         }
 
         // Heard by UIRecipes, updates haveEnoughItemsRecipes list. 
@@ -104,6 +114,10 @@ public class InventoryManager
         else if (item.GetType() == typeof(SOCraftingItem))
         {
             InventoryDataSO.CraftingInventorySO.RemoveItems(item, amount);
+        }
+        else if (item.GetType() == typeof(SOTool))
+        {
+            InventoryDataSO.ToolInventorySO.RemoveItems(item, amount);
         }
 
         // Heard by UIRecipes, updates haveEnoughItemsRecipes list. 

@@ -25,9 +25,12 @@ public class StatManager
         GetStatTotals();
 
         // Does this fancy LINQ work? 
-        return unfilteredList.Where(recipeSO => recipeSO.MinSinglePCStatRequirements.Where(
-            statRequirement => !TeamDataSO.IndividualPCStatMaxes.ContainsKey(statRequirement.StatType) ||
-            TeamDataSO.IndividualPCStatMaxes[statRequirement.StatType] < statRequirement.Value).ToList().Count == 0).ToList();
+        return unfilteredList
+            .Where(recipeSO => recipeSO.MinSinglePCStatRequirements
+                .Where(statRequirement => !TeamDataSO.IndividualPCStatMaxes.ContainsKey(statRequirement.StatType) ||
+                TeamDataSO.IndividualPCStatMaxes[statRequirement.StatType] < statRequirement.Value)
+                .ToList().Count == 0)
+            .ToList();
 
 
 /*        List<T> metRequirementsRecipes = new();

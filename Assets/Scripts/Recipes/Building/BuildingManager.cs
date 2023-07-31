@@ -206,8 +206,11 @@ public class BuildingManager
     public List<T> GetHaveRequiredBuildingsRecipes<T>(List<T> haveEnoughItemsRecipes) where T : SORecipe
     {
         // Does this fancy LINQ work? 
-        return haveEnoughItemsRecipes.Where(recipeSO => recipeSO.RequiredBuildings.Where(
-            craftingBuildingSO => !BuildingDataSO.Buildings.Contains(craftingBuildingSO)).ToList().Count == 0).ToList();
+        return haveEnoughItemsRecipes
+            .Where(recipeSO => recipeSO.RequiredBuildings
+                .Where(craftingBuildingSO => !BuildingDataSO.Buildings.Contains(craftingBuildingSO))
+                .ToList().Count == 0)
+            .ToList();
 
 /*        List<T> haveRequiredBuildingsRecipes = new();
 
@@ -299,14 +302,16 @@ public class BuildingManager
 
         // TODO - Do this better. 
         // Remove collisions with self.
-        List<Collider> collidersList = collidersArray.ToList();
+        List<Collider> collidersList = collidersArray
+            .Where(collider => collider.gameObject.GetInstanceID() == BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID()).ToList();
+//        List<Collider> collidersList = collidersArray.ToList();
         for (int i = collidersList.Count - 1; i >= 0; i--)
         {
             //Debug.Log(_currentBuildingInstance.transform.GetChild(0).gameObject.GetInstanceID() + " collided with " + collider.gameObject.GetInstanceID());
 
-            if (BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
+//            if (BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
             {
-                collidersList.Remove(collidersList[i]);
+                collidersList.RemoveAt(i);
             }
         }
 
