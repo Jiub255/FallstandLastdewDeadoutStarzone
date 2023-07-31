@@ -1169,34 +1169,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ------------ UI -------------
       objectReference: {fileID: 0}
-    - target: {fileID: 5616321802008765836, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5616321802008765836, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943391995100807327, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943391995100807327, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7746783582251859749, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7746783582251859749, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7844219124187704045, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0009765625
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
 --- !u!1001 &793084596
@@ -1460,10 +1432,6 @@ PrefabInstance:
     - target: {fileID: 5059075228530019439, guid: f32dafd3a9fbeb04db7a6175a61dadca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5059075228795231349, guid: f32dafd3a9fbeb04db7a6175a61dadca, type: 3}
-      propertyPath: _draggingSpeed
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f32dafd3a9fbeb04db7a6175a61dadca, type: 3}
@@ -3281,12 +3249,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PC James 2
       objectReference: {fileID: 0}
-    - target: {fileID: 5277230999929450495, guid: e664118a06015784d93da7f995a6108a, type: 3}
-      propertyPath: uniqueID
-      value: 1148672606842200618
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 214921392696509220, guid: e664118a06015784d93da7f995a6108a, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e664118a06015784d93da7f995a6108a, type: 3}
 --- !u!4 &7840435732139561338 stripped
 Transform:

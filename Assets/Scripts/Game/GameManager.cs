@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameDataSO.InventoryDataSO.CraftableItemsList.FilterOutNoRecipeItems();
-        GameDataSO.BuildingDataSO.BuildableBuildingsList.FilterOutNoRecipeItems();
+        GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
+        GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
 
         // Instantiate PCManager first, so it can instantiate all the PC's in the game world. 
         PCManager = new(GameDataSO.TeamDataSO);
@@ -60,13 +60,13 @@ public class GameManager : MonoBehaviour
     {
         // Get all craftable items.
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Clear();
-        List<SOItem> metStatReqsItems = StatManager.GetMetStatRequirementsRecipes(GameDataSO.InventoryDataSO.CraftableItemsList.ItemsWithRecipeCosts);
+        List<SOItem> metStatReqsItems = StatManager.GetMetStatRequirementsRecipes(GameDataSO.InventoryDataSO.CraftableItemsSO.ItemsWithRecipeCosts);
         List<SOItem> haveReqItemsAndToolsItems = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsItems);
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsItems);
 
         // Get all buildable buildings. 
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Clear();
-        List<SOBuilding> metStatReqsBuildings = StatManager.GetMetStatRequirementsRecipes(GameDataSO.BuildingDataSO.BuildableBuildingsList.BuildingsWithRecipeCosts);
+        List<SOBuilding> metStatReqsBuildings = StatManager.GetMetStatRequirementsRecipes(GameDataSO.BuildingDataSO.BuildableBuildingsSO.BuildingsWithRecipeCosts);
         List<SOBuilding> haveReqItemsAndToolsBuildings = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsBuildings);
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsBuildings);
     }

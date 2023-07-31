@@ -10,6 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/SOTeamData", fileName = "Current Team SO")]
 public class SOTeamData : ScriptableObject
 {
+	// TODO - Make the same two events for scavenging list? 
 	public event Action<SOPCData> OnBeforeAddPCToHomeList;
 	public event Action<SOPCData> OnBeforeRemovePCFromHomeList;
 
@@ -73,6 +74,8 @@ public class SOTeamData : ScriptableObject
 
 	public void AddPCToHomeList(SOPCData sopc)
     {
+		OnBeforeAddPCToHomeList?.Invoke(sopc);
+
 		HomePCs.Add(sopc);
 
 		// PCItemUseManager listens, updates dictionary. 
@@ -83,6 +86,8 @@ public class SOTeamData : ScriptableObject
     {
 		if (HomePCs.Contains(sopc))
         {
+			OnBeforeRemovePCFromHomeList?.Invoke(sopc);
+
 			HomePCs.Remove(sopc);
 
 			// PCItemUseManager listens, updates dictionary. 

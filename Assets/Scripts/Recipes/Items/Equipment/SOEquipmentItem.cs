@@ -11,9 +11,10 @@ public enum EquipmentType
 //[CreateAssetMenu(fileName = "New Equipment Item SO", menuName = "Items/SOEquipmentItem")]
 public class SOEquipmentItem : SOItem
 {
-    // int is CurrentMenuPC's InstanceID. 
     public static event Action<SOEquipmentItem> OnEquip;
     public static event Action<SOEquipmentItem> OnUnequip;
+/*    public event Action OnEquip;
+    public event Action OnUnequip;*/
 
     // TODO - Have each armor type inherit this class, or use the enum? 
     // Keep Equipment type, so Equipment can use it as an index. Have SOWeaponItem extend SOEquipmentItem so it can have a guaranteed attack stat

@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // Put this on Canvases object. 
+/// <summary>
+/// TODO - Put this on the GameManager as a non-MB, and get the canvas references as they get instantiated from here? <br/>
+/// Also have this class keep references to all the other UI scripts as non-MBs too? 
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [SerializeField, Header("Canvases")]
@@ -17,48 +21,48 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _hUDCanvas;
 
+    // TODO - Handle this differently. Put GameState in SOGameData, and use events to call upwards. 
+    // Still doing singleton input manager for now though. 
     private GameStateMachine _gameManager;
-    private InputManager _inputManager;
 
     private void Start()
     {
         _gameManager = S.I.GSM;
-        _inputManager = S.I.IM;
 
-        _inputManager.PC.InventoryMenu.OpenInventory.started += OpenInventory;
-        _inputManager.PC.InventoryMenu.CloseInventory.started += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
-        _inputManager.PC.NonCombatMenus.CloseBuildMenu.started += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.started += OpenCraftingMenu;
-        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenMap.started += OpenMap;
-        _inputManager.PC.NonCombatMenus.CloseMap.started += CloseUI;
+        S.I.IM.PC.InventoryMenu.OpenInventory.started += OpenInventory;
+        S.I.IM.PC.InventoryMenu.CloseInventory.started += CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started += CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenCraftingMenu.started += OpenCraftingMenu;
+        S.I.IM.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenMap.started += OpenMap;
+        S.I.IM.PC.NonCombatMenus.CloseMap.started += CloseUI;
     }
 
     private void OnDisable()
     {
-        _inputManager.PC.InventoryMenu.OpenInventory.started -= OpenInventory;
-        _inputManager.PC.InventoryMenu.CloseInventory.started -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenBuildMenu.started -= OpenBuildMenu;
-        _inputManager.PC.NonCombatMenus.CloseBuildMenu.started -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenCraftingMenu.started -= OpenCraftingMenu;
-        _inputManager.PC.NonCombatMenus.CloseCraftingMenu.started -= CloseUI;
-        _inputManager.PC.NonCombatMenus.OpenMap.started -= OpenMap;
-        _inputManager.PC.NonCombatMenus.CloseMap.started -= CloseUI;
+        S.I.IM.PC.InventoryMenu.OpenInventory.started -= OpenInventory;
+        S.I.IM.PC.InventoryMenu.CloseInventory.started -= CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenBuildMenu.started -= OpenBuildMenu;
+        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started -= CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenCraftingMenu.started -= OpenCraftingMenu;
+        S.I.IM.PC.NonCombatMenus.CloseCraftingMenu.started -= CloseUI;
+        S.I.IM.PC.NonCombatMenus.OpenMap.started -= OpenMap;
+        S.I.IM.PC.NonCombatMenus.CloseMap.started -= CloseUI;
     }
 
     private void OpenInventory(InputAction.CallbackContext context)
     {
-        if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeState) || 
-            S.I.GSM.ActiveState.GetType() == typeof(GameBuildState))
+        if (_gameManager.ActiveState.GetType() == typeof(GameHomeState) ||
+            _gameManager.ActiveState.GetType() == typeof(GameBuildState))
         {
-            S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
+            _gameManager.ChangeGameStateTo(_gameManager.HomeMenus());
 
             OpenMenu(_homeInventoryCanvas);
         }
-        else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatState))
+        else if (_gameManager.ActiveState.GetType() == typeof(GameCombatState))
         {
-            S.I.GSM.ChangeGameStateTo(S.I.GSM.CombatMenus());
+            _gameManager.ChangeGameStateTo(_gameManager.CombatMenus());
 
             OpenMenu(_combatInventoryCanvas);
         }
@@ -66,21 +70,21 @@ public class UIManager : MonoBehaviour
 
     private void OpenBuildMenu(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeGameStateTo(S.I.GSM.Build());
+        _gameManager.ChangeGameStateTo(_gameManager.Build());
         
         OpenMenu(_buildCanvas);
     }
 
     private void OpenCraftingMenu(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
+        _gameManager.ChangeGameStateTo(_gameManager.HomeMenus());
 
         OpenMenu(_craftingCanvas);
     }
 
     private void OpenMap(InputAction.CallbackContext context)
     {
-        S.I.GSM.ChangeGameStateTo(S.I.GSM.HomeMenus());
+        _gameManager.ChangeGameStateTo(_gameManager.HomeMenus());
 
         OpenMenu(_mapCanvas);
     }
@@ -92,13 +96,13 @@ public class UIManager : MonoBehaviour
 
     private void CloseUI(InputAction.CallbackContext context)
     {
-        if (S.I.GSM.ActiveState.GetType() == typeof(GameHomeMenusState))
+        if (_gameManager.ActiveState.GetType() == typeof(GameHomeMenusState))
         {
-            S.I.GSM.ChangeGameStateTo(S.I.GSM.Home());
+            _gameManager.ChangeGameStateTo(_gameManager.Home());
         }
         else if (S.I.GSM.ActiveState.GetType() == typeof(GameCombatMenusState))
         {
-            S.I.GSM.ChangeGameStateTo(S.I.GSM.Combat());
+            _gameManager.ChangeGameStateTo(_gameManager.Combat());
         }
 
         OpenCanvas(_hUDCanvas);
