@@ -40,11 +40,12 @@ public class InventoryManager
     }
 
     // TODO - Do this in CraftingManager instead? 
-    public List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
+//    public List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
+    public List<T> GetHaveEnoughItemsRecipes<T>(List<T> metRequirementsRecipes) where T : SORecipe
     {
-        List<SORecipe> haveEnoughItemsRecipes = new();
+        List<T> haveEnoughItemsRecipes = new();
 
-        foreach (SORecipe recipe in metRequirementsRecipes)
+        foreach (T recipe in metRequirementsRecipes)
         {
             foreach (RecipeCost recipeCost in recipe.RecipeCosts)
             {

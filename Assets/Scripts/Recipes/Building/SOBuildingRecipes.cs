@@ -1,18 +1,21 @@
 using System.Collections.Generic;
-using UnityEditor;
+/*using UnityEditor;*/
 using UnityEngine;
 
 // Use this class to collect a list of all created SOBuildingRecipe assets. 
 // Then another class can filter that list down to the ones you are able to build (StatRequirement-wise). 
 /// <summary>
-/// JUST FOR TESTING. USES UNITYEDITOR AND WONT WORK FOR BUILD. <br/>
-/// FILL SO RECIPE LISTS MANUALLY OR SOMEHOW BEFORE BUILD AND GET RID OF THIS STUFF. <br/>
-/// Populates SOInventoryData.PossibleBuildingRecipes by getting all SOBuildingRecipes from the assets folder. 
+/// Fill this with all Buildable buildings in the game before building game. 
 /// </summary>
 [CreateAssetMenu(menuName = "Recipes/Building/SOBuildingRecipes", fileName = "New Building Recipes SO")]
-public class SOBuildingRecipes : SORecipeList
+public class SOBuildingRecipes : ScriptableObject/* : SORecipeList*/
 {
-    private List<SORecipe> _buildingRecipes = new();
+    private List<SOBuilding> _allBuildingRecipes; 
+
+    public List<SOBuilding> AllBuildingRecipes { get { return _allBuildingRecipes; } }
+
+
+/*    private List<SORecipe> _buildingRecipes = new();
 
     /// <summary>
     /// JUST FOR TESTING. USES UNITYEDITOR AND WONT WORK FOR BUILD. <br/>
@@ -39,10 +42,10 @@ public class SOBuildingRecipes : SORecipeList
         foreach (string SOName in assetNames)
         {
             var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
-            var character = AssetDatabase.LoadAssetAtPath<SOBuildingItem>(SOpath);
+            var character = AssetDatabase.LoadAssetAtPath<SOBuilding>(SOpath);
             _buildingRecipes.Add(character);
         }
 
         Debug.Log($"Buildings list length: {_buildingRecipes.Count}");
-    }
+    }*/
 }

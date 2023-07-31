@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
@@ -17,9 +18,15 @@ public class InputManager : MonoBehaviour
     private float _mouseMovementThreshold = 0.1f;
     private float _mouseMovementThresholdSquared { get { return _mouseMovementThreshold * _mouseMovementThreshold; } }
 
+    private EventSystem EventSystem { get; set; }
+    public bool PointerOverUI { get; private set; }
+
     private void Awake()
     {
         PC = new PlayerControls();
+
+        EventSystem = EventSystem.current;
+        PointerOverUI = EventSystem.IsPointerOverGameObject();
 
         PC.Camera.RightClick.started += GetStartingMousePosition;
         PC.Camera.RightClick.canceled += HandleRightClick;
@@ -29,6 +36,11 @@ public class InputManager : MonoBehaviour
     {
         PC.Camera.RightClick.started -= GetStartingMousePosition;
         PC.Camera.RightClick.canceled -= HandleRightClick;
+    }
+
+    private void Update()
+    {
+        PointerOverUI = EventSystem.IsPointerOverGameObject();
     }
 
     private void GetStartingMousePosition(InputAction.CallbackContext context)

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +14,6 @@ public class SOInventoryData : ScriptableObject
     public SOInventory UsableInventorySO { get { return _usableInventorySO; } }
     public SOInventory EquipmentInventorySO { get { return _equipmentInventorySO; } }
     public SOInventory CraftingInventorySO { get { return _craftingInventorySO; } }
-    public List<SORecipe> PossibleCraftingRecipes { get; set; }
-    public List<SORecipe> PossibleBuildingRecipes { get; set; }
+    public List<SOItem> PossibleCraftingRecipes { get; set; }
+    public List<SOBuilding> PossibleBuildingRecipes { get; set; }
 }

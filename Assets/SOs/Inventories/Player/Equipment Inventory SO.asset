@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93994b24cb669b945882943615957097, type: 3}
-  m_Name: Test Usable Inventory SO
+  m_Name: Equipment Inventory SO
   m_EditorClassIdentifier: 
   _itemAmounts:
-  - ItemSO: {fileID: 11400000, guid: 73e4e636a9e21df44b8c1ce6128bc88a, type: 2}
-    Amount: 5
-  - ItemSO: {fileID: 11400000, guid: 38da70b30b03a044c9926e40afde9fc4, type: 2}
-    Amount: 1
+  - _itemSO: {fileID: 11400000, guid: b271eb590dfd2ac449b1ddbfd5b924db, type: 2}
+    _amount: 0
+  - _itemSO: {fileID: 11400000, guid: 2892032f7fd65634eacdecf1d215b717, type: 2}
+    _amount: 0

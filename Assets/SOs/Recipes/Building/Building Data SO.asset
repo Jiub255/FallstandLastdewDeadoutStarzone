@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87497d688dea58741b9e20855ba0f574, type: 3}
-  m_Name: Relieve Pain 10 - 10
+  m_Script: {fileID: 11500000, guid: a5b775f8d368d29439edecc955ff85aa, type: 3}
+  m_Name: Building Data SO
   m_EditorClassIdentifier: 
-  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
-  _painReliefAmount: 10
-  _duration: 10
+  _buildingPrefab: {fileID: 0}
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _rotationSpeed: 50
+  _snapAngle: 45

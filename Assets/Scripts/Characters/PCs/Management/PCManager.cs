@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // TODO - Have this be a centralized place to control which character is selected. It's all over the place right now. 
@@ -24,8 +23,7 @@ public class PCManager
     private Dictionary<SOPCData, PCController> PCControllerDict { get; } = new();
     private PCSelector PCSelector { get; }
     private PCItemUseManager PCItemUseManager { get; }
-    private EventSystem EventSystem { get; }
-    private bool PointerOverUI { get; set; }
+    private InputManager InputManager { get; set; }
 
     public PCManager(SOCurrentTeam currentTeamSO)
     {
@@ -33,8 +31,8 @@ public class PCManager
 
         PCSelector = new(CurrentTeamSO);
         PCItemUseManager = new(PCControllerDict, CurrentMenuPC);
-        EventSystem = EventSystem.current;
-        PointerOverUI = EventSystem.IsPointerOverGameObject();
+
+        InputManager = S.I.IM;
 
         // Set menu PC to first on list to start, so it's never null.
         CurrentMenuPC = CurrentTeamSO.HomeSOPCSList[0];
@@ -42,6 +40,7 @@ public class PCManager
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentlySelectedPC = pcDataSO;
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuPC = pcDataSO;
         UICharacter.OnMenuPCChanged += (pcDataSO) => CurrentMenuPC = pcDataSO;
+        SpawnPoint.OnSceneStart += InitializeScene;
 
         // Equipment 
         SOEquipmentItem.OnEquip += HandleEquip;
@@ -59,6 +58,7 @@ public class PCManager
         PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentlySelectedPC = pcDataSO;
         PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuPC = pcDataSO;
         UICharacter.OnMenuPCChanged -= (pcDataSO) => CurrentMenuPC = pcDataSO;
+        SpawnPoint.OnSceneStart -= InitializeScene;
 
         // TODO - Put these in non-anonymous methods? For readability? 
         // Equipment 
@@ -77,6 +77,32 @@ public class PCManager
         }
         PCSelector.OnDisable();
         PCItemUseManager.OnDisable();
+    }
+
+    private void InitializeScene(Vector3 spawnPosition)
+    {
+        InstantiatePCs(spawnPosition);
+    }
+
+    private void InstantiatePCs(Vector3 spawnPosition)
+    {
+        if (CurrentTeamSO.HomeSOPCSList.Count > 0)
+        {
+            for (int i = 0; i < CurrentTeamSO.HomeSOPCSList.Count; i++)
+            {
+                // Will UnityEngine.Object.Instantiate work? Or should this be done in GameManager? 
+                CurrentTeamSO.HomeSOPCSList[i].PCInstance = Object.Instantiate(
+                    CurrentTeamSO.HomeSOPCSList[i].PCPrefab,
+                    new Vector3(3 * i, 0f, 0f) + spawnPosition,
+                    Quaternion.identity);
+            }
+
+            PopulateDictionary();
+        }
+        else
+        {
+            Debug.LogWarning("No PCs on HomeSOPCSList in CurrentTeamSO. Can't play the game without PCs. ");
+        }
     }
 
     private void HandleUnequip(SOEquipmentItem item)
@@ -105,8 +131,6 @@ public class PCManager
 
     public void UpdateStates()
     {
-        PointerOverUI = EventSystem.IsPointerOverGameObject();
-
         foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
         {
             pcDataSO.ActiveState.Update(pcDataSO.Selected);
@@ -128,7 +152,7 @@ public class PCManager
     /// <param name="context"></param>
     private void HandleClick(InputAction.CallbackContext context)
     {
-        if (!PointerOverUI)
+        if (!InputManager.PointerOverUI)
         {
             if (!PCSelector.CheckIfPCClicked() && CurrentlySelectedPC != null)
             {
@@ -138,9 +162,9 @@ public class PCManager
     }
 
     /// <summary>
-    /// Called by GameManager after instantiating PCs. 
+    /// Called after instantiating PCs. 
     /// </summary>
-    public void PopulateDictionary()
+    private void PopulateDictionary()
     {
         PCControllerDict.Clear();
 

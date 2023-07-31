@@ -20,13 +20,14 @@ public class StatManager
 //        UIRecipes.OnGetMetStatRequirementsRecipes -= GetMetStatRequirementsRecipes;
     }
 
-    public List<SORecipe> GetMetStatRequirementsRecipes(List<SORecipe> unfilteredList)
+//    public List<SORecipe> GetMetStatRequirementsRecipes(List<SORecipe> unfilteredList)
+    public List<T> GetMetStatRequirementsRecipes<T>(List<T> unfilteredList) where T : SORecipe
     {
-        List<SORecipe> metRequirementsRecipes = new();
+        List<T> metRequirementsRecipes = new();
 
         GetStatTotals();
 
-        foreach (SORecipe recipe in unfilteredList)
+        foreach (T recipe in unfilteredList)
         {
             // Check to make sure combined stat totals and individual pc stat maxes have all the keys from the requirements first. 
             // Could delete this missing keys part before final build to improve performance, not sure if it really matters. 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Weapon Item SO", menuName = "Items/SOWeaponItem")]
+[CreateAssetMenu(menuName = "Items/SOWeaponItem", fileName = "New Weapon Item SO")]
 public class SOWeaponItem : SOEquipmentItem
 {
     [SerializeField, Header("------------- Weapon Data --------------")]

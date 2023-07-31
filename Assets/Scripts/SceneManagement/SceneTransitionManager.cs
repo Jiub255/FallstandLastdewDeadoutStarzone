@@ -39,8 +39,6 @@ public class SceneTransitionManager : MonoBehaviour
 
         // Fade to black or whatever. 
         // Send event to some fade UI object in whichever scene is open and active? 
-        // How to do this? Can this coroutine have a while(other coroutine is running) thing?
-        // Use yield return [Coroutine](); But how with an event/Func? 
         yield return OnFadeOut?.Invoke(_fadeTime);
 
         // Cache current scene index to unload after setting HomeScene to active. 

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// SOCraftingItem, SOEquipmentItem, and SOUsableItem all inherit from this. 
+// SOCraftingItem, SOEquipmentItem, SOUsableItem, and SOTool all inherit from this. 
 public abstract class SOItem : SORecipe
 {
     /// <summary>

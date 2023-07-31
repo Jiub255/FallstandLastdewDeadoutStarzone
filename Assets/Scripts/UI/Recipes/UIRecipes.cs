@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Put this on the Crafting and Building canvases. 
@@ -62,8 +63,8 @@ public class UIRecipes : MonoBehaviour
 		// TODO - How to decide between Building and Crafting recipes? 
 		// Might just make two scripts, UIBuilding and UICrafting instead of UIRecipes. 
 		List<SORecipe> recipeList = BuildCraftEnum == BuildOrCraft.Build ?
-			GameDataSO.InventoryDataSO.PossibleBuildingRecipes : 
-			GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
+			GameDataSO.InventoryDataSO.PossibleBuildingRecipes.ToList<SORecipe>() : 
+			GameDataSO.InventoryDataSO.PossibleCraftingRecipes.ToList<SORecipe>();
 
 		foreach (SORecipe recipeSO in recipeList)
 		{

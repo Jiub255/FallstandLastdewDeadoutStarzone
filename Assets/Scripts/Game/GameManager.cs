@@ -19,24 +19,29 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private SOBuildingRecipes _buildingRecipesList;
 
+    // Managers
     private InventoryManager InventoryManager { get; set; }
     private StatManager StatManager { get; set; }
     private PCManager PCManager { get; set; }
+    private BuildingManager BuildingManager { get; set; }
+
+    // SO Data
     private SOGameData GameDataSO { get { return _gameDataSO; } set { _gameDataSO = value; } }
     private SOCraftableItems CraftingRecipesList { get { return _craftingItemsList; } set { _craftingItemsList = value; } }
     private SOBuildingRecipes BuildingRecipesList { get { return _buildingRecipesList; } set { _buildingRecipesList = value; } }
 
     private void OnEnable()
     {
-        // TODO - Just for testing, manually run these before building to populate SO recipe lists. 
+/*        // TODO - Just for testing, manually run these before building to populate SO recipe lists. 
         CraftingRecipesList.GetAllRecipes();
-        BuildingRecipesList.GetAllRecipes();
+        BuildingRecipesList.GetAllRecipes();*/
 
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO);
         PCManager = new(GameDataSO.CurrentTeamSO);
+        BuildingManager = new(GameDataSO.BuildingDataSO);
 
-        SpawnPoint.OnSceneStart += InitializeScene;
+//        SpawnPoint.OnSceneStart += InitializeScene;
         InventoryManager.OnInventoryChanged += GetPossibleBuildingRecipes;
         PCStatManager.OnStatsChanged += GetPossibleBuildingRecipes;
         InventoryManager.OnInventoryChanged += GetPossibleCraftingRecipes;
@@ -49,15 +54,17 @@ public class GameManager : MonoBehaviour
         InventoryManager.OnDisable();
         StatManager.OnDisable();
         PCManager.OnDisable();
+        BuildingManager.OnDisable();
+//        BuildingManager.OnDisable();
 
-        SpawnPoint.OnSceneStart -= InitializeScene;
+//        SpawnPoint.OnSceneStart -= InitializeScene;
         InventoryManager.OnInventoryChanged -= GetPossibleBuildingRecipes;
         PCStatManager.OnStatsChanged -= GetPossibleBuildingRecipes;
         InventoryManager.OnInventoryChanged -= GetPossibleCraftingRecipes;
         PCStatManager.OnStatsChanged -= GetPossibleCraftingRecipes;
     }
 
-    private void InitializeScene(Vector3 spawnPosition)
+/*    private void InitializeScene(Vector3 spawnPosition)
     {
         InstantiatePCs(spawnPosition);
     }
@@ -81,7 +88,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("No PCs on HomeSOPCSList in CurrentTeamSO. Can't play the game without PCs. ");
         }
-    }
+    }*/
 
     /// <summary>
     /// First checks StatManager to get all recipes that you meet the stat requirements for. <br/>
@@ -92,7 +99,7 @@ public class GameManager : MonoBehaviour
     public /*List<SORecipe>*/void GetPossibleCraftingRecipes()
     {
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Clear();
-        List<SORecipe> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(CraftingRecipesList.ItemsWithRecipeCosts);
+        List<SOItem> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(CraftingRecipesList.ItemsWithRecipeCosts);
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
 //        return GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
     }
@@ -106,7 +113,7 @@ public class GameManager : MonoBehaviour
     public /*List<SORecipe>*/void GetPossibleBuildingRecipes()
     {
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Clear();
-        List<SORecipe> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(BuildingRecipesList.AllBuildingRecipes);
+        List<SOBuilding> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(BuildingRecipesList.AllBuildingRecipes);
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
 //        return GameDataSO.InventoryDataSO.PossibleBuildingRecipes;
     }
@@ -119,5 +126,6 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         PCManager.FixedUpdateStates();
+        BuildingManager.FixedUpdate();
     }
 }

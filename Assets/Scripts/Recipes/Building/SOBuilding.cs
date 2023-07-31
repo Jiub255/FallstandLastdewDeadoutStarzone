@@ -13,12 +13,12 @@ public enum BuildingType
     Farming // Or production? 
 }
 
-public class SOBuildingItem : SORecipe
+public class SOBuilding : SORecipe
 {
     /// <summary>
     /// BuildingManager listens, sets this as current building SO. 
     /// </summary>
-    public static event Action<SOBuildingItem> OnSelectBuilding;
+    public static event Action<SOBuilding> OnSelectBuilding;
 
     [SerializeField]
     private BuildingType _buildingType;

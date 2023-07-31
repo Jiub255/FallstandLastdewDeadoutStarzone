@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class SOUsableItem : SOItem
 {
     [SerializeField, Header("----------- Usable Item Data -----------")]
-    private bool _isReusable = false;
+    private bool _reusable = false;
     [SerializeField]
     private List<SOEffect> _effects = new();
 
-    public bool IsReusable { get { return _isReusable; } }
+    public bool Reusable { get { return _reusable; } }
     public List<SOEffect> Effects { get { return _effects; } }
 
     public override void OnClickInventory()
@@ -21,7 +21,7 @@ public class SOUsableItem : SOItem
             effect.ApplyEffect(this);
         }
 
-        if (!IsReusable)
+        if (!Reusable)
         {
             RemoveFromInventory();
         }

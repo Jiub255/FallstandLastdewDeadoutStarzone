@@ -525,8 +525,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8429050034460973232}
-  - component: {fileID: 8429050034460973235}
   - component: {fileID: 1332224178036465294}
+  - component: {fileID: 4838437376418465892}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -549,26 +549,6 @@ Transform:
   m_Father: {fileID: 8429050034455999761}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8429050034460973235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8429050034460973233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 893399e3b6ae8304eb7b3f298771edeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}
-  _groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  _rotationSpeed: 50
-  _snapAngle: 45
-  _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}
-  _toggle: 0
 --- !u!114 &1332224178036465294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,3 +562,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentTeamSO: {fileID: 11400000, guid: 86b3ab5c7e2b5004995a73c22eb895f1, type: 2}
+--- !u!114 &4838437376418465892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429050034460973233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fe74905b635c34ca4fbdf6f84d32f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameDataSO: {fileID: 0}
+  _craftingItemsList: {fileID: 0}
+  _buildingRecipesList: {fileID: 0}

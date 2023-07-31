@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // Uses a "Building" prefab with the selected building icon child. Then attaches the actual building prefab as a child of it when selecting building.
-public class BuildingManager : MonoBehaviour
+public class BuildingManager
 {
     /*
     Want a free form building system, not grid based. 
@@ -21,42 +21,36 @@ public class BuildingManager : MonoBehaviour
             differences (mouse wheel, right click for now)
     */
 
-    [SerializeField]
-    private GameObject _buildingPrefab;
-    private SOBuildingItem _currentBuildingRecipeSO;
-    private GameObject _currentBuildingInstance;
-    private SelectedBuildingIcon _selectedBuildingIcon;
+    /*    [SerializeField]
+        private GameObject _buildingPrefab;
+        [SerializeField]
+        private LayerMask _groundLayerMask;
+        [SerializeField]
+        private float _rotationSpeed = 50f;
+        [SerializeField, Tooltip("Snap angle to the next [Snap Angle]. Works best with a divisor of 360.")]
+        private int _snapAngle = 45;*/
 
-    [SerializeField]
-    private LayerMask _groundLayerMask;
+    private SOBuildingData BuildingDataSO { get; }
+
+    // Keep here. 
+    private InputAction MousePositionAction { get; }
+    private InputManager InputManager { get; }
+
 
     // For debug gizmos, so they dont draw in editor mode.
     //private bool _started;
 
-    [SerializeField]
-    private float _rotationSpeed = 50f;
-    private Quaternion _rotation = Quaternion.identity;
-
-    private bool _pointerOverUI = false;
-    private EventSystem _eventSystem;
-
-    [SerializeField, Tooltip("Snap angle to the next [Snap Angle]. Works best with a divisor of 360.")]
-    private int _snapAngle = 45;
-
-    private InputAction _mousePositionAction;
-
-    [SerializeField]
-    protected SOInventory _craftingInventorySO;
-
-
-    private bool _angleSnapMode = false;
+    // Just testing stuff out here. Not gonna keep it. 
+/*    private bool _angleSnapMode = false;
     [SerializeField, Tooltip("Toggle or hold modifier button (shift) to change angle snap mode")]
-    private bool _toggle = false;
+    private bool _toggle = false;*/
 
-    private void Start()
+    public BuildingManager(SOBuildingData buildingDataSO)
     {
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        _eventSystem = EventSystem.current;
+        BuildingDataSO = buildingDataSO;
+
+        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        InputManager = S.I.IM;
 
         // For debug gizmos, so they dont draw in editor mode.
        // _started = true;
@@ -66,14 +60,14 @@ public class BuildingManager : MonoBehaviour
         S.I.IM.PC.Build.SnapBuilding.started += SnapToNextAngle;
         S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
 
-        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
-        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;
-
-        SOBuildingItem.OnSelectBuilding += SelectCurrentBuilding;
+        SOBuilding.OnSelectBuilding += SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
+
+/*        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
+        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
     }
 
-    private void ToggleAngleSnapMode(InputAction.CallbackContext context)
+/*    private void ToggleAngleSnapMode(InputAction.CallbackContext context)
     {
         _angleSnapMode = !_angleSnapMode;
     }
@@ -89,57 +83,52 @@ public class BuildingManager : MonoBehaviour
     {
         _toggle = false;
         S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;
-    }
+    }*/
 
-    private void OnDisable()
+    public void OnDisable()
     {
         S.I.IM.PC.Build.RotateBuilding.started -= RotateBuilding;
         S.I.IM.PC.Build.PlaceBuilding.started -= PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.started -= SnapToNextAngle;
         S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
 
-        S.I.IM.PC.Build.AngleSnapMode.started -= ToggleAngleSnapMode;
-        // TODO - How to check if event is subscribed? So you don't unnecessarily unsubscribe. 
-        // Or could you just subscribe here real quick before unsubscribing to be sure? Seems hacky. 
-        // Or, when you change _toggle, subscribe or unsubscribe there, so this _toggle check will be fine. 
-        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;
-
-        SOBuildingItem.OnSelectBuilding -= SelectCurrentBuilding;
+        SOBuilding.OnSelectBuilding -= SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
+
+/*        S.I.IM.PC.Build.AngleSnapMode.started -= ToggleAngleSnapMode;
+        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;*/
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
-        if (_currentBuildingInstance != null)
+        if (BuildingDataSO.CurrentBuildingInstance != null)
         {
             // Move building to current mouse position on ground
-            Ray ray = Camera.main.ScreenPointToRay(_mousePositionAction.ReadValue<Vector2>());
+            Ray ray = Camera.main.ScreenPointToRay(MousePositionAction.ReadValue<Vector2>());
             RaycastHit hitData;
 
             // TODO - Set maxDistance to zoom level plus a bit? Or is that just going overboard? 
-            if (Physics.Raycast(ray, out hitData, 1000, _groundLayerMask))
+            if (Physics.Raycast(ray, out hitData, 1000, BuildingDataSO.GroundLayerMask))
             {
                 // Make sure to make buildings have their "pivot" on the bottom center, that is,
                 // make an empty parent that holds the actual object and offset its y-coordinate so it's flush with the bottom of the parent.
-                _currentBuildingInstance.transform.position = hitData.point;
+                BuildingDataSO.CurrentBuildingInstance.transform.position = hitData.point;
 
                 SetHighlight();
             }
         }
-
-        _pointerOverUI = _eventSystem.IsPointerOverGameObject();
     }
 
     private void RotateBuilding(InputAction.CallbackContext context)
     {
-        if (_currentBuildingInstance != null)
+        if (BuildingDataSO.CurrentBuildingInstance != null)
         {
-            _currentBuildingInstance.transform.Rotate(new Vector3(
+            BuildingDataSO.CurrentBuildingInstance.transform.Rotate(new Vector3(
                 0f,
-                Time.unscaledDeltaTime * _rotationSpeed * context.ReadValue<float>(), 
+                Time.unscaledDeltaTime * BuildingDataSO.RotationSpeed * context.ReadValue<float>(), 
                 0f));
 
-            _rotation = _currentBuildingInstance.transform.rotation;
+            BuildingDataSO.Rotation = BuildingDataSO.CurrentBuildingInstance.transform.rotation;
 
             SetHighlight();
         }
@@ -150,16 +139,16 @@ public class BuildingManager : MonoBehaviour
     // Maybe holding/pressing shift can turn on/toggle angle snap mode. 
     private void SnapToNextAngle(InputAction.CallbackContext context)
     {
-        if (_currentBuildingInstance != null)
+        if (BuildingDataSO.CurrentBuildingInstance != null)
         {
-            for (int i = 0; i <= 360; i += _snapAngle)
+            for (int i = 0; i <= 360; i += BuildingDataSO.SnapAngle)
             {
 //                if (Mathf.Abs(_currentBuildingInstance.transform.rotation.eulerAngles.y - i) <= (_snapAngle / 2f))
-                if (_rotation.eulerAngles.y < i)
+                if (BuildingDataSO.Rotation.eulerAngles.y < i)
                 {
-                    _currentBuildingInstance.transform.rotation = Quaternion.Euler(0f, i , 0f);
+                    BuildingDataSO.CurrentBuildingInstance.transform.rotation = Quaternion.Euler(0f, i , 0f);
                     
-                    _rotation = _currentBuildingInstance.transform.rotation;
+                    BuildingDataSO.Rotation = BuildingDataSO.CurrentBuildingInstance.transform.rotation;
                 }
             }
         }
@@ -170,29 +159,29 @@ public class BuildingManager : MonoBehaviour
         if (CanBuildHere())
         {
             // Green highlight, allowed to build here. 
-            _selectedBuildingIcon.SetGreenMaterial();
+            BuildingDataSO.SelectedBuildingIcon.SetGreenMaterial();
         }
         else
         {
             // Red highlight, can't build here. 
-            _selectedBuildingIcon.SetRedMaterial();
+            BuildingDataSO.SelectedBuildingIcon.SetRedMaterial();
         }
     }
 
     private void MakeInstance()
     {
-        if (_currentBuildingRecipeSO != null)
+        if (BuildingDataSO.CurrentBuildingRecipeSO != null)
         {
-            if (_currentBuildingInstance != null)
+            if (BuildingDataSO.CurrentBuildingInstance != null)
             {
-                Destroy(_currentBuildingInstance);
+                Object.Destroy(BuildingDataSO.CurrentBuildingInstance);
                 SetBuildingInstance(null);
             }
 
-            SetBuildingInstance(Instantiate(_currentBuildingRecipeSO.BuildingPrefab));
+            SetBuildingInstance(Object.Instantiate(BuildingDataSO.CurrentBuildingRecipeSO.BuildingPrefab));
 
             // Set building's rotation
-            _currentBuildingInstance.transform.rotation = _rotation;
+            BuildingDataSO.CurrentBuildingInstance.transform.rotation = BuildingDataSO.Rotation;
         }
     }
 
@@ -201,17 +190,17 @@ public class BuildingManager : MonoBehaviour
     {
         if (buildingInstance != null)
         {
-            GameObject buildingParent = Instantiate(_buildingPrefab);
+            GameObject buildingParent = Object.Instantiate(BuildingDataSO.BuildingPrefab);
             buildingInstance.transform.SetParent(buildingParent.transform);
             buildingInstance.transform.localPosition = Vector3.zero;
-            _currentBuildingInstance = buildingParent;
-            _selectedBuildingIcon = buildingInstance.GetComponent<SelectedBuildingIcon>();
+            BuildingDataSO.CurrentBuildingInstance = buildingParent;
+            BuildingDataSO.SelectedBuildingIcon = buildingInstance.GetComponent<SelectedBuildingIcon>();
 //            _selectedBuildingIcon?.ActivateIcon();
         }
         else
         {
-            _currentBuildingInstance = null;
-            _selectedBuildingIcon = null;
+            BuildingDataSO.CurrentBuildingInstance = null;
+            BuildingDataSO.SelectedBuildingIcon = null;
         }
     }
 
@@ -219,7 +208,7 @@ public class BuildingManager : MonoBehaviour
     {
         // TODO: This might not work in builds, especially for android. Figure it out. 
         // Not sure what that means, look into it. Maybe the _pointerOverUI/eventSystem bit? 
-        if (_currentBuildingInstance != null && !_pointerOverUI)
+        if (BuildingDataSO.CurrentBuildingInstance != null && !InputManager.PointerOverUI)
         {
             // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
             if (CanBuildHere())
@@ -227,14 +216,14 @@ public class BuildingManager : MonoBehaviour
                 // TODO - Figure this out. 
                 // Collider not working unless I switch it off and on again.
                 // Could make it disabled in prefab then just enable it after placing?
-                _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;
-                _currentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
+                BuildingDataSO.CurrentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;
+                BuildingDataSO.CurrentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
 
                 // Disconnect the actual building from the parent/selected icon. 
-                _currentBuildingInstance.transform.GetComponentInChildren<Collider>().transform.parent = null;
+                BuildingDataSO.CurrentBuildingInstance.transform.GetComponentInChildren<Collider>().transform.parent = null;
 
                 // Destroy the parent/selected icon. 
-                Destroy(_currentBuildingInstance);
+                Object.Destroy(BuildingDataSO.CurrentBuildingInstance);
 
                 // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built).
                 // This is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu. 
@@ -249,24 +238,24 @@ public class BuildingManager : MonoBehaviour
 
     // Gets called from a button in build menu, which calls event in BuildingItem.
     // Also called when selecting a building the first time, not just changing buildings.
-    public void SelectCurrentBuilding(SOBuildingItem newBuildingRecipeSO)
+    public void SelectCurrentBuilding(SOBuilding newBuildingRecipeSO)
     {
        // Debug.Log("Changing current building to " + newBuilding.name);
 
-        _currentBuildingRecipeSO = newBuildingRecipeSO;
+        BuildingDataSO.CurrentBuildingRecipeSO = newBuildingRecipeSO;
 
         MakeInstance();
     }
 
     private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
-        if (_currentBuildingRecipeSO != null)
+        if (BuildingDataSO.CurrentBuildingRecipeSO != null)
         {
-            _currentBuildingRecipeSO = null;
+            BuildingDataSO.CurrentBuildingRecipeSO = null;
         }
-        if (_currentBuildingInstance != null)
+        if (BuildingDataSO.CurrentBuildingInstance != null)
         {
-            Destroy(_currentBuildingInstance);
+            Object.Destroy(BuildingDataSO.CurrentBuildingInstance);
             SetBuildingInstance(null);
 //            _currentBuildingInstance = null;
         }
@@ -275,11 +264,11 @@ public class BuildingManager : MonoBehaviour
     private bool CanBuildHere()
     {
         Collider[] collidersArray = Physics.OverlapBox(
-            _selectedBuildingIcon.transform.position,
-            _selectedBuildingIcon.transform.localScale,
+            BuildingDataSO.SelectedBuildingIcon.transform.position,
+            BuildingDataSO.SelectedBuildingIcon.transform.localScale,
 //            Quaternion.identity, 
-            _selectedBuildingIcon.transform.localRotation, 
-            ~_groundLayerMask);
+            BuildingDataSO.SelectedBuildingIcon.transform.localRotation, 
+            ~BuildingDataSO.GroundLayerMask);
 
         // TODO - Do this better. 
         // Remove collisions with self.
@@ -288,7 +277,7 @@ public class BuildingManager : MonoBehaviour
         {
             //Debug.Log(_currentBuildingInstance.transform.GetChild(0).gameObject.GetInstanceID() + " collided with " + collider.gameObject.GetInstanceID());
 
-            if (_selectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
+            if (BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
             {
                 collidersList.Remove(collidersList[i]);
             }
