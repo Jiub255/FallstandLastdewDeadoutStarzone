@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/SOLoot", fileName = "New Loot SO")]
+[CreateAssetMenu(menuName = "Inventory/SOLoot", fileName = "New Loot SO")]
 public class SOLoot : ScriptableObject
 {
 	[SerializeField]

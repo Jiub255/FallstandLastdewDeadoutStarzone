@@ -6,9 +6,8 @@ using UnityEngine.InputSystem;
 // so it might be better there. 
 
 /// <summary>
-/// How to handle click? <br/>
-/// Put PCSelector here, maybe as a plain C# class?
-/// Subscribe click event to that, and also run HandleClick in selected PC if there is one? 
+/// Must be constructed after PCs have been instantiated in scene. <br/> 
+/// TODO - Better way to do this? Seems unsafe and hard to keep track of. 
 /// </summary>
 public class PCSelector/* : MonoBehaviour*/
 {
@@ -30,13 +29,17 @@ public class PCSelector/* : MonoBehaviour*/
     private InputAction MousePositionAction { get; }
 
 //    private void Start()
+/// <summary>
+/// Need to wait to call this until after PCs have been instantiated, because it subscribes to events called by instantiated MBs on PCs. 
+/// </summary>
+/// <param name="teamDataSO"></param>
     public PCSelector(SOTeamData teamDataSO)
     {
         TeamDataSO = teamDataSO;
 
-        if (teamDataSO.HomeSOPCSList.Count > 0)
+        if (teamDataSO.HomePCs.Count > 0)
         {
-            PCLayerMask = teamDataSO.HomeSOPCSList[0].PCSharedDataSO.PCLayerMask;
+            PCLayerMask = teamDataSO.HomePCs[0].PCSharedDataSO.PCLayerMask;
         }
         else
         {
@@ -45,13 +48,29 @@ public class PCSelector/* : MonoBehaviour*/
 
         MousePositionAction = S.I.IM.PC.Camera.MousePosition;
 
-        SOPCData.OnSelectPC += HandleClick;
+        // SOPCData click events get subscribed to/unsubscribed from as PCs get added/removed from home team list. 
+        // TODO - Do the same for scavenging team list? 
+        teamDataSO.OnBeforeAddPCToHomeList += (pcDataSO) => pcDataSO.OnClickPCIcon += () => HandleClick(pcDataSO.PCInstance);
+        teamDataSO.OnBeforeRemovePCFromHomeList += (pcDataSO) => pcDataSO.OnClickPCIcon -= () => HandleClick(pcDataSO.PCInstance);
+        foreach (SOPCData pcDataSO in teamDataSO.HomePCs)
+        {
+            pcDataSO.OnClickPCIcon += () => HandleClick(pcDataSO.PCInstance);
+        }
+//        SOPCData.OnClickPCIcon += HandleClick;
+
         PCIdleState.OnPCDeselected += () => ChangePC(null);
     }
 
     public void OnDisable()
     {
-        SOPCData.OnSelectPC -= HandleClick;
+        TeamDataSO.OnBeforeAddPCToHomeList -= (pcDataSO) => pcDataSO.OnClickPCIcon += () => HandleClick(pcDataSO.PCInstance);
+        TeamDataSO.OnBeforeRemovePCFromHomeList -= (pcDataSO) => pcDataSO.OnClickPCIcon -= () => HandleClick(pcDataSO.PCInstance);
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
+        {
+            pcDataSO.OnClickPCIcon -= () => HandleClick(pcDataSO.PCInstance);
+        }
+//        SOPCData.OnClickPCIcon -= HandleClick;
+
         PCIdleState.OnPCDeselected -= () => ChangePC(null);
     }
 
@@ -62,6 +81,7 @@ public class PCSelector/* : MonoBehaviour*/
     /// <returns></returns>
     public bool CheckIfPCClicked(/*InputAction.CallbackContext context*/)
     {
+        // TODO - Change max distance to max zoom or something that makes sense? Probably not a big deal. 
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(MousePositionAction.ReadValue<Vector2>()),
@@ -71,6 +91,7 @@ public class PCSelector/* : MonoBehaviour*/
         // If there were any hits, they must have been PCs. 
         if (hits.Length > 0)
         {
+            // TODO - Handle click on the closest one to camera, not the first one necessarily? Or are they the same? 
             // This handles double/single clicking. 
             HandleClick(hits[0].transform.gameObject);
             return true;
@@ -120,7 +141,7 @@ public class PCSelector/* : MonoBehaviour*/
         LastClickTime = currentClickTime;
     }
     /// <summary>
-    /// Changes SelectedPC in Current Team SO. Also changes CurrentMenuPC so when you open the menu, it's on the 
+    /// Changes SelectedPC in Current Team SO. Also changes CurrentMenuPC so that when you open the menu, it's on the 
     /// most recently selected character. 
     /// </summary>
     /// <param name="clickedPCInstance"></param>
@@ -129,7 +150,7 @@ public class PCSelector/* : MonoBehaviour*/
         // TODO - Could do this better with selected bool I think. If clicked pc has Selected == true, then do nothing, otherwise
         // Select this PC and deselect other. Maybe deselect all first then select this one? This is the problem between having a bool
         // Or having a selectedPC field. With the bool, multiple could theoretically be selected, but only want at most one at a time to be. 
-        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             // Deselect all PCs first, 
             pcDataSO.Selected = false;

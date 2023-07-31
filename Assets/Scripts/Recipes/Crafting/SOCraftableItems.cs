@@ -8,16 +8,20 @@ using UnityEngine;
 /// <summary>
 /// Fill this with all SOItems with non empty RecipeCost lists before building game. 
 /// </summary>
-[CreateAssetMenu(menuName = "Recipes/Crafting/SOCraftableItems", fileName = "New Craftable Items SO")]
+[CreateAssetMenu(menuName = "Data/SOCraftableItems", fileName = "New Craftable Items SO")]
 public class SOCraftableItems : ScriptableObject/* : SORecipeList*/
 {
-    [SerializeField]
+    [SerializeField, Header("Put all items that should be craftable in game here\n(Items with empty RecipeCost lists get filtered out on game start)")]
     private List<SOItem> _itemsWithRecipeCosts = new();
 
+    /// <summary>
+    /// Put all items that should be craftable in game here (Items with empty RecipeCost lists get filtered out on game start). 
+    /// </summary>
     public List<SOItem> ItemsWithRecipeCosts { get { return _itemsWithRecipeCosts/*.Where(item => item.RecipeCosts.Count > 0).ToList()*/; } }
 
     /// <summary>
-    /// Do this once on load to make sure no SOItems with empty recipe cost lists got in. 
+    /// Do this once on load to make sure no SOItems with empty recipe cost lists got in. <br/>
+    /// TODO - Do this in editor right before build instead? Then won't have to do it each time the game loads. 
     /// </summary>
     public void FilterOutNoRecipeItems()
     {

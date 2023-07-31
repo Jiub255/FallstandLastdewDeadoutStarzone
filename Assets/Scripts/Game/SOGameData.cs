@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Game/SOGameData", fileName = "Game Data SO")]
+[CreateAssetMenu(menuName = "Data/SOGameData", fileName = "Game Data SO")]
 public class SOGameData : ScriptableObject
 {
     [SerializeField]

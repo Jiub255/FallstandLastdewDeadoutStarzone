@@ -3,6 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Have this be a singleton? Or have it created in ApplicationManager? <br/>
+/// Singleton might make more sense. It will keep the InputAction subscriptions in the classes that use them, instead
+/// of them all being in InputManager. One singleton for input seems fine, lots of classes use it. <br/>
+/// TODO - Maybe refactor without singleton later if it causes problems. 
+/// </summary>
 public class InputManager : MonoBehaviour
 {
     /// <summary>

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Enemies/SOEnemyData", fileName = "New Enemy Data SO")]
+[CreateAssetMenu(menuName = "Data/SOEnemyData", fileName = "New Enemy Data SO")]
 public class SOEnemyData : ScriptableObject
 {
 	[SerializeField]
@@ -16,4 +16,5 @@ public class SOEnemyData : ScriptableObject
 	public int CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
 	public List<(SOItem, int)> Loot { get { return _loot; } }
 	public SOEnemyCombatState EnemyCombatStateSO { get { return _enemyCombatStateSO; } }
+	public EnemyState ActiveState { get; set; }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Effects/SORelievePain", fileName = "Relieve Pain")]
+[CreateAssetMenu(menuName = "Items/Usable/Effects/SORelievePain", fileName = "Relieve Pain")]
 public class SORelievePain : SOEffect
 {
     // First int is CurrentMenuPC's InstanceID. 

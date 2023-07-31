@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Building/SOBuildingData", fileName = "Building Data SO")]
+[CreateAssetMenu(menuName = "Data/SOBuildingData", fileName = "Building Data SO")]
 public class SOBuildingData : ScriptableObject
 {
+    [SerializeField]
+    private SOBuildingRecipes _buildableBuildingsList;
     [SerializeField]
     private GameObject _buildingPrefab;
     [SerializeField]
@@ -13,6 +15,7 @@ public class SOBuildingData : ScriptableObject
     [SerializeField, Tooltip("Snap angle to the next [Snap Angle]. Works best with a divisor of 360.")]
     private int _snapAngle = 45;
 
+    public SOBuildingRecipes BuildableBuildingsList { get { return _buildableBuildingsList; } }
     public GameObject BuildingPrefab { get { return _buildingPrefab; } }
     public LayerMask GroundLayerMask { get { return _groundLayerMask; } }
     public float RotationSpeed { get { return _rotationSpeed; } }

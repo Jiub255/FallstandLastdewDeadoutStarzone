@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Player Characters/SOPCSharedData", fileName = "New PC Shared Data SO")]
+[CreateAssetMenu(menuName = "Data/SOPCSharedData", fileName = "New PC Shared Data SO")]
 public class SOPCSharedData : ScriptableObject
 {
     [SerializeField]

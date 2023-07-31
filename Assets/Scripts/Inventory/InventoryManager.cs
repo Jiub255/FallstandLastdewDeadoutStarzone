@@ -41,7 +41,10 @@ public class InventoryManager
     }
 
     // TODO - Do this in CraftingManager instead? 
-//    public List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
+    /// <summary>
+    /// Filters out all of the SORecipes that you either don't have enough crafting materials to build, <br/>
+    /// or you don't have the required tools for. 
+    /// </summary>
     public List<T> GetHaveEnoughItemsRecipes<T>(List<T> metRequirementsRecipes) where T : SORecipe
     {
         // Does this fancy LINQ work? 

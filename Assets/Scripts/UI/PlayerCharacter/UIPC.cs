@@ -19,7 +19,7 @@ public class UIPC : MonoBehaviour
         ClearInventory();
 
         // Populates UI
-        foreach (SOPCData pcSO in _pcSOsSO.HomeSOPCSList)
+        foreach (SOPCData pcSO in _pcSOsSO.HomePCs)
         {
             PCSlot slot = Instantiate(SlotPrefab, SlotParent).GetComponent<PCSlot>();
 

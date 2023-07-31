@@ -8,24 +8,28 @@ using UnityEngine;
 /// <summary>
 /// Fill this with all Buildable buildings in the game before building game. 
 /// </summary>
-[CreateAssetMenu(menuName = "Recipes/Building/SOBuildingRecipes", fileName = "New Building Recipes SO")]
+[CreateAssetMenu(menuName = "Data/SOBuildingRecipes", fileName = "New Building Recipes SO")]
 public class SOBuildingRecipes : ScriptableObject/* : SORecipeList*/
 {
-    [SerializeField]
-    private List<SOBuilding> _allBuildingRecipes; 
+    [SerializeField, Header("Put all building that should be buildable in game here\n(Buildings with empty RecipeCost lists get filtered out on game start)")]
+    private List<SOBuilding> _buildingsWithRecipeCosts;
 
-    public List<SOBuilding> AllBuildingRecipes { get { return _allBuildingRecipes; } }
+    /// <summary>
+    /// Put all building that should be buildable in game here (Buildings with empty RecipeCost lists get filtered out on game start). 
+    /// </summary>
+    public List<SOBuilding> BuildingsWithRecipeCosts { get { return _buildingsWithRecipeCosts; } }
 
     /// <summary>
     /// Do this once on load to make sure no SOItems with empty recipe cost lists got in. 
+    /// TODO - Do this in editor right before build instead? Then won't have to do it each time the game loads. 
     /// </summary>
     public void FilterOutNoRecipeItems()
     {
-        int prefilteredListCount = _allBuildingRecipes.Count;
+        int prefilteredListCount = _buildingsWithRecipeCosts.Count;
 
-        _allBuildingRecipes = _allBuildingRecipes.Where(item => item.RecipeCosts.Count > 0).ToList();
+        _buildingsWithRecipeCosts = _buildingsWithRecipeCosts.Where(item => item.RecipeCosts.Count > 0).ToList();
 
-        int postfilteredListCount = _allBuildingRecipes.Count;
+        int postfilteredListCount = _buildingsWithRecipeCosts.Count;
 
         if (prefilteredListCount != postfilteredListCount)
         {

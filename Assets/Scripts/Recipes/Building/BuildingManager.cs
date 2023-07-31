@@ -203,14 +203,15 @@ public class BuildingManager
         }
     }
 
+    /// <summary>
+    /// Filters out all of the SORecipes that you don't have the required crafting buildings for. 
+    /// </summary>
     public List<T> GetHaveRequiredBuildingsRecipes<T>(List<T> haveEnoughItemsRecipes) where T : SORecipe
     {
         // Does this fancy LINQ work? 
-        return haveEnoughItemsRecipes
-            .Where(recipeSO => recipeSO.RequiredBuildings
-                .Where(craftingBuildingSO => !BuildingDataSO.Buildings.Contains(craftingBuildingSO))
-                .ToList().Count == 0)
-            .ToList();
+        return haveEnoughItemsRecipes.Where(recipeSO => 
+            recipeSO.RequiredBuildings.Where(craftingBuildingSO => 
+            !BuildingDataSO.Buildings.Contains(craftingBuildingSO)).ToList().Count == 0).ToList();
 
 /*        List<T> haveRequiredBuildingsRecipes = new();
 

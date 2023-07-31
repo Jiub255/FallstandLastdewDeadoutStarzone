@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Inventory/SOInventoryData", fileName = "Inventory Data SO")]
+[CreateAssetMenu(menuName = "Data/SOInventoryData", fileName = "Inventory Data SO")]
 public class SOInventoryData : ScriptableObject
 {
+    [SerializeField]
+    private SOCraftableItems _craftableItemsList;
+
     [SerializeField]
     private SOInventory _usableInventorySO;
     [SerializeField]
@@ -13,6 +16,7 @@ public class SOInventoryData : ScriptableObject
     [SerializeField]
     private SOInventory _toolInventorySO;
 
+    public SOCraftableItems CraftableItemsList { get { return _craftableItemsList; } }
     public SOInventory UsableInventorySO { get { return _usableInventorySO; } }
     public SOInventory EquipmentInventorySO { get { return _equipmentInventorySO; } }
     public SOInventory CraftingInventorySO { get { return _craftingInventorySO; } }

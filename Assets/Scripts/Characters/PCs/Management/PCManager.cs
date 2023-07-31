@@ -21,7 +21,7 @@ public class PCManager
     private SOPCData CurrentlySelectedPC { get; set; }
     private SOPCData CurrentMenuPC { get; set; }
     private Dictionary<SOPCData, PCController> PCControllerDict { get; } = new();
-    private PCSelector PCSelector { get; }
+    private PCSelector PCSelector { get; set; }
     private PCItemUseManager PCItemUseManager { get; }
     private InputManager InputManager { get; set; }
 
@@ -29,26 +29,17 @@ public class PCManager
     {
         TeamDataSO = teamDataSO;
 
-        PCSelector = new(TeamDataSO);
         PCItemUseManager = new(PCControllerDict, CurrentMenuPC);
 
         InputManager = S.I.IM;
 
         // Set menu PC to first on list to start, so it's never null.
-        CurrentMenuPC = TeamDataSO.HomeSOPCSList[0];
+        CurrentMenuPC = TeamDataSO.HomePCs[0];
 
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentlySelectedPC = pcDataSO;
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuPC = pcDataSO;
         UICharacter.OnMenuPCChanged += (pcDataSO) => CurrentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart += InitializeScene;
-
-        // Equipment 
-        SOEquipmentItem.OnEquip += HandleEquip;
-        SOEquipmentItem.OnUnequip += HandleUnequip;
-
-        // TODO - Put these on PCItemUseManager? Kind of clutters up this class. 
-        // Usable items 
-        SORelievePain.OnRelievePainEffect += HandleRelievePainEffect;
 
         S.I.IM.PC.World.SelectOrCenter.canceled += HandleClick;
     }
@@ -59,14 +50,6 @@ public class PCManager
         PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuPC = pcDataSO;
         UICharacter.OnMenuPCChanged -= (pcDataSO) => CurrentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart -= InitializeScene;
-
-        // TODO - Put these in non-anonymous methods? For readability? 
-        // Equipment 
-        SOEquipmentItem.OnEquip -= HandleEquip;
-        SOEquipmentItem.OnUnequip -= HandleUnequip;
-
-        // Usable items 
-        SORelievePain.OnRelievePainEffect -= HandleRelievePainEffect;
 
         S.I.IM.PC.World.SelectOrCenter.canceled -= HandleClick;
 
@@ -86,18 +69,21 @@ public class PCManager
 
     private void InstantiatePCs(Vector3 spawnPosition)
     {
-        if (TeamDataSO.HomeSOPCSList.Count > 0)
+        if (TeamDataSO.HomePCs.Count > 0)
         {
-            for (int i = 0; i < TeamDataSO.HomeSOPCSList.Count; i++)
+            for (int i = 0; i < TeamDataSO.HomePCs.Count; i++)
             {
                 // Will UnityEngine.Object.Instantiate work? Or should this be done in GameManager? 
-                TeamDataSO.HomeSOPCSList[i].PCInstance = Object.Instantiate(
-                    TeamDataSO.HomeSOPCSList[i].PCPrefab,
+                TeamDataSO.HomePCs[i].PCInstance = Object.Instantiate(
+                    TeamDataSO.HomePCs[i].PCPrefab,
                     new Vector3(3 * i, 0f, 0f) + spawnPosition,
                     Quaternion.identity);
             }
 
             PopulateDictionary();
+
+            // This has to be constructed after PCs have been instantiated. 
+            PCSelector = new(TeamDataSO);
         }
         else
         {
@@ -105,33 +91,9 @@ public class PCManager
         }
     }
 
-    private void HandleUnequip(SOEquipmentItem item)
-    {
-        if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].EquipmentManager.Unequip(item);
-        else
-            Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
-    }
-
-    private void HandleEquip(SOEquipmentItem item)
-    {
-        if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].EquipmentManager.Equip(item);
-        else
-            Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
-    }
-
-    private void HandleRelievePainEffect(int amount, float duration)
-    {
-        if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].PainInjuryManager.TemporarilyRelievePain(amount, duration);
-        else
-            Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
-    }
-
     public void UpdateStates()
     {
-        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             pcDataSO.ActiveState.Update(pcDataSO.Selected);
         }
@@ -139,7 +101,7 @@ public class PCManager
 
     public void FixedUpdateStates()
     {
-        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             pcDataSO.ActiveState.FixedUpdate(pcDataSO.Selected);
         }
@@ -168,7 +130,7 @@ public class PCManager
     {
         PCControllerDict.Clear();
 
-        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             PCControllerDict.Add(pcDataSO, new PCController(pcDataSO, TeamDataSO));
         }

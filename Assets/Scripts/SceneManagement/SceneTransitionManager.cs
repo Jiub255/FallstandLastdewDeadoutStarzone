@@ -16,7 +16,7 @@ public class SceneTransitionManager : MonoBehaviour
     public void LoadHomeScene()
     {
         // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
-        foreach (SOPCData pcDataSO in _pcSOListSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in _pcSOListSO.HomePCs)
         {
             pcDataSO.PCInstance = null;
         }
@@ -87,7 +87,7 @@ public class SceneTransitionManager : MonoBehaviour
     public void LoadScavengingScene(GameObject levelPrefab)
     {
         // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
-        foreach (SOPCData pcDataSO in _pcSOListSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in _pcSOListSO.HomePCs)
         {
             pcDataSO.PCInstance = null;
         }

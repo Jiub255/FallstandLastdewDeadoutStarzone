@@ -137,7 +137,6 @@ MonoBehaviour:
   _transparentableLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  _currentTeamSO: {fileID: 11400000, guid: 86b3ab5c7e2b5004995a73c22eb895f1, type: 2}
   _boxcastHalfWidth: 50
   _boxcastHalfHeight: 50
 --- !u!1 &5059075228795231347
@@ -192,7 +191,7 @@ MonoBehaviour:
   _xRotationMax: 90
   _edgeScrollingSpeed: 4
   _percentDistanceFromEdges: 10
-  _draggingSpeed: 2
+  _draggingSpeed: 6
 --- !u!1 &5059075229066574954
 GameObject:
   m_ObjectHideFlags: 0

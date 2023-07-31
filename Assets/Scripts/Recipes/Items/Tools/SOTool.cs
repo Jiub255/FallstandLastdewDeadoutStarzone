@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/SOTool", fileName = "New Tool SO")]
+[CreateAssetMenu(menuName = "Items/Tools/SOTool", fileName = "New Tool SO")]
 public class SOTool : SOItem
 {
     /// <summary>

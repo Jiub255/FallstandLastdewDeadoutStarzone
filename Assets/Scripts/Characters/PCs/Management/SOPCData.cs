@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Player Characters/SOPCData", fileName = "New PC Data SO")]
+[CreateAssetMenu(menuName = "Data/SOPCData", fileName = "New PC Data SO")]
 public class SOPCData : ScriptableObject
 {
     /// <summary>
-    /// Called by clicking on PC icon in PC HUD. 
+    /// PCSelector listens, handles click (double or single click). 
     /// </summary>
-    public static event Action<GameObject> OnSelectPC;
+//    public static event Action<GameObject> OnClickPCIcon;
+    public event Action OnClickPCIcon;
 
     [SerializeField, Header("These variables DON'T change during runtime")]
     private Sprite _icon;
@@ -51,10 +52,12 @@ public class SOPCData : ScriptableObject
         return weaponAttack + attackStat;
     }
 
-    // Called by clicking PC icon button. 
-    public void Use()
+    /// <summary>
+    /// Called by clicking PC icon button. 
+    /// </summary>
+    public void SelectPC()
     {
         // PCSelector hears this. Selects this PC for now. Center camera on double click later. 
-        OnSelectPC?.Invoke(PCInstance);
+        OnClickPCIcon?.Invoke(/*PCInstance*/);
     }
 }

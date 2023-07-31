@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Inventory SO", menuName = "Items/SOInventory")]
+[CreateAssetMenu(menuName = "Inventory/SOInventory", fileName = "New Inventory SO")]
 public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory where T : SOItem*/
 {
     public event Action OnInventoryChanged;

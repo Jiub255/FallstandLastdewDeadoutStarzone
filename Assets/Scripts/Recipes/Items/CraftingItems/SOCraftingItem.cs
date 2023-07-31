@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Crafting Item SO", menuName = "Items/SOCraftingItem")]
+[CreateAssetMenu(menuName = "Items/Crafting/SOCraftingItem", fileName = "New Crafting Item SO")]
 public class SOCraftingItem : SOItem
 {  
     // What to do when clicking crafting item in inventory?

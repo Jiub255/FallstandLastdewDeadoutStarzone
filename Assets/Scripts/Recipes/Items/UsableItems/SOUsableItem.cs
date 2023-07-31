@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New Usable Item SO", menuName = "Items/SOUsableItem")]
+[CreateAssetMenu(menuName = "Items/Usable/SOUsableItem", fileName = "New Usable Item SO")]
 public class SOUsableItem : SOItem
 {
     [SerializeField, Header("----------- Usable Item Data -----------")]

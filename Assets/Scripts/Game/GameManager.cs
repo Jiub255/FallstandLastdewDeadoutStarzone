@@ -14,80 +14,41 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private SOGameData _gameDataSO;
-    [SerializeField]
-    private SOCraftableItems _craftingItemsList;
-    [SerializeField]
-    private SOBuildingRecipes _buildingRecipesList;
 
     // Managers
+    private PCManager PCManager { get; set; }
     private InventoryManager InventoryManager { get; set; }
     private StatManager StatManager { get; set; }
-    private PCManager PCManager { get; set; }
     private BuildingManager BuildingManager { get; set; }
 
-    // SO Data
+    // Data
     private SOGameData GameDataSO { get { return _gameDataSO; } set { _gameDataSO = value; } }
-    private SOCraftableItems CraftingRecipesList { get { return _craftingItemsList; } set { _craftingItemsList = value; } }
-    private SOBuildingRecipes BuildingRecipesList { get { return _buildingRecipesList; } set { _buildingRecipesList = value; } }
 
     private void OnEnable()
     {
-        CraftingRecipesList.FilterOutNoRecipeItems();
-        BuildingRecipesList.FilterOutNoRecipeItems();
+        GameDataSO.InventoryDataSO.CraftableItemsList.FilterOutNoRecipeItems();
+        GameDataSO.BuildingDataSO.BuildableBuildingsList.FilterOutNoRecipeItems();
 
+        // Instantiate PCManager first, so it can instantiate all the PC's in the game world. 
+        PCManager = new(GameDataSO.TeamDataSO);
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO.TeamDataSO);
-        PCManager = new(GameDataSO.TeamDataSO);
         BuildingManager = new(GameDataSO.BuildingDataSO);
 
-//        SpawnPoint.OnSceneStart += InitializeScene;
-        InventoryManager.OnInventoryChanged += GetPossibleBuildingRecipes;
-        PCStatManager.OnStatsChanged += GetPossibleBuildingRecipes;
-        InventoryManager.OnInventoryChanged += GetPossibleCraftingRecipes;
-        PCStatManager.OnStatsChanged += GetPossibleCraftingRecipes;
+        InventoryManager.OnInventoryChanged += GetPossibleRecipes;
+        PCStatManager.OnStatsChanged += GetPossibleRecipes;
     }
 
     private void OnDisable()
     {
-        // Run OnDisable in created class instances. 
+        // Run OnDisable in created class instances (to unsubscribe from events).  
         InventoryManager.OnDisable();
-        StatManager.OnDisable();
         PCManager.OnDisable();
         BuildingManager.OnDisable();
-//        BuildingManager.OnDisable();
 
-//        SpawnPoint.OnSceneStart -= InitializeScene;
-        InventoryManager.OnInventoryChanged -= GetPossibleBuildingRecipes;
-        PCStatManager.OnStatsChanged -= GetPossibleBuildingRecipes;
-        InventoryManager.OnInventoryChanged -= GetPossibleCraftingRecipes;
-        PCStatManager.OnStatsChanged -= GetPossibleCraftingRecipes;
+        InventoryManager.OnInventoryChanged -= GetPossibleRecipes;
+        PCStatManager.OnStatsChanged -= GetPossibleRecipes;
     }
-
-/*    private void InitializeScene(Vector3 spawnPosition)
-    {
-        InstantiatePCs(spawnPosition);
-    }
-
-    private void InstantiatePCs(Vector3 spawnPosition)
-    {
-        if (GameDataSO.CurrentTeamSO.HomeSOPCSList.Count > 0)
-        {
-            for (int i = 0; i < GameDataSO.CurrentTeamSO.HomeSOPCSList.Count; i++)
-            {
-                // Will UnityEngine.Object.Instantiate work? Or should this be done in GameManager? 
-                GameDataSO.CurrentTeamSO.HomeSOPCSList[i].PCInstance = Instantiate(
-                    GameDataSO.CurrentTeamSO.HomeSOPCSList[i].PCPrefab,
-                    new Vector3(3 * i, 0f, 0f) + spawnPosition,
-                    Quaternion.identity);
-            }
-            
-            PCManager.PopulateDictionary();
-        }
-        else
-        {
-            Debug.LogWarning("No PCs on HomeSOPCSList in CurrentTeamSO. Can't play the game without PCs. ");
-        }
-    }*/
 
     /// <summary>
     /// First checks StatManager to get all recipes that you meet the stat requirements for. <br/>
@@ -95,26 +56,19 @@ public class GameManager : MonoBehaviour
     /// TODO - Check BuildingManager for required building stuff, and inv for required held items stuff. 
     /// </summary>
     /// <returns>List of all recipes that you meet requirements for, and have enough items to craft. </returns>
-    public /*List<SORecipe>*/void GetPossibleCraftingRecipes()
+    public void GetPossibleRecipes()
     {
+        // Get all craftable items.
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Clear();
-        List<SOItem> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(CraftingRecipesList.ItemsWithRecipeCosts);
-        GameDataSO.InventoryDataSO.PossibleCraftingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
-//        return GameDataSO.InventoryDataSO.PossibleCraftingRecipes;
-    }
+        List<SOItem> metStatReqsItems = StatManager.GetMetStatRequirementsRecipes(GameDataSO.InventoryDataSO.CraftableItemsList.ItemsWithRecipeCosts);
+        List<SOItem> haveReqItemsAndToolsItems = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsItems);
+        GameDataSO.InventoryDataSO.PossibleCraftingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsItems);
 
-    /// <summary>
-    /// First checks StatManager to get all recipes that you meet the stat requirements for. <br/>
-    /// Then checks InventoryManager to get all recipes that you also have enough items for. <br/>
-    /// TODO - Check BuildingManager for required building stuff, and inv for required held items stuff. 
-    /// </summary>
-    /// <returns>List of all recipes that you meet requirements for, and have enough items to craft. </returns>
-    public /*List<SORecipe>*/void GetPossibleBuildingRecipes()
-    {
+        // Get all buildable buildings. 
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Clear();
-        List<SOBuilding> metStatReqsRecipes = StatManager.GetMetStatRequirementsRecipes(BuildingRecipesList.AllBuildingRecipes);
-        GameDataSO.InventoryDataSO.PossibleBuildingRecipes = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsRecipes);
-//        return GameDataSO.InventoryDataSO.PossibleBuildingRecipes;
+        List<SOBuilding> metStatReqsBuildings = StatManager.GetMetStatRequirementsRecipes(GameDataSO.BuildingDataSO.BuildableBuildingsList.BuildingsWithRecipeCosts);
+        List<SOBuilding> haveReqItemsAndToolsBuildings = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsBuildings);
+        GameDataSO.InventoryDataSO.PossibleBuildingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsBuildings);
     }
 
     private void Update()

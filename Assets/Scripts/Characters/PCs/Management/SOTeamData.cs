@@ -5,32 +5,60 @@ using UnityEngine;
 // TODO - Use this as a PCManager, and recieve Usable/Equipment item events and send them to the correct PC? 
 // OR, have a separate MonoBehavoiur PCManager, and do that there, just reference this SO? 
 /// <summary>
-/// Holds a home SOPCDatas list, a scavenging one, a selected PC instance GameObject, and a current menu SOPCData. 
+/// Holds "home" and "scavenging" SOPCData lists. Sends events when they change. 
 /// </summary>
-[CreateAssetMenu(menuName = "Player Characters/SOTeamData", fileName = "Current Team SO")]
+[CreateAssetMenu(menuName = "Data/SOTeamData", fileName = "Current Team SO")]
 public class SOTeamData : ScriptableObject
 {
-	public event Action OnHomeSOPCListChanged;
-	public event Action OnScavengingSOPCListChanged;
+	public event Action<SOPCData> OnBeforeAddPCToHomeList;
+	public event Action<SOPCData> OnBeforeRemovePCFromHomeList;
+
+	// Not sure if these will be needed. Might use before add/remove events that send the SO to be added/removed instead. 
+/*	public event Action OnHomeSOPCListChanged;
+	public event Action OnScavengingSOPCListChanged;*/
 
 	[SerializeField]
-	private List<SOPCData> _homeSOPCSList = new();
+	private List<SOPCData> _homePCs;
 	[SerializeField]
-	private List<SOPCData> _scavengingPCSList = new();
+	private List<SOPCData> _scavengingPCs;
 
-	public List<SOPCData> HomeSOPCSList { get { return _homeSOPCSList; } }
-	public List<SOPCData> ScavengingPCSList { get { return _scavengingPCSList; } }
+	public List<SOPCData> HomePCs { get { return _homePCs; } }
+	public List<SOPCData> ScavengingPCs { get { return _scavengingPCs; } }
 	public List <SORecipe> PossibleRecipes { get; set; }
 	/// <summary>
 	/// Using dictionary instead of StatValue so you can change value and get by key. 
 	/// </summary>
 	public Dictionary<StatType, int> IndividualPCStatMaxes { get; }
 
+	/// <summary>
+	/// Use this to get the healing rate. Based on total medical skill of all PCs. 
+	/// </summary>
+	/// <remarks>
+	/// Currently totalMedicalSkill / 1000f. 
+	/// </remarks>
+	public float HealingRate
+	{
+		get
+		{
+			float totalMedicalSkill = 0;
+			foreach (SOPCData pcSO in HomePCs)
+			{
+				totalMedicalSkill += pcSO.Stats[StatType.Medical].ModdedValue;
+			}
+			return totalMedicalSkill / 1000f;
+		}
+	}
+
+
+	/// <summary>
+	/// Is this necessary? Or does it even do anything? Or just return the same thing you put in, <br/>
+	/// unless it's not on the list? So it's kinda like a bool contains check, but returns null instead of false. 
+	/// </summary>
 	public SOPCData this[SOPCData pcDataSO]
     {
         get
         {
-			foreach (SOPCData homePCDataSO in _homeSOPCSList)
+			foreach (SOPCData homePCDataSO in _homePCs)
             {
 				if (homePCDataSO == pcDataSO)
                 {
@@ -45,20 +73,20 @@ public class SOTeamData : ScriptableObject
 
 	public void AddPCToHomeList(SOPCData sopc)
     {
-		HomeSOPCSList.Add(sopc);
+		HomePCs.Add(sopc);
 
 		// PCItemUseManager listens, updates dictionary. 
-		OnHomeSOPCListChanged?.Invoke();
+//		OnHomeSOPCListChanged?.Invoke();
     }
 
 	public void RemovePCFromHomeList(SOPCData sopc)
     {
-		if (HomeSOPCSList.Contains(sopc))
+		if (HomePCs.Contains(sopc))
         {
-			HomeSOPCSList.Remove(sopc);
+			HomePCs.Remove(sopc);
 
 			// PCItemUseManager listens, updates dictionary. 
-			OnHomeSOPCListChanged?.Invoke();
+//			OnHomeSOPCListChanged?.Invoke();
         }
         else
         {
@@ -68,39 +96,20 @@ public class SOTeamData : ScriptableObject
 
 	public void AddPCToScavengingList(SOPCData sopc)
     {
-		ScavengingPCSList.Add(sopc);
-		OnScavengingSOPCListChanged?.Invoke();
+		ScavengingPCs.Add(sopc);
+//		OnScavengingSOPCListChanged?.Invoke();
     }
 
 	public void RemovePCFromScavengingList(SOPCData sopc)
     {
-		if (ScavengingPCSList.Contains(sopc))
+		if (ScavengingPCs.Contains(sopc))
         {
-			ScavengingPCSList.Remove(sopc);
-			OnScavengingSOPCListChanged?.Invoke();
+			ScavengingPCs.Remove(sopc);
+//			OnScavengingSOPCListChanged?.Invoke();
         }
         else
         {
 			Debug.LogWarning($"{sopc.PCPrefab.name} not on Scavenging SOPC list. ");
         }
     }
-
-	/// <summary>
-	/// Use this to get the healing rate. Based on total medical skill of all PCs. 
-	/// </summary>
-	/// <remarks>
-	/// Currently totalMedicalSkill / 1000f. 
-	/// </remarks>
-	public float HealingRate
-	{
-		get
-		{
-			float totalMedicalSkill = 0;
-			foreach (SOPCData pcSO in HomeSOPCSList)
-			{
-				totalMedicalSkill += pcSO.Stats[StatType.Medical].ModdedValue;
-			}
-			return totalMedicalSkill / 1000f;
-		}
-	}
 }

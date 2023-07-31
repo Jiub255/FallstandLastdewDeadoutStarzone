@@ -45,7 +45,7 @@ public class PCSlot : MonoBehaviour
     {
         if (_pcSO != null)
         {
-            _pcSO.Use();
+            _pcSO.SelectPC();
         }
     }
 }

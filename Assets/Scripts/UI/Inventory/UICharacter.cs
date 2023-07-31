@@ -53,15 +53,15 @@ public class UICharacter : MonoBehaviour
 
     public void NextPC()
     {
-	    int currentIndex = CurrentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
+	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
         {
 			currentIndex++;
 
-			if (currentIndex >= CurrentTeamSO.HomeSOPCSList.Count) currentIndex = 0;
+			if (currentIndex >= CurrentTeamSO.HomePCs.Count) currentIndex = 0;
 
-			CurrentMenuSOPCData = CurrentTeamSO.HomeSOPCSList[currentIndex];
+			CurrentMenuSOPCData = CurrentTeamSO.HomePCs[currentIndex];
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
 
@@ -75,15 +75,15 @@ public class UICharacter : MonoBehaviour
 
 	public void PreviousPC()
     {
-		int currentIndex = CurrentTeamSO.HomeSOPCSList.IndexOf(CurrentMenuSOPCData);
+		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
 		{
 			currentIndex--;
 
-			if (currentIndex > 0) currentIndex = CurrentTeamSO.HomeSOPCSList.Count - 1;
+			if (currentIndex > 0) currentIndex = CurrentTeamSO.HomePCs.Count - 1;
 
-			CurrentMenuSOPCData = CurrentTeamSO.HomeSOPCSList[currentIndex];
+			CurrentMenuSOPCData = CurrentTeamSO.HomePCs[currentIndex];
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
 

@@ -6,20 +6,14 @@ public class StatManager
 {
 	private SOTeamData TeamDataSO { get; set; }
 
-//    private void OnEnable()
     public StatManager(SOTeamData teamDataSO)
     {
         TeamDataSO = teamDataSO;
-
-//        UIRecipes.OnGetMetStatRequirementsRecipes += GetMetStatRequirementsRecipes;
     }
 
-    public void OnDisable()
-    {
-//        UIRecipes.OnGetMetStatRequirementsRecipes -= GetMetStatRequirementsRecipes;
-    }
-
-//    public List<SORecipe> GetMetStatRequirementsRecipes(List<SORecipe> unfilteredList)
+    /// <summary>
+    /// Filters out all of the SORecipes that you don't meet the stat requirements for. 
+    /// </summary>
     public List<T> GetMetStatRequirementsRecipes<T>(List<T> unfilteredList) where T : SORecipe
     {
         GetStatTotals();
@@ -67,7 +61,7 @@ public class StatManager
 
     private void GetStatTotals()
     {
-		foreach (SOPCData pcSO in TeamDataSO.HomeSOPCSList)
+		foreach (SOPCData pcSO in TeamDataSO.HomePCs)
         {
             foreach (Stat stat in pcSO.Stats.StatList)
             {
