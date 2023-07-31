@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PCManager
 {
+    private SOPCData _currentMenuPC;
+
     /// <summary>
     /// TODO - Can this be passed to PCItemUseManager and keep the same references as it gets changed (set) in here?
     /// Pretty sure the reference the same as here if this one gets altered, but what if it gets re-set to another object? 
@@ -19,8 +22,10 @@ public class PCManager
     /// </summary>
 	private SOTeamData TeamDataSO { get; }
     private SOPCData CurrentlySelectedPC { get; set; }
-    private SOPCData CurrentMenuPC { get; set; }
-    private Dictionary<SOPCData, PCController> PCControllerDict { get; } = new();
+    /// <summary>
+    /// TODO - Put this on TeamDataSO instead so PCSlot can reference it. 
+    /// </summary>
+//    private Dictionary<SOPCData, PCController> PCControllerDict { get; } = new();
     private PCSelector PCSelector { get; set; }
     private PCItemUseManager PCItemUseManager { get; }
     private InputManager InputManager { get; set; }
@@ -29,16 +34,18 @@ public class PCManager
     {
         TeamDataSO = teamDataSO;
 
-        PCItemUseManager = new(PCControllerDict, CurrentMenuPC);
+        // TODO - Will this work? Passing the reference to SOPCData here? What if it gets changed to refer to another SOPCData?
+        // Will PCItemUseManager keep the reference to the old one? 
+        PCItemUseManager = new(/*TeamDataSO.PCControllerDict, */ref _currentMenuPC);
 
         InputManager = S.I.IM;
 
         // Set menu PC to first on list to start, so it's never null.
-        CurrentMenuPC = TeamDataSO.HomePCs[0];
+        _currentMenuPC = TeamDataSO.HomePCs[0];
 
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentlySelectedPC = pcDataSO;
-        PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuPC = pcDataSO;
-        UICharacter.OnMenuPCChanged += (pcDataSO) => CurrentMenuPC = pcDataSO;
+        PCSelector.OnSelectedNewPC += (pcDataSO) => _currentMenuPC = pcDataSO;
+        UICharacter.OnMenuPCChanged += (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart += InitializeScene;
 
         S.I.IM.PC.World.SelectOrCenter.canceled += HandleClick;
@@ -47,14 +54,15 @@ public class PCManager
     public void OnDisable()
     {
         PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentlySelectedPC = pcDataSO;
-        PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuPC = pcDataSO;
-        UICharacter.OnMenuPCChanged -= (pcDataSO) => CurrentMenuPC = pcDataSO;
+        PCSelector.OnSelectedNewPC -= (pcDataSO) => _currentMenuPC = pcDataSO;
+        UICharacter.OnMenuPCChanged -= (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart -= InitializeScene;
 
         S.I.IM.PC.World.SelectOrCenter.canceled -= HandleClick;
 
         // Run OnDisable in created class instances. 
-        foreach (PCController pcController in PCControllerDict.Values)
+//        foreach (PCController pcController in TeamDataSO.PCControllerDict.Values)
+        foreach (PCController pcController in TeamDataSO.HomePCs.Select(pcDataSO => pcDataSO.PCController))
         {
             pcController.OnDisable();
         }
@@ -78,9 +86,11 @@ public class PCManager
                     TeamDataSO.HomePCs[i].PCPrefab,
                     new Vector3(3 * i, 0f, 0f) + spawnPosition,
                     Quaternion.identity);
+
+                TeamDataSO.HomePCs[i].PCController = new PCController(TeamDataSO.HomePCs[i], TeamDataSO);
             }
 
-            PopulateDictionary();
+//            PopulateDictionary();
 
             // This has to be constructed after PCs have been instantiated. 
             PCSelector = new(TeamDataSO);
@@ -118,7 +128,8 @@ public class PCManager
         {
             if (!PCSelector.CheckIfPCClicked() && CurrentlySelectedPC != null)
             {
-                PCControllerDict[CurrentlySelectedPC].PCStateMachine.HandleClick();
+//                TeamDataSO.PCControllerDict[CurrentlySelectedPC].PCStateMachine.HandleClick();
+                CurrentlySelectedPC.PCController.PCStateMachine.HandleClick();
             }
         }
     }
@@ -126,13 +137,14 @@ public class PCManager
     /// <summary>
     /// Called after instantiating PCs. 
     /// </summary>
-    private void PopulateDictionary()
+/*    private void PopulateDictionary()
     {
-        PCControllerDict.Clear();
+        TeamDataSO.PCControllerDict.Clear();
 
         foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
-            PCControllerDict.Add(pcDataSO, new PCController(pcDataSO, TeamDataSO));
+//            TeamDataSO.PCControllerDict.Add(pcDataSO, new PCController(pcDataSO, TeamDataSO));
+            pcDataSO.PCController = new PCController(pcDataSO, TeamDataSO);
         }
-    }
+    }*/
 }

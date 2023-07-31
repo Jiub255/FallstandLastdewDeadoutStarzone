@@ -10,13 +10,17 @@ using UnityEngine;
 /// </summary>
 public class PCItemUseManager
 {
-    private Dictionary<SOPCData, PCController> PCControllerDict { get; }
+//    private Dictionary<SOPCData, PCController> PCControllerDict { get; }
     private SOPCData CurrentMenuPC { get; }
-    private SOInventoryData InventoryDataSO { get; }
+//    private SOInventoryData InventoryDataSO { get; }
 
-    public PCItemUseManager(Dictionary<SOPCData, PCController> pcControllerDict, SOPCData currentMenuPC)
+    /// <summary>
+    /// TODO - Will passing the SOPCData by ref work? I want the reference to always point to the same thing as it does in PCManager. 
+    /// </summary>
+    /// <param name="currentMenuPC"></param>
+    public PCItemUseManager(/*Dictionary<SOPCData, PCController> pcControllerDict, */ref SOPCData currentMenuPC)
     {
-        PCControllerDict = pcControllerDict;
+//        PCControllerDict = pcControllerDict;
         CurrentMenuPC = currentMenuPC;
 /*        InventoryDataSO = inventoryDataSO;
 
@@ -60,7 +64,8 @@ public class PCItemUseManager
     private void HandleEquip(SOEquipmentItem item)
     {
         if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].EquipmentManager.Equip(item);
+//            PCControllerDict[CurrentMenuPC].EquipmentManager.Equip(item);
+            CurrentMenuPC.PCController.EquipmentManager.Equip(item);
         else
             Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
     }
@@ -68,7 +73,8 @@ public class PCItemUseManager
     private void HandleUnequip(SOEquipmentItem item)
     {
         if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].EquipmentManager.Unequip(item);
+//            PCControllerDict[CurrentMenuPC].EquipmentManager.Unequip(item);
+            CurrentMenuPC.PCController.EquipmentManager.Unequip(item);
         else
             Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
     }
@@ -76,7 +82,8 @@ public class PCItemUseManager
     private void HandleRelievePainEffect(int amount, float duration)
     {
         if (CurrentMenuPC != null)
-            PCControllerDict[CurrentMenuPC].PainInjuryManager.TemporarilyRelievePain(amount, duration);
+//            PCControllerDict[CurrentMenuPC].PainInjuryManager.TemporarilyRelievePain(amount, duration);
+            CurrentMenuPC.PCController.PainInjuryManager.TemporarilyRelievePain(amount, duration);
         else
             Debug.LogWarning("CurrentMenuPC is null in PCManager. This should never happen, should get set on scene load. ");
     }

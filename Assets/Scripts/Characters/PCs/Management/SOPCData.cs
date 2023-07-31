@@ -43,6 +43,7 @@ public class SOPCData : ScriptableObject
     public GameObject PCInstance { get; set; }
     public PCState ActiveState { get; set; }
     public bool Selected { get; set; }
+    public PCController PCController { get; set; }
 
     public int WeaponDamage()
     {

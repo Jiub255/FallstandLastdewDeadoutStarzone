@@ -35,9 +35,8 @@ public class PCSlot : MonoBehaviour
         UpdatePainBar(pcSO.Pain);
         UpdateInjuryBar(pcSO.Injury);
 
-        // Set the pain and injury scripts' references to this script here, so they can update the UI when they change value. 
-        PainInjuryManager painInjuryManager = pcSO.PCInstance.GetComponentInChildren<PainInjuryManager>();
-        painInjuryManager.Slot = this;
+        // Set the pain and injury script's reference to this script here, so it can update the UI when it changes value. 
+        pcSO.PCController.PainInjuryManager.Slot = this;
     }
 
     // Called by clicking on PC slot

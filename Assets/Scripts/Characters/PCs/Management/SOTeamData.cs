@@ -30,6 +30,7 @@ public class SOTeamData : ScriptableObject
 	/// Using dictionary instead of StatValue so you can change value and get by key. 
 	/// </summary>
 	public Dictionary<StatType, int> IndividualPCStatMaxes { get; }
+//	public Dictionary<SOPCData, PCController> PCControllerDict { get; }
 
 	/// <summary>
 	/// Use this to get the healing rate. Based on total medical skill of all PCs. 

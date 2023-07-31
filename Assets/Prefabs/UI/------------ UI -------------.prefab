@@ -630,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26965fa72ca676044b043024435da91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pcSOsSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _pcSOsSO: {fileID: 11400000, guid: afd964bd4dbd31841b81217914415593, type: 2}
   SlotPrefab: {fileID: 9215846113654697647, guid: 2e2496814e5e78841a85fd889ab9d303, type: 3}
   SlotParent: {fileID: 972536995}
 --- !u!1 &1886890405
@@ -780,7 +780,7 @@ GameObject:
   - component: {fileID: 8835902864726765215}
   - component: {fileID: 9212622735993861932}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Background Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2379,7 +2379,7 @@ GameObject:
   - component: {fileID: 5546669424213671620}
   - component: {fileID: 4003300953570516234}
   m_Layer: 5
-  m_Name: Usable Items Panel
+  m_Name: Background Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4968,7 +4968,7 @@ GameObject:
   - component: {fileID: 709161213704758934}
   - component: {fileID: 1777686612054492350}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Background Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5148,10 +5148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34473425980b48840b9638d5d1b9620f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildOrCraft: 0
+  _buildOrCraft: 1
   _recipeSlotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
   _slotsParent: {fileID: 8086131555549873885}
-  _gameDataSO: {fileID: 0}
+  _gameDataSO: {fileID: 11400000, guid: 5cf33be3994d9c54b975ba827f10c138, type: 2}
 --- !u!1 &5501772686231289652
 GameObject:
   m_ObjectHideFlags: 0
@@ -6932,7 +6932,7 @@ MonoBehaviour:
   _buildOrCraft: 0
   _recipeSlotPrefab: {fileID: 1125692319144443039, guid: 383eaeefa50581d40b919843be44e773, type: 3}
   _slotsParent: {fileID: 4478954206514053347}
-  _gameDataSO: {fileID: 0}
+  _gameDataSO: {fileID: 11400000, guid: 5cf33be3994d9c54b975ba827f10c138, type: 2}
 --- !u!1 &8146464655037193725
 GameObject:
   m_ObjectHideFlags: 0
