@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 // Manages the total stats of all PCs.
 public class StatManager
 {
-	private SOGameData GameDataSO { get; set; }
+	private SOTeamData TeamDataSO { get; set; }
 
 //    private void OnEnable()
-    public StatManager(SOGameData gameDataSO)
+    public StatManager(SOTeamData teamDataSO)
     {
-        GameDataSO = gameDataSO;
+        TeamDataSO = teamDataSO;
 
 //        UIRecipes.OnGetMetStatRequirementsRecipes += GetMetStatRequirementsRecipes;
     }
@@ -23,9 +22,15 @@ public class StatManager
 //    public List<SORecipe> GetMetStatRequirementsRecipes(List<SORecipe> unfilteredList)
     public List<T> GetMetStatRequirementsRecipes<T>(List<T> unfilteredList) where T : SORecipe
     {
-        List<T> metRequirementsRecipes = new();
-
         GetStatTotals();
+
+        // Does this fancy LINQ work? 
+        return unfilteredList.Where(recipeSO => recipeSO.MinSinglePCStatRequirements.Where(
+            statRequirement => !TeamDataSO.IndividualPCStatMaxes.ContainsKey(statRequirement.StatType) ||
+            TeamDataSO.IndividualPCStatMaxes[statRequirement.StatType] < statRequirement.Value).ToList().Count == 0).ToList();
+
+
+/*        List<T> metRequirementsRecipes = new();
 
         foreach (T recipe in unfilteredList)
         {
@@ -41,8 +46,8 @@ public class StatManager
             }
 
             // Combined stat requirements, probably won't use. 
-/*            List<StatRequirement> unmetRequirements = recipe.CombinedStatRequirements.Where(
-                entry => _combinedStatTotals[entry.StatType] < entry.RequiredAmount).ToList();*/
+*//*            List<StatRequirement> unmetRequirements = recipe.CombinedStatRequirements.Where(
+                entry => _combinedStatTotals[entry.StatType] < entry.RequiredAmount).ToList();*//*
             
             // Minimum single PC stat requirements. 
             List<StatValue> unmetRequirements = recipe.MinSinglePCStatRequirements.Where(
@@ -54,12 +59,12 @@ public class StatManager
             }
         }
 
-        return metRequirementsRecipes;
+        return metRequirementsRecipes;*/
     }
 
     private void GetStatTotals()
     {
-		foreach (SOPCData pcSO in GameDataSO.CurrentTeamSO.HomeSOPCSList)
+		foreach (SOPCData pcSO in TeamDataSO.HomeSOPCSList)
         {
             foreach (Stat stat in pcSO.Stats.StatList)
             {
@@ -74,16 +79,16 @@ public class StatManager
                 }*/
 
                 // Update _individualPCStatMaxes dictionary. 
-                if (GameDataSO.IndividualPCStatMaxes.ContainsKey(stat.StatType))
+                if (TeamDataSO.IndividualPCStatMaxes.ContainsKey(stat.StatType))
                 {
-                    if (stat.ModdedValue > GameDataSO.IndividualPCStatMaxes[stat.StatType])
+                    if (stat.ModdedValue > TeamDataSO.IndividualPCStatMaxes[stat.StatType])
                     {
-                        GameDataSO.IndividualPCStatMaxes[stat.StatType] = stat.ModdedValue;
+                        TeamDataSO.IndividualPCStatMaxes[stat.StatType] = stat.ModdedValue;
                     }
                 }
                 else
                 {
-                    GameDataSO.IndividualPCStatMaxes.Add(stat.StatType, stat.ModdedValue);
+                    TeamDataSO.IndividualPCStatMaxes.Add(stat.StatType, stat.ModdedValue);
                 }
             }
         }

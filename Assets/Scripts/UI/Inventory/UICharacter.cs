@@ -16,7 +16,7 @@ public class UICharacter : MonoBehaviour
 	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
 	/// </summary>
 	[SerializeField]
-	private SOCurrentTeam _currentTeamSO;
+	private SOTeamData _currentTeamSO;
 	[SerializeField]
 	private TextMeshProUGUI _pcName;
 	[SerializeField]
@@ -32,7 +32,7 @@ public class UICharacter : MonoBehaviour
 	/// <summary>
 	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
 	/// </summary>
-	private SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
+	private SOTeamData CurrentTeamSO { get { return _currentTeamSO; } }
 	private TextMeshProUGUI PCName { get { return _pcName; } }
 	private Image PCImage { get { return _pcImage; } }
 	private GameObject StatTextPrefab { get { return _statTextPrefab; } }

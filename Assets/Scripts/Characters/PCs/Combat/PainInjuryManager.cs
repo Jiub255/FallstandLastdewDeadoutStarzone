@@ -11,7 +11,7 @@ public class PainInjuryManager
     /// <summary>
     /// Just to get Healing Rate. Might do differently later. 
     /// </summary>
-    private SOCurrentTeam CurrentTeamSO { get; }
+    private SOTeamData CurrentTeamSO { get; }
     private int Pain
     {
         get
@@ -25,7 +25,7 @@ public class PainInjuryManager
         }
     }
 
-    public PainInjuryManager(SOPCData pcDataSO, SOCurrentTeam currentTeamSO)
+    public PainInjuryManager(SOPCData pcDataSO, SOTeamData currentTeamSO)
     {
         PCDataSO = pcDataSO;
         CurrentTeamSO = currentTeamSO;

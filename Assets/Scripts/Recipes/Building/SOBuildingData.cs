@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building/SOBuildingData", fileName = "Building Data SO")]
@@ -18,6 +19,7 @@ public class SOBuildingData : ScriptableObject
     public int SnapAngle { get { return _snapAngle; } }
     public SOBuilding CurrentBuildingRecipeSO { get; set; }
     public GameObject CurrentBuildingInstance { get; set; }
+    public List<SOBuilding> Buildings { get; set; }
     public SelectedBuildingIcon SelectedBuildingIcon { get; set; }
     public Quaternion Rotation { get; set; }
 }

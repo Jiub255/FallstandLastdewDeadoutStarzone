@@ -59,7 +59,7 @@ public class PCItemUseManager
     }
 
     /*	[SerializeField]
-        private SOCurrentTeam _currentTeamSO;
+        private SOTeamData _currentTeamSO;
 
         private class PCManagers
         {

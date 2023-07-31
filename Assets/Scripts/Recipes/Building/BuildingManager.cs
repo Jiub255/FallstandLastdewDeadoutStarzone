@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // Uses a "Building" prefab with the selected building icon child. Then attaches the actual building prefab as a child of it when selecting building.
@@ -204,6 +203,31 @@ public class BuildingManager
         }
     }
 
+    public List<T> GetHaveRequiredBuildingsRecipes<T>(List<T> haveEnoughItemsRecipes) where T : SORecipe
+    {
+        // Does this fancy LINQ work? 
+        return haveEnoughItemsRecipes.Where(recipeSO => recipeSO.RequiredBuildings.Where(
+            craftingBuildingSO => !BuildingDataSO.Buildings.Contains(craftingBuildingSO)).ToList().Count == 0).ToList();
+
+/*        List<T> haveRequiredBuildingsRecipes = new();
+
+        foreach (T recipe in haveEnoughItemsRecipes)
+        {
+            foreach (SOBuilding building in recipe.RequiredBuildings)
+            {
+                if (!BuildingDataSO.Buildings.Contains(building))
+                {
+                    break;
+                }
+            }
+
+            // Can only reach this point if you have built all required buildings. 
+            haveRequiredBuildingsRecipes.Add(recipe);
+        }
+
+        return haveRequiredBuildingsRecipes;*/
+    }
+
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         // TODO: This might not work in builds, especially for android. Figure it out. 
@@ -213,6 +237,9 @@ public class BuildingManager
             // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
             if (CanBuildHere())
             {
+                // Add SOBuilding to Buildings list. 
+                BuildingDataSO.Buildings.Add(BuildingDataSO.CurrentBuildingRecipeSO);
+
                 // TODO - Figure this out. 
                 // Collider not working unless I switch it off and on again.
                 // Could make it disabled in prefab then just enable it after placing?
@@ -225,8 +252,8 @@ public class BuildingManager
                 // Destroy the parent/selected icon. 
                 Object.Destroy(BuildingDataSO.CurrentBuildingInstance);
 
-                // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built).
-                // This is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu. 
+                // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built) 
+                // (this is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu). 
                 SetBuildingInstance(null);
 //                _currentBuildingInstance = null;
 

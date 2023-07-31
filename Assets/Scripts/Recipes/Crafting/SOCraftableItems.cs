@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-/*using System.Linq;
-using UnityEditor;*/
+using System.Linq;
+/*using UnityEditor;*/
 using UnityEngine;
 
 // Use this class to collect a list of all created SOItem assets with a non-empty RecipeCost list, ie. craftable items. 
@@ -11,10 +11,27 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Recipes/Crafting/SOCraftableItems", fileName = "New Craftable Items SO")]
 public class SOCraftableItems : ScriptableObject/* : SORecipeList*/
 {
+    [SerializeField]
     private List<SOItem> _itemsWithRecipeCosts = new();
 
-    public List<SOItem> ItemsWithRecipeCosts { get { return _itemsWithRecipeCosts; } }
+    public List<SOItem> ItemsWithRecipeCosts { get { return _itemsWithRecipeCosts/*.Where(item => item.RecipeCosts.Count > 0).ToList()*/; } }
 
+    /// <summary>
+    /// Do this once on load to make sure no SOItems with empty recipe cost lists got in. 
+    /// </summary>
+    public void FilterOutNoRecipeItems()
+    {
+        int prefilteredListCount = _itemsWithRecipeCosts.Count;
+
+        _itemsWithRecipeCosts = _itemsWithRecipeCosts.Where(item => item.RecipeCosts.Count > 0).ToList();
+
+        int postfilteredListCount = _itemsWithRecipeCosts.Count;
+
+        if (prefilteredListCount != postfilteredListCount)
+        {
+            Debug.LogWarning($"{prefilteredListCount - postfilteredListCount} SOItems found on list with no recipe costs. ");
+        }
+    }
 
 /*    /// <summary>
     /// JUST FOR TESTING. USES UNITYEDITOR AND WONT WORK FOR BUILD. <br/>

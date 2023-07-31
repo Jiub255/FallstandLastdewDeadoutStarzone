@@ -22,7 +22,7 @@ public class PCSelector/* : MonoBehaviour*/
     /// </summary>
     public static event Action<SOPCData> OnSelectedNewPC;
 
-    private SOCurrentTeam CurrentTeamSO { get; }
+    private SOTeamData TeamDataSO { get; }
     private LayerMask PCLayerMask { get; }
     private float DoubleClickTimeLimit { get; } = 0.5f;
     private float LastClickTime { get; set; }
@@ -30,17 +30,17 @@ public class PCSelector/* : MonoBehaviour*/
     private InputAction MousePositionAction { get; }
 
 //    private void Start()
-    public PCSelector(SOCurrentTeam currentTeamSO)
+    public PCSelector(SOTeamData teamDataSO)
     {
-        CurrentTeamSO = currentTeamSO;
+        TeamDataSO = teamDataSO;
 
-        if (currentTeamSO.HomeSOPCSList.Count > 0)
+        if (teamDataSO.HomeSOPCSList.Count > 0)
         {
-            PCLayerMask = currentTeamSO.HomeSOPCSList[0].PCSharedDataSO.PCLayerMask;
+            PCLayerMask = teamDataSO.HomeSOPCSList[0].PCSharedDataSO.PCLayerMask;
         }
         else
         {
-            Debug.LogWarning("No PCs on SOCurrentTeam.HomeSOPCSList. Can't play game without PCs. ");
+            Debug.LogWarning("No PCs on SOTeamData.HomeSOPCSList. Can't play game without PCs. ");
         }
 
         MousePositionAction = S.I.IM.PC.Camera.MousePosition;
@@ -129,7 +129,7 @@ public class PCSelector/* : MonoBehaviour*/
         // TODO - Could do this better with selected bool I think. If clicked pc has Selected == true, then do nothing, otherwise
         // Select this PC and deselect other. Maybe deselect all first then select this one? This is the problem between having a bool
         // Or having a selectedPC field. With the bool, multiple could theoretically be selected, but only want at most one at a time to be. 
-        foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
         {
             // Deselect all PCs first, 
             pcDataSO.Selected = false;

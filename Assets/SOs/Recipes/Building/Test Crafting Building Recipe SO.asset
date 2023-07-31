@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51b50d7dac6bcc64fa7f7216af49e056, type: 3}
-  m_Name: Test Usable Item SO 2
+  m_Script: {fileID: 11500000, guid: 40ba0809345dea44a857f82d204d753d, type: 3}
+  m_Name: Test Crafting Building Recipe SO
   m_EditorClassIdentifier: 
   _description: Enter Description
   _icon: {fileID: 0}
   _minSinglePCStatRequirements: []
   _requiredBuildings: []
   _requiredTools: []
-  _recipeCosts:
-  - CraftingItemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
-    Amount: 1
-  _reusable: 1
-  _effects:
-  - {fileID: 11400000, guid: 781d41f4446446f48a2ecb29f88f01bc, type: 2}
+  _recipeCosts: []
+  _buildingType: 0
+  _buildingPrefab: {fileID: 0}

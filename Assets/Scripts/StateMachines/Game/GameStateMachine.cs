@@ -3,9 +3,9 @@ using UnityEngine;
 public class GameStateMachine : MonoBehaviour
 {
     [SerializeField]
-    private SOCurrentTeam _currentTeamSO;
+    private SOTeamData _currentTeamSO;
 
-    public SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }
+    public SOTeamData CurrentTeamSO { get { return _currentTeamSO; } }
     public GameState ActiveState { get; private set; }
 
     private void Start()

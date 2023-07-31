@@ -17,7 +17,7 @@ public class PCManager
     /// Pretty sure the reference the same as here if this one gets altered, but what if it gets re-set to another object? 
     /// I think it works fine, classes are reference types, so it should just be passing the reference to the actual CurrentTeamSO, even if it gets changed. 
     /// </summary>
-	private SOCurrentTeam CurrentTeamSO { get; }
+	private SOTeamData TeamDataSO { get; }
     private SOPCData CurrentlySelectedPC { get; set; }
     private SOPCData CurrentMenuPC { get; set; }
     private Dictionary<SOPCData, PCController> PCControllerDict { get; } = new();
@@ -25,17 +25,17 @@ public class PCManager
     private PCItemUseManager PCItemUseManager { get; }
     private InputManager InputManager { get; set; }
 
-    public PCManager(SOCurrentTeam currentTeamSO)
+    public PCManager(SOTeamData teamDataSO)
     {
-        CurrentTeamSO = currentTeamSO;
+        TeamDataSO = teamDataSO;
 
-        PCSelector = new(CurrentTeamSO);
+        PCSelector = new(TeamDataSO);
         PCItemUseManager = new(PCControllerDict, CurrentMenuPC);
 
         InputManager = S.I.IM;
 
         // Set menu PC to first on list to start, so it's never null.
-        CurrentMenuPC = CurrentTeamSO.HomeSOPCSList[0];
+        CurrentMenuPC = TeamDataSO.HomeSOPCSList[0];
 
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentlySelectedPC = pcDataSO;
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuPC = pcDataSO;
@@ -86,13 +86,13 @@ public class PCManager
 
     private void InstantiatePCs(Vector3 spawnPosition)
     {
-        if (CurrentTeamSO.HomeSOPCSList.Count > 0)
+        if (TeamDataSO.HomeSOPCSList.Count > 0)
         {
-            for (int i = 0; i < CurrentTeamSO.HomeSOPCSList.Count; i++)
+            for (int i = 0; i < TeamDataSO.HomeSOPCSList.Count; i++)
             {
                 // Will UnityEngine.Object.Instantiate work? Or should this be done in GameManager? 
-                CurrentTeamSO.HomeSOPCSList[i].PCInstance = Object.Instantiate(
-                    CurrentTeamSO.HomeSOPCSList[i].PCPrefab,
+                TeamDataSO.HomeSOPCSList[i].PCInstance = Object.Instantiate(
+                    TeamDataSO.HomeSOPCSList[i].PCPrefab,
                     new Vector3(3 * i, 0f, 0f) + spawnPosition,
                     Quaternion.identity);
             }
@@ -131,7 +131,7 @@ public class PCManager
 
     public void UpdateStates()
     {
-        foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
         {
             pcDataSO.ActiveState.Update(pcDataSO.Selected);
         }
@@ -139,7 +139,7 @@ public class PCManager
 
     public void FixedUpdateStates()
     {
-        foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
         {
             pcDataSO.ActiveState.FixedUpdate(pcDataSO.Selected);
         }
@@ -168,9 +168,9 @@ public class PCManager
     {
         PCControllerDict.Clear();
 
-        foreach (SOPCData pcDataSO in CurrentTeamSO.HomeSOPCSList)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomeSOPCSList)
         {
-            PCControllerDict.Add(pcDataSO, new PCController(pcDataSO, CurrentTeamSO));
+            PCControllerDict.Add(pcDataSO, new PCController(pcDataSO, TeamDataSO));
         }
     }
 }

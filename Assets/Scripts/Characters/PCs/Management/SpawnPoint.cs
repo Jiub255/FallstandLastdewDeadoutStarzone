@@ -10,9 +10,9 @@ public class SpawnPoint : MonoBehaviour
     public static event Action<Vector3> OnSceneStart;
 
 /*    [SerializeField]
-    private SOCurrentTeam _currentTeamSO;
+    private SOTeamData _currentTeamSO;
 
-    private SOCurrentTeam CurrentTeamSO { get { return _currentTeamSO; } }*/
+    private SOTeamData CurrentTeamSO { get { return _currentTeamSO; } }*/
 
     private void Start/*Awake*/()
     {

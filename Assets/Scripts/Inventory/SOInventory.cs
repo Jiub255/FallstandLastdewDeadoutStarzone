@@ -12,6 +12,13 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
 
     public List<ItemAmount> ItemAmounts { get { return _itemAmounts; } protected set { _itemAmounts = value; } }
 
+    /// <summary>
+    /// Returns the reference to the item amount in inventory if you have enough. Doesn't return the amount you put in necessarily,
+    /// just how much you have in inventory. Returns null if you don't have enough or don't have an ItemAmount with the same SOItem at all. 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     public ItemAmount Contains(SOItem item, int amount = 1)
     {
         foreach (ItemAmount itemAmount in ItemAmounts)

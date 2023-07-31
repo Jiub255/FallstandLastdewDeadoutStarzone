@@ -5,7 +5,7 @@ using UnityEngine;
 public class ScavengingSceneExit : MonoBehaviour
 {
 	[SerializeField]
-	private SOCurrentTeam _scavengingTeamSO;
+	private SOTeamData _scavengingTeamSO;
 
 	// Have all PCs walk out of exit.
 

@@ -9,7 +9,7 @@ public class PCController
     public PainInjuryManager PainInjuryManager { get; }
     public EquipmentManager EquipmentManager { get; }
 
-    public PCController(SOPCData pcDataSO, SOCurrentTeam currentTeamSO)
+    public PCController(SOPCData pcDataSO, SOTeamData currentTeamSO)
     {
         PCStateMachine = new(pcDataSO);
         PainInjuryManager = new(pcDataSO, currentTeamSO);

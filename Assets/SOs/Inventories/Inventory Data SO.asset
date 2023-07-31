@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40b10574e7d4bad49a12d08ae64b0a87, type: 3}
   m_Name: Inventory Data SO
   m_EditorClassIdentifier: 
-  _usableInventorySO: {fileID: 0}
-  _equipmentInventorySO: {fileID: 0}
-  _craftingInventorySO: {fileID: 0}
+  _usableInventorySO: {fileID: 11400000, guid: f53933e6e7962bf48aee369695e9c438, type: 2}
+  _equipmentInventorySO: {fileID: 11400000, guid: 0faf83ead42c25047b1a6d2f1ee96263, type: 2}
+  _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}

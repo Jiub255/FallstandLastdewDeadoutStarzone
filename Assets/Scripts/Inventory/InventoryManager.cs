@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Have BuildingManager created in here? So it can get required items? Kinda functions like CraftingManager so it makes sense. 
@@ -43,7 +44,11 @@ public class InventoryManager
 //    public List<SORecipe> GetHaveEnoughItemsRecipes(List<SORecipe> metRequirementsRecipes)
     public List<T> GetHaveEnoughItemsRecipes<T>(List<T> metRequirementsRecipes) where T : SORecipe
     {
-        List<T> haveEnoughItemsRecipes = new();
+        // Does this fancy LINQ work? 
+        return metRequirementsRecipes.Where(recipeSO => recipeSO.RecipeCosts.Where(
+            recipeCost => InventoryDataSO.CraftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null).ToList().Count == 0).ToList();
+
+/*        List<T> haveEnoughItemsRecipes = new();
 
         foreach (T recipe in metRequirementsRecipes)
         {
@@ -61,7 +66,7 @@ public class InventoryManager
             haveEnoughItemsRecipes.Add(recipe);
         }
 
-        return haveEnoughItemsRecipes;
+        return haveEnoughItemsRecipes;*/
     }
 
     public virtual void AddItems(SOItem item, int amount = 1)

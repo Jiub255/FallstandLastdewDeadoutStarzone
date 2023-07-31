@@ -7,11 +7,9 @@ using UnityEngine;
 /// <summary>
 /// Holds a home SOPCDatas list, a scavenging one, a selected PC instance GameObject, and a current menu SOPCData. 
 /// </summary>
-[CreateAssetMenu(menuName = "Player Characters/SOCurrentTeam", fileName = "Current Team SO")]
-public class SOCurrentTeam : ScriptableObject
+[CreateAssetMenu(menuName = "Player Characters/SOTeamData", fileName = "Current Team SO")]
+public class SOTeamData : ScriptableObject
 {
-/*	public event Action OnSelectedPCChanged;
-	public event Action OnCurrentMenuPCChanged;*/
 	public event Action OnHomeSOPCListChanged;
 	public event Action OnScavengingSOPCListChanged;
 
@@ -19,38 +17,14 @@ public class SOCurrentTeam : ScriptableObject
 	private List<SOPCData> _homeSOPCSList = new();
 	[SerializeField]
 	private List<SOPCData> _scavengingPCSList = new();
-/*	[SerializeField]
-	private GameObject _selectedPC;
-	[SerializeField]
-	private SOPCData _currentMenuSOPC;*/
 
 	public List<SOPCData> HomeSOPCSList { get { return _homeSOPCSList; } }
 	public List<SOPCData> ScavengingPCSList { get { return _scavengingPCSList; } }
 	public List <SORecipe> PossibleRecipes { get; set; }
-
 	/// <summary>
-	/// Could just have selected bool on SOPCData and send event whenever it changes to true?
-	/// Need selected bool for PCManager state runner, <br/>
-	/// but need SelectedPC property for 
+	/// Using dictionary instead of StatValue so you can change value and get by key. 
 	/// </summary>
-/*	public GameObject SelectedPC 
-	{
-		get { return _selectedPC; } 
-		set 
-		{
-			_selectedPC = value;
-			OnSelectedPCChanged?.Invoke();
-		}
-	}
-	public SOPCData CurrentMenuSOPC 
-	{ 
-		get { return _currentMenuSOPC; } 
-		set
-		{		
-			_currentMenuSOPC = value;
-			OnCurrentMenuPCChanged?.Invoke();
-		} 
-	}*/
+	public Dictionary<StatType, int> IndividualPCStatMaxes { get; }
 
 	public SOPCData this[SOPCData pcDataSO]
     {

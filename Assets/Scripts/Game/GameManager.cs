@@ -32,13 +32,12 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-/*        // TODO - Just for testing, manually run these before building to populate SO recipe lists. 
-        CraftingRecipesList.GetAllRecipes();
-        BuildingRecipesList.GetAllRecipes();*/
+        CraftingRecipesList.FilterOutNoRecipeItems();
+        BuildingRecipesList.FilterOutNoRecipeItems();
 
         InventoryManager = new(GameDataSO.InventoryDataSO);
-        StatManager = new(GameDataSO);
-        PCManager = new(GameDataSO.CurrentTeamSO);
+        StatManager = new(GameDataSO.TeamDataSO);
+        PCManager = new(GameDataSO.TeamDataSO);
         BuildingManager = new(GameDataSO.BuildingDataSO);
 
 //        SpawnPoint.OnSceneStart += InitializeScene;

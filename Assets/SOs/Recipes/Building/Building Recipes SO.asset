@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10cda7af89ec9aa4fbfde83c3052c769, type: 3}
   m_Name: Building Recipes SO
   m_EditorClassIdentifier: 
-  Buildings: []
+  _allBuildingRecipes:
+  - {fileID: 11400000, guid: 9c1261ddcef995c4e938956b27cc8af8, type: 2}
