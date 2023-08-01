@@ -15,8 +15,11 @@ public class SOTeamData : ScriptableObject
 	public event Action<SOPCData> OnBeforeRemovePCFromHomeList;
 
 	// Not sure if these will be needed. Might use before add/remove events that send the SO to be added/removed instead. 
-/*	public event Action OnHomeSOPCListChanged;
-	public event Action OnScavengingSOPCListChanged;*/
+	/// <summary>
+	/// UIPC listens, remakes PC slots in HUD. 
+	/// </summary>
+	public event Action OnHomeSOPCListChanged;
+/*	public event Action OnScavengingSOPCListChanged;*/
 
 	[SerializeField]
 	private List<SOPCData> _homePCs;
@@ -79,8 +82,7 @@ public class SOTeamData : ScriptableObject
 
 		HomePCs.Add(sopc);
 
-		// PCItemUseManager listens, updates dictionary. 
-//		OnHomeSOPCListChanged?.Invoke();
+		OnHomeSOPCListChanged?.Invoke();
     }
 
 	public void RemovePCFromHomeList(SOPCData sopc)
@@ -91,8 +93,7 @@ public class SOTeamData : ScriptableObject
 
 			HomePCs.Remove(sopc);
 
-			// PCItemUseManager listens, updates dictionary. 
-//			OnHomeSOPCListChanged?.Invoke();
+			OnHomeSOPCListChanged?.Invoke();
         }
         else
         {

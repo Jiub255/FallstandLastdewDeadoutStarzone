@@ -26,7 +26,6 @@ public class UICharacter : MonoBehaviour
 	[SerializeField]
 	private RectTransform _statsParent;
 
-	// TODO - Keep reference to currentMenu SOPCData instead? 
 	private SOPCData _currentMenuSOPCData;
 
 	/// <summary>
@@ -42,6 +41,7 @@ public class UICharacter : MonoBehaviour
     private void OnEnable()
     {
 		PCStatManager.OnStatsChanged += SetupCharacterPanel;
+		PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuSOPCData = pcDataSO;
 
         SetupCharacterPanel();
     }
@@ -49,9 +49,10 @@ public class UICharacter : MonoBehaviour
     private void OnDisable()
     {
         PCStatManager.OnStatsChanged -= SetupCharacterPanel;
-    }
+		PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuSOPCData = pcDataSO;
+	}
 
-    public void NextPC()
+	public void NextPC()
     {
 	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentMenuSOPCData);
 

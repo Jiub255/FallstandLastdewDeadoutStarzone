@@ -51,11 +51,11 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// First checks StatManager to get all recipes that you meet the stat requirements for. <br/>
-    /// Then checks InventoryManager to get all recipes that you also have enough items for. <br/>
-    /// TODO - Check BuildingManager for required building stuff, and inv for required held items stuff. 
+    /// First checks StatManager to filter out all recipes that you don't meet the stat requirements for. <br/>
+    /// Then checks InventoryManager to filter out all recipes that you don't have enough items for, or don't have the required tools for. <br/>
+    /// Then finally checks BuildingManager to filter out all recipes that you don't have the required crafting buildings for. <br/>
+    /// Does this for both the PossibleCraftingRecipes and PossibleBuildingRecipes lists from SOInventoryData. 
     /// </summary>
-    /// <returns>List of all recipes that you meet requirements for, and have enough items to craft. </returns>
     public void GetPossibleRecipes()
     {
         // Get all craftable items.

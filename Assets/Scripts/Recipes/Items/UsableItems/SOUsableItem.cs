@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Why even use SOEffect and subclasses if they just call events?
+/// Call the event from here instead? 
+/// Would have to make a new base class for each effect combination then. Effects make sense. 
+/// </summary>
 [CreateAssetMenu(menuName = "Items/Usable/SOUsableItem", fileName = "New Usable Item SO")]
 public class SOUsableItem : SOItem
 {

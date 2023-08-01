@@ -3,10 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Make this class in PCManager, and use it to subscribe to all the equipment and usable item effect events. 
-/// TODO - Eventually hold all item SOs in InventoryDataSO, and go through them here to subscribe to events without them having to be static events. <br/>
-/// Also, maybe put this on a higher level so it can access inv data better? Add player level right below game and put it there? 
-/// OR, just put the craftable items SO here? 
+/// Make this class in PCManager, and use it to subscribe to all the equipment and usable item effect events. <br/>
+/// TODO - Eventually hold all item SOs in InventoryDataSO, and go through them here to subscribe to events without them having to be static events. 
 /// </summary>
 public class PCItemUseManager
 {

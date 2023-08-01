@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1be9ffce9537181478cf0efcc537c36a, type: 3}
-  m_Name: Team Data SO
+  m_Script: {fileID: 11500000, guid: ab929db0492eff745b6d84119d91657a, type: 3}
+  m_Name: New TESTSO
   m_EditorClassIdentifier: 
-  _homePCs:
-  - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
-  _scavengingPCs:
-  - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
+  _testGO: {fileID: 4314923721212641126, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}

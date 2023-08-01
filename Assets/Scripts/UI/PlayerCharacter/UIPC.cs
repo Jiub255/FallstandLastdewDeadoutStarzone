@@ -3,7 +3,7 @@ using UnityEngine;
 public class UIPC : MonoBehaviour
 {
     [SerializeField]
-    private SOTeamData _pcSOsSO;
+    private SOTeamData _teamDataSO;
     [SerializeField]
     protected GameObject SlotPrefab;
     [SerializeField]
@@ -11,7 +11,14 @@ public class UIPC : MonoBehaviour
 
     private void OnEnable()
     {
+        _teamDataSO.OnHomeSOPCListChanged += PopulateInventory; 
+
         PopulateInventory();
+    }
+
+    private void OnDisable()
+    {
+        _teamDataSO.OnHomeSOPCListChanged -= PopulateInventory;
     }
 
     public void PopulateInventory()
@@ -19,7 +26,7 @@ public class UIPC : MonoBehaviour
         ClearInventory();
 
         // Populates UI
-        foreach (SOPCData pcSO in _pcSOsSO.HomePCs)
+        foreach (SOPCData pcSO in _teamDataSO.HomePCs)
         {
             PCSlot slot = Instantiate(SlotPrefab, SlotParent).GetComponent<PCSlot>();
 

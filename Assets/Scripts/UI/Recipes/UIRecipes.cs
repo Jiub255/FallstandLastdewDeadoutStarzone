@@ -17,7 +17,7 @@ public class UIRecipes : MonoBehaviour
     }
 
 	[SerializeField]
-	private BuildOrCraft _buildOrCraft;
+	private BuildOrCraft _buildingOrCraftingMenu;
 	[SerializeField]
 	private GameObject _recipeSlotPrefab;
 	[SerializeField]
@@ -29,7 +29,7 @@ public class UIRecipes : MonoBehaviour
 	[SerializeField]
 	private SOGameData _gameDataSO;
 
-	private BuildOrCraft BuildCraftEnum { get { return _buildOrCraft; } }
+	private BuildOrCraft BuildingOrCraftingMenu { get { return _buildingOrCraftingMenu; } }
 	private GameObject RecipeSlotPrefab { get { return _recipeSlotPrefab; } }
 	private Transform SlotsParent { get { return _slotsParent; } }
 	private SOGameData GameDataSO { get { return _gameDataSO; } }
@@ -62,7 +62,7 @@ public class UIRecipes : MonoBehaviour
 
 		// TODO - How to decide between Building and Crafting recipes? 
 		// Might just make two scripts, UIBuilding and UICrafting instead of UIRecipes. 
-		List<SORecipe> recipeList = BuildCraftEnum == BuildOrCraft.Build ?
+		List<SORecipe> recipeList = BuildingOrCraftingMenu == BuildOrCraft.Build ?
 			GameDataSO.InventoryDataSO.PossibleBuildingRecipes.ToList<SORecipe>() : 
 			GameDataSO.InventoryDataSO.PossibleCraftingRecipes.ToList<SORecipe>();
 
