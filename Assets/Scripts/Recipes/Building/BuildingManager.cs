@@ -32,8 +32,8 @@ public class BuildingManager
     private SOBuildingData BuildingDataSO { get; }
 
     // Keep here. 
-    private InputAction MousePositionAction { get; }
-    private InputManager InputManager { get; }
+    private InputAction MousePositionAction { get; set; }
+    private InputManager InputManager { get; set; }
 
 
     // For debug gizmos, so they dont draw in editor mode.
@@ -48,22 +48,26 @@ public class BuildingManager
     {
         BuildingDataSO = buildingDataSO;
 
-        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        InputManager = S.I.IM;
+        SOBuilding.OnSelectBuilding += SelectCurrentBuilding;
 
         // For debug gizmos, so they dont draw in editor mode.
        // _started = true;
+
+/*        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
+        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
+    }
+
+    public void Start()
+    {
+        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        InputManager = S.I.IM;
 
         S.I.IM.PC.Build.RotateBuilding.started += RotateBuilding;
         S.I.IM.PC.Build.PlaceBuilding.started += PlaceBuilding;
         S.I.IM.PC.Build.SnapBuilding.started += SnapToNextAngle;
         S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
 
-        SOBuilding.OnSelectBuilding += SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
-
-/*        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
-        if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
     }
 
 /*    private void ToggleAngleSnapMode(InputAction.CallbackContext context)

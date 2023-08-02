@@ -44,6 +44,7 @@ public class SOPCData : ScriptableObject
     public PCState ActiveState { get; set; }
     public bool Selected { get; set; }
     public PCController PCController { get; set; }
+    public SelectedPCIcon SelectedPCIcon { get; set; }
 
     public int WeaponDamage()
     {

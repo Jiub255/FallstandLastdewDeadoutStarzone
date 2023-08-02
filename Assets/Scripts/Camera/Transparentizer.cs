@@ -60,10 +60,9 @@ public class Transparentizer : MonoBehaviour
         PCSelector.OnSelectedNewPC -= SelectPC;
     }
 
-    // Doing it like this to cache the transform. 
     private void SelectPC(SOPCData pcDataSO)
     {
-        CurrentPCTransform = pcDataSO.PCInstance.transform;
+        CurrentPCTransform = pcDataSO ? pcDataSO.PCInstance.transform : CurrentPCTransform;
     }
 
     // TODO - How to handle mouse position? Add to the shader graph? 

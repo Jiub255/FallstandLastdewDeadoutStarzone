@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ba0809345dea44a857f82d204d753d, type: 3}
+  m_Name: Test Crafting Building Recipe SO
+  m_EditorClassIdentifier: 
+  _description: Crafting building
+  _icon: {fileID: 21300000, guid: ec70c667907272942a27a451289534b1, type: 3}
+  _minSinglePCStatRequirements: []
+  _requiredBuildings: []
+  _requiredTools: []
+  _recipeCosts: []
+  _buildingType: 2
+  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}

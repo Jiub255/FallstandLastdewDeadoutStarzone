@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,6 +15,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PCManager
 {
+    public static event Action OnAfterPCsInstantiated;
+
     private SOPCData _currentMenuPC;
 
     /// <summary>
@@ -38,23 +42,25 @@ public class PCManager
         // Will PCItemUseManager keep the reference to the old one? 
         PCItemUseManager = new(/*TeamDataSO.PCControllerDict, */ref _currentMenuPC);
 
-        InputManager = S.I.IM;
-
         // Set menu PC to first on list to start, so it's never null.
         _currentMenuPC = TeamDataSO.HomePCs[0];
 
         PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentlySelectedPC = pcDataSO;
-        PCSelector.OnSelectedNewPC += (pcDataSO) => _currentMenuPC = pcDataSO;
+        PCSelector.OnSelectedNewPC += (pcDataSO) => _currentMenuPC = pcDataSO ? pcDataSO : _currentMenuPC;
         UICharacter.OnMenuPCChanged += (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart += InitializeScene;
+    }
 
+    public void Start()
+    {
+        InputManager = S.I.IM;
         S.I.IM.PC.World.SelectOrCenter.canceled += HandleClick;
     }
 
     public void OnDisable()
     {
         PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentlySelectedPC = pcDataSO;
-        PCSelector.OnSelectedNewPC -= (pcDataSO) => _currentMenuPC = pcDataSO;
+        PCSelector.OnSelectedNewPC -= (pcDataSO) => _currentMenuPC = pcDataSO ? pcDataSO : _currentMenuPC;
         UICharacter.OnMenuPCChanged -= (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart -= InitializeScene;
 
@@ -77,16 +83,21 @@ public class PCManager
 
     private void InstantiatePCs(Vector3 spawnPosition)
     {
+        Debug.Log("Instantiate PCs Called");
+
         if (TeamDataSO.HomePCs.Count > 0)
         {
             for (int i = 0; i < TeamDataSO.HomePCs.Count; i++)
             {
-                // Will UnityEngine.Object.Instantiate work? Or should this be done in GameManager? 
-                TeamDataSO.HomePCs[i].PCInstance = Object.Instantiate(
+                // Instantiate PC. 
+                GameObject pcInstance = UnityEngine.Object.Instantiate(
                     TeamDataSO.HomePCs[i].PCPrefab,
                     new Vector3(3 * i, 0f, 0f) + spawnPosition,
                     Quaternion.identity);
 
+                // Set SOPCData references for this PC. 
+                TeamDataSO.HomePCs[i].PCInstance = pcInstance;
+                TeamDataSO.HomePCs[i].SelectedPCIcon = pcInstance.GetComponentInChildren<SelectedPCIcon>();
                 TeamDataSO.HomePCs[i].PCController = new PCController(TeamDataSO.HomePCs[i], TeamDataSO);
             }
 
@@ -94,6 +105,8 @@ public class PCManager
 
             // This has to be constructed after PCs have been instantiated. 
             PCSelector = new(TeamDataSO);
+
+            OnAfterPCsInstantiated?.Invoke();
         }
         else
         {
@@ -105,7 +118,9 @@ public class PCManager
     {
         foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
-            pcDataSO.ActiveState.Update(pcDataSO.Selected);
+            if (pcDataSO.ActiveState != null)
+                pcDataSO.ActiveState.Update(pcDataSO.Selected);
+//            Debug.Log($"Active state null: {pcDataSO.ActiveState == null}");
         }
     }
 
@@ -113,7 +128,8 @@ public class PCManager
     {
         foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
-            pcDataSO.ActiveState.FixedUpdate(pcDataSO.Selected);
+            if (pcDataSO.ActiveState != null)
+                pcDataSO.ActiveState.FixedUpdate(pcDataSO.Selected);
         }
     }
 
@@ -124,6 +140,8 @@ public class PCManager
     /// <param name="context"></param>
     private void HandleClick(InputAction.CallbackContext context)
     {
+        Debug.Log($"HandleClick called, PointerOverUI: {InputManager.PointerOverUI}");
+
         if (!InputManager.PointerOverUI)
         {
             if (!PCSelector.CheckIfPCClicked() && CurrentlySelectedPC != null)

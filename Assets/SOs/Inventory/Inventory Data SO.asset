@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b10574e7d4bad49a12d08ae64b0a87, type: 3}
+  m_Name: Inventory Data SO
+  m_EditorClassIdentifier: 
+  _craftableItemsSO: {fileID: 11400000, guid: cf415609b5aec9a498ebac80b8698a48, type: 2}
+  _usableInventorySO: {fileID: 11400000, guid: f53933e6e7962bf48aee369695e9c438, type: 2}
+  _equipmentInventorySO: {fileID: 11400000, guid: 0faf83ead42c25047b1a6d2f1ee96263, type: 2}
+  _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}
+  _toolInventorySO: {fileID: 11400000, guid: 7d44c78014697e240add6df676a7bac4, type: 2}

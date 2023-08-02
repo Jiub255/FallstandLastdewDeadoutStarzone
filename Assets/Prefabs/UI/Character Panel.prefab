@@ -950,7 +950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 071af75f2b2a26143a3afb580a26b068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentTeamSO: {fileID: 11400000, guid: 695a0a3c437a5ee488066e14ba40965b, type: 2}
+  _currentTeamSO: {fileID: 11400000, guid: afd964bd4dbd31841b81217914415593, type: 2}
   _pcName: {fileID: 4247891363542767961}
   _pcImage: {fileID: 7113171313166308137}
   _statTextPrefab: {fileID: 8604089704511231721, guid: cf3c8fd37a98fd14da5db7f7569e4cf0, type: 3}

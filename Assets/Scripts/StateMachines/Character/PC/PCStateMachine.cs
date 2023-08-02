@@ -12,7 +12,6 @@ using System.Linq;
 /// </summary>
 public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
 {
-    private PCState ActiveState { get; set; }
     private InputAction MousePositionAction { get; }
     private SelectedPCIcon SelectedPCIcon { get; }
     public SOPCData PCDataSO { get; } 
@@ -57,14 +56,14 @@ public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
 
     public void ChangeStateTo(PCState state)
     {
-        if (ActiveState != null)
+        if (PCDataSO.ActiveState != null)
         {
-            ActiveState.Exit();
+            PCDataSO.ActiveState.Exit();
         }
 
-        ActiveState = state;
+        PCDataSO.ActiveState = state;
 
-//        Debug.Log($"{gameObject.name} changed state to: {_activeState.GetType()}");
+        Debug.Log($"Changed state to: {PCDataSO.ActiveState.GetType()}");
     }
 
     // 

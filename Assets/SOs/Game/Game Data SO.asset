@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Game Data SO
   m_EditorClassIdentifier: 
   _inventoryDataSO: {fileID: 11400000, guid: 2d3e87cabcfb22046a8c77dbeef0157a, type: 2}
-  _teamDataSO: {fileID: 0}
+  _teamDataSO: {fileID: 11400000, guid: afd964bd4dbd31841b81217914415593, type: 2}
   _buildingDataSO: {fileID: 11400000, guid: bddfc47859534c0488254b3b93d81efc, type: 2}
+  _uiPrefab: {fileID: 4314923721212641126, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}

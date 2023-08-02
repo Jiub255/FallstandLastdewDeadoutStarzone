@@ -81,12 +81,14 @@ public class PCSelector/* : MonoBehaviour*/
     /// <returns></returns>
     public bool CheckIfPCClicked(/*InputAction.CallbackContext context*/)
     {
+        Debug.Log($"CheckIfPCClicked called."); 
         // TODO - Change max distance to max zoom or something that makes sense? Probably not a big deal. 
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
             Camera.main.ScreenPointToRay(MousePositionAction.ReadValue<Vector2>()),
             1000,
             PCLayerMask);
+//        Debug.Log($"hit: {hits[0].point}");
 
         // If there were any hits, they must have been PCs. 
         if (hits.Length > 0)
@@ -105,6 +107,7 @@ public class PCSelector/* : MonoBehaviour*/
     /// </summary>
     private void HandleClick(GameObject pcInstance)
     {
+        Debug.Log("HandleClick called from PCSelector. ");
         float currentClickTime = Time.realtimeSinceStartup;
 
         // Double click 
@@ -141,6 +144,7 @@ public class PCSelector/* : MonoBehaviour*/
         LastClickTime = currentClickTime;
     }
     /// <summary>
+    /// Central place for selecting/deselecting/changing PCs. <br/>
     /// Changes SelectedPC in Current Team SO. Also changes CurrentMenuPC so that when you open the menu, it's on the 
     /// most recently selected character. 
     /// </summary>
@@ -154,11 +158,13 @@ public class PCSelector/* : MonoBehaviour*/
         {
             // Deselect all PCs first, 
             pcDataSO.Selected = false;
+            pcDataSO.SelectedPCIcon.ActivateIcon(false);
 
             // Then only select the one that was clicked. 
             if (pcDataSO.PCInstance == PCInstance)
             {
                 pcDataSO.Selected = true;
+                pcDataSO.SelectedPCIcon.ActivateIcon(true);
 
                 // TODO - Keep these properties? Or just send an event and let scripts that need this data update their own properties? 
                 // Seems more performant the event way, instead of constantly getting these references from the SO. 
@@ -171,6 +177,11 @@ public class PCSelector/* : MonoBehaviour*/
 /*                _currentTeamSO.SelectedPC = PCInstance;
                 _currentTeamSO.CurrentMenuSOPC = pcDataSO;*/
             }
+        }
+
+        if (PCInstance == null)
+        {
+            OnSelectedNewPC?.Invoke(null);
         }
 
 /*        // If clicked PC is NOT your selected PC, or selected PC is null, 

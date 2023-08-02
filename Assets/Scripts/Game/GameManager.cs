@@ -26,17 +26,23 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
-        GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
-
         // Instantiate PCManager first, so it can instantiate all the PC's in the game world. 
         PCManager = new(GameDataSO.TeamDataSO);
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO.TeamDataSO);
-        BuildingManager = new(GameDataSO.BuildingDataSO);
+        BuildingManager = new(GameDataSO.BuildingDataSO);        
 
+        GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
+        GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
+    }
+
+    private void Start()
+    {
         InventoryManager.OnInventoryChanged += GetPossibleRecipes;
         PCStatManager.OnStatsChanged += GetPossibleRecipes;
+
+        PCManager.Start();
+        BuildingManager.Start();
     }
 
     private void OnDisable()

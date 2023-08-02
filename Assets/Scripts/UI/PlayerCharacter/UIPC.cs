@@ -11,19 +11,22 @@ public class UIPC : MonoBehaviour
 
     private void OnEnable()
     {
-        _teamDataSO.OnHomeSOPCListChanged += PopulateInventory; 
-
-        PopulateInventory();
+        PCManager.OnAfterPCsInstantiated += SetupPCSlots;
+        _teamDataSO.OnHomeSOPCListChanged += SetupPCSlots;
     }
 
     private void OnDisable()
     {
-        _teamDataSO.OnHomeSOPCListChanged -= PopulateInventory;
+        PCManager.OnAfterPCsInstantiated -= SetupPCSlots;
+        _teamDataSO.OnHomeSOPCListChanged -= SetupPCSlots;
     }
 
-    public void PopulateInventory()
+    /// <summary>
+    /// Call this right after instantiating PCs. 
+    /// </summary>
+    public void SetupPCSlots()
     {
-        ClearInventory();
+        ClearPCSlots();
 
         // Populates UI
         foreach (SOPCData pcSO in _teamDataSO.HomePCs)
@@ -34,7 +37,7 @@ public class UIPC : MonoBehaviour
         }
     }
 
-    private void ClearInventory()
+    private void ClearPCSlots()
     {
         foreach (Transform child in SlotParent)
         {

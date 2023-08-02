@@ -29,7 +29,7 @@ public class Stat
     [SerializeField]
     private int _baseValue;
 
-    private List<int> _modifiers;
+    private List<int> _modifiers = new();
     private int _moddedValue;
     private PCStatManager _pcStatManager;
 
