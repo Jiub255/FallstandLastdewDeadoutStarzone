@@ -41,20 +41,21 @@ public class UICharacter : MonoBehaviour
     private void OnEnable()
     {
 		PCStatManager.OnStatsChanged += SetupCharacterPanel;
-		PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuSOPCData = pcDataSO;
-
-        SetupCharacterPanel();
+		PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuSOPCData = pcDataSO ? pcDataSO : CurrentMenuSOPCData;
+		PCManager.OnAfterPCsInstantiated += SetupCharacterPanel;
     }
 
     private void OnDisable()
     {
         PCStatManager.OnStatsChanged -= SetupCharacterPanel;
-		PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuSOPCData = pcDataSO;
+		PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuSOPCData = pcDataSO ? pcDataSO : CurrentMenuSOPCData;
+		PCManager.OnAfterPCsInstantiated -= SetupCharacterPanel;
 	}
 
 	public void NextPC()
     {
-	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentMenuSOPCData);
+	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
+		Debug.Log($"UICharacter's current index: {currentIndex}");
 
 		if (currentIndex != -1)
         {
@@ -76,7 +77,7 @@ public class UICharacter : MonoBehaviour
 
 	public void PreviousPC()
     {
-		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentMenuSOPCData);
+		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
 
 		if (currentIndex != -1)
 		{
@@ -99,6 +100,9 @@ public class UICharacter : MonoBehaviour
 	private void SetupCharacterPanel()
     {
 		ClearStatTextBoxes();
+
+		Debug.Log($"PCName = null: {PCName == null}");
+		Debug.Log($"CurrentMenuSOPCData = null: {CurrentMenuSOPCData == null}");
 
 		// Set character name. 
 		PCName.text = CurrentMenuSOPCData.name;

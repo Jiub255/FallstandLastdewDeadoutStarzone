@@ -16,7 +16,7 @@ public class SOTeamData : ScriptableObject
 
 	// Not sure if these will be needed. Might use before add/remove events that send the SO to be added/removed instead. 
 	/// <summary>
-	/// UIPC listens, remakes PC slots in HUD. 
+	/// UIPCHUD listens, remakes PC slots in HUD. 
 	/// </summary>
 	public event Action OnHomeSOPCListChanged;
 /*	public event Action OnScavengingSOPCListChanged;*/

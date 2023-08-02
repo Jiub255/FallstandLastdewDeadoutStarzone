@@ -15,6 +15,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PCManager
 {
+    /// <summary>
+    /// UIPCHUD and UICharacter listen, set up slots. 
+    /// </summary>
     public static event Action OnAfterPCsInstantiated;
 
     private SOPCData _currentMenuPC;
@@ -101,10 +104,13 @@ public class PCManager
                 TeamDataSO.HomePCs[i].PCController = new PCController(TeamDataSO.HomePCs[i], TeamDataSO);
             }
 
-//            PopulateDictionary();
-
             // This has to be constructed after PCs have been instantiated. 
             PCSelector = new(TeamDataSO);
+
+            // Changing PC to first on list to set CurrentMenuPC on other scripts, then setting back to null
+            // so no PC is world selected, but there is a CurrentMenuPC from the start. 
+            PCSelector.ChangePC(TeamDataSO.HomePCs[0].PCInstance);
+            PCSelector.ChangePC(null);
 
             OnAfterPCsInstantiated?.Invoke();
         }

@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class UIPC : MonoBehaviour
+/// <summary>
+/// User Interface, Player Character, Heads-up Display. Chud. 
+/// </summary>
+public class UIPCHUD : MonoBehaviour
 {
     [SerializeField]
     private SOTeamData _teamDataSO;

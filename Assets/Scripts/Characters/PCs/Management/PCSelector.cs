@@ -149,7 +149,7 @@ public class PCSelector/* : MonoBehaviour*/
     /// most recently selected character. 
     /// </summary>
     /// <param name="clickedPCInstance"></param>
-    private void ChangePC(GameObject PCInstance)
+    public void ChangePC(GameObject PCInstance)
     {
         // TODO - Could do this better with selected bool I think. If clicked pc has Selected == true, then do nothing, otherwise
         // Select this PC and deselect other. Maybe deselect all first then select this one? This is the problem between having a bool
