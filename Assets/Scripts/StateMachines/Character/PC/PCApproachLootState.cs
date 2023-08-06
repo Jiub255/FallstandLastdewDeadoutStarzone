@@ -10,7 +10,7 @@ public class PCApproachLootState : PCState
 
     // Pass LootContainer in the constructor, and get NavMeshAgent and Transform from the PlayerController. 
     // Get lootingPosition and whatever else from LootContainer. 
-    public PCApproachLootState(PCStateMachine pcStateMachine, LootContainer lootContainer) : base(pcStateMachine)
+    public PCApproachLootState(PCStateMachine pcStateMachine, InputManager inputManager, LootContainer lootContainer) : base(pcStateMachine, inputManager)
     {
         LootContainer = lootContainer;
 

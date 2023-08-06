@@ -10,9 +10,11 @@ public enum BuildingType
     Defensive,
     Crafting,
     QOL,
-    Farming // Or production? 
+    Farming, // Or production? 
+    Storage
 }
 
+[CreateAssetMenu(menuName = "Building/SOBuilding", fileName = "New Building SO")]
 public class SOBuilding : SORecipe
 {
     /// <summary>
@@ -20,7 +22,7 @@ public class SOBuilding : SORecipe
     /// </summary>
     public static event Action<SOBuilding> OnSelectBuilding;
 
-    [SerializeField]
+	[SerializeField, Header("------------ Building Data -------------")]
     private BuildingType _buildingType;
     [SerializeField]
     private GameObject _buildingPrefab;

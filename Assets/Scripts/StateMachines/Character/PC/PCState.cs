@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 public abstract class PCState/* : CharacterState<PCStateMachine>*/
 {
     protected PCStateMachine StateMachine { get; }
+    protected InputManager InputManager { get; }
 
-    public PCState(PCStateMachine pcStateMachine)/* : base(characterController)*/
+    public PCState(PCStateMachine pcStateMachine, InputManager inputManager)/* : base(characterController)*/
     {
         StateMachine = pcStateMachine;
-        InputManager.OnDeselectOrCancel += CancelOrDeselect;
+        inputManager.OnDeselectOrCancel += CancelOrDeselect;
     }
 
     public abstract void Update(bool selected = false);

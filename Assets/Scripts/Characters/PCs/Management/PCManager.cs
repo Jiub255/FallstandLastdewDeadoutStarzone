@@ -36,10 +36,13 @@ public class PCManager
     private PCSelector PCSelector { get; set; }
     private PCItemUseManager PCItemUseManager { get; }
     private InputManager InputManager { get; set; }
+    private GameManager GameManager { get; set; }
 
-    public PCManager(SOTeamData teamDataSO)
+    public PCManager(SOTeamData teamDataSO, InputManager inputManager, GameManager gameManager)
     {
         TeamDataSO = teamDataSO;
+        InputManager = inputManager;
+        GameManager = gameManager;
 
         // TODO - Will this work? Passing the reference to SOPCData here? What if it gets changed to refer to another SOPCData?
         // Will PCItemUseManager keep the reference to the old one? 
@@ -52,12 +55,8 @@ public class PCManager
         PCSelector.OnSelectedNewPC += (pcDataSO) => _currentMenuPC = pcDataSO ? pcDataSO : _currentMenuPC;
         UICharacter.OnMenuPCChanged += (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart += InitializeScene;
-    }
 
-    public void Start()
-    {
-        InputManager = S.I.IM;
-        S.I.IM.PC.World.SelectOrCenter.canceled += HandleClick;
+        inputManager.PC.World.SelectOrCenter.canceled += HandleClick;
     }
 
     public void OnDisable()
@@ -67,7 +66,7 @@ public class PCManager
         UICharacter.OnMenuPCChanged -= (pcDataSO) => _currentMenuPC = pcDataSO;
         SpawnPoint.OnSceneStart -= InitializeScene;
 
-        S.I.IM.PC.World.SelectOrCenter.canceled -= HandleClick;
+        InputManager.PC.World.SelectOrCenter.canceled -= HandleClick;
 
         // Run OnDisable in created class instances. 
 //        foreach (PCController pcController in TeamDataSO.PCControllerDict.Values)
@@ -101,11 +100,11 @@ public class PCManager
                 // Set SOPCData references for this PC. 
                 TeamDataSO.HomePCs[i].PCInstance = pcInstance;
                 TeamDataSO.HomePCs[i].SelectedPCIcon = pcInstance.GetComponentInChildren<SelectedPCIcon>();
-                TeamDataSO.HomePCs[i].PCController = new PCController(TeamDataSO.HomePCs[i], TeamDataSO);
+                TeamDataSO.HomePCs[i].PCController = new PCController(TeamDataSO.HomePCs[i], TeamDataSO, InputManager, GameManager);
             }
 
             // This has to be constructed after PCs have been instantiated. 
-            PCSelector = new(TeamDataSO);
+            PCSelector = new(TeamDataSO, InputManager);
 
             // Changing PC to first on list to set CurrentMenuPC on other scripts, then setting back to null
             // so no PC is world selected, but there is a CurrentMenuPC from the start. 

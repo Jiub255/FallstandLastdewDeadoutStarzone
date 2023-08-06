@@ -7,7 +7,7 @@ public class PCApproachEnemyState : PCState
     private float WeaponRangeSquared { get; }
     private Transform Transform { get; }
 
-    public PCApproachEnemyState(PCStateMachine pcStateMachine, Transform target) : base(pcStateMachine)
+    public PCApproachEnemyState(PCStateMachine pcStateMachine, InputManager inputManager, Transform target) : base(pcStateMachine, inputManager)
     {
         Transform = pcStateMachine.PCDataSO.PCInstance.transform;
 

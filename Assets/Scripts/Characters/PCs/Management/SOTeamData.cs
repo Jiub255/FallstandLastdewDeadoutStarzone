@@ -55,26 +55,43 @@ public class SOTeamData : ScriptableObject
 	}
 
 
-	/// <summary>
-	/// Is this necessary? Or does it even do anything? Or just return the same thing you put in, <br/>
-	/// unless it's not on the list? So it's kinda like a bool contains check, but returns null instead of false. 
-	/// </summary>
-	public SOPCData this[SOPCData pcDataSO]
+    /// <summary>
+    /// Is this necessary? Or does it even do anything? Or just return the same thing you put in, <br/>
+    /// unless it's not on the list? So it's kinda like a bool contains check, but returns null instead of false. 
+    /// </summary>
+    public SOPCData this[SOPCData pcDataSO]
     {
         get
         {
-			foreach (SOPCData homePCDataSO in _homePCs)
+            foreach (SOPCData homePCDataSO in _homePCs)
             {
-				if (homePCDataSO == pcDataSO)
+                if (homePCDataSO == pcDataSO)
                 {
-					return homePCDataSO;
+                    return homePCDataSO;
                 }
             }
 
-			Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
-			return null;
+            Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
+            return null;
         }
     }
+
+	/// <summary>
+	/// TODO - Use this or the above method? Or don't use either and do IndexOf in UICharacter.NextPC? 
+	/// </summary>
+    public int GetIndex(SOPCData pcDataSO)
+    {
+		foreach (SOPCData homePCDataSO in _homePCs)
+        {
+			if (homePCDataSO.name == pcDataSO.name)
+			{
+				return _homePCs.IndexOf(homePCDataSO);
+            }
+        }
+
+		Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
+		return -1;
+	}
 
 	public void AddPCToHomeList(SOPCData sopc)
     {

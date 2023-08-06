@@ -11,7 +11,7 @@ public abstract class SORecipe : ScriptableObject
 	[SerializeField, Header("------------- Recipe Data --------------"), Tooltip("For each stat requirement, must have at least one PC that meets or exceeds it. ")]
 	private List<StatValue> _minSinglePCStatRequirements;
 	[SerializeField, Tooltip("Must have each of these buildings built to be able to craft this recipe. ")]
-	private List<SOCraftingBuilding> _requiredBuildings;
+	private List<SOBuilding> _requiredBuildings;
 	[SerializeField, Tooltip("Must have each of these tools in inventory to be able to craft this recipe. ")]
 	private List<SOTool> _requiredTools;
 	[SerializeField]
@@ -20,7 +20,7 @@ public abstract class SORecipe : ScriptableObject
 	public string Description { get { return _description; } }
 	public Sprite Icon { get { return _icon; } }
 	public List<StatValue> MinSinglePCStatRequirements { get { return _minSinglePCStatRequirements;} }
-	public List<SOCraftingBuilding> RequiredBuildings { get { return _requiredBuildings; } }
+	public List<SOBuilding> RequiredBuildings { get { return _requiredBuildings; } }
 	/// <summary>
 	/// Have a separate SOTool:SOItem class? They won't be usable from menu but will satisfy these types of requirements. <br/>
 	/// Have things like knife, axe, welder, etc. Can't cut fabric without a knife, can't weld without a welder etc. 

@@ -12,7 +12,7 @@ public class PCIdleState : PCState
     private float SightDistance { get; }
     private Transform Transform { get; }
 
-    public PCIdleState(PCStateMachine pcStateMachine, SOPCMovementState pcMovementStateSO) : base(pcStateMachine)
+    public PCIdleState(PCStateMachine pcStateMachine, InputManager inputManager, SOPCMovementState pcMovementStateSO) : base(pcStateMachine, inputManager)
     {
         SightDistance = pcMovementStateSO.SightDistance;
         Transform = pcStateMachine.PCDataSO.PCInstance.transform;

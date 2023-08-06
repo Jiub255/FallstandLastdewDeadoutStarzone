@@ -3,26 +3,41 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneTransitionManager : MonoBehaviour
+public class SceneTransitionManager
 {
     public static event Func<float, IEnumerator> OnFadeOut;
     public static event Func<float, IEnumerator> OnFadeIn;
 
-    [SerializeField]
-    private SOTeamData _pcSOListSO;
-    [SerializeField]
-    private float _fadeTime = 0.5f;
+    private SOTeamData TeamDataSO { get; }
+    private float FadeTime { get; }
+    private GameStateMachine GameStateMachine { get; }
+    private GameManager GameManager { get; }
+
+    public SceneTransitionManager(SOTeamData teamDataSO, float fadeTime, GameStateMachine gameStateMachine, GameManager gameManager)
+    {
+        TeamDataSO = teamDataSO;
+        FadeTime = fadeTime;
+        GameStateMachine = gameStateMachine;
+        GameManager = gameManager;
+
+        BuildingButton.OnClickMapButton += LoadScavengingScene;
+    }
+
+    public void OnDisable()
+    {
+        BuildingButton.OnClickMapButton -= LoadScavengingScene;
+    }
 
     public void LoadHomeScene()
     {
         // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
-        foreach (SOPCData pcDataSO in _pcSOListSO.HomePCs)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             pcDataSO.PCInstance = null;
         }
         // TODO - Use game state machine instead. 
-        S.I.GSM.ChangeGameStateTo(S.I.GSM.Home());
-        StartCoroutine(LoadSceneCoroutine("HomeScene"));
+        GameStateMachine.ChangeGameStateTo(GameStateMachine.Home());
+        GameManager.StartCoroutine(LoadSceneCoroutine("HomeScene"));
     }
 
     /// <summary>
@@ -39,7 +54,7 @@ public class SceneTransitionManager : MonoBehaviour
 
         // Fade to black or whatever. 
         // Send event to some fade UI object in whichever scene is open and active? 
-        yield return OnFadeOut?.Invoke(_fadeTime);
+        yield return OnFadeOut?.Invoke(FadeTime);
 
         // Cache current scene index to unload after setting HomeScene to active. 
         int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
@@ -60,7 +75,7 @@ public class SceneTransitionManager : MonoBehaviour
         // Fade back in from black. 
         // Send event to some fade UI object in whichever scene is open and active? 
         // How to do this? Can this coroutine have a while(other coroutine is running) thing?
-        yield return OnFadeIn?.Invoke(_fadeTime);
+        yield return OnFadeIn?.Invoke(FadeTime);
 
         // Unpause gameplay/ reenable controls.
 //        S.I.GameManager.Pause(false);
@@ -87,12 +102,12 @@ public class SceneTransitionManager : MonoBehaviour
     public void LoadScavengingScene(GameObject levelPrefab)
     {
         // Set all PCInstance references to null, and they'll get repopulated by SpawnPoint on scene load. 
-        foreach (SOPCData pcDataSO in _pcSOListSO.HomePCs)
+        foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
         {
             pcDataSO.PCInstance = null;
         }
-        S.I.GSM.ChangeGameStateTo(S.I.GSM.Combat());
-        StartCoroutine(LoadSceneCoroutine("ScavengingScene"));
+        GameStateMachine.ChangeGameStateTo(GameStateMachine.Combat());
+        GameManager.StartCoroutine(LoadSceneCoroutine("ScavengingScene"));
     }
 
 

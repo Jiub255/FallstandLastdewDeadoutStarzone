@@ -39,14 +39,12 @@ public class UIRecipes : MonoBehaviour
 		// Call this whenever stats change. 
 		SetupRecipeSlots();
 
-		InventoryManager.OnInventoryChanged += SetupRecipeSlots;
-		PCStatManager.OnStatsChanged += SetupRecipeSlots;
+		GameManager.OnRecipeListsCalculated += SetupRecipeSlots;
 	}
 
     private void OnDisable()
     {
-		InventoryManager.OnInventoryChanged -= SetupRecipeSlots;
-		PCStatManager.OnStatsChanged -= SetupRecipeSlots;
+		GameManager.OnRecipeListsCalculated -= SetupRecipeSlots;
 	}
 
     // TODO - Gray out the buildings/items that you don't have enough materials to build. 

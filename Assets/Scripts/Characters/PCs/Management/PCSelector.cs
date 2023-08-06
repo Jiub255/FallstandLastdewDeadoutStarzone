@@ -33,7 +33,7 @@ public class PCSelector/* : MonoBehaviour*/
 /// Need to wait to call this until after PCs have been instantiated, because it subscribes to events called by instantiated MBs on PCs. 
 /// </summary>
 /// <param name="teamDataSO"></param>
-    public PCSelector(SOTeamData teamDataSO)
+    public PCSelector(SOTeamData teamDataSO, InputManager inputManager)
     {
         TeamDataSO = teamDataSO;
 
@@ -46,7 +46,7 @@ public class PCSelector/* : MonoBehaviour*/
             Debug.LogWarning("No PCs on SOTeamData.HomeSOPCSList. Can't play game without PCs. ");
         }
 
-        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        MousePositionAction = inputManager.PC.Camera.MousePosition;
 
         // SOPCData click events get subscribed to/unsubscribed from as PCs get added/removed from home team list. 
         // TODO - Do the same for scavenging team list? 

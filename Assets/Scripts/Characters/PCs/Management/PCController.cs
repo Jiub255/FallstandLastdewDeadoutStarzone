@@ -9,10 +9,10 @@ public class PCController
     public PainInjuryManager PainInjuryManager { get; }
     public EquipmentManager EquipmentManager { get; }
 
-    public PCController(SOPCData pcDataSO, SOTeamData currentTeamSO)
+    public PCController(SOPCData pcDataSO, SOTeamData currentTeamSO, InputManager inputManager, GameManager gameManager)
     {
-        PCStateMachine = new(pcDataSO);
-        PainInjuryManager = new(pcDataSO, currentTeamSO);
+        PCStateMachine = new(pcDataSO, inputManager);
+        PainInjuryManager = new(pcDataSO, currentTeamSO, gameManager);
         EquipmentManager = new(pcDataSO);
         PCStatManager = new(pcDataSO, EquipmentManager.EquipmentBonuses);
 

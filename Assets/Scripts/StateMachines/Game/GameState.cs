@@ -1,17 +1,17 @@
-using UnityEngine;
-
 public abstract class GameState
 {
     protected GameStateMachine _gameStateMachine;
+    protected InputManager _inputManager;
 
-	public GameState(GameStateMachine gameStateMachine)
+	public GameState(GameStateMachine gameStateMachine, InputManager inputManager)
     {
         _gameStateMachine = gameStateMachine;
+        _inputManager = inputManager;
     }
 
     public void SetActionMaps()
     {
-        S.I.IM.EnableStateActionMaps(this);
+        _inputManager.EnableStateActionMaps(this);
     }
 
     public abstract void SetTimeScale();

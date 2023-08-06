@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameHomeMenusState : GameState
 {
-    public GameHomeMenusState(GameStateMachine gameStateMachine) : base(gameStateMachine) {}
+    public GameHomeMenusState(GameStateMachine gameStateMachine, InputManager inputManager) : base(gameStateMachine, inputManager) {}
 
     public override void SetTimeScale()
     {

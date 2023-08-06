@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GamePauseState : GameState
 {
-    public GamePauseState(GameStateMachine gameStateMachine) : base(gameStateMachine) {}
+    public GamePauseState(GameStateMachine gameStateMachine, InputManager inputManager) : base(gameStateMachine, inputManager) {}
 
     public override void SetTimeScale()
     {

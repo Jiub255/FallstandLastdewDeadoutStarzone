@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e195f062ef353be45a40195949156191, type: 3}
-  m_Name: Test Crafting Item SO 1
+  m_Script: {fileID: 11500000, guid: b9fd3e25d215bec4785f37089b0c48a0, type: 3}
+  m_Name: Workbench
   m_EditorClassIdentifier: 
-  _description: Crafting item 1
-  _icon: {fileID: 21300000, guid: de252f87501795643b3f50da4470b2b3, type: 3}
+  _description: Use to craft basic items
+  _icon: {fileID: 21300000, guid: 7e899290760a4254ab505db5355909f9, type: 3}
   _minSinglePCStatRequirements: []
   _requiredBuildings: []
   _requiredTools: []
   _recipeCosts: []
+  _buildingType: 2
+  _buildingPrefab: {fileID: 588010162298765337, guid: a60ebb429c3434147b8b0780dea52d5a, type: 3}

@@ -10,7 +10,7 @@ public class PCLootState : PCState
     private LootTimer LootTimer { get; }
     private float Timer { get; set; }
 
-    public PCLootState(PCStateMachine pcStateMachine, LootContainer lootContainer) : base(pcStateMachine)
+    public PCLootState(PCStateMachine pcStateMachine, InputManager inputManager, LootContainer lootContainer) : base(pcStateMachine, inputManager)
     {
         LootContainer = lootContainer;
 

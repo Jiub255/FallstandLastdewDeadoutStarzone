@@ -9,12 +9,12 @@ using UnityEngine.InputSystem;
 /// of them all being in InputManager. One singleton for input seems fine, lots of classes use it. <br/>
 /// TODO - Maybe refactor without singleton later if it causes problems. 
 /// </summary>
-public class InputManager : MonoBehaviour
+public class InputManager
 {
     /// <summary>
     /// Only called if mouse hasn't moved more than <c>_mouseMovementThreshold</c> between pressing and releasing button. 
     /// </summary>
-    public static event Action<InputAction.CallbackContext> OnDeselectOrCancel;
+    public event Action<InputAction.CallbackContext> OnDeselectOrCancel;
 
     public PlayerControls PC { get; private set; }
 
@@ -27,7 +27,7 @@ public class InputManager : MonoBehaviour
     private EventSystem EventSystem { get; set; }
     public bool PointerOverUI { get; private set; }
 
-    private void Awake()
+    public InputManager()
     {
         PC = new PlayerControls();
 
@@ -38,13 +38,13 @@ public class InputManager : MonoBehaviour
         PC.Camera.RightClick.canceled += HandleRightClick;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         PC.Camera.RightClick.started -= GetStartingMousePosition;
         PC.Camera.RightClick.canceled -= HandleRightClick;
     }
 
-    private void Update()
+    public void Update()
     {
         PointerOverUI = EventSystem.IsPointerOverGameObject();
     }
@@ -88,7 +88,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in non-combat menus. 
-    public void EnableStatesActionMaps(GameHomeMenusState homeMenusState)
+    private void EnableStatesActionMaps(GameHomeMenusState homeMenusState)
     {
         PC.Disable();
         PC.Quit.Enable();
@@ -97,7 +97,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in scavenging scenes and home base combat. 
-    public void EnableStatesActionMaps(GameCombatState combatState)
+    private void EnableStatesActionMaps(GameCombatState combatState)
     {
         PC.Disable();
         PC.Camera.Enable();
@@ -107,7 +107,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in combat menus. 
-    public void EnableStatesActionMaps(GameCombatMenusState combatMenusState)
+    private void EnableStatesActionMaps(GameCombatMenusState combatMenusState)
     {
         PC.Disable();
         PC.Quit.Enable();
@@ -115,7 +115,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Used in build mode in home base. 
-    public void EnableStatesActionMaps(GameBuildState buildState)
+    private void EnableStatesActionMaps(GameBuildState buildState)
     {
         PC.Disable();
         PC.Camera.Enable();

@@ -9,7 +9,7 @@ public class PCCombatState : PCState
     private Animator Animator { get; }
     private Transform Transform { get; }
 
-    public PCCombatState(PCStateMachine pcStateMachine, Transform target) : base(pcStateMachine)
+    public PCCombatState(PCStateMachine pcStateMachine, InputManager inputManager, Transform target) : base(pcStateMachine, inputManager)
     {
         Target = target;
 

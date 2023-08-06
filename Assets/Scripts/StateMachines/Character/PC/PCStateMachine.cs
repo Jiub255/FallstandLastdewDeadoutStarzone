@@ -17,16 +17,18 @@ public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
     public SOPCData PCDataSO { get; } 
     public Animator Animator { get; }
     public PathNavigator PathNavigator{ get; }
+    private InputManager InputManager { get; }
 
-    public PCStateMachine(SOPCData pcDataSO)
+    public PCStateMachine(SOPCData pcDataSO, InputManager inputManager)
     {
         PCDataSO = pcDataSO;
+        InputManager = inputManager;
         GameObject pcGO = pcDataSO.PCInstance;
         SelectedPCIcon = pcGO.GetComponentInChildren<SelectedPCIcon>();
         Animator = pcGO.GetComponentInChildren<Animator>();
         PathNavigator = pcGO.GetComponent<PathNavigator>();
 
-        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        MousePositionAction = inputManager.PC.Camera.MousePosition;
 
         // Activate or deactivate selected pc icon. 
         SelectedPCIcon.ActivateIcon(pcDataSO.Selected);
@@ -37,16 +39,16 @@ public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
 
     // GET DATA FOR THESE FROM SOs. 
     // Data from SOPCMovementState. 
-    public PCApproachLocationState ApproachLocation(Vector3 destination) { return new PCApproachLocationState(this, destination); } 
-    public PCIdleState Idle() { return new PCIdleState(this, PCDataSO.PCMovementStateSO); }
+    public PCApproachLocationState ApproachLocation(Vector3 destination) { return new PCApproachLocationState(this, InputManager, destination); } 
+    public PCIdleState Idle() { return new PCIdleState(this, InputManager, PCDataSO.PCMovementStateSO); }
 
     // Data from SOPCCombatState. 
-    public PCApproachEnemyState ApproachEnemy(Transform target) { return new PCApproachEnemyState(this, target); } 
-    public PCCombatState Combat(Transform target) { return new PCCombatState(this, target); }
+    public PCApproachEnemyState ApproachEnemy(Transform target) { return new PCApproachEnemyState(this, InputManager, target); } 
+    public PCCombatState Combat(Transform target) { return new PCCombatState(this, InputManager, target); }
 
     // Data from SOPCLootState. 
-    public PCApproachLootState ApproachLoot(LootContainer lootContainer) { return new PCApproachLootState(this, lootContainer); } 
-    public PCLootState Loot(LootContainer lootContainer) { return new PCLootState(this, lootContainer); }
+    public PCApproachLootState ApproachLoot(LootContainer lootContainer) { return new PCApproachLootState(this, InputManager, lootContainer); } 
+    public PCLootState Loot(LootContainer lootContainer) { return new PCLootState(this, InputManager, lootContainer); }
 
     public void SetSelected(bool selected)
     {

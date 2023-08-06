@@ -6,7 +6,7 @@ public class PCApproachLocationState : PCState
     private Transform Transform { get; }
     private Vector3 Destination { get; }
          
-    public PCApproachLocationState(PCStateMachine pcStateMachine, Vector3 destination) : base(pcStateMachine)
+    public PCApproachLocationState(PCStateMachine pcStateMachine, InputManager inputManager, Vector3 destination) : base(pcStateMachine, inputManager)
     {
         Destination = destination;
 

@@ -1,15 +1,13 @@
 using UnityEngine;
 
-public class GameStateMachine : MonoBehaviour
+public class GameStateMachine
 {
-    [SerializeField]
-    private SOTeamData _currentTeamSO;
-
-    public SOTeamData CurrentTeamSO { get { return _currentTeamSO; } }
     public GameState ActiveState { get; private set; }
+    private InputManager InputManager { get; }
 
-    private void Start()
+    public GameStateMachine(InputManager inputManager)
     {
+        InputManager = inputManager;
         // Start game in Pause state, in main menu. 
         // FOR NOW, start in home state for testing, until main menu is built. 
         ChangeGameStateTo(/*Pause*/Home());
@@ -34,12 +32,12 @@ public class GameStateMachine : MonoBehaviour
         Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }
 
-    public GamePauseState Pause() { return new GamePauseState(this); }
-    public GameHomeState Home() { return new GameHomeState(this); }
-    public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(this); }
-    public GameCombatState Combat() { return new GameCombatState(this); }
-    public GameCombatMenusState CombatMenus() { return new GameCombatMenusState(this); }
-    public GameBuildState Build() { return new GameBuildState(this); }
+    public GamePauseState Pause() { return new GamePauseState(this, InputManager); }
+    public GameHomeState Home() { return new GameHomeState(this, InputManager); }
+    public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(this, InputManager); }
+    public GameCombatState Combat() { return new GameCombatState(this, InputManager); }
+    public GameCombatMenusState CombatMenus() { return new GameCombatMenusState(this, InputManager); }
+    public GameBuildState Build() { return new GameBuildState(this, InputManager); }
 
 
 

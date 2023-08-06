@@ -11,9 +11,12 @@ public class SOGameData : ScriptableObject
     private SOBuildingData _buildingDataSO;
     [SerializeField]
     private GameObject _uiPrefab;
+    [SerializeField]
+    private float _sceneTransitionFadeTime = 0.5f;
 
     public SOInventoryData InventoryDataSO { get { return _inventoryDataSO; } }
     public SOTeamData TeamDataSO { get { return _teamDataSO; } }
     public SOBuildingData BuildingDataSO { get { return _buildingDataSO; } }
     public GameObject UIPrefab { get { return _uiPrefab; } }
+    public float SceneTransitionFadeTime { get { return _sceneTransitionFadeTime;} }
 }

@@ -12,9 +12,6 @@ public class UICharacter : MonoBehaviour
 	/// </summary>
 	public static event Action<SOPCData> OnMenuPCChanged;
 
-	/// <summary>
-	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
-	/// </summary>
 	[SerializeField]
 	private SOTeamData _currentTeamSO;
 	[SerializeField]
@@ -26,17 +23,12 @@ public class UICharacter : MonoBehaviour
 	[SerializeField]
 	private RectTransform _statsParent;
 
-	private SOPCData _currentMenuSOPCData;
-
-	/// <summary>
-	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
-	/// </summary>
 	private SOTeamData CurrentTeamSO { get { return _currentTeamSO; } }
 	private TextMeshProUGUI PCName { get { return _pcName; } }
 	private Image PCImage { get { return _pcImage; } }
 	private GameObject StatTextPrefab { get { return _statTextPrefab; } }
 	private RectTransform StatsParent { get { return _statsParent; } }
-	private SOPCData CurrentMenuSOPCData { get { return _currentMenuSOPCData; } set { _currentMenuSOPCData = value; } }
+	private SOPCData CurrentMenuSOPCData { get; set; }
 
     private void OnEnable()
     {
@@ -54,7 +46,8 @@ public class UICharacter : MonoBehaviour
 
 	public void NextPC()
     {
-	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
+//	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
+		int currentIndex = CurrentTeamSO.GetIndex(CurrentMenuSOPCData);
 		Debug.Log($"UICharacter's current index: {currentIndex}");
 
 		if (currentIndex != -1)
@@ -77,7 +70,8 @@ public class UICharacter : MonoBehaviour
 
 	public void PreviousPC()
     {
-		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
+//		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
+		int currentIndex = CurrentTeamSO.GetIndex(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
 		{

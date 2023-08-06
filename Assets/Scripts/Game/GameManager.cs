@@ -12,6 +12,13 @@ using UnityEngine;
 /// </remarks>
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// Any class that needs InputManager but isn't created by GameManager gets the reference through this. 
+    /// </summary>
+    public static event System.Action<InputManager> OnInputManagerCreated;
+    public static event System.Action<GameStateMachine> OnGameStateMachineCreated;
+    public static event System.Action OnRecipeListsCalculated;
+
     [SerializeField]
     private SOGameData _gameDataSO;
 
@@ -20,6 +27,9 @@ public class GameManager : MonoBehaviour
     private InventoryManager InventoryManager { get; set; }
     private StatManager StatManager { get; set; }
     private BuildingManager BuildingManager { get; set; }
+    private GameStateMachine GameStateMachine { get; set; }
+    private InputManager InputManager { get; set; }
+    private SceneTransitionManager SceneTransitionManager { get; set; }
 
     // Data
     private SOGameData GameDataSO { get { return _gameDataSO; } set { _gameDataSO = value; } }
@@ -27,10 +37,13 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         // Instantiate PCManager first, so it can instantiate all the PC's in the game world. 
-        PCManager = new(GameDataSO.TeamDataSO);
+        PCManager = new(GameDataSO.TeamDataSO, InputManager, this);
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO.TeamDataSO);
-        BuildingManager = new(GameDataSO.BuildingDataSO);        
+        BuildingManager = new(GameDataSO.BuildingDataSO, InputManager);
+        GameStateMachine = new(InputManager);
+        OnGameStateMachineCreated?.Invoke(GameStateMachine);
+        SceneTransitionManager = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
 
         GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
         GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
@@ -40,9 +53,9 @@ public class GameManager : MonoBehaviour
     {
         InventoryManager.OnInventoryChanged += GetPossibleRecipes;
         PCStatManager.OnStatsChanged += GetPossibleRecipes;
-
-        PCManager.Start();
-        BuildingManager.Start();
+        
+        InputManager = new();
+        OnInputManagerCreated?.Invoke(InputManager);
     }
 
     private void OnDisable()
@@ -51,6 +64,8 @@ public class GameManager : MonoBehaviour
         InventoryManager.OnDisable();
         PCManager.OnDisable();
         BuildingManager.OnDisable();
+        InputManager.OnDisable();
+        SceneTransitionManager.OnDisable();
 
         InventoryManager.OnInventoryChanged -= GetPossibleRecipes;
         PCStatManager.OnStatsChanged -= GetPossibleRecipes;
@@ -65,21 +80,22 @@ public class GameManager : MonoBehaviour
     public void GetPossibleRecipes()
     {
         // Get all craftable items.
-        GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Clear();
         List<SOItem> metStatReqsItems = StatManager.GetMetStatRequirementsRecipes(GameDataSO.InventoryDataSO.CraftableItemsSO.ItemsWithRecipeCosts);
         List<SOItem> haveReqItemsAndToolsItems = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsItems);
         GameDataSO.InventoryDataSO.PossibleCraftingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsItems);
 
         // Get all buildable buildings. 
-        GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Clear();
         List<SOBuilding> metStatReqsBuildings = StatManager.GetMetStatRequirementsRecipes(GameDataSO.BuildingDataSO.BuildableBuildingsSO.BuildingsWithRecipeCosts);
         List<SOBuilding> haveReqItemsAndToolsBuildings = InventoryManager.GetHaveEnoughItemsRecipes(metStatReqsBuildings);
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsBuildings);
+
+        OnRecipeListsCalculated?.Invoke();
     }
 
     private void Update()
     {
         PCManager.UpdateStates();
+        InputManager.Update();
     }
 
     private void FixedUpdate()

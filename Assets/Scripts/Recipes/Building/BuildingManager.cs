@@ -18,20 +18,9 @@ public class BuildingManager
         Still have edge scrolling and keyboard camera movement and camera rotation by holding middle mouse button
         Change World action map to have the things common to World and BuildWorld, then have WorldGameplay and WorldBuild maps to cover the
             differences (mouse wheel, right click for now)
-    */
-
-    /*    [SerializeField]
-        private GameObject _buildingPrefab;
-        [SerializeField]
-        private LayerMask _groundLayerMask;
-        [SerializeField]
-        private float _rotationSpeed = 50f;
-        [SerializeField, Tooltip("Snap angle to the next [Snap Angle]. Works best with a divisor of 360.")]
-        private int _snapAngle = 45;*/
+    */ 
 
     private SOBuildingData BuildingDataSO { get; }
-
-    // Keep here. 
     private InputAction MousePositionAction { get; set; }
     private InputManager InputManager { get; set; }
 
@@ -44,12 +33,21 @@ public class BuildingManager
     [SerializeField, Tooltip("Toggle or hold modifier button (shift) to change angle snap mode")]
     private bool _toggle = false;*/
 
-    public BuildingManager(SOBuildingData buildingDataSO)
+    public BuildingManager(SOBuildingData buildingDataSO, InputManager inputManager)
     {
         BuildingDataSO = buildingDataSO;
+        InputManager = inputManager;
 
         SOBuilding.OnSelectBuilding += SelectCurrentBuilding;
 
+        MousePositionAction = inputManager.PC.Camera.MousePosition;
+
+        inputManager.PC.Build.RotateBuilding.started += RotateBuilding;
+        inputManager.PC.Build.PlaceBuilding.started += PlaceBuilding;
+        inputManager.PC.Build.SnapBuilding.started += SnapToNextAngle;
+        inputManager.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
+
+        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         // For debug gizmos, so they dont draw in editor mode.
        // _started = true;
 
@@ -57,18 +55,6 @@ public class BuildingManager
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
     }
 
-    public void Start()
-    {
-        MousePositionAction = S.I.IM.PC.Camera.MousePosition;
-        InputManager = S.I.IM;
-
-        S.I.IM.PC.Build.RotateBuilding.started += RotateBuilding;
-        S.I.IM.PC.Build.PlaceBuilding.started += PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.started += SnapToNextAngle;
-        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
-
-        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
-    }
 
 /*    private void ToggleAngleSnapMode(InputAction.CallbackContext context)
     {
@@ -90,10 +76,10 @@ public class BuildingManager
 
     public void OnDisable()
     {
-        S.I.IM.PC.Build.RotateBuilding.started -= RotateBuilding;
-        S.I.IM.PC.Build.PlaceBuilding.started -= PlaceBuilding;
-        S.I.IM.PC.Build.SnapBuilding.started -= SnapToNextAngle;
-        S.I.IM.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
+        InputManager.PC.Build.RotateBuilding.started -= RotateBuilding;
+        InputManager.PC.Build.PlaceBuilding.started -= PlaceBuilding;
+        InputManager.PC.Build.SnapBuilding.started -= SnapToNextAngle;
+        InputManager.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
 
         SOBuilding.OnSelectBuilding -= SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
@@ -188,12 +174,12 @@ public class BuildingManager
         }
     }
 
-    // Use a "Building" prefab with the selected building icon child. Then attach the actual building prefab as a child of it in this script.
+    // Use a "Building parent" prefab with the selected building icon child. Then attach the actual building prefab as a child of it in this script.
     private void SetBuildingInstance(GameObject buildingInstance)
     {
         if (buildingInstance != null)
         {
-            GameObject buildingParent = Object.Instantiate(BuildingDataSO.BuildingPrefab);
+            GameObject buildingParent = Object.Instantiate(BuildingDataSO.BuildingParentPrefab);
             buildingInstance.transform.SetParent(buildingParent.transform);
             buildingInstance.transform.localPosition = Vector3.zero;
             BuildingDataSO.CurrentBuildingInstance = buildingParent;

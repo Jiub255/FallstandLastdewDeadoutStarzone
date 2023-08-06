@@ -12,6 +12,7 @@ public class PainInjuryManager
     /// Just to get Healing Rate. Might do differently later. 
     /// </summary>
     private SOTeamData CurrentTeamSO { get; }
+    private GameManager GameManager { get; }
     private int Pain
     {
         get
@@ -25,10 +26,11 @@ public class PainInjuryManager
         }
     }
 
-    public PainInjuryManager(SOPCData pcDataSO, SOTeamData currentTeamSO)
+    public PainInjuryManager(SOPCData pcDataSO, SOTeamData currentTeamSO, GameManager gameManager)
     {
         PCDataSO = pcDataSO;
         CurrentTeamSO = currentTeamSO;
+        GameManager = gameManager;
     }
 
     /// <summary>
@@ -67,7 +69,7 @@ public class PainInjuryManager
     {
         PCDataSO.Healing = true;
 
-        S.I.StartCoroutine(HealingCoroutine(CurrentTeamSO.HealingRate));
+        GameManager.StartCoroutine(HealingCoroutine(CurrentTeamSO.HealingRate));
     }
     
     /// <summary>
@@ -120,7 +122,7 @@ public class PainInjuryManager
     /// </summary>
     public void TemporarilyRelievePain(int amount, float duration)
     {
-        S.I.StartCoroutine(RelievePainCoroutine(amount, duration));
+        GameManager.StartCoroutine(RelievePainCoroutine(amount, duration));
     }
 
     private IEnumerator RelievePainCoroutine(int amount, float duration)

@@ -26,20 +26,27 @@ public class CameraZoom : MonoBehaviour
     // Just doing this to make for better "speed" values in the inspector. 
     private float ZoomSpeed { get { return _zoomSpeed / 20f; } }
 
-    private void Start()
+    private void OnEnable()
     {
         _transform = transform;
-        _zoomAction = S.I.IM.PC.Camera.Zoom;
-
-        _zoomAction.performed += Zoom;
+        GameManager.OnInputManagerCreated += SetupInput;
 
         CameraMoveRotate.OnCenterOnPC += () => ZoomTo(_defaultZoomDist);
 
         ZoomTo(_defaultZoomDist);
     }
 
+    private void SetupInput(InputManager inputManager)
+    {
+        _zoomAction = inputManager.PC.Camera.Zoom;
+
+        _zoomAction.performed += Zoom;
+    }
+
     private void OnDisable()
     {
+        GameManager.OnInputManagerCreated -= SetupInput;
+
         _zoomAction.performed -= Zoom;
 
         CameraMoveRotate.OnCenterOnPC -= () => ZoomTo(_defaultZoomDist);

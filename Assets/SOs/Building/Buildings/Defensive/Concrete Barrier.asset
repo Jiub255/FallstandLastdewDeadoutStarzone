@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 641e55a7022c9544793c61328759cf3b, type: 3}
-  m_Name: Test Defensive Building Recipe SO
+  m_Script: {fileID: 11500000, guid: b9fd3e25d215bec4785f37089b0c48a0, type: 3}
+  m_Name: Concrete Barrier
   m_EditorClassIdentifier: 
-  _description: Defensive Building
-  _icon: {fileID: 21300000, guid: e251dfd24b5610d4d8ea65a237cc9d97, type: 3}
+  _description: Keeps enemies out
+  _icon: {fileID: 21300000, guid: 75f84fbab749d9e47b6beb315e34aecd, type: 3}
   _minSinglePCStatRequirements: []
   _requiredBuildings: []
   _requiredTools: []
   _recipeCosts: []
   _buildingType: 1
-  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}
+  _buildingPrefab: {fileID: 132769144655913394, guid: 543a02fbfc8dad64ea796bdb30a91e92, type: 3}

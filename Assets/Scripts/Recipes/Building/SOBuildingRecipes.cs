@@ -11,7 +11,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/SOBuildingRecipes", fileName = "New Building Recipes SO")]
 public class SOBuildingRecipes : ScriptableObject/* : SORecipeList*/
 {
-    [SerializeField, Header("Put all building that should be buildable in game here\n(Buildings with empty RecipeCost lists get filtered out on game start)")]
+    [SerializeField, Header("Put all buildings that should be buildable in game here\n(Buildings with empty RecipeCost lists get filtered out on game start)")]
     private List<SOBuilding> _buildingsWithRecipeCosts;
 
     /// <summary>

@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40ba0809345dea44a857f82d204d753d, type: 3}
-  m_Name: Test Crafting Building Recipe SO
+  m_Script: {fileID: 11500000, guid: e195f062ef353be45a40195949156191, type: 3}
+  m_Name: Wood
   m_EditorClassIdentifier: 
-  _description: Crafting building
-  _icon: {fileID: 21300000, guid: ec70c667907272942a27a451289534b1, type: 3}
+  _description: 'Comes from trees. '
+  _icon: {fileID: 21300000, guid: 5659133ff5dd1594a914d5b8f0987fb0, type: 3}
   _minSinglePCStatRequirements: []
   _requiredBuildings: []
   _requiredTools: []
   _recipeCosts: []
-  _buildingType: 2
-  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}

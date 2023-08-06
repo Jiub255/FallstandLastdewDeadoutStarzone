@@ -7,7 +7,7 @@ public class SOBuildingData : ScriptableObject
     [SerializeField]
     private SOBuildingRecipes _buildableBuildingsSO;
     [SerializeField]
-    private GameObject _buildingPrefab;
+    private GameObject _buildingParentPrefab;
     [SerializeField]
     private LayerMask _groundLayerMask;
     [SerializeField]
@@ -16,7 +16,7 @@ public class SOBuildingData : ScriptableObject
     private int _snapAngle = 45;
 
     public SOBuildingRecipes BuildableBuildingsSO { get { return _buildableBuildingsSO; } }
-    public GameObject BuildingPrefab { get { return _buildingPrefab; } }
+    public GameObject BuildingParentPrefab { get { return _buildingParentPrefab; } }
     public LayerMask GroundLayerMask { get { return _groundLayerMask; } }
     public float RotationSpeed { get { return _rotationSpeed; } }
     public int SnapAngle { get { return _snapAngle; } }

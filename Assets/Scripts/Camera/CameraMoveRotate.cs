@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // TODO - Add right click to drag camera. Base it off mouse screen position, not the ground. 
@@ -58,8 +57,9 @@ public class CameraMoveRotate : MonoBehaviour
     private float HorizontalRotationSpeed { get { return _yRotationSpeed / 10f; } }
     private float EdgeScrollingSpeed { get { return _edgeScrollingSpeed * 5f; } }
     private float DraggingSpeed { get { return _draggingSpeed / 2f; } }
+    private InputManager InputManager { get; set; }
 
-    private void Start()
+    private void OnEnable()
     { 
         _transform = transform;
         _screenWidth = Screen.width;
@@ -72,11 +72,8 @@ public class CameraMoveRotate : MonoBehaviour
         // Might even set the absolute max a little lower than 89.9. 
         if (_xRotationMax > _xRotationAbsoluteMax) _xRotationMax = _xRotationAbsoluteMax;
 
-        _zoomAction = S.I.IM.PC.Camera.Zoom;
-        _rotateCameraAction = S.I.IM.PC.Camera.RotateCamera;
-        _moveCameraAction = S.I.IM.PC.Camera.MoveCamera;
-        _mouseDeltaAction = S.I.IM.PC.Camera.MouseDelta;
-        _mousePositionAction = S.I.IM.PC.Camera.MousePosition;
+        GameManager.OnInputManagerCreated += SetupInput;
+        
 
         GetVectors();
 
@@ -86,19 +83,31 @@ public class CameraMoveRotate : MonoBehaviour
        // S.I.IM.PC.Home.SelectOrCenter.performed += CenterOnPC;
 
         PCSelector.OnDoubleClickPC += CenterOnPC;
+    }
 
-        S.I.IM.PC.Camera.RightClick.started += StartDragging;
-        S.I.IM.PC.Camera.RightClick.canceled += (c) => _dragging = false;
+    private void SetupInput(InputManager inputManager)
+    {
+        InputManager = inputManager;
+
+        _zoomAction = inputManager.PC.Camera.Zoom;
+        _rotateCameraAction = inputManager.PC.Camera.RotateCamera;
+        _moveCameraAction = inputManager.PC.Camera.MoveCamera;
+        _mouseDeltaAction = inputManager.PC.Camera.MouseDelta;
+        _mousePositionAction = inputManager.PC.Camera.MousePosition;
+
+        inputManager.PC.Camera.RightClick.started += StartDragging;
+        inputManager.PC.Camera.RightClick.canceled += (c) => _dragging = false;
     }
 
     private void OnDisable()
     {
         //S.I.IM.PC.Home.SelectOrCenter.performed -= CenterOnPC;
+        GameManager.OnInputManagerCreated -= SetupInput;
 
         PCSelector.OnDoubleClickPC -= CenterOnPC;
 
-        S.I.IM.PC.Camera.RightClick.started -= (c) => { _dragging = true; _lastMousePosition = _mousePositionAction.ReadValue<Vector2>(); }/*StartDragging*/;
-        S.I.IM.PC.Camera.RightClick.canceled -= (c) => _dragging = false;
+        InputManager.PC.Camera.RightClick.started -= (c) => { _dragging = true; _lastMousePosition = _mousePositionAction.ReadValue<Vector2>(); }/*StartDragging*/;
+        InputManager.PC.Camera.RightClick.canceled -= (c) => _dragging = false;
     }
 
 /*    private void Update()
