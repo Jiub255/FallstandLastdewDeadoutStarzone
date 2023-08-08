@@ -24,7 +24,7 @@ public class CameraZoom : MonoBehaviour
     private float _zoomLevel;
 
     // Just doing this to make for better "speed" values in the inspector. 
-    private float ZoomSpeed { get { return _zoomSpeed / 20f; } }
+    private float ZoomSpeed { get { return _zoomSpeed / 200f; } }
 
     private void OnEnable()
     {

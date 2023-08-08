@@ -30,25 +30,48 @@ public class UICharacter : MonoBehaviour
 	private RectTransform StatsParent { get { return _statsParent; } }
 	private SOPCData CurrentMenuSOPCData { get; set; }
 
+    private void Awake()
+    {
+		if (CurrentTeamSO.HomePCs.Count > 0)
+        {
+			CurrentMenuSOPCData = CurrentTeamSO.HomePCs[0];
+        }
+        else
+        {
+			Debug.LogWarning("Home PCs list on SOTeamData empty.");
+        }        
+    }
+
     private void OnEnable()
     {
 		PCStatManager.OnStatsChanged += SetupCharacterPanel;
-		PCSelector.OnSelectedNewPC += (pcDataSO) => CurrentMenuSOPCData = pcDataSO ? pcDataSO : CurrentMenuSOPCData;
-		PCManager.OnAfterPCsInstantiated += SetupCharacterPanel;
+		PCSelector.OnSelectedNewPC += SetNewMenuPC;
+
+		// Shouldn't need this as long as you don't open the Character UI panel within the first frame. 
+//		PCManager.OnAfterPCsInstantiated += SetupCharacterPanel;
+		SetupCharacterPanel();
     }
 
     private void OnDisable()
     {
         PCStatManager.OnStatsChanged -= SetupCharacterPanel;
-		PCSelector.OnSelectedNewPC -= (pcDataSO) => CurrentMenuSOPCData = pcDataSO ? pcDataSO : CurrentMenuSOPCData;
-		PCManager.OnAfterPCsInstantiated -= SetupCharacterPanel;
+		PCSelector.OnSelectedNewPC -= SetNewMenuPC;
+
+//		PCManager.OnAfterPCsInstantiated -= SetupCharacterPanel;
+	}
+
+	private void SetNewMenuPC(SOPCData pcDataSO)
+    {
+		// If selected PC changed to null, don't change menu PC. 
+		CurrentMenuSOPCData = pcDataSO ? pcDataSO : CurrentMenuSOPCData;
+		SetupCharacterPanel();
 	}
 
 	public void NextPC()
     {
 //	    int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
-		int currentIndex = CurrentTeamSO.GetIndex(CurrentMenuSOPCData);
-		Debug.Log($"UICharacter's current index: {currentIndex}");
+		int currentIndex = CurrentTeamSO./*GetIndex*/HomePCs.IndexOf(CurrentMenuSOPCData);
+//		Debug.Log($"UICharacter's current index: {currentIndex}");
 
 		if (currentIndex != -1)
         {
@@ -56,11 +79,9 @@ public class UICharacter : MonoBehaviour
 
 			if (currentIndex >= CurrentTeamSO.HomePCs.Count) currentIndex = 0;
 
-			CurrentMenuSOPCData = CurrentTeamSO.HomePCs[currentIndex];
+			SetNewMenuPC(CurrentTeamSO.HomePCs[currentIndex]);
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
-
-			SetupCharacterPanel();
         }
         else
         {
@@ -71,19 +92,17 @@ public class UICharacter : MonoBehaviour
 	public void PreviousPC()
     {
 //		int currentIndex = CurrentTeamSO.HomePCs.IndexOf(CurrentTeamSO[CurrentMenuSOPCData]);
-		int currentIndex = CurrentTeamSO.GetIndex(CurrentMenuSOPCData);
+		int currentIndex = CurrentTeamSO./*GetIndex*/HomePCs.IndexOf(CurrentMenuSOPCData);
 
 		if (currentIndex != -1)
 		{
 			currentIndex--;
 
-			if (currentIndex > 0) currentIndex = CurrentTeamSO.HomePCs.Count - 1;
+			if (currentIndex < 0) currentIndex = CurrentTeamSO.HomePCs.Count - 1;
 
-			CurrentMenuSOPCData = CurrentTeamSO.HomePCs[currentIndex];
+			SetNewMenuPC(CurrentTeamSO.HomePCs[currentIndex]);
 
 			OnMenuPCChanged?.Invoke(CurrentMenuSOPCData);
-
-			SetupCharacterPanel();
 		}
 		else
 		{

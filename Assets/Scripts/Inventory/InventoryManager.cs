@@ -13,16 +13,27 @@ public class InventoryManager
     /// </summary>
     public static event Action OnInventoryChanged;
 
-    private SOInventoryData InventoryDataSO { get; set; }
-    private CraftingManager CraftingManager { get; set; }
+    private SOInventoryData InventoryDataSO { get; }
+    private InventoryController CraftingInventoryController { get; }
+    private InventoryController EquipmentInventoryController { get; }
+    private InventoryController UsableItemsInventoryController { get; }
+    private InventoryController ToolInventoryController { get; }
+    private CraftingHandler CraftingHandler { get; /*set; */}
 
     public InventoryManager(SOInventoryData inventoryDataSO)
     {
         InventoryDataSO = inventoryDataSO;
-        
-        CraftingManager = new(inventoryDataSO.CraftingInventorySO);
 
-        SOItem.OnSelectItem += (itemSO) => AddItems(CraftingManager.HandleCrafting(itemSO));
+        // Must be called before instantiating CraftingHandler. 
+        CraftingInventoryController = new InventoryController(InventoryDataSO.CraftingInventorySO);
+        EquipmentInventoryController = new InventoryController(InventoryDataSO.EquipmentInventorySO);
+        UsableItemsInventoryController = new InventoryController(InventoryDataSO.UsableItemsInventorySO);
+        ToolInventoryController = new InventoryController(InventoryDataSO.ToolInventorySO);
+
+        // Must be called after instantiating CraftingInventoryController. 
+        CraftingHandler = new(CraftingInventoryController);
+
+        SOItem.OnSelectItem += (itemSO) => AddItems(CraftingHandler.HandleCrafting(itemSO));
         SOItem.OnAddItem += (item) => AddItems(item);
         EquipmentManager.OnUnequip += (equipmentItem) => AddItems(equipmentItem);
         PCLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
@@ -32,7 +43,7 @@ public class InventoryManager
 
     public void OnDisable()
     {
-        SOItem.OnSelectItem -= (itemSO) => AddItems(CraftingManager.HandleCrafting(itemSO));
+        SOItem.OnSelectItem -= (itemSO) => AddItems(CraftingHandler.HandleCrafting(itemSO));
         SOItem.OnAddItem -= (item) => AddItems(item);
         EquipmentManager.OnUnequip -= (equipmentItem) => AddItems(equipmentItem);
         PCLootState.OnLootItems -= (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
@@ -51,9 +62,9 @@ public class InventoryManager
         // Returns the SORecipes that you have enough items to build, and have the required tools for. 
         return metRequirementsRecipes
             .Where(recipeSO => recipeSO.RecipeCosts
-                .Where(recipeCost => InventoryDataSO.CraftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+                .Where(recipeCost => CraftingInventoryController.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
                 .ToList().Count == 0 && recipeSO.RequiredTools
-                .Where(toolSO => InventoryDataSO.ToolInventorySO.Contains(toolSO) == null)
+                .Where(toolSO => ToolInventoryController.Contains(toolSO) == null)
                 .ToList().Count == 0)
             .ToList();
 
@@ -84,19 +95,19 @@ public class InventoryManager
         {
             if (item.GetType() == typeof(SOUsableItem))
             {
-                InventoryDataSO.UsableInventorySO.AddItems(item, amount);
+                UsableItemsInventoryController.AddItems(item, amount);
             }
             else if (item.GetType() == typeof(SOEquipmentItem))
             {
-                InventoryDataSO.EquipmentInventorySO.AddItems(item, amount);
+                EquipmentInventoryController.AddItems(item, amount);
             }
             else if (item.GetType() == typeof(SOCraftingItem))
             {
-                InventoryDataSO.CraftingInventorySO.AddItems(item, amount);
+                CraftingInventoryController.AddItems(item, amount);
             }
             else if (item.GetType() == typeof(SOTool))
             {
-                InventoryDataSO.ToolInventorySO.AddItems(item, amount);
+                ToolInventoryController.AddItems(item, amount);
             }
         }
 
@@ -108,19 +119,19 @@ public class InventoryManager
     {
         if (item.GetType() == typeof(SOUsableItem))
         {
-            InventoryDataSO.UsableInventorySO.RemoveItems(item, amount);
+            UsableItemsInventoryController.RemoveItems(item, amount);
         }
         else if (item.GetType() == typeof(SOEquipmentItem))
         {
-            InventoryDataSO.EquipmentInventorySO.RemoveItems(item, amount);
+            EquipmentInventoryController.RemoveItems(item, amount);
         }
         else if (item.GetType() == typeof(SOCraftingItem))
         {
-            InventoryDataSO.CraftingInventorySO.RemoveItems(item, amount);
+            CraftingInventoryController.RemoveItems(item, amount);
         }
         else if (item.GetType() == typeof(SOTool))
         {
-            InventoryDataSO.ToolInventorySO.RemoveItems(item, amount);
+            ToolInventoryController.RemoveItems(item, amount);
         }
 
         // Heard by UIRecipes, updates haveEnoughItemsRecipes list. 

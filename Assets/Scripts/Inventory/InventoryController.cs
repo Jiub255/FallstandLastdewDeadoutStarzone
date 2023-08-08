@@ -1,28 +1,18 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// TODO - Keep just the data here, and make an InventoryController class to do the Add/Remove/Contains? 
-/// </summary>
-[CreateAssetMenu(menuName = "Inventory/SOInventory", fileName = "New Inventory SO")]
-public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory where T : SOItem*/
+public class InventoryController
 {
-//    public event Action OnInventoryChanged;
-    // Serialized for now just to see in inspector. Can get rid of the protected field entirely when done testing. 
-/*    [SerializeField]
-    protected List<ItemAmount> _itemAmounts = new();
-*/
-    [field: SerializeField]
-    public List<ItemAmount> ItemAmounts { get; } = new();
+    public event System.Action OnInventoryChanged;
+
+    private SOInventory InventorySO { get; }
+
+    public InventoryController(SOInventory inventorySO)
+    {
+        InventorySO = inventorySO;
+        inventorySO.InventoryController = this;
+    }
 
     /// <summary>
-    /// Is this a bad idea? Circular reference? How to get reference to controller to UI? <br/>
-    /// Use an event? But then how to get the specific correct one cleanly? 
-    /// </summary>
-    public InventoryController InventoryController { get; set; }
-
-/*    /// <summary>
     /// Returns the reference to the item amount in inventory if you have enough. Doesn't return the amount you put in necessarily,
     /// just how much you have in inventory. Returns null if you don't have enough or don't have an ItemAmount with the same SOItem at all. 
     /// </summary>
@@ -31,7 +21,7 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
     /// <returns></returns>
     public ItemAmount Contains(SOItem item, int amount = 1)
     {
-        foreach (ItemAmount itemAmount in ItemAmounts)
+        foreach (ItemAmount itemAmount in InventorySO.ItemAmounts)
         {
             if (itemAmount.ItemSO == item && itemAmount.Amount >= amount)
             {
@@ -54,7 +44,7 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
         else
         {
             ItemAmount newItemAmount = new(item, amount);
-            ItemAmounts.Add(newItemAmount);
+            InventorySO.ItemAmounts.Add(newItemAmount);
         }
 
         // Heard by UIInventory, calls SetupSlots with the newly updated inventory SO. 
@@ -74,7 +64,7 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
             // If there's exactly [amount] in inventory, delete the ItemAmount entirely. 
             else if (listItemAmount.Amount == amount)
             {
-                ItemAmounts.Remove(listItemAmount);
+                InventorySO.ItemAmounts.Remove(listItemAmount);
             }
             // Else, if there's less than [amount] in inventory, warn and don't do anything. 
             else
@@ -90,12 +80,5 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
         {
             Debug.LogWarning("Item to be removed not in inventory");
         }
-    }*/
-
-    // FOR TESTING
-    // Clear inventory when exiting play mode. 
-    public void ResetOnExitPlayMode()
-    {
-//        ItemAmounts.Clear();
     }
 }

@@ -47,7 +47,7 @@ public class BuildingManager
         inputManager.PC.Build.SnapBuilding.started += SnapToNextAngle;
         inputManager.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
 
-        InputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
+        inputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         // For debug gizmos, so they dont draw in editor mode.
        // _started = true;
 

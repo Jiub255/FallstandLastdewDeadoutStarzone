@@ -11,6 +11,7 @@ public abstract class PCState/* : CharacterState<PCStateMachine>*/
     public PCState(PCStateMachine pcStateMachine, InputManager inputManager)/* : base(characterController)*/
     {
         StateMachine = pcStateMachine;
+        InputManager = inputManager;
         inputManager.OnDeselectOrCancel += CancelOrDeselect;
     }
 

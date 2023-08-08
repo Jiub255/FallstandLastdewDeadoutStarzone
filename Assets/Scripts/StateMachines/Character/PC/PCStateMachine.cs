@@ -2,15 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-// TODO - have a list of SOPCStates here, and construct the new states from those as templates. 
-// But how exactly? Especially for enemies, how to construct states from list of SOs? 
-
-// TODO - Make this a non-monobehaviour and put it on PCController? Could pass in the PathNavigator, Animator, transform, etc components
-// that the state machine needs right as (or after) PCs get instantiated (by PCInstantiator or maybe soon by PCManager). 
-/// <summary>
-/// TODO - Combine with CharacterStateMachine, name whole thing PCStateMachine. 
-/// </summary>
-public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
+public class PCStateMachine
 {
     private InputAction MousePositionAction { get; }
     private SelectedPCIcon SelectedPCIcon { get; }
@@ -65,7 +57,7 @@ public class PCStateMachine/* : CharacterStateMachine<PCStateMachine>*/
 
         PCDataSO.ActiveState = state;
 
-        Debug.Log($"Changed state to: {PCDataSO.ActiveState.GetType()}");
+//        Debug.Log($"Changed state to: {PCDataSO.ActiveState.GetType()}");
     }
 
     // 

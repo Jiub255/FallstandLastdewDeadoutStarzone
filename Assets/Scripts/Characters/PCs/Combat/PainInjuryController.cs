@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PainInjuryManager
+public class PainInjuryController
 {
     /// <summary>
     /// Gets set by PCSlot, in SetupSlot(), right after being instantiated. 
@@ -26,7 +26,7 @@ public class PainInjuryManager
         }
     }
 
-    public PainInjuryManager(SOPCData pcDataSO, SOTeamData currentTeamSO, GameManager gameManager)
+    public PainInjuryController(SOPCData pcDataSO, SOTeamData currentTeamSO, GameManager gameManager)
     {
         PCDataSO = pcDataSO;
         CurrentTeamSO = currentTeamSO;

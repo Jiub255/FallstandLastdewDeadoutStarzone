@@ -7,21 +7,20 @@ public class RecipeSlot : MonoBehaviour
     private Image _image;
 
     // TODO - Set up recipe cost UI. Use icons and numbers instead of all text? 
-
-    private SORecipe _recipeSO;
+    private SORecipe RecipeSO { get; set; }
 
     public void SetupSlot(SORecipe recipeSO)
     {
-        _recipeSO = recipeSO;
+        RecipeSO = recipeSO;
         _image.sprite = recipeSO.Icon; 
     }
 
     // Called by clicking on inventory slot
 	public void OnClickRecipe()
     {
-        if (_recipeSO != null)
+        if (RecipeSO != null)
         {
-            _recipeSO.OnClickRecipe();
+            RecipeSO.OnClickRecipe();
         }
     }
 }

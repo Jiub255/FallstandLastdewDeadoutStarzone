@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab929db0492eff745b6d84119d91657a, type: 3}
-  m_Name: New TESTSO
+  m_Script: {fileID: 11500000, guid: 7aea5c6a12baff345af52d37dcf68a47, type: 3}
+  m_Name: New SO Actual Component
   m_EditorClassIdentifier: 
-  _testGO: {fileID: 4314923721212641126, guid: 8ba4c9db754a2c64aa06f5f92641adbb, type: 3}
+  <GOInstance>k__BackingField: {fileID: 0}

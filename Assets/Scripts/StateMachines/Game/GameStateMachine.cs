@@ -29,7 +29,7 @@ public class GameStateMachine
         ActiveState.SetActionMaps();
         ActiveState.SetTimeScale();
 
-        Debug.Log($"Game state changed to {ActiveState.GetType()}");
+//        Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }
 
     public GamePauseState Pause() { return new GamePauseState(this, InputManager); }

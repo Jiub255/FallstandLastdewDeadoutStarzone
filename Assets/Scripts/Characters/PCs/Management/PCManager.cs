@@ -85,7 +85,7 @@ public class PCManager
 
     private void InstantiatePCs(Vector3 spawnPosition)
     {
-        Debug.Log("Instantiate PCs Called");
+//        Debug.Log("Instantiate PCs Called");
 
         if (TeamDataSO.HomePCs.Count > 0)
         {

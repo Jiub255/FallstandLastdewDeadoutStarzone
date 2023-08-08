@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Team Data SO
   m_EditorClassIdentifier: 
   _homePCs:
+  - {fileID: 11400000, guid: 9c860815b163c114c8cefbe770b7902f, type: 2}
   - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
   _scavengingPCs:
+  - {fileID: 11400000, guid: 9c860815b163c114c8cefbe770b7902f, type: 2}
   - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}

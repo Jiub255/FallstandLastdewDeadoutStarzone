@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Building Recipes SO
   m_EditorClassIdentifier: 
   _buildingsWithRecipeCosts:
-  - {fileID: 11400000, guid: 130ea1709db785041b9f668c37f2a4e7, type: 2}
-  - {fileID: 11400000, guid: 9c1261ddcef995c4e938956b27cc8af8, type: 2}
+  - {fileID: 11400000, guid: a56c669dda5d43546aa3abffc693d7ec, type: 2}
+  - {fileID: 11400000, guid: 22e421664da9fe94182652c61dbf2e2f, type: 2}

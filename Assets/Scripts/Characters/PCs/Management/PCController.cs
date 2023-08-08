@@ -6,7 +6,7 @@ public class PCController
 {
     private PCStatManager PCStatManager { get; }
     public PCStateMachine PCStateMachine { get; }
-    public PainInjuryManager PainInjuryManager { get; }
+    public PainInjuryController PainInjuryManager { get; }
     public EquipmentManager EquipmentManager { get; }
 
     public PCController(SOPCData pcDataSO, SOTeamData currentTeamSO, InputManager inputManager, GameManager gameManager)

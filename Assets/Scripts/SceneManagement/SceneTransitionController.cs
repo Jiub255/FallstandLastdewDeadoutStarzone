@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneTransitionManager
+public class SceneTransitionController
 {
     public static event Func<float, IEnumerator> OnFadeOut;
     public static event Func<float, IEnumerator> OnFadeIn;
@@ -13,7 +13,7 @@ public class SceneTransitionManager
     private GameStateMachine GameStateMachine { get; }
     private GameManager GameManager { get; }
 
-    public SceneTransitionManager(SOTeamData teamDataSO, float fadeTime, GameStateMachine gameStateMachine, GameManager gameManager)
+    public SceneTransitionController(SOTeamData teamDataSO, float fadeTime, GameStateMachine gameStateMachine, GameManager gameManager)
     {
         TeamDataSO = teamDataSO;
         FadeTime = fadeTime;

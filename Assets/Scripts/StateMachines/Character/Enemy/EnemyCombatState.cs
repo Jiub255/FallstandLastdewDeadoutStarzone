@@ -54,7 +54,7 @@ public class EnemyCombatState : EnemyState
         // boxcast immediately after animation to check if PC is still there
 
         // JUST FOR TESTING. Will use events and a better system eventually. 
-        Target.GetComponentInChildren<PainInjuryManager>().GetHurt(10);
+        Target.GetComponentInChildren<PainInjuryController>().GetHurt(10);
         Debug.Log("Got injured for 10 by " + EnemyStateMachine.transform.name);
     }
 

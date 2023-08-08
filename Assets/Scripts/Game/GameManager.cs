@@ -29,14 +29,21 @@ public class GameManager : MonoBehaviour
     private BuildingManager BuildingManager { get; set; }
     private GameStateMachine GameStateMachine { get; set; }
     private InputManager InputManager { get; set; }
-    private SceneTransitionManager SceneTransitionManager { get; set; }
+    private SceneTransitionController SceneTransitionManager { get; set; }
 
     // Data
     private SOGameData GameDataSO { get { return _gameDataSO; } set { _gameDataSO = value; } }
 
-    private void OnEnable()
+    // Why not in subscribe to events in OnEnable and new stuff up in Awake? 
+    // So that stuff that needs the InputManager reference event can subscribe to it in OnEnable. 
+    private void Start()
     {
-        // Instantiate PCManager first, so it can instantiate all the PC's in the game world. 
+        InventoryManager.OnInventoryChanged += GetPossibleRecipes;
+        PCStatManager.OnStatsChanged += GetPossibleRecipes;
+        
+        InputManager = new();
+        OnInputManagerCreated?.Invoke(InputManager);
+        // Instantiate PCManager first, so it can instantiate all the PC's in the game world. Before what though? Does it matter? 
         PCManager = new(GameDataSO.TeamDataSO, InputManager, this);
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO.TeamDataSO);
@@ -47,15 +54,6 @@ public class GameManager : MonoBehaviour
 
         GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
         GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
-    }
-
-    private void Start()
-    {
-        InventoryManager.OnInventoryChanged += GetPossibleRecipes;
-        PCStatManager.OnStatsChanged += GetPossibleRecipes;
-        
-        InputManager = new();
-        OnInputManagerCreated?.Invoke(InputManager);
     }
 
     private void OnDisable()

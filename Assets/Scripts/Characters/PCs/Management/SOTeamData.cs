@@ -32,7 +32,7 @@ public class SOTeamData : ScriptableObject
 	/// <summary>
 	/// Using dictionary instead of StatValue so you can change value and get by key. 
 	/// </summary>
-	public Dictionary<StatType, int> IndividualPCStatMaxes { get; }
+	public Dictionary<StatType, int> IndividualPCStatMaxes { get; } = new();
 //	public Dictionary<SOPCData, PCController> PCControllerDict { get; }
 
 	/// <summary>
@@ -55,7 +55,7 @@ public class SOTeamData : ScriptableObject
 	}
 
 
-    /// <summary>
+/*    /// <summary>
     /// Is this necessary? Or does it even do anything? Or just return the same thing you put in, <br/>
     /// unless it's not on the list? So it's kinda like a bool contains check, but returns null instead of false. 
     /// </summary>
@@ -91,7 +91,7 @@ public class SOTeamData : ScriptableObject
 
 		Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
 		return -1;
-	}
+	}*/
 
 	public void AddPCToHomeList(SOPCData sopc)
     {

@@ -20,7 +20,7 @@ public class SOInventoryData : ScriptableObject
     private SOInventory _toolInventorySO;
 
     public SOCraftableItems CraftableItemsSO { get { return _craftableItemsSO; } }
-    public SOInventory UsableInventorySO { get { return _usableInventorySO; } }
+    public SOInventory UsableItemsInventorySO { get { return _usableInventorySO; } }
     public SOInventory EquipmentInventorySO { get { return _equipmentInventorySO; } }
     public SOInventory CraftingInventorySO { get { return _craftingInventorySO; } }
     public SOInventory ToolInventorySO { get { return _toolInventorySO; } }

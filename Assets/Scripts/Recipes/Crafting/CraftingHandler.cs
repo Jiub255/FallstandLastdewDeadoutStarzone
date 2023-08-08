@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public class CraftingManager
+public class CraftingHandler
 {
-    private SOInventory _craftingInventorySO;
+    private InventoryController _craftingInventoryController;
 
-    public CraftingManager(SOInventory craftingInventorySO)
+    public CraftingHandler(InventoryController craftingInventoryController)
     {
-        _craftingInventorySO = craftingInventorySO;
+        _craftingInventoryController = craftingInventoryController;
     }
 
     public SOItem HandleCrafting(SOItem itemSO)
     {
         foreach (RecipeCost recipeCost in itemSO.RecipeCosts)
         {
-            if (_craftingInventorySO.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+            if (_craftingInventoryController.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
             {
                 // TODO - Make a UI text that says how much more of each material you need to craft the item? 
                 Debug.Log($"Don't have enough crafting materials to craft {itemSO.name}");
@@ -29,7 +29,7 @@ public class CraftingManager
     {
         foreach (RecipeCost recipeCost in itemSO.RecipeCosts)
         {
-            _craftingInventorySO.RemoveItems(recipeCost.CraftingItemSO, recipeCost.Amount);
+            _craftingInventoryController.RemoveItems(recipeCost.CraftingItemSO, recipeCost.Amount);
         }
 
         return itemSO;

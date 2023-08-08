@@ -19,16 +19,16 @@ public class UIInventory : MonoBehaviour
 	private GameObject InventorySlotPrefab { get { return _inventorySlotPrefab; } }
 	private Transform SlotsParent { get { return _slotsParent; } }
 
-	private void OnEnable()
-	{
+    private void Start()
+    {
 		SetupInventorySlots();
 
-		InventorySO.OnInventoryChanged += SetupInventorySlots;
-	}
+		InventorySO.InventoryController.OnInventoryChanged += SetupInventorySlots;        
+    }
 
-	private void OnDisable()
+    private void OnDisable()
 	{
-		InventorySO.OnInventoryChanged -= SetupInventorySlots;
+		InventorySO.InventoryController.OnInventoryChanged -= SetupInventorySlots;
 	}
 
 	private void SetupInventorySlots()
