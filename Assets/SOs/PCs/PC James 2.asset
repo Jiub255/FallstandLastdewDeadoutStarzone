@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d328694ce4fcd548bbb973b62d29b28, type: 3}
   m_Name: PC James 2
   m_EditorClassIdentifier: 
-  _icon: {fileID: 21300000, guid: b7e2b63185fbb9344a7cd47dbd02e31a, type: 3}
-  _characterImage: {fileID: 21300000, guid: b7e2b63185fbb9344a7cd47dbd02e31a, type: 3}
+  _icon: {fileID: 21300000, guid: fda9ee1c14e217744aa66aeafca5b011, type: 3}
+  _characterImage: {fileID: 21300000, guid: 2444e088bd5ebc54986c8980c4ec408d, type: 3}
   _pcPrefab: {fileID: 2674923138821894305, guid: e664118a06015784d93da7f995a6108a, type: 3}
   _pcMovementStateSO: {fileID: 11400000, guid: a01066a920e9f554f8152487eab83ebf, type: 2}
   _pcSharedDataSO: {fileID: 11400000, guid: 6e1272701015d7541ae9a73271d28b3c, type: 2}
