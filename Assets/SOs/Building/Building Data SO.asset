@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Building Data SO
   m_EditorClassIdentifier: 
   _buildableBuildingsSO: {fileID: 11400000, guid: fe38649df7e7b2c449aecbf5a2da3ba4, type: 2}
-  _buildingPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}
+  _buildingParentPrefab: {fileID: 1180576486612636054, guid: d9ea143e2c9b1b0459394de111b5003b, type: 3}
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 128

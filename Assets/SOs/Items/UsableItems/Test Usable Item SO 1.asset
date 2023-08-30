@@ -15,8 +15,7 @@ MonoBehaviour:
   _description: Usable item 1
   _icon: {fileID: 21300000, guid: a6fbd5a181bc51e42a61a73fe8d727c8, type: 3}
   _minSinglePCStatRequirements: []
-  _requiredBuildings:
-  - {fileID: 11400000, guid: 130ea1709db785041b9f668c37f2a4e7, type: 2}
+  _requiredBuildings: []
   _requiredTools:
   - {fileID: 11400000, guid: 09a71b2603fad1143aa3b73033edce73, type: 2}
   _recipeCosts:

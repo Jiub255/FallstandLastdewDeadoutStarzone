@@ -13,10 +13,5 @@ MonoBehaviour:
   m_Name: Craftable Items SO
   m_EditorClassIdentifier: 
   _itemsWithRecipeCosts:
-  - {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
-  - {fileID: 11400000, guid: 5e66ac4ef74b8f446becc9fc598e7e2c, type: 2}
-  - {fileID: 11400000, guid: b271eb590dfd2ac449b1ddbfd5b924db, type: 2}
-  - {fileID: 11400000, guid: 2892032f7fd65634eacdecf1d215b717, type: 2}
-  - {fileID: 11400000, guid: 09a71b2603fad1143aa3b73033edce73, type: 2}
   - {fileID: 11400000, guid: 73e4e636a9e21df44b8c1ce6128bc88a, type: 2}
   - {fileID: 11400000, guid: 38da70b30b03a044c9926e40afde9fc4, type: 2}

@@ -100,11 +100,6 @@ public class UIManager : MonoBehaviour
         OpenMenu(_mapCanvas);
     }
 
-    private void OpenMenu(GameObject canvas)
-    {
-        OpenCanvas(canvas);
-    }
-
     private void CloseUI(InputAction.CallbackContext context)
     {
         if (_gameStateMachine.ActiveState.GetType() == typeof(GameHomeMenusState))
@@ -116,15 +111,18 @@ public class UIManager : MonoBehaviour
             _gameStateMachine.ChangeGameStateTo(_gameStateMachine.Combat());
         }
 
-        OpenCanvas(_hUDCanvas);
+        OpenMenu(_hUDCanvas);
     }
 
-    private void OpenCanvas(GameObject canvas)
+    /// <summary>
+    /// Closes all canvases except for "canvas".
+    /// </summary>
+    private void OpenMenu(GameObject canvas)
     {
-        if (_buildCanvas.activeInHierarchy) _buildCanvas.gameObject.SetActive(false);
-        if (_craftingCanvas.activeInHierarchy) _craftingCanvas.gameObject.SetActive(false);
-        if (_homeInventoryCanvas.activeInHierarchy) _homeInventoryCanvas.gameObject.SetActive(false);
-        if (_hUDCanvas.activeInHierarchy) _hUDCanvas.gameObject.SetActive(false);
+        if (_buildCanvas.activeInHierarchy) _buildCanvas.SetActive(false);
+        if (_craftingCanvas.activeInHierarchy) _craftingCanvas.SetActive(false);
+        if (_homeInventoryCanvas.activeInHierarchy) _homeInventoryCanvas.SetActive(false);
+        if (_hUDCanvas.activeInHierarchy) _hUDCanvas.SetActive(false);
         if (!canvas.activeInHierarchy) canvas.SetActive(true);
     }
 }

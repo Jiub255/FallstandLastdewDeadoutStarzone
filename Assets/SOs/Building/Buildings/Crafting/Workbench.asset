@@ -17,6 +17,8 @@ MonoBehaviour:
   _minSinglePCStatRequirements: []
   _requiredBuildings: []
   _requiredTools: []
-  _recipeCosts: []
+  _recipeCosts:
+  - CraftingItemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
+    Amount: 1
   _buildingType: 2
   _buildingPrefab: {fileID: 588010162298765337, guid: a60ebb429c3434147b8b0780dea52d5a, type: 3}
