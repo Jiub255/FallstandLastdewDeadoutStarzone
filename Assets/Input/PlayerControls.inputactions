@@ -367,39 +367,11 @@
             ]
         },
         {
-            "name": "Quit",
-            "id": "cebf6a23-b35c-43ac-913b-4269ea46e868",
-            "actions": [
-                {
-                    "name": "Quit",
-                    "type": "PassThrough",
-                    "id": "7a2d45b8-4cbc-4897-8a24-3dde2d6fb62f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "e5fec9b9-a1c7-4739-bb9f-2ec81b920d29",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Quit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "InventoryMenu",
             "id": "e1054432-fc96-4adc-90c2-a02c236d23ad",
             "actions": [
                 {
-                    "name": "OpenInventory",
+                    "name": "ToggleInventory",
                     "type": "PassThrough",
                     "id": "f2573d91-4d74-48ae-aeb5-53914fb1f639",
                     "expectedControlType": "Button",
@@ -408,7 +380,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CloseInventory",
+                    "name": "CloseMenus",
                     "type": "PassThrough",
                     "id": "196e871f-fc3c-4f2b-ad2c-b6088657a810",
                     "expectedControlType": "Button",
@@ -425,18 +397,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "OpenInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f6e340e4-156c-47e8-9a80-d8874e090866",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseInventory",
+                    "action": "ToggleInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -447,7 +408,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "CloseInventory",
+                    "action": "CloseMenus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -458,7 +419,7 @@
             "id": "89065333-d518-4ec8-9f13-b660d8239f08",
             "actions": [
                 {
-                    "name": "OpenBuildMenu",
+                    "name": "ToggleBuildMenu",
                     "type": "PassThrough",
                     "id": "1e3cb696-bbe2-4580-91c9-312c87fb25d3",
                     "expectedControlType": "Button",
@@ -467,16 +428,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CloseBuildMenu",
-                    "type": "PassThrough",
-                    "id": "6bcbbdc5-71aa-4892-820c-46730b913815",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenCraftingMenu",
+                    "name": "ToggleCraftingMenu",
                     "type": "PassThrough",
                     "id": "3078849f-f965-4e22-9200-8f318d2d6763",
                     "expectedControlType": "Button",
@@ -485,16 +437,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CloseCraftingMenu",
-                    "type": "PassThrough",
-                    "id": "c6189075-5c60-46b3-b67e-5c3980e24add",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "OpenMap",
+                    "name": "ToggleMapMenu",
                     "type": "PassThrough",
                     "id": "5f079a0c-ca47-47e6-ae9c-ad22fb807bfb",
                     "expectedControlType": "Button",
@@ -503,9 +446,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CloseMap",
+                    "name": "CloseMenus",
                     "type": "PassThrough",
-                    "id": "83723cdf-9f11-4223-b6b1-ce89090a1984",
+                    "id": "c6189075-5c60-46b3-b67e-5c3980e24add",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold",
@@ -520,29 +463,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "OpenBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "926ed22f-608e-46dc-a9f2-f75a1fc017a3",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseBuildMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "13c4af1e-32da-4346-a616-80760e6a06e1",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseBuildMenu",
+                    "action": "ToggleBuildMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -553,18 +474,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "OpenCraftingMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0928147f-a5e1-490d-a7da-785ce4e9a277",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseCraftingMenu",
+                    "action": "ToggleCraftingMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -575,7 +485,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "CloseCraftingMenu",
+                    "action": "CloseMenus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -586,29 +496,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "OpenMap",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b75dae29-43b5-48ab-9327-fdfdb182ef51",
-                    "path": "<Keyboard>/m",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseMap",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6d8d35b6-cdca-48b8-ab44-76a79625b491",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CloseMap",
+                    "action": "ToggleMapMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

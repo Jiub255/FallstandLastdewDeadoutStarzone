@@ -389,39 +389,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Quit"",
-            ""id"": ""cebf6a23-b35c-43ac-913b-4269ea46e868"",
-            ""actions"": [
-                {
-                    ""name"": ""Quit"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""7a2d45b8-4cbc-4897-8a24-3dde2d6fb62f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""e5fec9b9-a1c7-4739-bb9f-2ec81b920d29"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""Quit"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""InventoryMenu"",
             ""id"": ""e1054432-fc96-4adc-90c2-a02c236d23ad"",
             ""actions"": [
                 {
-                    ""name"": ""OpenInventory"",
+                    ""name"": ""ToggleInventory"",
                     ""type"": ""PassThrough"",
                     ""id"": ""f2573d91-4d74-48ae-aeb5-53914fb1f639"",
                     ""expectedControlType"": ""Button"",
@@ -430,7 +402,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CloseInventory"",
+                    ""name"": ""CloseMenus"",
                     ""type"": ""PassThrough"",
                     ""id"": ""196e871f-fc3c-4f2b-ad2c-b6088657a810"",
                     ""expectedControlType"": ""Button"",
@@ -447,18 +419,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""OpenInventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f6e340e4-156c-47e8-9a80-d8874e090866"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseInventory"",
+                    ""action"": ""ToggleInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -469,7 +430,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseInventory"",
+                    ""action"": ""CloseMenus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -480,7 +441,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""89065333-d518-4ec8-9f13-b660d8239f08"",
             ""actions"": [
                 {
-                    ""name"": ""OpenBuildMenu"",
+                    ""name"": ""ToggleBuildMenu"",
                     ""type"": ""PassThrough"",
                     ""id"": ""1e3cb696-bbe2-4580-91c9-312c87fb25d3"",
                     ""expectedControlType"": ""Button"",
@@ -489,16 +450,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CloseBuildMenu"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""6bcbbdc5-71aa-4892-820c-46730b913815"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""OpenCraftingMenu"",
+                    ""name"": ""ToggleCraftingMenu"",
                     ""type"": ""PassThrough"",
                     ""id"": ""3078849f-f965-4e22-9200-8f318d2d6763"",
                     ""expectedControlType"": ""Button"",
@@ -507,16 +459,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CloseCraftingMenu"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""c6189075-5c60-46b3-b67e-5c3980e24add"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""OpenMap"",
+                    ""name"": ""ToggleMapMenu"",
                     ""type"": ""PassThrough"",
                     ""id"": ""5f079a0c-ca47-47e6-ae9c-ad22fb807bfb"",
                     ""expectedControlType"": ""Button"",
@@ -525,9 +468,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CloseMap"",
+                    ""name"": ""CloseMenus"",
                     ""type"": ""PassThrough"",
-                    ""id"": ""83723cdf-9f11-4223-b6b1-ce89090a1984"",
+                    ""id"": ""c6189075-5c60-46b3-b67e-5c3980e24add"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -542,29 +485,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""OpenBuildMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""926ed22f-608e-46dc-a9f2-f75a1fc017a3"",
-                    ""path"": ""<Keyboard>/b"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseBuildMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""13c4af1e-32da-4346-a616-80760e6a06e1"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseBuildMenu"",
+                    ""action"": ""ToggleBuildMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -575,18 +496,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""OpenCraftingMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0928147f-a5e1-490d-a7da-785ce4e9a277"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseCraftingMenu"",
+                    ""action"": ""ToggleCraftingMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -597,7 +507,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseCraftingMenu"",
+                    ""action"": ""CloseMenus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -608,29 +518,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b75dae29-43b5-48ab-9327-fdfdb182ef51"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6d8d35b6-cdca-48b8-ab44-76a79625b491"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CloseMap"",
+                    ""action"": ""ToggleMapMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -684,21 +572,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Build_SnapBuilding = m_Build.FindAction("SnapBuilding", throwIfNotFound: true);
         m_Build_PlaceBuilding = m_Build.FindAction("PlaceBuilding", throwIfNotFound: true);
         m_Build_AngleSnapMode = m_Build.FindAction("AngleSnapMode", throwIfNotFound: true);
-        // Quit
-        m_Quit = asset.FindActionMap("Quit", throwIfNotFound: true);
-        m_Quit_Quit = m_Quit.FindAction("Quit", throwIfNotFound: true);
         // InventoryMenu
         m_InventoryMenu = asset.FindActionMap("InventoryMenu", throwIfNotFound: true);
-        m_InventoryMenu_OpenInventory = m_InventoryMenu.FindAction("OpenInventory", throwIfNotFound: true);
-        m_InventoryMenu_CloseInventory = m_InventoryMenu.FindAction("CloseInventory", throwIfNotFound: true);
+        m_InventoryMenu_ToggleInventory = m_InventoryMenu.FindAction("ToggleInventory", throwIfNotFound: true);
+        m_InventoryMenu_CloseMenus = m_InventoryMenu.FindAction("CloseMenus", throwIfNotFound: true);
         // NonCombatMenus
         m_NonCombatMenus = asset.FindActionMap("NonCombatMenus", throwIfNotFound: true);
-        m_NonCombatMenus_OpenBuildMenu = m_NonCombatMenus.FindAction("OpenBuildMenu", throwIfNotFound: true);
-        m_NonCombatMenus_CloseBuildMenu = m_NonCombatMenus.FindAction("CloseBuildMenu", throwIfNotFound: true);
-        m_NonCombatMenus_OpenCraftingMenu = m_NonCombatMenus.FindAction("OpenCraftingMenu", throwIfNotFound: true);
-        m_NonCombatMenus_CloseCraftingMenu = m_NonCombatMenus.FindAction("CloseCraftingMenu", throwIfNotFound: true);
-        m_NonCombatMenus_OpenMap = m_NonCombatMenus.FindAction("OpenMap", throwIfNotFound: true);
-        m_NonCombatMenus_CloseMap = m_NonCombatMenus.FindAction("CloseMap", throwIfNotFound: true);
+        m_NonCombatMenus_ToggleBuildMenu = m_NonCombatMenus.FindAction("ToggleBuildMenu", throwIfNotFound: true);
+        m_NonCombatMenus_ToggleCraftingMenu = m_NonCombatMenus.FindAction("ToggleCraftingMenu", throwIfNotFound: true);
+        m_NonCombatMenus_ToggleMapMenu = m_NonCombatMenus.FindAction("ToggleMapMenu", throwIfNotFound: true);
+        m_NonCombatMenus_CloseMenus = m_NonCombatMenus.FindAction("CloseMenus", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -918,50 +801,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public BuildActions @Build => new BuildActions(this);
 
-    // Quit
-    private readonly InputActionMap m_Quit;
-    private IQuitActions m_QuitActionsCallbackInterface;
-    private readonly InputAction m_Quit_Quit;
-    public struct QuitActions
-    {
-        private @PlayerControls m_Wrapper;
-        public QuitActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Quit => m_Wrapper.m_Quit_Quit;
-        public InputActionMap Get() { return m_Wrapper.m_Quit; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(QuitActions set) { return set.Get(); }
-        public void SetCallbacks(IQuitActions instance)
-        {
-            if (m_Wrapper.m_QuitActionsCallbackInterface != null)
-            {
-                @Quit.started -= m_Wrapper.m_QuitActionsCallbackInterface.OnQuit;
-                @Quit.performed -= m_Wrapper.m_QuitActionsCallbackInterface.OnQuit;
-                @Quit.canceled -= m_Wrapper.m_QuitActionsCallbackInterface.OnQuit;
-            }
-            m_Wrapper.m_QuitActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Quit.started += instance.OnQuit;
-                @Quit.performed += instance.OnQuit;
-                @Quit.canceled += instance.OnQuit;
-            }
-        }
-    }
-    public QuitActions @Quit => new QuitActions(this);
-
     // InventoryMenu
     private readonly InputActionMap m_InventoryMenu;
     private IInventoryMenuActions m_InventoryMenuActionsCallbackInterface;
-    private readonly InputAction m_InventoryMenu_OpenInventory;
-    private readonly InputAction m_InventoryMenu_CloseInventory;
+    private readonly InputAction m_InventoryMenu_ToggleInventory;
+    private readonly InputAction m_InventoryMenu_CloseMenus;
     public struct InventoryMenuActions
     {
         private @PlayerControls m_Wrapper;
         public InventoryMenuActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @OpenInventory => m_Wrapper.m_InventoryMenu_OpenInventory;
-        public InputAction @CloseInventory => m_Wrapper.m_InventoryMenu_CloseInventory;
+        public InputAction @ToggleInventory => m_Wrapper.m_InventoryMenu_ToggleInventory;
+        public InputAction @CloseMenus => m_Wrapper.m_InventoryMenu_CloseMenus;
         public InputActionMap Get() { return m_Wrapper.m_InventoryMenu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -971,22 +821,22 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_InventoryMenuActionsCallbackInterface != null)
             {
-                @OpenInventory.started -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnOpenInventory;
-                @OpenInventory.performed -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnOpenInventory;
-                @OpenInventory.canceled -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnOpenInventory;
-                @CloseInventory.started -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseInventory;
-                @CloseInventory.performed -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseInventory;
-                @CloseInventory.canceled -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseInventory;
+                @ToggleInventory.started -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.performed -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.canceled -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnToggleInventory;
+                @CloseMenus.started -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseMenus;
+                @CloseMenus.performed -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseMenus;
+                @CloseMenus.canceled -= m_Wrapper.m_InventoryMenuActionsCallbackInterface.OnCloseMenus;
             }
             m_Wrapper.m_InventoryMenuActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @OpenInventory.started += instance.OnOpenInventory;
-                @OpenInventory.performed += instance.OnOpenInventory;
-                @OpenInventory.canceled += instance.OnOpenInventory;
-                @CloseInventory.started += instance.OnCloseInventory;
-                @CloseInventory.performed += instance.OnCloseInventory;
-                @CloseInventory.canceled += instance.OnCloseInventory;
+                @ToggleInventory.started += instance.OnToggleInventory;
+                @ToggleInventory.performed += instance.OnToggleInventory;
+                @ToggleInventory.canceled += instance.OnToggleInventory;
+                @CloseMenus.started += instance.OnCloseMenus;
+                @CloseMenus.performed += instance.OnCloseMenus;
+                @CloseMenus.canceled += instance.OnCloseMenus;
             }
         }
     }
@@ -995,22 +845,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // NonCombatMenus
     private readonly InputActionMap m_NonCombatMenus;
     private INonCombatMenusActions m_NonCombatMenusActionsCallbackInterface;
-    private readonly InputAction m_NonCombatMenus_OpenBuildMenu;
-    private readonly InputAction m_NonCombatMenus_CloseBuildMenu;
-    private readonly InputAction m_NonCombatMenus_OpenCraftingMenu;
-    private readonly InputAction m_NonCombatMenus_CloseCraftingMenu;
-    private readonly InputAction m_NonCombatMenus_OpenMap;
-    private readonly InputAction m_NonCombatMenus_CloseMap;
+    private readonly InputAction m_NonCombatMenus_ToggleBuildMenu;
+    private readonly InputAction m_NonCombatMenus_ToggleCraftingMenu;
+    private readonly InputAction m_NonCombatMenus_ToggleMapMenu;
+    private readonly InputAction m_NonCombatMenus_CloseMenus;
     public struct NonCombatMenusActions
     {
         private @PlayerControls m_Wrapper;
         public NonCombatMenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @OpenBuildMenu => m_Wrapper.m_NonCombatMenus_OpenBuildMenu;
-        public InputAction @CloseBuildMenu => m_Wrapper.m_NonCombatMenus_CloseBuildMenu;
-        public InputAction @OpenCraftingMenu => m_Wrapper.m_NonCombatMenus_OpenCraftingMenu;
-        public InputAction @CloseCraftingMenu => m_Wrapper.m_NonCombatMenus_CloseCraftingMenu;
-        public InputAction @OpenMap => m_Wrapper.m_NonCombatMenus_OpenMap;
-        public InputAction @CloseMap => m_Wrapper.m_NonCombatMenus_CloseMap;
+        public InputAction @ToggleBuildMenu => m_Wrapper.m_NonCombatMenus_ToggleBuildMenu;
+        public InputAction @ToggleCraftingMenu => m_Wrapper.m_NonCombatMenus_ToggleCraftingMenu;
+        public InputAction @ToggleMapMenu => m_Wrapper.m_NonCombatMenus_ToggleMapMenu;
+        public InputAction @CloseMenus => m_Wrapper.m_NonCombatMenus_CloseMenus;
         public InputActionMap Get() { return m_Wrapper.m_NonCombatMenus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1020,46 +866,34 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_NonCombatMenusActionsCallbackInterface != null)
             {
-                @OpenBuildMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @OpenBuildMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @OpenBuildMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenBuildMenu;
-                @CloseBuildMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @CloseBuildMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @CloseBuildMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseBuildMenu;
-                @OpenCraftingMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @OpenCraftingMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @OpenCraftingMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenCraftingMenu;
-                @CloseCraftingMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
-                @CloseCraftingMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
-                @CloseCraftingMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseCraftingMenu;
-                @OpenMap.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
-                @OpenMap.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
-                @OpenMap.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnOpenMap;
-                @CloseMap.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
-                @CloseMap.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
-                @CloseMap.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMap;
+                @ToggleBuildMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleCraftingMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleCraftingMenu;
+                @ToggleCraftingMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleCraftingMenu;
+                @ToggleCraftingMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleCraftingMenu;
+                @ToggleMapMenu.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleMapMenu;
+                @ToggleMapMenu.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleMapMenu;
+                @ToggleMapMenu.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnToggleMapMenu;
+                @CloseMenus.started -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMenus;
+                @CloseMenus.performed -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMenus;
+                @CloseMenus.canceled -= m_Wrapper.m_NonCombatMenusActionsCallbackInterface.OnCloseMenus;
             }
             m_Wrapper.m_NonCombatMenusActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @OpenBuildMenu.started += instance.OnOpenBuildMenu;
-                @OpenBuildMenu.performed += instance.OnOpenBuildMenu;
-                @OpenBuildMenu.canceled += instance.OnOpenBuildMenu;
-                @CloseBuildMenu.started += instance.OnCloseBuildMenu;
-                @CloseBuildMenu.performed += instance.OnCloseBuildMenu;
-                @CloseBuildMenu.canceled += instance.OnCloseBuildMenu;
-                @OpenCraftingMenu.started += instance.OnOpenCraftingMenu;
-                @OpenCraftingMenu.performed += instance.OnOpenCraftingMenu;
-                @OpenCraftingMenu.canceled += instance.OnOpenCraftingMenu;
-                @CloseCraftingMenu.started += instance.OnCloseCraftingMenu;
-                @CloseCraftingMenu.performed += instance.OnCloseCraftingMenu;
-                @CloseCraftingMenu.canceled += instance.OnCloseCraftingMenu;
-                @OpenMap.started += instance.OnOpenMap;
-                @OpenMap.performed += instance.OnOpenMap;
-                @OpenMap.canceled += instance.OnOpenMap;
-                @CloseMap.started += instance.OnCloseMap;
-                @CloseMap.performed += instance.OnCloseMap;
-                @CloseMap.canceled += instance.OnCloseMap;
+                @ToggleBuildMenu.started += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled += instance.OnToggleBuildMenu;
+                @ToggleCraftingMenu.started += instance.OnToggleCraftingMenu;
+                @ToggleCraftingMenu.performed += instance.OnToggleCraftingMenu;
+                @ToggleCraftingMenu.canceled += instance.OnToggleCraftingMenu;
+                @ToggleMapMenu.started += instance.OnToggleMapMenu;
+                @ToggleMapMenu.performed += instance.OnToggleMapMenu;
+                @ToggleMapMenu.canceled += instance.OnToggleMapMenu;
+                @CloseMenus.started += instance.OnCloseMenus;
+                @CloseMenus.performed += instance.OnCloseMenus;
+                @CloseMenus.canceled += instance.OnCloseMenus;
             }
         }
     }
@@ -1102,22 +936,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnPlaceBuilding(InputAction.CallbackContext context);
         void OnAngleSnapMode(InputAction.CallbackContext context);
     }
-    public interface IQuitActions
-    {
-        void OnQuit(InputAction.CallbackContext context);
-    }
     public interface IInventoryMenuActions
     {
-        void OnOpenInventory(InputAction.CallbackContext context);
-        void OnCloseInventory(InputAction.CallbackContext context);
+        void OnToggleInventory(InputAction.CallbackContext context);
+        void OnCloseMenus(InputAction.CallbackContext context);
     }
     public interface INonCombatMenusActions
     {
-        void OnOpenBuildMenu(InputAction.CallbackContext context);
-        void OnCloseBuildMenu(InputAction.CallbackContext context);
-        void OnOpenCraftingMenu(InputAction.CallbackContext context);
-        void OnCloseCraftingMenu(InputAction.CallbackContext context);
-        void OnOpenMap(InputAction.CallbackContext context);
-        void OnCloseMap(InputAction.CallbackContext context);
+        void OnToggleBuildMenu(InputAction.CallbackContext context);
+        void OnToggleCraftingMenu(InputAction.CallbackContext context);
+        void OnToggleMapMenu(InputAction.CallbackContext context);
+        void OnCloseMenus(InputAction.CallbackContext context);
     }
 }

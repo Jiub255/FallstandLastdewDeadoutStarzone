@@ -32,7 +32,7 @@ public class GameStateMachine
 //        Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }
 
-    public GamePauseState Pause() { return new GamePauseState(this, InputManager); }
+//    public GamePauseState Pause() { return new GamePauseState(this, InputManager); }
     public GameHomeState Home() { return new GameHomeState(this, InputManager); }
     public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(this, InputManager); }
     public GameCombatState Combat() { return new GameCombatState(this, InputManager); }

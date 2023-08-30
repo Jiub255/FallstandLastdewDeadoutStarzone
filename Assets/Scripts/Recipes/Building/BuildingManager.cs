@@ -45,7 +45,7 @@ public class BuildingManager
         inputManager.PC.Build.RotateBuilding.started += RotateBuilding;
         inputManager.PC.Build.PlaceBuilding.started += PlaceBuilding;
         inputManager.PC.Build.SnapBuilding.started += SnapToNextAngle;
-        inputManager.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
+//        inputManager.PC.NonCombatMenus.CloseBuildMenu.started += DeselectCurrentBuilding;
 
         inputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         // For debug gizmos, so they dont draw in editor mode.
@@ -79,7 +79,7 @@ public class BuildingManager
         InputManager.PC.Build.RotateBuilding.started -= RotateBuilding;
         InputManager.PC.Build.PlaceBuilding.started -= PlaceBuilding;
         InputManager.PC.Build.SnapBuilding.started -= SnapToNextAngle;
-        InputManager.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
+ //       InputManager.PC.NonCombatMenus.CloseBuildMenu.started -= DeselectCurrentBuilding;
 
         SOBuilding.OnSelectBuilding -= SelectCurrentBuilding;
         InputManager.OnDeselectOrCancel -= DeselectCurrentBuilding;
@@ -268,6 +268,10 @@ public class BuildingManager
         MakeInstance();
     }
 
+    /// <summary>
+    /// TODO - Call this when toggling the build menu to closed. 
+    /// </summary>
+    /// <param name="context"></param>
     private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
         if (BuildingDataSO.CurrentBuildingRecipeSO != null)

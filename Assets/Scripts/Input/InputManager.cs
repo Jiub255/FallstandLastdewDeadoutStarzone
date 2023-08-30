@@ -81,7 +81,7 @@ public class InputManager
     {
         PC.Disable();
         PC.Camera.Enable();
-        PC.Quit.Enable();
+//        PC.Quit.Enable();
         PC.World.Enable();
         PC.InventoryMenu.Enable();
         PC.NonCombatMenus.Enable();
@@ -91,7 +91,7 @@ public class InputManager
     private void EnableStatesActionMaps(GameHomeMenusState homeMenusState)
     {
         PC.Disable();
-        PC.Quit.Enable();
+//        PC.Quit.Enable();
         PC.InventoryMenu.Enable();
         PC.NonCombatMenus.Enable();
     }
@@ -101,7 +101,7 @@ public class InputManager
     {
         PC.Disable();
         PC.Camera.Enable();
-        PC.Quit.Enable();
+//        PC.Quit.Enable();
         PC.World.Enable();
         PC.InventoryMenu.Enable();
     }
@@ -110,7 +110,7 @@ public class InputManager
     private void EnableStatesActionMaps(GameCombatMenusState combatMenusState)
     {
         PC.Disable();
-        PC.Quit.Enable();
+//        PC.Quit.Enable();
         PC.InventoryMenu.Enable();
     }
 
@@ -119,7 +119,7 @@ public class InputManager
     {
         PC.Disable();
         PC.Camera.Enable();
-        PC.Quit.Enable();
+//        PC.Quit.Enable();
         PC.Build.Enable();
         PC.InventoryMenu.Enable();
         PC.NonCombatMenus.Enable();
