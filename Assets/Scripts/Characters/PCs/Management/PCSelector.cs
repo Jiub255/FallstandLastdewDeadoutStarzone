@@ -81,7 +81,7 @@ public class PCSelector/* : MonoBehaviour*/
     /// <returns></returns>
     public bool CheckIfPCClicked(/*InputAction.CallbackContext context*/)
     {
-        Debug.Log($"CheckIfPCClicked called."); 
+//        Debug.Log($"CheckIfPCClicked called."); 
         // TODO - Change max distance to max zoom or something that makes sense? Probably not a big deal. 
         // Only raycast to PC layer. 
         RaycastHit[] hits = Physics.RaycastAll(
@@ -107,13 +107,13 @@ public class PCSelector/* : MonoBehaviour*/
     /// </summary>
     private void HandleClick(GameObject pcInstance)
     {
-        Debug.Log("HandleClick called from PCSelector. ");
+//        Debug.Log("HandleClick called from PCSelector. ");
         float currentClickTime = Time.realtimeSinceStartup;
 
         // Double click 
         if ((currentClickTime - LastClickTime) < DoubleClickTimeLimit)
         {
-            Debug.Log("Double click");
+//            Debug.Log("Double click");
             // If the second click was on the same PC as first click, center on that PC. 
             if (pcInstance.GetInstanceID() == FirstClickedObjectID)
             {
@@ -133,7 +133,7 @@ public class PCSelector/* : MonoBehaviour*/
         // Single Click 
         else
         {
-            Debug.Log("Single click");
+//            Debug.Log("Single click");
             // Select PC. 
             ChangePC(pcInstance); 
 

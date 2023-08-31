@@ -9,7 +9,8 @@ public class PCStatManager
 {
     /// <summary>
     /// Heard by UICharacter, updates UI. <br/>
-    /// Heard by UIRecipes, gets new metRequirementsRecipes list.
+    /// Heard by UIRecipes, gets new metRequirementsRecipes list. <br/>
+    /// Heard by GameManager, updates possible recipe lists. 
     /// </summary>
     public static event Action OnStatsChanged;
 
@@ -62,9 +63,9 @@ public class PCStatManager
     }
 
     /// <summary>
-    /// TESTING - Subtract from stat based on pain.
+    /// TESTING - Subtract from stat based on pain. <br/>
+    /// Maybe do this separately instead? So it can change frame by frame without needing to recalculate all the other stat modifiers each time. 
     /// </summary>
-    /// <param name="stat"></param>
     private void SubtractPainPenalty(Stat stat)
     {
         // Integer division truncates. 

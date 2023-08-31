@@ -62,7 +62,10 @@ public class InputManager
         }
     }
 
-    // Called by game state machine when changing states. 
+    /// <summary>
+    /// Called by game state machine when changing states. 
+    /// </summary>
+    /// <param name="gameState"></param>
     public void EnableStateActionMaps(GameState gameState)
     {
         // Calls one of the below methods depending on which subclass of GameState called this method. 
@@ -71,57 +74,63 @@ public class InputManager
 
     // Might not use Pause state, just have the different menu states?
     // Or use this state for main menu/submenus (options, save, load, new, etc)? Only navigate main menu using mouse click on buttons? 
-    private void EnableStatesActionMaps(GamePauseState pauseState)
+/*    private void EnableStatesActionMaps(GamePauseState pauseState)
     {
         PC.Disable();
-    }
+    }*/
 
     // Used at home base (not during combat/raids/invasions).
     private void EnableStatesActionMaps(GameHomeState homeState)
     {
-        PC.Disable();
-        PC.Camera.Enable();
-//        PC.Quit.Enable();
-        PC.World.Enable();
-        PC.InventoryMenu.Enable();
-        PC.NonCombatMenus.Enable();
+        if (!PC.Camera.enabled) PC.Camera.Enable();
+        if (!PC.World.enabled) PC.World.Enable();
+        if (!PC.InventoryMenu.enabled) PC.InventoryMenu.Enable();
+        if (!PC.NonCombatMenus.enabled) PC.NonCombatMenus.Enable();
+        
+        if (PC.Build.enabled) PC.Build.Disable();
     }
 
     // Used in non-combat menus. 
     private void EnableStatesActionMaps(GameHomeMenusState homeMenusState)
     {
-        PC.Disable();
-//        PC.Quit.Enable();
-        PC.InventoryMenu.Enable();
-        PC.NonCombatMenus.Enable();
+        if (!PC.InventoryMenu.enabled) PC.InventoryMenu.Enable();
+        if (!PC.NonCombatMenus.enabled) PC.NonCombatMenus.Enable();
+
+        if (PC.Camera.enabled) PC.Camera.Disable();
+        if (PC.World.enabled) PC.World.Disable();
+        if (PC.Build.enabled) PC.Build.Disable();
     }
 
     // Used in scavenging scenes and home base combat. 
     private void EnableStatesActionMaps(GameCombatState combatState)
     {
-        PC.Disable();
-        PC.Camera.Enable();
-//        PC.Quit.Enable();
-        PC.World.Enable();
-        PC.InventoryMenu.Enable();
+        if (!PC.Camera.enabled) PC.Camera.Enable();
+        if (!PC.World.enabled) PC.World.Enable();
+        if (!PC.InventoryMenu.enabled) PC.InventoryMenu.Enable();
+
+        if (PC.Build.enabled) PC.Build.Disable();
+        if (PC.NonCombatMenus.enabled) PC.NonCombatMenus.Disable();
     }
 
     // Used in combat menus. 
     private void EnableStatesActionMaps(GameCombatMenusState combatMenusState)
     {
-        PC.Disable();
-//        PC.Quit.Enable();
-        PC.InventoryMenu.Enable();
+        if (!PC.InventoryMenu.enabled) PC.InventoryMenu.Enable();
+
+        if (PC.Camera.enabled) PC.Camera.Disable();
+        if (PC.World.enabled) PC.World.Disable();
+        if (PC.Build.enabled) PC.Build.Disable();
+        if (PC.NonCombatMenus.enabled) PC.NonCombatMenus.Disable();
     }
 
     // Used in build mode in home base. 
     private void EnableStatesActionMaps(GameBuildState buildState)
     {
-        PC.Disable();
-        PC.Camera.Enable();
-//        PC.Quit.Enable();
-        PC.Build.Enable();
-        PC.InventoryMenu.Enable();
-        PC.NonCombatMenus.Enable();
+        if (!PC.Camera.enabled) PC.Camera.Enable();
+        if (!PC.Build.enabled) PC.Build.Enable();
+        if (!PC.InventoryMenu.enabled) PC.InventoryMenu.Enable();
+        if (!PC.NonCombatMenus.enabled) PC.NonCombatMenus.Enable();
+
+        if (PC.World.enabled) PC.World.Disable();
     }
 }

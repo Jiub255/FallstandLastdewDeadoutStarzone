@@ -8,27 +8,24 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Inventory/SOInventory", fileName = "New Inventory SO")]
 public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory where T : SOItem*/
 {
-//    public event Action OnInventoryChanged;
-    // Serialized for now just to see in inspector. Can get rid of the protected field entirely when done testing. 
-/*    [SerializeField]
-    protected List<ItemAmount> _itemAmounts = new();
-*/
+    public event Action OnInventoryChanged;
+
+    // Serialized for now just to see in inspector. 
     [field: SerializeField]
-    public List<ItemAmount> ItemAmounts { get; } = new();
+    public List<ItemAmount> ItemAmounts { get; private set; } = new();
 
     /// <summary>
-    /// Is this a bad idea? Circular reference? How to get reference to controller to UI? <br/>
-    /// Use an event? But then how to get the specific correct one cleanly? 
+    /// Called by InventoryController. 
     /// </summary>
-    public InventoryController InventoryController { get; set; }
+    public void InventoryChanged()
+    {
+        OnInventoryChanged?.Invoke();
+    }
 
 /*    /// <summary>
     /// Returns the reference to the item amount in inventory if you have enough. Doesn't return the amount you put in necessarily,
     /// just how much you have in inventory. Returns null if you don't have enough or don't have an ItemAmount with the same SOItem at all. 
     /// </summary>
-    /// <param name="item"></param>
-    /// <param name="amount"></param>
-    /// <returns></returns>
     public ItemAmount Contains(SOItem item, int amount = 1)
     {
         foreach (ItemAmount itemAmount in ItemAmounts)

@@ -42,18 +42,18 @@ public class UIManager : MonoBehaviour
         inputManager.PC.NonCombatMenus.ToggleMapMenu.started += ToggleMapMenu;
         inputManager.PC.NonCombatMenus.CloseMenus.started += CloseUI;
 
-/*        inputManager.PC.NonCombatMenus.ToggleBuildMenu.started += (c) => Debug.Log("started");
+/*//        inputManager.PC.NonCombatMenus.ToggleBuildMenu.started += (c) => Debug.Log("started");
         inputManager.PC.NonCombatMenus.ToggleBuildMenu.performed += (c) => Debug.Log("performed");
         inputManager.PC.NonCombatMenus.ToggleBuildMenu.canceled += (c) => Debug.Log("canceled");*/
 
-/*        inputManager.PC.InventoryMenu.OpenInventory.started += OpenInventory;
-        inputManager.PC.InventoryMenu.CloseInventory.started += CloseUI;
-        inputManager.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
-        inputManager.PC.NonCombatMenus.CloseBuildMenu.started += CloseUI;
-        inputManager.PC.NonCombatMenus.OpenCraftingMenu.started += OpenCraftingMenu;
-        inputManager.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
-        inputManager.PC.NonCombatMenus.OpenMap.started += OpenMap;
-        inputManager.PC.NonCombatMenus.CloseMap.started += CloseUI;*/
+        /*        inputManager.PC.InventoryMenu.OpenInventory.started += OpenInventory;
+                inputManager.PC.InventoryMenu.CloseInventory.started += CloseUI;
+                inputManager.PC.NonCombatMenus.OpenBuildMenu.started += OpenBuildMenu;
+                inputManager.PC.NonCombatMenus.CloseBuildMenu.started += CloseUI;
+                inputManager.PC.NonCombatMenus.OpenCraftingMenu.started += OpenCraftingMenu;
+                inputManager.PC.NonCombatMenus.CloseCraftingMenu.started += CloseUI;
+                inputManager.PC.NonCombatMenus.OpenMap.started += OpenMap;
+                inputManager.PC.NonCombatMenus.CloseMap.started += CloseUI;*/
     }
 
     private void OnDisable()
@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
         InputManager.PC.NonCombatMenus.ToggleMapMenu.started -= ToggleMapMenu;
         InputManager.PC.NonCombatMenus.CloseMenus.started -= CloseUI;
 
-/*        InputManager.PC.NonCombatMenus.ToggleBuildMenu.started -= (c) => Debug.Log("started");
+/*//        InputManager.PC.NonCombatMenus.ToggleBuildMenu.started -= (c) => Debug.Log("started");
         InputManager.PC.NonCombatMenus.ToggleBuildMenu.performed -= (c) => Debug.Log("performed");
         InputManager.PC.NonCombatMenus.ToggleBuildMenu.canceled -= (c) => Debug.Log("canceled");*/
 
@@ -88,13 +88,13 @@ public class UIManager : MonoBehaviour
         if (_gameStateMachine.ActiveState.GetType() == typeof(GameHomeMenusState) ||
             _gameStateMachine.ActiveState.GetType() == typeof(GameCombatMenusState))
         {
-            Debug.Log("ToggleInventory close");
+//            Debug.Log("ToggleInventory close");
             CloseUI(context);
         }
         // Otherwise open inventory.
         else
         {
-            Debug.Log("ToggleInventory open");
+//            Debug.Log("ToggleInventory open");
             if (_gameStateMachine.ActiveState.GetType() == typeof(GameHomeState) ||
                 _gameStateMachine.ActiveState.GetType() == typeof(GameBuildState))
             {
@@ -114,6 +114,8 @@ public class UIManager : MonoBehaviour
     // TODO - Change in game state causing button to trigger again? Or something like that? YES, FIX IT. 
     private void ToggleBuildMenu(InputAction.CallbackContext context)
     {
+ //       Debug.Log("started");
+
         // Only open if not in combat. 
         if (_gameStateMachine.ActiveState.GetType() != typeof(GameCombatMenusState) &&
             _gameStateMachine.ActiveState.GetType() != typeof(GameCombatState))
@@ -121,14 +123,14 @@ public class UIManager : MonoBehaviour
             // Open build menu if not already open.
             if (!_buildCanvas.activeInHierarchy)
             {
-                Debug.Log("ToggleBuildMenu open");
+ //               Debug.Log("ToggleBuildMenu open");
                 _gameStateMachine.ChangeGameStateTo(_gameStateMachine.Build());
         
                 OpenMenu(_buildCanvas);
             }
             else
             {
-                Debug.Log("ToggleBuildMenu close");
+  //              Debug.Log("ToggleBuildMenu close");
                 CloseUI(context);
             }
         }
@@ -143,14 +145,14 @@ public class UIManager : MonoBehaviour
             // Open crafting menu if not already open.
             if (!_craftingCanvas.activeInHierarchy)
             {
-                Debug.Log("ToggleCraftingMenu open");
+  //              Debug.Log("ToggleCraftingMenu open");
                 _gameStateMachine.ChangeGameStateTo(_gameStateMachine.HomeMenus());
 
                 OpenMenu(_craftingCanvas);
             }
             else
             {
-                Debug.Log("ToggleCraftingMenu close");
+ //               Debug.Log("ToggleCraftingMenu close");
                 CloseUI(context);
             }
         }
@@ -165,14 +167,14 @@ public class UIManager : MonoBehaviour
             // Open map menu if not already open. 
             if (!_mapCanvas.activeInHierarchy)
             {
-                Debug.Log("ToggleMapMenu open");
+ //               Debug.Log("ToggleMapMenu open");
                 _gameStateMachine.ChangeGameStateTo(_gameStateMachine.HomeMenus());
 
                 OpenMenu(_mapCanvas);
             }
             else
             {
-                Debug.Log("ToggleMapMenu close");
+ //               Debug.Log("ToggleMapMenu close");
                 CloseUI(context);
             }
         }

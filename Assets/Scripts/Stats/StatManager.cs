@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 // Manages the total stats of all PCs.
 public class StatManager
@@ -18,13 +19,20 @@ public class StatManager
     {
         GetStatTotals();
 
+        Debug.Log($"Pre stat filtered list count: {unfilteredList.Count}");
+
         // Does this fancy LINQ work? 
-        return unfilteredList
+        List<T> filteredList = unfilteredList
             .Where(recipeSO => recipeSO.MinSinglePCStatRequirements
-                .Where(statRequirement => !TeamDataSO.IndividualPCStatMaxes.ContainsKey(statRequirement.StatType) ||
-                TeamDataSO.IndividualPCStatMaxes[statRequirement.StatType] < statRequirement.Value)
-                .ToList().Count == 0)
+            .Where(statRequirement => !TeamDataSO.IndividualPCStatMaxes
+            .ContainsKey(statRequirement.StatType) ||
+            TeamDataSO.IndividualPCStatMaxes[statRequirement.StatType] < statRequirement.Value)
+            .ToList().Count == 0)
             .ToList();
+
+        Debug.Log($"Post stat filtered list count: {filteredList.Count}");
+
+        return filteredList;
 
 
 /*        List<T> metRequirementsRecipes = new();

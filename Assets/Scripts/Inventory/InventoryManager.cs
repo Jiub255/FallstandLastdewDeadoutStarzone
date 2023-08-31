@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Have BuildingManager created in here? So it can get required items? Kinda functions like CraftingManager so it makes sense. 
@@ -58,15 +59,24 @@ public class InventoryManager
     /// </summary>
     public List<T> GetHaveEnoughItemsRecipes<T>(List<T> metRequirementsRecipes) where T : SORecipe
     {
+        Debug.Log($"Pre items filtered list count: {metRequirementsRecipes.Count}");
+
         // Does this fancy LINQ work? 
         // Returns the SORecipes that you have enough items to build, and have the required tools for. 
-        return metRequirementsRecipes
+        List<T> filteredList = metRequirementsRecipes
             .Where(recipeSO => recipeSO.RecipeCosts
-                .Where(recipeCost => CraftingInventoryController.Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
-                .ToList().Count == 0 && recipeSO.RequiredTools
-                .Where(toolSO => ToolInventoryController.Contains(toolSO) == null)
-                .ToList().Count == 0)
+            .Where(recipeCost => CraftingInventoryController
+            .Contains(recipeCost.CraftingItemSO, recipeCost.Amount) == null)
+            .ToList().Count == 0 && 
+            recipeSO.RequiredTools
+            .Where(toolSO => ToolInventoryController
+            .Contains(toolSO) == null)
+            .ToList().Count == 0)
             .ToList();
+
+        Debug.Log($"Post items filtered list count: {filteredList.Count}");
+
+        return filteredList;
 
 /*        List<T> haveEnoughItemsRecipes = new();
 

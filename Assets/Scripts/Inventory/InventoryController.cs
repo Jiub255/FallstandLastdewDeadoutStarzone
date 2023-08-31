@@ -2,23 +2,18 @@ using UnityEngine;
 
 public class InventoryController
 {
-    public event System.Action OnInventoryChanged;
-
     private SOInventory InventorySO { get; }
 
     public InventoryController(SOInventory inventorySO)
     {
         InventorySO = inventorySO;
-        inventorySO.InventoryController = this;
+//        inventorySO.InventoryController = this;
     }
 
     /// <summary>
     /// Returns the reference to the item amount in inventory if you have enough. Doesn't return the amount you put in necessarily,
     /// just how much you have in inventory. Returns null if you don't have enough or don't have an ItemAmount with the same SOItem at all. 
     /// </summary>
-    /// <param name="item"></param>
-    /// <param name="amount"></param>
-    /// <returns></returns>
     public ItemAmount Contains(SOItem item, int amount = 1)
     {
         foreach (ItemAmount itemAmount in InventorySO.ItemAmounts)
@@ -48,7 +43,8 @@ public class InventoryController
         }
 
         // Heard by UIInventory, calls SetupSlots with the newly updated inventory SO. 
-        OnInventoryChanged?.Invoke();
+        InventorySO.InventoryChanged();
+//        OnInventoryChanged?.Invoke();
     }
 
     public void RemoveItems(SOItem item, int amount)
@@ -72,7 +68,9 @@ public class InventoryController
                 Debug.LogWarning($"Only {listItemAmount.Amount} {listItemAmount.ItemSO.name}s left, can't remove {amount}");
             }
 
-            OnInventoryChanged?.Invoke();
+
+            InventorySO.InventoryChanged();
+//            OnInventoryChanged?.Invoke();
 
             return;
         }

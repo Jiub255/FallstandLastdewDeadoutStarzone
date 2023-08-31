@@ -88,6 +88,10 @@ public class GameManager : MonoBehaviour
         GameDataSO.InventoryDataSO.PossibleBuildingRecipes = BuildingManager.GetHaveRequiredBuildingsRecipes(haveReqItemsAndToolsBuildings);
 
         OnRecipeListsCalculated?.Invoke();
+
+        // FOR TESTING
+        Debug.Log($"Possible crafting recipes: {GameDataSO.InventoryDataSO.PossibleCraftingRecipes.Count}");
+        Debug.Log($"Possible building recipes: {GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Count}");
     }
 
     private void Update()

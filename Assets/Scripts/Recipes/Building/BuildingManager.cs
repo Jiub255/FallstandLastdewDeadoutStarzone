@@ -198,10 +198,19 @@ public class BuildingManager
     /// </summary>
     public List<T> GetHaveRequiredBuildingsRecipes<T>(List<T> haveEnoughItemsRecipes) where T : SORecipe
     {
+        Debug.Log($"Pre buildings filtered list count: {haveEnoughItemsRecipes.Count}");
+
         // Does this fancy LINQ work? 
-        return haveEnoughItemsRecipes.Where(recipeSO => 
-            recipeSO.RequiredBuildings.Where(craftingBuildingSO => 
-            !BuildingDataSO.Buildings.Contains(craftingBuildingSO)).ToList().Count == 0).ToList();
+        List<T> filteredList = haveEnoughItemsRecipes
+            .Where(recipeSO => recipeSO.RequiredBuildings
+            .Where(craftingBuildingSO => !BuildingDataSO.Buildings
+            .Contains(craftingBuildingSO))
+            .ToList().Count == 0)
+            .ToList();
+
+        Debug.Log($"Post buildings filtered list count: {filteredList.Count}");
+
+        return filteredList;
 
 /*        List<T> haveRequiredBuildingsRecipes = new();
 

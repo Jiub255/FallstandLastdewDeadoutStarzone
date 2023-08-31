@@ -66,6 +66,7 @@ public class UIRecipes : MonoBehaviour
 
 		foreach (SORecipe recipeSO in recipeList)
 		{
+			Debug.Log($"Instantiating {recipeSO} in {BuildingOrCraftingMenu}ing menu.");
 			GameObject slot = Instantiate(RecipeSlotPrefab, SlotsParent);
 			slot.GetComponent<RecipeSlot>().SetupSlot(recipeSO);
 		}

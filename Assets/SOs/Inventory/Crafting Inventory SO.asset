@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93994b24cb669b945882943615957097, type: 3}
   m_Name: Crafting Inventory SO
   m_EditorClassIdentifier: 
-  _itemAmounts:
-  - _itemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
-    _amount: 0
+  <ItemAmounts>k__BackingField:
   - _itemSO: {fileID: 11400000, guid: 5e66ac4ef74b8f446becc9fc598e7e2c, type: 2}
-    _amount: 0
+    _amount: 5
+  - _itemSO: {fileID: 11400000, guid: 3bb8ac2133197eb40a8299b2fa532b81, type: 2}
+    _amount: 5

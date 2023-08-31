@@ -23,12 +23,12 @@ public class UIInventory : MonoBehaviour
     {
 		SetupInventorySlots();
 
-		InventorySO.InventoryController.OnInventoryChanged += SetupInventorySlots;        
+		InventorySO.OnInventoryChanged += SetupInventorySlots;        
     }
 
     private void OnDisable()
 	{
-		InventorySO.InventoryController.OnInventoryChanged -= SetupInventorySlots;
+		InventorySO.OnInventoryChanged -= SetupInventorySlots;
 	}
 
 	private void SetupInventorySlots()

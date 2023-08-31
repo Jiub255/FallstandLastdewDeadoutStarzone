@@ -145,7 +145,7 @@ public class PCManager
     /// <param name="context"></param>
     private void HandleClick(InputAction.CallbackContext context)
     {
-        Debug.Log($"HandleClick called, PointerOverUI: {InputManager.PointerOverUI}");
+//        Debug.Log($"HandleClick called, PointerOverUI: {InputManager.PointerOverUI}");
 
         if (!InputManager.PointerOverUI)
         {
