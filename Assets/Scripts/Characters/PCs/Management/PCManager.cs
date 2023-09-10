@@ -119,6 +119,10 @@ public class PCManager
         }
     }
 
+    /// <summary>
+    /// TODO - Why not handle this from PCStateMachine? <br/>
+    /// But that would just add an unnecessary step essentially, since it would still be getting active state from SOPCData. 
+    /// </summary>
     public void UpdateStates()
     {
         foreach (SOPCData pcDataSO in TeamDataSO.HomePCs)
@@ -142,7 +146,6 @@ public class PCManager
     /// If no PCs were clicked, and there is a currently selected PC, then run selected PC's HandleClick. <br/>
     /// If a PC was clicked, then run PCSelector's HandleClick and don't even try to run selected PC's HandleClick. 
     /// </summary>
-    /// <param name="context"></param>
     private void HandleClick(InputAction.CallbackContext context)
     {
 //        Debug.Log($"HandleClick called, PointerOverUI: {InputManager.PointerOverUI}");

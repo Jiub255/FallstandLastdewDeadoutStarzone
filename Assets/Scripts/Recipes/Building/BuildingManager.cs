@@ -18,7 +18,7 @@ public class BuildingManager
         Still have edge scrolling and keyboard camera movement and camera rotation by holding middle mouse button
         Change World action map to have the things common to World and BuildWorld, then have WorldGameplay and WorldBuild maps to cover the
             differences (mouse wheel, right click for now)
-    */ 
+    */
 
     private SOBuildingData BuildingDataSO { get; }
     private InputAction MousePositionAction { get; set; }
@@ -26,7 +26,7 @@ public class BuildingManager
 
 
     // For debug gizmos, so they dont draw in editor mode.
-    //private bool _started;
+    private bool _started;
 
     // Just testing stuff out here. Not gonna keep it. 
 /*    private bool _angleSnapMode = false;
@@ -49,7 +49,7 @@ public class BuildingManager
 
         inputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         // For debug gizmos, so they dont draw in editor mode.
-       // _started = true;
+        _started = true;
 
 /*        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
@@ -88,7 +88,14 @@ public class BuildingManager
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled -= ToggleAngleSnapMode;*/
     }
 
-    public void FixedUpdate()
+    // Doing Update instead of FixedUpdate because Time.timeScale is set to zero in the build game state
+    // (and update runs but fixed doesn't at timeScale == 0). 
+    /// <summary>
+    /// TODO - Run these from GameStateMachine instead? Combine it with GameManager somehow? 
+    /// Then could just run the logic needed, you know, like a state machine. 
+    /// Also, combine this script into GameBuildState? 
+    /// </summary>
+    public void /*Fixed*/Update()
     {
         if (BuildingDataSO.CurrentBuildingInstance != null)
         {
@@ -179,11 +186,17 @@ public class BuildingManager
     {
         if (buildingInstance != null)
         {
+            Debug.Log($"SetBuildingInstance with {buildingInstance.name}");
+
+            // TODO - Do this more cleanly. 
             GameObject buildingParent = Object.Instantiate(BuildingDataSO.BuildingParentPrefab);
+            SelectedBuildingIcon selectedBuildingIcon = buildingParent.GetComponentInChildren<SelectedBuildingIcon>();
             buildingInstance.transform.SetParent(buildingParent.transform);
             buildingInstance.transform.localPosition = Vector3.zero;
+            // TODO - Next 2 lines not getting set correctly (type mismatch). Why? 
             BuildingDataSO.CurrentBuildingInstance = buildingParent;
-            BuildingDataSO.SelectedBuildingIcon = buildingInstance.GetComponent<SelectedBuildingIcon>();
+            BuildingDataSO.SelectedBuildingIcon = selectedBuildingIcon/*buildingInstance.GetComponent<SelectedBuildingIcon>()*/;
+            selectedBuildingIcon.SetIconSize();
 //            _selectedBuildingIcon?.ActivateIcon();
         }
         else
@@ -200,6 +213,7 @@ public class BuildingManager
     {
         Debug.Log($"Pre buildings filtered list count: {haveEnoughItemsRecipes.Count}");
 
+        // TODO - Change this to use List<BuildingLocation> in BuildingDataSO instead. 
         // Does this fancy LINQ work? 
         List<T> filteredList = haveEnoughItemsRecipes
             .Where(recipeSO => recipeSO.RequiredBuildings
@@ -240,14 +254,29 @@ public class BuildingManager
             // Nesting if because CanBuildHere needs _currentBuildingInstance to be not null.
             if (CanBuildHere())
             {
+                // TODO - Add to BuildingLocations list instead. Do after deattaching from BuildingParent. 
                 // Add SOBuilding to Buildings list. 
                 BuildingDataSO.Buildings.Add(BuildingDataSO.CurrentBuildingRecipeSO);
 
                 // TODO - Figure this out. 
                 // Collider not working unless I switch it off and on again.
                 // Could make it disabled in prefab then just enable it after placing?
-                BuildingDataSO.CurrentBuildingInstance.GetComponentInChildren<Collider>().enabled = false;
-                BuildingDataSO.CurrentBuildingInstance.GetComponentInChildren<Collider>().enabled = true;
+                Collider collider = BuildingDataSO.CurrentBuildingInstance.GetComponentInChildren<Collider>();
+                collider.enabled = false;
+                collider.enabled = true;
+
+                // Update the parts of the grid within (an area surrounding) the newly placed building's collider. 
+                Bounds bounds = new Bounds(collider.bounds.center, collider.bounds.size * 2f);
+                AstarPath.active.UpdateGraphs(bounds);
+                // Recalculate all graphs
+                //                AstarPath.active.Scan();
+
+                // Add BuildingLocation to list. 
+                BuildingLocation buildingLocation = new BuildingLocation(
+                    BuildingDataSO.CurrentBuildingRecipeSO,
+                    BuildingDataSO.CurrentBuildingInstance.transform.position,
+                    BuildingDataSO.CurrentBuildingInstance.transform.rotation);
+                BuildingDataSO.Buildings2.Add(buildingLocation);
 
                 // Disconnect the actual building from the parent/selected icon. 
                 BuildingDataSO.CurrentBuildingInstance.transform.GetComponentInChildren<Collider>().transform.parent = null;
@@ -258,7 +287,6 @@ public class BuildingManager
                 // Setting instance to null stops the mouse from controlling its position, so it just stays where it was when you clicked (ie, it gets built) 
                 // (this is only for when you place a building, the null check in MakeInstance is for when you select a building from the menu). 
                 SetBuildingInstance(null);
-//                _currentBuildingInstance = null;
 
                 // Make a new instance of same building to be the new currentBuildingInstance
                 MakeInstance();
@@ -270,7 +298,7 @@ public class BuildingManager
     // Also called when selecting a building the first time, not just changing buildings.
     public void SelectCurrentBuilding(SOBuilding newBuildingRecipeSO)
     {
-       // Debug.Log("Changing current building to " + newBuilding.name);
+        Debug.Log("Changing current building to " + newBuildingRecipeSO.name);
 
         BuildingDataSO.CurrentBuildingRecipeSO = newBuildingRecipeSO;
 
@@ -278,9 +306,8 @@ public class BuildingManager
     }
 
     /// <summary>
-    /// TODO - Call this when toggling the build menu to closed. 
+    /// Call this when manually deselecting. 
     /// </summary>
-    /// <param name="context"></param>
     private void DeselectCurrentBuilding(InputAction.CallbackContext context)
     {
         if (BuildingDataSO.CurrentBuildingRecipeSO != null)
@@ -295,54 +322,56 @@ public class BuildingManager
         }
     }
 
+    /// <summary>
+    /// Call this when toggling the build menu to closed. 
+    /// </summary>
+    public void DeselectBuilding()
+    {
+        DeselectCurrentBuilding(new InputAction.CallbackContext());
+    }
+
     private bool CanBuildHere()
     {
         Collider[] collidersArray = Physics.OverlapBox(
             BuildingDataSO.SelectedBuildingIcon.transform.position,
-            BuildingDataSO.SelectedBuildingIcon.transform.localScale,
-//            Quaternion.identity, 
+            BuildingDataSO.SelectedBuildingIcon.transform.localScale / 2f,
             BuildingDataSO.SelectedBuildingIcon.transform.localRotation, 
             ~BuildingDataSO.GroundLayerMask);
 
         // TODO - Do this better. 
         // Remove collisions with self.
-        List<Collider> collidersList = collidersArray
-            .Where(collider => collider.gameObject.GetInstanceID() == BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID()).ToList();
-//        List<Collider> collidersList = collidersArray.ToList();
-        for (int i = collidersList.Count - 1; i >= 0; i--)
-        {
-            //Debug.Log(_currentBuildingInstance.transform.GetChild(0).gameObject.GetInstanceID() + " collided with " + collider.gameObject.GetInstanceID());
+        List<Collider> collidersList = collidersArray.Where(collider => 
+            collider.gameObject.GetInstanceID() != BuildingDataSO.CurrentBuildingInstance.transform.GetChild(1).gameObject.GetInstanceID())
+            .ToList();
 
-//            if (BuildingDataSO.SelectedBuildingIcon.gameObject.GetInstanceID() == collidersList[i].gameObject.GetInstanceID())
-            {
-                collidersList.RemoveAt(i);
-            }
-        }
-
-        // TODO: Might need to fix this after adding collider to building prefabs.
-        // Stupid hack anyway, do it better. 
-        // collides with itself for now?, cheap hack fix
         if (collidersList.Count == 0)
         {
             return true;
         }
         else
         {
+            foreach (Collider collider in collidersList)
+            {
+                Debug.Log($"Building touching {collider.gameObject.name}");
+            }
+
             return false;
         }
     }
 
-/*    private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
-        if (_currentBuildingInstance != null && _started)
+        if (BuildingDataSO.CurrentBuildingInstance != null && _started)
         {
-            Debug.Log(_currentBuildingInstance.transform.GetChild(0).transform.position + ", " + 
-                _currentBuildingInstance.transform.GetChild(0).transform.localScale);
+/*            Debug.Log(_currentBuildingInstance.transform.GetChild(0).transform.position + ", " +
+                _currentBuildingInstance.transform.GetChild(0).transform.localScale);*/
 
             //BoxCollider boxCollider = _currentBuildingInstance.GetComponentInChildren<BoxCollider>();
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(_currentBuildingInstance.transform.GetChild(0).transform.position, _currentBuildingInstance.transform.GetChild(0).transform.localScale);
-                *//*_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size*//*
+            Gizmos.DrawWireCube(
+                BuildingDataSO.CurrentBuildingInstance.transform.GetChild(0).transform.position, 
+                BuildingDataSO.CurrentBuildingInstance.transform.GetChild(0).transform.localScale);
+            /*_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size*/
         }
-    }*/
+    }
 }

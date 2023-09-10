@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         InventoryManager = new(GameDataSO.InventoryDataSO);
         StatManager = new(GameDataSO.TeamDataSO);
         BuildingManager = new(GameDataSO.BuildingDataSO, InputManager);
-        GameStateMachine = new(InputManager);
+        GameStateMachine = new(InputManager, PCManager, BuildingManager);
         OnGameStateMachineCreated?.Invoke(GameStateMachine);
         SceneTransitionManager = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
 
@@ -94,15 +94,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Possible building recipes: {GameDataSO.InventoryDataSO.PossibleBuildingRecipes.Count}");
     }
 
+    /// <summary>
+    /// TODO - Call GameStateMachine.UpdateGameStates here? Then have each game state get passed references to the appropriate managers in its constructor
+    /// and then call update on them? <br/> 
+    /// Like only call PCManager.UpdateStates from non-menu states, only call building manager's from Build state, etc. 
+    /// </summary>
     private void Update()
     {
-        PCManager.UpdateStates();
         InputManager.Update();
+        GameStateMachine.UpdateActiveState();
     }
 
     private void FixedUpdate()
     {
-        PCManager.FixedUpdateStates();
-        BuildingManager.FixedUpdate();
+        GameStateMachine.FixedUpdateActiveState();
     }
 }

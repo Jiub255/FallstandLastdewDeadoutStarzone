@@ -19,4 +19,6 @@ public class SOGameData : ScriptableObject
     public SOBuildingData BuildingDataSO { get { return _buildingDataSO; } }
     public GameObject UIPrefab { get { return _uiPrefab; } }
     public float SceneTransitionFadeTime { get { return _sceneTransitionFadeTime;} }
+
+    // TODO - Keep GameState on here too? 
 }

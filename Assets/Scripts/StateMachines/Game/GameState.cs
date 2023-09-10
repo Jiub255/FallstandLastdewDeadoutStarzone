@@ -1,18 +1,27 @@
+using UnityEngine;
+
 public abstract class GameState
 {
-    protected GameStateMachine _gameStateMachine;
-    protected InputManager _inputManager;
+    protected InputManager InputManager { get; }
+    protected float TimeScale { get; }
 
-	public GameState(GameStateMachine gameStateMachine, InputManager inputManager)
+	public GameState(InputManager inputManager, float timeScale)
     {
-        _gameStateMachine = gameStateMachine;
-        _inputManager = inputManager;
+        InputManager = inputManager;
+        TimeScale = timeScale;
     }
 
     public void SetActionMaps()
     {
-        _inputManager.EnableStateActionMaps(this);
+        InputManager.EnableStateActionMaps(this);
     }
 
-    public abstract void SetTimeScale();
+    public void SetTimeScale()
+    {
+        Time.timeScale = TimeScale;
+    }
+
+    public abstract void Update();
+    public abstract void FixedUpdate();
+    public abstract void Exit();
 }

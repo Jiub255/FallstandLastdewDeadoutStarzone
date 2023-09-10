@@ -44,6 +44,9 @@ public class InputManager
         PC.Camera.RightClick.canceled -= HandleRightClick;
     }
 
+    /// <summary>
+    /// Just for checking if mouse is over UI. Not sure if this will work in build. 
+    /// </summary>
     public void Update()
     {
         PointerOverUI = EventSystem.IsPointerOverGameObject();

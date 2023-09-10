@@ -14,22 +14,24 @@ public class SelectedBuildingIcon : MonoBehaviour
 
     private Transform _transform;
 	private Renderer _renderer;
-    private BoxCollider _boxCollider;
+//    private BoxCollider _boxCollider;
 
     private void Awake()
     {
         _transform = transform;
         _renderer = GetComponent<Renderer>();
-        _boxCollider = transform.parent.GetComponentInChildren<BoxCollider>();
 
-        SetIconSize();
+        // TODO - Do this (getting the box collider reference specifically) after building is instantiated
+        // and connected to the building parent prefab, so the reference isn't null. 
+//        SetIconSize();
     }
 
-    private void SetIconSize()
+    public void SetIconSize()
     {
         // Set icon size based off collider, border thickness, and a y value for height. 
-        Vector3 position = _boxCollider.transform.position;
-        Vector3 size = _boxCollider.size;
+        BoxCollider boxCollider = transform.parent.GetComponentInChildren<BoxCollider>();
+        Vector3 position = boxCollider.transform.position;
+        Vector3 size = boxCollider.size;
         
         // Set position, including height. 
         _transform.position = new Vector3(position.x, 0f, position.z);

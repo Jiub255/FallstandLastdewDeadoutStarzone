@@ -4,10 +4,14 @@ public class GameStateMachine
 {
     public GameState ActiveState { get; private set; }
     private InputManager InputManager { get; }
+    private PCManager PCManager { get; }
+    private BuildingManager BuildingManager { get; }
 
-    public GameStateMachine(InputManager inputManager)
+    public GameStateMachine(InputManager inputManager, PCManager pcManager, BuildingManager buildingManager)
     {
         InputManager = inputManager;
+        PCManager = pcManager;
+        BuildingManager = buildingManager;
         // Start game in Pause state, in main menu. 
         // FOR NOW, start in home state for testing, until main menu is built. 
         ChangeGameStateTo(/*Pause*/Home());
@@ -18,10 +22,10 @@ public class GameStateMachine
     /// </summary>
     public void ChangeGameStateTo(GameState gameState)
     {
-/*        if (ActiveState != null)
+        if (ActiveState != null)
         {
             ActiveState.Exit();
-        }*/
+        }
 
         ActiveState = gameState;
 
@@ -32,14 +36,21 @@ public class GameStateMachine
 //        Debug.Log($"Game state changed to {ActiveState.GetType()}");
     }
 
-//    public GamePauseState Pause() { return new GamePauseState(this, InputManager); }
-    public GameHomeState Home() { return new GameHomeState(this, InputManager); }
-    public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(this, InputManager); }
-    public GameCombatState Combat() { return new GameCombatState(this, InputManager); }
-    public GameCombatMenusState CombatMenus() { return new GameCombatMenusState(this, InputManager); }
-    public GameBuildState Build() { return new GameBuildState(this, InputManager); }
+    public GameHomeState Home() { return new GameHomeState(InputManager, PCManager); }
+    public GameHomeMenusState HomeMenus() { return new GameHomeMenusState(InputManager); }
+    public GameCombatState Combat() { return new GameCombatState(InputManager, PCManager); }
+    public GameCombatMenusState CombatMenus() { return new GameCombatMenusState(InputManager); }
+    public GameBuildState Build() { return new GameBuildState(InputManager, BuildingManager); }
 
+    public void UpdateActiveState()
+    {
+        ActiveState.Update();
+    }
 
+    public void FixedUpdateActiveState()
+    {
+        ActiveState.FixedUpdate();
+    }
 
 
     /*    public bool Paused { get; private set; } = false;

@@ -1,11 +1,21 @@
-using UnityEngine;
-
 public class GameHomeState : GameState
 {
-    public GameHomeState(GameStateMachine gameStateMachine, InputManager inputManager) : base(gameStateMachine, inputManager) {}
+    protected PCManager PCManager { get; }
 
-    public override void SetTimeScale()
+    public GameHomeState(InputManager inputManager, PCManager pcManager) : base(inputManager, 1f)
     {
-        Time.timeScale = 1f;
+        PCManager = pcManager;
     }
+
+    public override void Update()
+    {
+        PCManager.UpdateStates();
+    }
+
+    public override void FixedUpdate()
+    {
+        PCManager.FixedUpdateStates();
+    }
+
+    public override void Exit() {}
 }

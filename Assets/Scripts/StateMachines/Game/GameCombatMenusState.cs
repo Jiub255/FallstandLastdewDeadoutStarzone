@@ -1,11 +1,8 @@
-using UnityEngine;
-
 public class GameCombatMenusState : GameState
 {
-    public GameCombatMenusState(GameStateMachine gameStateMachine, InputManager inputManager) : base(gameStateMachine, inputManager) {}
+    public GameCombatMenusState(InputManager inputManager) : base(inputManager, 0f) {}
 
-    public override void SetTimeScale()
-    {
-        Time.timeScale = 0f;
-    }
+    public override void Update() {}
+    public override void FixedUpdate() {}
+    public override void Exit() {}
 }

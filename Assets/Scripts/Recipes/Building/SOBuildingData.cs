@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/SOBuildingData", fileName = "Building Data SO")]
-public class SOBuildingData : ScriptableObject
+public class SOBuildingData : ScriptableObject, IResettable
 {
     [SerializeField]
     private SOBuildingRecipes _buildableBuildingsSO;
@@ -22,7 +22,16 @@ public class SOBuildingData : ScriptableObject
     public int SnapAngle { get { return _snapAngle; } }
     public SOBuilding CurrentBuildingRecipeSO { get; set; }
     public GameObject CurrentBuildingInstance { get; set; }
+    /// <summary>
+    /// TODO - Change this to a List of { SOBuilding buildingSO; Vector3 position; Vector3 rotation; }. 
+    /// </summary>
     public List<SOBuilding> Buildings { get; set; }
+    public List<BuildingLocation> Buildings2 { get; set; }
     public SelectedBuildingIcon SelectedBuildingIcon { get; set; }
     public Quaternion Rotation { get; set; }
+
+    public void ResetOnExitPlayMode()
+    {
+        Buildings.Clear();
+    }
 }
