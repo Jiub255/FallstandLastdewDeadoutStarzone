@@ -8,7 +8,7 @@ using UnityEngine;
 /// Holds "home" and "scavenging" SOPCData lists. Sends events when they change. 
 /// </summary>
 [CreateAssetMenu(menuName = "Data/SOTeamData", fileName = "Current Team SO")]
-public class SOTeamData : ScriptableObject
+public class SOTeamData : SaveableSO
 {
 	// TODO - Make the same two events for scavenging list? 
 	public event Action<SOPCData> OnBeforeAddPCToHomeList;
@@ -135,5 +135,15 @@ public class SOTeamData : ScriptableObject
         {
 			Debug.LogWarning($"{sopc.PCPrefab.name} not on Scavenging SOPC list. ");
         }
+    }
+
+    public override void SaveData(GameData gameData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void LoadData(GameData gameData)
+    {
+        throw new NotImplementedException();
     }
 }

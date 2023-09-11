@@ -6,7 +6,7 @@ using UnityEngine;
 /// TODO - Keep just the data here, and make an InventoryController class to do the Add/Remove/Contains? 
 /// </summary>
 [CreateAssetMenu(menuName = "Inventory/SOInventory", fileName = "New Inventory SO")]
-public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory where T : SOItem*/
+public class SOInventory : SaveableSO, IResettable/*, IGenericSOInventory where T : SOItem*/
 {
     public event Action OnInventoryChanged;
 
@@ -94,5 +94,15 @@ public class SOInventory : ScriptableObject, IResettable/*, IGenericSOInventory 
     public void ResetOnExitPlayMode()
     {
 //        ItemAmounts.Clear();
+    }
+
+    public override void SaveData(GameData gameData)
+    {
+        // Actually save inventory list to JSON here. 
+    }
+
+    public override void LoadData(GameData gameData)
+    {
+        // Load inventory list from JSON. 
     }
 }

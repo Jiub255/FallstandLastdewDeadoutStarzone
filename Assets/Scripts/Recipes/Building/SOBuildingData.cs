@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/SOBuildingData", fileName = "Building Data SO")]
-public class SOBuildingData : ScriptableObject, IResettable
+public class SOBuildingData : SaveableSO, IResettable
 {
     [SerializeField]
     private SOBuildingRecipes _buildableBuildingsSO;
@@ -29,6 +29,16 @@ public class SOBuildingData : ScriptableObject, IResettable
     public List<BuildingLocation> Buildings2 { get; set; }
     public SelectedBuildingIcon SelectedBuildingIcon { get; set; }
     public Quaternion Rotation { get; set; }
+
+    public override void SaveData(GameData gameData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void LoadData(GameData gameData)
+    {
+        throw new System.NotImplementedException();
+    }
 
     public void ResetOnExitPlayMode()
     {
