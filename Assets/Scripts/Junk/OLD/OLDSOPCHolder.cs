@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SOPCHolder : MonoBehaviour
+public class OLDSOPCHolder : MonoBehaviour
 {
 	public SOPCData SOPC;
 }

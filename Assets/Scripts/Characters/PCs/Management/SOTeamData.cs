@@ -101,23 +101,24 @@ public class SOTeamData : ScriptableObject
 		HomePCs.Clear();
 		foreach (PCSaveData pcSaveData in gameData.HomePCs)
         {
-			// Change SOPCData based off the other properties from PCSaveData (Injury, stats, and equipment). 
-			// Use id to get equipment from item database. 
+			// Injury
 			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Injury = pcSaveData.Injury;
 
+			// Stats
 			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Clear();
 			foreach ((StatType, int) tuple in pcSaveData.Stats)
             {
 				PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Add(new Stat(tuple.Item1, tuple.Item2));
 			}
 
+			// Equipment
 			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Equipment.EquipmentItems.Clear();
 			foreach (int equipmentID in pcSaveData.EquipmentIDs)
             {
 				PCDatabaseSO.PCDataSOs[pcSaveData.PCID].PCController.EquipmentManager.Equip((SOEquipmentItem)ItemDatabaseSO.Items[equipmentID]);
             }
 
-			// Add SOPCData to HomePCs list from database, based off id from pcSaveData. 
+			// Add SOPCData to HomePCs list from database, based off id from PCSaveData. 
 			HomePCs.Add(PCDatabaseSO.PCDataSOs[pcSaveData.PCID]);
         }
 

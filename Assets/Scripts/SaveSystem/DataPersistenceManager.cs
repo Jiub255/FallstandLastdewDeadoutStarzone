@@ -36,6 +36,8 @@ public class DataPersistenceManager
         InitializeSelectedProfileID();
         
         SceneManager.sceneLoaded += OnSceneLoaded;
+        // TODO - How to actually call these from menu? 
+ //       UIStartMenu.OnNew += NewGame;
     }
 
     public void OnDisable()

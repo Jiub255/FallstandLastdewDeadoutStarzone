@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthManager : MonoBehaviour
+public class OLDHealthManager : MonoBehaviour
 {
     [SerializeField]
     private int _maxHealth = 10;

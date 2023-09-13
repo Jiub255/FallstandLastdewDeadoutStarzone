@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Is this class just adding an extra unnecessary step? Not gonna use this for now. 
 /// </summary>
-public class PCClickReciever : MonoBehaviour
+public class OLDPCClickReciever : MonoBehaviour
 {
 /*    /// <summary>
     /// PCSelector listens, handles click (double or single click). 
