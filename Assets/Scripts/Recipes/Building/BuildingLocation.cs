@@ -1,15 +1,18 @@
 using UnityEngine;
 
+/// <summary>
+/// int BuildingID, Vector3 Position, Quaternion Rotation. 
+/// </summary>
 [System.Serializable]
 public class BuildingLocation
 {
-    public SOBuilding BuildingSO { get; set; }
-    public Vector3 Position { get; set; }
-    public Quaternion Rotation { get; set; }
+    public int BuildingID { get; }
+    public Vector3 Position { get; }
+    public Quaternion Rotation { get; }
 
-    public BuildingLocation(SOBuilding buildingSO, Vector3 position, Quaternion rotation)
+    public BuildingLocation(int buildingID, Vector3 position, Quaternion rotation)
     {
-        BuildingSO = buildingSO;
+        BuildingID = buildingID;
         Position = position;
         Rotation = rotation;
     }

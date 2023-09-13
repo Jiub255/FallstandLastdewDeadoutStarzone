@@ -10,9 +10,9 @@ public class InventoryManager
 {
     /// <summary>
     /// TODO - Have GameManager hear this, and recalculate possible recipes based off of Inventory and Stats. Pass CraftingInventory? <br/>
-    /// Currently heard by UIRecipes, who calculates possible recipes and keeps the list. Going to put list on CurrentTeamSO and have GameManager calculate it. 
+    /// Also heard by UIRecipes, which calculates possible recipes and keeps the list. Going to put list on CurrentTeamSO and have GameManager calculate it. 
     /// </summary>
-    public static event Action OnInventoryChanged;
+    public event Action OnInventoryChanged;
 
     private SOInventoryData InventoryDataSO { get; }
     private InventoryController CraftingInventoryController { get; }
@@ -40,6 +40,24 @@ public class InventoryManager
         PCLootState.OnLootItems += (itemAmount) => AddItems(itemAmount.ItemSO, itemAmount.Amount);
         EquipmentManager.OnEquip += (equipmentItem) => RemoveItems(equipmentItem);
         SOItem.OnRemoveItem += (item) => RemoveItems(item);
+    }
+
+    public void SaveData(GameSaveData gameData)
+    {
+        // Get Inventory data from SOInventoryData. 
+        InventoryDataSO.SaveData(gameData);
+    }
+
+    public void LoadData(GameSaveData gameData)
+    {
+        // Use AddItems here and have it do the sorting. Can't see any reason not to. 
+        // Maybe later to preserve sorting order or whatever, but it's fine for now. 
+        foreach ((int, int) tuple in gameData.ItemIDAmountTuples)
+        {
+            SOItem itemSO = InventoryDataSO.ItemDatabaseSO.Items[tuple.Item1];
+            int amount = tuple.Item2;
+            AddItems(itemSO, amount);
+        }
     }
 
     public void OnDisable()

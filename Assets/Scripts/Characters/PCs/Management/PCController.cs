@@ -4,7 +4,7 @@
 /// </summary>
 public class PCController
 {
-    private PCStatManager PCStatManager { get; }
+    public PCStatManager PCStatManager { get; }
     public PCStateMachine PCStateMachine { get; }
     public PainInjuryController PainInjuryManager { get; }
     public EquipmentManager EquipmentManager { get; }

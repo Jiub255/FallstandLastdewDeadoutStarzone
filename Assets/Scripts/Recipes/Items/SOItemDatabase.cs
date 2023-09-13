@@ -6,7 +6,7 @@ using UnityEngine;
 public class SOItemDatabase : ScriptableObject
 {
 	[SerializeField]
-	private List<SOItem> _items = new();
+	private List<SOItem> _items;
 
 	public List<SOItem> Items { get { return _items; } }
 
@@ -22,9 +22,9 @@ public class SOItemDatabase : ScriptableObject
 
         foreach (string SOName in assetNames)
         {
-            var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
-            var character = AssetDatabase.LoadAssetAtPath<SOItem>(SOpath);
-            Items.Add(character);
+            string SOpath = AssetDatabase.GUIDToAssetPath(SOName);
+            SOItem itemSO = AssetDatabase.LoadAssetAtPath<SOItem>(SOpath);
+            Items.Add(itemSO);
         }
 
         Debug.Log($"Number of items: {Items.Count}");

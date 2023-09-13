@@ -26,7 +26,7 @@ public class BuildingManager
 
 
     // For debug gizmos, so they dont draw in editor mode.
-    private bool _started;
+//    private bool _started;
 
     // Just testing stuff out here. Not gonna keep it. 
 /*    private bool _angleSnapMode = false;
@@ -49,12 +49,32 @@ public class BuildingManager
 
         inputManager.OnDeselectOrCancel += DeselectCurrentBuilding;
         // For debug gizmos, so they dont draw in editor mode.
-        _started = true;
+//        _started = true;
 
 /*        S.I.IM.PC.Build.AngleSnapMode.started += ToggleAngleSnapMode;
         if (_toggle) S.I.IM.PC.Build.AngleSnapMode.canceled += ToggleAngleSnapMode;*/
     }
 
+    public void SaveData(GameSaveData gameData)
+    {
+        BuildingDataSO.SaveData(gameData);
+    }
+
+    public void LoadData(GameSaveData gameData)
+    {
+        // Load data into Buildings list. 
+        BuildingDataSO.LoadData(gameData);
+
+        // Instantiate each building and position/rotate it. 
+        foreach (BuildingLocation buildingLocation in BuildingDataSO.BuildingLocations)
+        {
+            // Instantiate building.
+            Transform buildingTransform = Object.Instantiate(BuildingDataSO.BuildingDatabaseSO.Buildings[buildingLocation.BuildingID].BuildingPrefab).transform;
+
+            // Set position and rotation. 
+            buildingTransform.SetPositionAndRotation(buildingLocation.Position, buildingLocation.Rotation);
+        }
+    }
 
 /*    private void ToggleAngleSnapMode(InputAction.CallbackContext context)
     {
@@ -214,35 +234,28 @@ public class BuildingManager
         Debug.Log($"Pre buildings filtered list count: {haveEnoughItemsRecipes.Count}");
 
         // TODO - Change this to use List<BuildingLocation> in BuildingDataSO instead. 
-        // Does this fancy LINQ work? 
+        // Does this fancy LINQ work? Use "==" or ">" ?
         List<T> filteredList = haveEnoughItemsRecipes
             .Where(recipeSO => recipeSO.RequiredBuildings
-            .Where(craftingBuildingSO => !BuildingDataSO.Buildings
-            .Contains(craftingBuildingSO))
-            .ToList().Count == 0)
+            .Where(requiredBuildingSO => BuildingDataSO.BuildingLocations
+            .Where(buildingLocation => (BuildingDataSO.BuildingDatabaseSO.Buildings[buildingLocation.BuildingID] == requiredBuildingSO))
+            .ToList().Count /*>*/== 0)
+            .ToList().Count /*>*/== 0)
+            // There are NO required buildings which are NOT on the building locations list. 
             .ToList();
+
+        /*        // TODO - Change this to use List<BuildingLocation> in BuildingDataSO instead. 
+                // Does this fancy LINQ work? 
+                List<T> filteredList = haveEnoughItemsRecipes
+                    .Where(recipeSO => recipeSO.RequiredBuildings
+                    .Where(craftingBuildingSO => !BuildingDataSO.Buildings
+                    .Contains(craftingBuildingSO))
+                    .ToList().Count == 0)
+                    .ToList();*/
 
         Debug.Log($"Post buildings filtered list count: {filteredList.Count}");
 
         return filteredList;
-
-/*        List<T> haveRequiredBuildingsRecipes = new();
-
-        foreach (T recipe in haveEnoughItemsRecipes)
-        {
-            foreach (SOBuilding building in recipe.RequiredBuildings)
-            {
-                if (!BuildingDataSO.Buildings.Contains(building))
-                {
-                    break;
-                }
-            }
-
-            // Can only reach this point if you have built all required buildings. 
-            haveRequiredBuildingsRecipes.Add(recipe);
-        }
-
-        return haveRequiredBuildingsRecipes;*/
     }
 
     private void PlaceBuilding(InputAction.CallbackContext context)
@@ -256,7 +269,7 @@ public class BuildingManager
             {
                 // TODO - Add to BuildingLocations list instead. Do after deattaching from BuildingParent. 
                 // Add SOBuilding to Buildings list. 
-                BuildingDataSO.Buildings.Add(BuildingDataSO.CurrentBuildingRecipeSO);
+ //               BuildingDataSO.Buildings.Add(BuildingDataSO.CurrentBuildingRecipeSO);
 
                 // TODO - Figure this out. 
                 // Collider not working unless I switch it off and on again.
@@ -273,10 +286,11 @@ public class BuildingManager
 
                 // Add BuildingLocation to list. 
                 BuildingLocation buildingLocation = new BuildingLocation(
-                    BuildingDataSO.CurrentBuildingRecipeSO,
+                    // Not sure if getting index like this will work. 
+                    BuildingDataSO.BuildingDatabaseSO.Buildings.IndexOf(BuildingDataSO.CurrentBuildingRecipeSO),
                     BuildingDataSO.CurrentBuildingInstance.transform.position,
                     BuildingDataSO.CurrentBuildingInstance.transform.rotation);
-                BuildingDataSO.Buildings2.Add(buildingLocation);
+                BuildingDataSO.BuildingLocations.Add(buildingLocation);
 
                 // Disconnect the actual building from the parent/selected icon. 
                 BuildingDataSO.CurrentBuildingInstance.transform.GetComponentInChildren<Collider>().transform.parent = null;
@@ -359,19 +373,19 @@ public class BuildingManager
         }
     }
 
-    private void OnDrawGizmos()
+/*    private void OnDrawGizmos()
     {
         if (BuildingDataSO.CurrentBuildingInstance != null && _started)
         {
-/*            Debug.Log(_currentBuildingInstance.transform.GetChild(0).transform.position + ", " +
-                _currentBuildingInstance.transform.GetChild(0).transform.localScale);*/
+*//*            Debug.Log(_currentBuildingInstance.transform.GetChild(0).transform.position + ", " +
+                _currentBuildingInstance.transform.GetChild(0).transform.localScale);*//*
 
             //BoxCollider boxCollider = _currentBuildingInstance.GetComponentInChildren<BoxCollider>();
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(
                 BuildingDataSO.CurrentBuildingInstance.transform.GetChild(0).transform.position, 
                 BuildingDataSO.CurrentBuildingInstance.transform.GetChild(0).transform.localScale);
-            /*_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size*/
+            *//*_currentBuildingInstance.transform.position + (Vector3.up * (boxCollider.bounds.size.y / 2)), boxCollider.bounds.size*//*
         }
-    }
+    }*/
 }

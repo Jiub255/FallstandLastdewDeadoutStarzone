@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Inventory Data SO
   m_EditorClassIdentifier: 
   _craftableItemsSO: {fileID: 11400000, guid: cf415609b5aec9a498ebac80b8698a48, type: 2}
+  _itemDatabaseSO: {fileID: 11400000, guid: c12f5a7b35860d84bbc927b066012712, type: 2}
   _usableInventorySO: {fileID: 11400000, guid: f53933e6e7962bf48aee369695e9c438, type: 2}
   _equipmentInventorySO: {fileID: 11400000, guid: 0faf83ead42c25047b1a6d2f1ee96263, type: 2}
   _craftingInventorySO: {fileID: 11400000, guid: ffa6e50051d74814dbf42a1a66156e21, type: 2}

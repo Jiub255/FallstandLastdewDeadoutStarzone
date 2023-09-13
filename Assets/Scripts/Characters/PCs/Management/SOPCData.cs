@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/SOPCData", fileName = "New PC Data SO")]
-public class SOPCData : SaveableSO
+public class SOPCData : ScriptableObject
 {
     /// <summary>
     /// PCSelector listens, handles click (double or single click). 
@@ -46,6 +46,22 @@ public class SOPCData : SaveableSO
     public PCController PCController { get; set; }
     public SelectedPCIcon SelectedPCIcon { get; set; }
 
+    // Handle this from SOTeamData using PCSaveData constructor? 
+    public void SaveData(GameSaveData gameData)
+    {
+        // SOPCData (this)
+
+
+        // Injury
+        
+
+        // Stats
+
+
+        // Equipment
+
+    }
+
     public int WeaponDamage()
     {
         int weaponAttack = Equipment.Weapon().WeaponDamage;
@@ -61,15 +77,5 @@ public class SOPCData : SaveableSO
     {
         // PCSelector hears this. Selects this PC for now. Center camera on double click later. 
         OnClickPCIcon?.Invoke(/*PCInstance*/);
-    }
-
-    public override void SaveData(GameData gameData)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void LoadData(GameData gameData)
-    {
-        throw new NotImplementedException();
     }
 }

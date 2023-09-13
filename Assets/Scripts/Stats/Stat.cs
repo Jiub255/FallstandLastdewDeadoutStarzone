@@ -22,7 +22,7 @@ public class Stat
     /// How to know which PC this affects? Could new these in SOPCData (from PCStatManager) based on presets in SOPCSharedData, and pass in the 
     /// PCStatManager in the constructor. Then the stat could call CalculateModdedValues or whatever itself. 
     /// </remarks>
-//    public static event Action OnBaseValueChanged;
+    public event Action OnBaseValueChanged;
 
     [SerializeField]
     private StatType _statType;
@@ -31,16 +31,17 @@ public class Stat
 
     private List<int> _modifiers = new();
     private int _moddedValue;
-    private PCStatManager _pcStatManager;
+ //   private PCStatManager _pcStatManager;
 
     public StatType StatType { get { return _statType; } }
+    public int BaseValue { get { return _baseValue; } }
     public int ModdedValue { get { return _moddedValue; } }
 
-    public Stat(StatType statType, int baseValue, PCStatManager pcStatManager)
+    public Stat(StatType statType, int baseValue/*, PCStatManager pcStatManager*/)
     {
         _statType = statType;
         _baseValue = baseValue;
-        _pcStatManager = pcStatManager;
+//        _pcStatManager = pcStatManager;
     }
 
     private void CalculateModdedValue()
@@ -55,15 +56,15 @@ public class Stat
         _baseValue += amount;
         CalculateModdedValue();
 
-        if (_pcStatManager != null)
+/*        if (_pcStatManager != null)
         {
             _pcStatManager.CalculateStatModifiers();
         }
         else
         {
             Debug.LogWarning($"No PCStatManager found on {_statType.ToString()}");
-        }
-//        OnBaseValueChanged?.Invoke();
+        }*/
+        OnBaseValueChanged?.Invoke();
     }
 
     public void AddModifier(int modifier)

@@ -6,7 +6,7 @@ public class UIInventory : MonoBehaviour
 	// Different item types derive from SOItem, and create corresponding SOInventorys, 
 	// then InventoryManager handles putting the items in the right inventory.
 	/// <summary>
-	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
+	/// Just using to get SaveData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
 	/// </summary>
 	[SerializeField]
 	private SOInventory _inventorySO;

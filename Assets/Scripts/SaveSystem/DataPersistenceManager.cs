@@ -1,84 +1,62 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 /// <summary>
 /// TODO - Make this a plain C# class and pass in all the SaveableSOs in the constructor from GameManager? <br/>
 /// Or just put them in a serialized list here? Try the first way, not sure exactly how yet. Send references through events as they get constructed? <br/>
 /// Or just send the GameDataSO, which holds all the others. 
 /// </summary>
-public class DataPersistenceManager : MonoBehaviour
+public class DataPersistenceManager
 {
-    [Header("File Storage Config")]
-    [SerializeField] private string fileName;
+    public event System.Action<GameSaveData> OnSave;
+    public event System.Action<GameSaveData> OnLoad;
 
-    [Header("Auto Saving Configuration")]
-    [SerializeField]
-    private float autoSaveTimeSeconds = 60f;
+    private SOSaveSystemData SaveSystemDataSO { get; }
 
-    private GameData gameData;
+    private GameSaveData GameData { get; set; }
 
-    private List<ISaveable> dataPersistenceObjects;
-//    private List<IDataPersistence> dataPersistenceObjects;
+    private GameManager GameManager { get; }
 
-    private FileDataHandler dataHandler;
+    private FileDataHandler FileDataHandler { get; }
 
-    private string selectedProfileID = "";
+    private string SelectedProfileID { get; set; } = "";
 
-    private Coroutine autoSaveCoroutine;
+    private Coroutine AutoSaveCoroutine { get; set; }
 
     public static DataPersistenceManager instance { get; private set; }
 
-    private void Awake()
+    public DataPersistenceManager(GameManager gameManager, SOSaveSystemData saveSystemDataSO)
     {
-        if (instance != null)
-        {
-            Debug.LogError("Found more than one DataPersistenceManager in the scene.");
-            Destroy(gameObject);
-            return;
-        }
+        GameManager = gameManager;
+        SaveSystemDataSO = saveSystemDataSO;
 
-        instance = this;
-
-        DontDestroyOnLoad(gameObject);
-        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
-
+        FileDataHandler = new FileDataHandler(Application.persistentDataPath, SaveSystemDataSO.FileName);
         InitializeSelectedProfileID();
-    }
-
-    private void OnEnable()
-    {
+        
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        dataPersistenceObjects = FindAllDataPersistenceObjects();
-        Debug.Log(dataPersistenceObjects.Count.ToString());
-
         // Start up the autosave coroutine
-        if (autoSaveCoroutine != null)
+        if (AutoSaveCoroutine != null)
         {
-            StopCoroutine(autoSaveCoroutine);
+            GameManager.StopCoroutine(AutoSaveCoroutine);
         }
-        autoSaveCoroutine = StartCoroutine(AutoSave());
-
-        // Don't think I want to do persistence between scenes this way
-        // Using SO's and singleton Managers instead
-        // LoadGame();
+        AutoSaveCoroutine = GameManager.StartCoroutine(AutoSave());
     }
 
     public void DeleteProfileData(string profileID)
     {
         // Delete the data for this profile ID
-        dataHandler.Delete(profileID);
+        FileDataHandler.Delete(profileID);
         // Initialize the selected profile ID
         InitializeSelectedProfileID();
         // Reload the game so that our data matches the newly selected profile ID
@@ -87,110 +65,97 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void InitializeSelectedProfileID()
     {
-        selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileID();
+        SelectedProfileID = FileDataHandler.GetMostRecentlyUpdatedProfileID();
     }
 
-    public GameData NewGame()
+    public GameSaveData NewGame()
     {
-        gameData = new GameData();
+        GameData = new GameSaveData();
 
         // Push the loaded data to all other scripts that need it.
-        foreach (ISaveable dataPersistenceObject in dataPersistenceObjects)
-        {
-            dataPersistenceObject.LoadData(gameData);
-        }
+//        GameManager.LoadData(GameData);
+        OnLoad?.Invoke(GameData);
 
-        return gameData;
+        return GameData;
     }
 
-    // Have this return loaded GameData so SaveSlotsMenu and MainMenu can load the 
+    // Have this return loaded SaveData so SaveSlotsMenu and MainMenu can load the 
     // current saved scene
-    public GameData LoadGame()
+    public GameSaveData LoadGame()
     {
         // Load any saved data from a file using the data handler.
-        gameData = dataHandler.Load(selectedProfileID);
+        GameData = FileDataHandler.Load(SelectedProfileID);
 
         // If no data can be loaded, warn player.
-        if (gameData == null)
+        if (GameData == null)
         {
             Debug.Log("No data was found. Start a new game.");
             return null;
         }
 
         // Push the loaded data to all other scripts that need it.
-        foreach (ISaveable dataPersistenceObject in dataPersistenceObjects)
-        {
-            dataPersistenceObject.LoadData(gameData);
-        }
+//        GameManager.LoadData(GameData);
+        OnLoad?.Invoke(GameData);
 
-        return gameData;
+        return GameData;
     }
 
     public void SaveGame()
     {
         // If no data can be saved, warn player.
-        if (gameData == null)
+        if (GameData == null)
         {
             Debug.Log("No data was found. Start a new game.");
             return;
         }
 
         // Pass the data to other scripts so they can update it.
-        foreach (ISaveable dataPersistenceObject in dataPersistenceObjects)
-        {
-            dataPersistenceObject.SaveData(gameData);
-        }
+        // TODO - Just run the SaveData method on GameManager and have it chain through its children saving all their data? Same for loading. 
+        // Won't have to find all ISaveables then either, not sure how to do it without them inheriting Unity.Object. 
+//        GameManager.SaveData(GameData);
+        OnSave?.Invoke(GameData);
 
         // Timestamp the data so we know when it was last saved
-        gameData.LastUpdated = System.DateTime.Now.ToBinary();
+        GameData.LastUpdated = System.DateTime.Now.ToBinary();
 
         // Save that data to a file using the data handler.
-        dataHandler.Save(gameData, selectedProfileID);
+        FileDataHandler.Save(GameData, SelectedProfileID);
     }
 
-    private void OnApplicationQuit()
+    // Maybe implement an "on quit" save later (in a separate slot). 
+/*    private void OnApplicationQuit()
     {
         SaveGame();
-    }
+    }*/
 
-    // Have this return loaded GameData so SaveSlotsMenu and MainMenu can load the 
-    // current saved scene
-    public GameData ChangeSelectedProfileID(string newProfileID)
+    // Have this return loaded SaveData so SaveSlotsMenu and MainMenu can load the current saved scene
+    public GameSaveData ChangeSelectedProfileID(string newProfileID)
     {
         // Update the profile to use for saving and loading
-        selectedProfileID = newProfileID;
+        SelectedProfileID = newProfileID;
         // Load the game, which will use that profile, updating our game data accordingly
         return LoadGame();
     }
 
-    private List<ISaveable> FindAllDataPersistenceObjects()
-    {
-        // FindObjectsOfType takes in an optional boolean to include inactive gameobjects
-        IEnumerable<ISaveable> dataPersistenceObjects = 
-            FindObjectsOfType<ScriptableObject>(true).OfType<ISaveable>();
-
-        return new List<ISaveable>(dataPersistenceObjects);
-    }
-
     public bool HasGameData()
     {
-        gameData = dataHandler.Load(selectedProfileID);
+        GameData = FileDataHandler.Load(SelectedProfileID);
 
-        Debug.Log("Save data exists: " + (gameData != null).ToString());
+        Debug.Log("Save data exists: " + (GameData != null).ToString());
 
-        return (gameData != null);
+        return (GameData != null);
     }
 
-    public Dictionary<string, GameData> GetAllProfilesGameData()
+    public Dictionary<string, GameSaveData> GetAllProfilesGameData()
     {
-        return dataHandler.LoadAllProfiles();
+        return FileDataHandler.LoadAllProfiles();
     }
 
     private IEnumerator AutoSave()
     {
         while (true)
         {
-            yield return new WaitForSeconds(autoSaveTimeSeconds);
+            yield return new WaitForSeconds(SaveSystemDataSO.AutoSaveTimeSeconds);
             SaveGame();
             Debug.Log("Auto Saved Game");
         }

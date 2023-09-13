@@ -24,7 +24,7 @@ public class UIRecipes : MonoBehaviour
 	private Transform _slotsParent;
 
 	/// <summary>
-	/// Just using to get GameData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
+	/// Just using to get SaveData for now, probably going to add it to the GameManager eventually and have it pass that down in the constructor. 
 	/// </summary>
 	[SerializeField]
 	private SOGameData _gameDataSO;

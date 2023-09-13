@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static event System.Action<InputManager> OnInputManagerCreated;
     public static event System.Action<GameStateMachine> OnGameStateMachineCreated;
+    /// <summary>
+    /// Heard by UIRecipes, calls SetupRecipeSlots. 
+    /// </summary>
     public static event System.Action OnRecipeListsCalculated;
 
     [SerializeField]
@@ -30,17 +33,31 @@ public class GameManager : MonoBehaviour
     private GameStateMachine GameStateMachine { get; set; }
     private InputManager InputManager { get; set; }
     private SceneTransitionController SceneTransitionManager { get; set; }
+    private DataPersistenceManager DataPersistenceManager { get; set; }
 
     // Data
     private SOGameData GameDataSO { get { return _gameDataSO; } set { _gameDataSO = value; } }
+
+    public void SaveData(GameSaveData gameData)
+    {
+        PCManager.SaveData(gameData);
+        InventoryManager.SaveData(gameData);
+        BuildingManager.SaveData(gameData);
+    }
+
+    public void LoadData(GameSaveData gameData)
+    {
+        // Do similar to SaveData to get data back into SOs, then apply that data to the game world,
+        // for example: instantiate and position all buildings. 
+        PCManager.LoadData(gameData);
+        InventoryManager.LoadData(gameData);
+        BuildingManager.LoadData(gameData);
+    }
 
     // Why not in subscribe to events in OnEnable and new stuff up in Awake? 
     // So that stuff that needs the InputManager reference event can subscribe to it in OnEnable. 
     private void Start()
     {
-        InventoryManager.OnInventoryChanged += GetPossibleRecipes;
-        PCStatManager.OnStatsChanged += GetPossibleRecipes;
-        
         InputManager = new();
         OnInputManagerCreated?.Invoke(InputManager);
         // Instantiate PCManager first, so it can instantiate all the PC's in the game world. Before what though? Does it matter? 
@@ -51,7 +68,13 @@ public class GameManager : MonoBehaviour
         GameStateMachine = new(InputManager, PCManager, BuildingManager);
         OnGameStateMachineCreated?.Invoke(GameStateMachine);
         SceneTransitionManager = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
+        DataPersistenceManager = new(this, GameDataSO.SaveSystemDataSO);
 
+        InventoryManager.OnInventoryChanged += GetPossibleRecipes;
+        PCStatManager.OnStatsChanged += GetPossibleRecipes;
+        DataPersistenceManager.OnSave += SaveData;
+        DataPersistenceManager.OnLoad += LoadData;
+        
         GameDataSO.InventoryDataSO.CraftableItemsSO.FilterOutNoRecipeItems();
         GameDataSO.BuildingDataSO.BuildableBuildingsSO.FilterOutNoRecipeItems();
     }
@@ -64,9 +87,16 @@ public class GameManager : MonoBehaviour
         BuildingManager.OnDisable();
         InputManager.OnDisable();
         SceneTransitionManager.OnDisable();
+        DataPersistenceManager.OnDisable();
+        foreach (SOPCData pcDataSO in GameDataSO.TeamDataSO.HomePCs)
+        {
+            pcDataSO.PCController.PCStatManager.OnDisable();
+        }
 
         InventoryManager.OnInventoryChanged -= GetPossibleRecipes;
         PCStatManager.OnStatsChanged -= GetPossibleRecipes;
+        DataPersistenceManager.OnSave -= SaveData;
+        DataPersistenceManager.OnLoad -= LoadData;
     }
 
     /// <summary>

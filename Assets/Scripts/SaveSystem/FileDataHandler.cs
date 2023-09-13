@@ -16,7 +16,7 @@ public class FileDataHandler
         _dataFileName = dataFileName;
     }
 
-    public GameData Load(string profileID, bool allowRestoreFromBackup = true)
+    public GameSaveData Load(string profileID, bool allowRestoreFromBackup = true)
     {
         // Base case: if the profileID is null, return right away
         if (profileID == null)
@@ -26,7 +26,7 @@ public class FileDataHandler
 
         // Use Path.Combine to account for different OS's having different path separators.
         string fullPath = Path.Combine(_dataDirectoryPath, profileID, _dataFileName);
-        GameData loadedData = null;
+        GameSaveData loadedData = null;
         if (File.Exists(fullPath))
         {
             try
@@ -43,7 +43,7 @@ public class FileDataHandler
                 }
 
                 // Deserialize the data from Json back into the C# object.
-                loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                loadedData = JsonUtility.FromJson<GameSaveData>(dataToLoad);
             }
             catch (Exception e)
             {
@@ -71,7 +71,7 @@ public class FileDataHandler
         return loadedData;
     }
 
-    public void Save(GameData data, string profileID)
+    public void Save(GameSaveData data, string profileID)
     {
         // Base case: if the profileID is null, return right away
         if (profileID == null)
@@ -100,7 +100,7 @@ public class FileDataHandler
             }
 
             // Verify that the newly saved file can be loaded successfully
-            GameData verifiedGameData = Load(profileID);
+            GameSaveData verifiedGameData = Load(profileID);
             // If the data can be verified, back it up
             if (verifiedGameData != null)
             {
@@ -153,9 +153,9 @@ public class FileDataHandler
         }
     }
 
-    public Dictionary<string, GameData> LoadAllProfiles()
+    public Dictionary<string, GameSaveData> LoadAllProfiles()
     {
-        Dictionary<string, GameData> profileDictionary = new Dictionary<string, GameData>();
+        Dictionary<string, GameSaveData> profileDictionary = new Dictionary<string, GameSaveData>();
 
         // Loop over all directory names in the data directory path
         IEnumerable<DirectoryInfo> directoryInfos = 
@@ -176,7 +176,7 @@ public class FileDataHandler
             }
 
             // Load the game data for this profile and put it in the dictionary
-            GameData profileData = Load(profileID);
+            GameSaveData profileData = Load(profileID);
             // Defensive programming - ensure the profile data isn't null,
             // because if it is then something went wrong and we should let ourselves know
             if (profileData != null)
@@ -197,11 +197,11 @@ public class FileDataHandler
     {
         string mostRecentProfileID = null;
 
-        Dictionary<string, GameData> profilesGameData = LoadAllProfiles();
-        foreach (KeyValuePair<string,GameData> pair in profilesGameData)
+        Dictionary<string, GameSaveData> profilesGameData = LoadAllProfiles();
+        foreach (KeyValuePair<string,GameSaveData> pair in profilesGameData)
         {
             string profileID = pair.Key;
-            GameData gameData = pair.Value;
+            GameSaveData gameData = pair.Value;
 
             // Skip this entry if the gameData is null
             if (gameData == null)

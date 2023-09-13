@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,6 +35,7 @@ public class PCManager
     private PCItemUseManager PCItemUseManager { get; }
     private InputManager InputManager { get; set; }
     private GameManager GameManager { get; set; }
+//    private Vector3 SpawnPosition { get; set; }
 
     public PCManager(SOTeamData teamDataSO, InputManager inputManager, GameManager gameManager)
     {
@@ -57,6 +56,22 @@ public class PCManager
         SpawnPoint.OnSceneStart += InitializeScene;
 
         inputManager.PC.World.SelectOrCenter.canceled += HandleClick;
+    }
+
+    public void SaveData(GameSaveData gameData)
+    {
+        // Get PC data from SOTeamData. 
+        TeamDataSO.SaveData(gameData);
+    }
+
+    public void LoadData(GameSaveData gameData)
+    {
+        // Load PC data onto SOTeamData. 
+        TeamDataSO.LoadData(gameData);
+
+        // How to do this? Make sure it happens after scene load call? Cache spawn point? 
+        // OR, just have LoadData load the data, and wait and let SpawnPoint do the instantiate event. 
+//        InstantiatePCs(SpawnPosition);
     }
 
     public void OnDisable()
@@ -80,9 +95,13 @@ public class PCManager
 
     private void InitializeScene(Vector3 spawnPosition)
     {
+//        SpawnPosition = spawnPosition;
         InstantiatePCs(spawnPosition);
     }
 
+    /// <summary>
+    /// TODO - How to make sure PC data gets loaded onto SOs before this gets called? 
+    /// </summary>
     private void InstantiatePCs(Vector3 spawnPosition)
     {
 //        Debug.Log("Instantiate PCs Called");

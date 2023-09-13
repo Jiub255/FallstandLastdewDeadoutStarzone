@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // TODO - Use this as a PCManager, and recieve Usable/Equipment item events and send them to the correct PC? 
@@ -8,7 +9,7 @@ using UnityEngine;
 /// Holds "home" and "scavenging" SOPCData lists. Sends events when they change. 
 /// </summary>
 [CreateAssetMenu(menuName = "Data/SOTeamData", fileName = "Current Team SO")]
-public class SOTeamData : SaveableSO
+public class SOTeamData : ScriptableObject
 {
 	// TODO - Make the same two events for scavenging list? 
 	public event Action<SOPCData> OnBeforeAddPCToHomeList;
@@ -25,18 +26,24 @@ public class SOTeamData : SaveableSO
 	private List<SOPCData> _homePCs;
 	[SerializeField]
 	private List<SOPCData> _scavengingPCs;
+	[SerializeField]
+	private SOPCDatabase _pcDatabaseSO;
+	[SerializeField]
+	private SOItemDatabase _itemDatabaseSO;
 
 	public List<SOPCData> HomePCs { get { return _homePCs; } }
 	public List<SOPCData> ScavengingPCs { get { return _scavengingPCs; } }
+	public SOPCDatabase PCDatabaseSO { get { return _pcDatabaseSO; } }
+	public SOItemDatabase ItemDatabaseSO { get { return _itemDatabaseSO; } }
 	public List <SORecipe> PossibleRecipes { get; set; }
 	/// <summary>
 	/// Using dictionary instead of StatValue so you can change value and get by key. 
 	/// </summary>
 	public Dictionary<StatType, int> IndividualPCStatMaxes { get; } = new();
-//	public Dictionary<SOPCData, PCController> PCControllerDict { get; }
 
 	/// <summary>
-	/// Use this to get the healing rate. Based on total medical skill of all PCs. 
+	/// Use this to get the healing rate. Based on total medical skill of all PCs. <br/>
+	/// TODO - Get this on load, and any time that the total medical skill changes and just cache the value. 
 	/// </summary>
 	/// <remarks>
 	/// Currently totalMedicalSkill / 1000f. 
@@ -54,44 +61,73 @@ public class SOTeamData : SaveableSO
 		}
 	}
 
-
-/*    /// <summary>
-    /// Is this necessary? Or does it even do anything? Or just return the same thing you put in, <br/>
-    /// unless it's not on the list? So it's kinda like a bool contains check, but returns null instead of false. 
-    /// </summary>
-    public SOPCData this[SOPCData pcDataSO]
-    {
-        get
+	public void SaveData(GameSaveData gameData)
+	{
+		// Save Home PCs list. 
+		gameData.HomePCs.Clear();
+		foreach (SOPCData pcDataSO in HomePCs)
         {
-            foreach (SOPCData homePCDataSO in _homePCs)
+			// Save individual PC's data.
+			int id = PCDatabaseSO.PCDataSOs.IndexOf(pcDataSO);
+
+			int injury = pcDataSO.Injury;
+
+			List<(StatType, int)> stats = pcDataSO.Stats.StatList
+				.Select(x => (x.StatType, x.BaseValue))
+				.ToList();
+
+			// To load equipment, just get all the items from database, and have EquipmentManager equip them. 
+			List<int> equipmentIDs = pcDataSO.Equipment.EquipmentItems
+				.Select(x => ItemDatabaseSO.Items.IndexOf(x))
+				.ToList();
+
+			PCSaveData pcSaveData = new(id, injury, stats, equipmentIDs);
+
+			gameData.HomePCs.Add(pcSaveData);
+        }
+
+		// Save Scavenging PCs list. 
+		gameData.ScavengingPCIDs.Clear();
+		foreach (SOPCData pcDataSO in ScavengingPCs)
+        {
+			int id = PCDatabaseSO.PCDataSOs.IndexOf(pcDataSO);
+			gameData.ScavengingPCIDs.Add(id);
+        }
+	}
+
+	public void LoadData(GameSaveData gameData)
+    {
+		// Load HomePCs list. 
+		HomePCs.Clear();
+		foreach (PCSaveData pcSaveData in gameData.HomePCs)
+        {
+			// Change SOPCData based off the other properties from PCSaveData (Injury, stats, and equipment). 
+			// Use id to get equipment from item database. 
+			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Injury = pcSaveData.Injury;
+
+			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Clear();
+			foreach ((StatType, int) tuple in pcSaveData.Stats)
             {
-                if (homePCDataSO == pcDataSO)
-                {
-                    return homePCDataSO;
-                }
+				PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Add(new Stat(tuple.Item1, tuple.Item2));
+			}
+
+			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Equipment.EquipmentItems.Clear();
+			foreach (int equipmentID in pcSaveData.EquipmentIDs)
+            {
+				PCDatabaseSO.PCDataSOs[pcSaveData.PCID].PCController.EquipmentManager.Equip((SOEquipmentItem)ItemDatabaseSO.Items[equipmentID]);
             }
 
-            Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
-            return null;
+			// Add SOPCData to HomePCs list from database, based off id from pcSaveData. 
+			HomePCs.Add(PCDatabaseSO.PCDataSOs[pcSaveData.PCID]);
+        }
+
+		// Load Scavenging PCs list. 
+		ScavengingPCs.Clear();
+		foreach (int index in gameData.ScavengingPCIDs)
+        {
+			ScavengingPCs.Add(PCDatabaseSO.PCDataSOs[index]);
         }
     }
-
-	/// <summary>
-	/// TODO - Use this or the above method? Or don't use either and do IndexOf in UICharacter.NextPC? 
-	/// </summary>
-    public int GetIndex(SOPCData pcDataSO)
-    {
-		foreach (SOPCData homePCDataSO in _homePCs)
-        {
-			if (homePCDataSO.name == pcDataSO.name)
-			{
-				return _homePCs.IndexOf(homePCDataSO);
-            }
-        }
-
-		Debug.LogWarning($"No SOPCData {pcDataSO.name} found");
-		return -1;
-	}*/
 
 	public void AddPCToHomeList(SOPCData sopc)
     {
@@ -135,15 +171,5 @@ public class SOTeamData : SaveableSO
         {
 			Debug.LogWarning($"{sopc.PCPrefab.name} not on Scavenging SOPC list. ");
         }
-    }
-
-    public override void SaveData(GameData gameData)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void LoadData(GameData gameData)
-    {
-        throw new NotImplementedException();
     }
 }

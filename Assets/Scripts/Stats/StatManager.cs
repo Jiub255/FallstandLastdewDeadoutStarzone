@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// Manages the total stats of all PCs.
+/// <summary>
+/// Manages the total stats of all PCs.
+/// </summary>
 public class StatManager
 {
 	private SOTeamData TeamDataSO { get; set; }

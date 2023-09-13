@@ -22,23 +22,42 @@ public class PCStatManager
         PCDataSO = pcDataSO;
         EquipmentBonuses = equipmentBonuses;
 
-        SetupStartingStats();
+//        SetupStartingStats();
+
+        SubscribeToStatEvents();
 
         CalculateStatModifiers();
     }
 
+    private void SubscribeToStatEvents()
+    {
+        foreach (Stat stat in PCDataSO.Stats.StatList)
+        {
+            stat.OnBaseValueChanged += CalculateStatModifiers;
+        }
+    }
+
+    public void OnDisable()
+    {
+        foreach (Stat stat in PCDataSO.Stats.StatList)
+        {
+            stat.OnBaseValueChanged -= CalculateStatModifiers;
+        }
+    }
+
     /// <summary>
     /// Make a new list of stats in SOPCData based on presets in SOPCSharedData. <br/>
-    /// Also ensures you have a complete list of stats, instead of setting it up on each character individually. 
+    /// Also ensures you have a complete list of stats, instead of setting it up on each character individually. <br/>
+    /// TODO - How to not reset PC's stats on every new scene/load? 
     /// </summary>
-    private void SetupStartingStats()
+/*    private void SetupStartingStats()
     {
         PCDataSO.Stats.StatList.Clear();
         foreach(Stat stat in PCDataSO.PCSharedDataSO.StartingStats.StatList)
         {
-            PCDataSO.Stats.StatList.Add(new Stat(stat.StatType, stat.ModdedValue, this));
+            PCDataSO.Stats.StatList.Add(new Stat(stat.StatType, stat.BaseValue, this));
         }
-    }
+    }*/
 
     /// <summary>
     /// Calculates stat modifiers from equipment, then updates UICharacter. 
@@ -68,7 +87,6 @@ public class PCStatManager
     /// </summary>
     private void SubtractPainPenalty(Stat stat)
     {
-        // Integer division truncates. 
         int painPenalty = (-1 * PCDataSO.Pain) / 10;
         stat.AddModifier(painPenalty);
     }
