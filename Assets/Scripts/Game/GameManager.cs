@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static event System.Action<InputManager> OnInputManagerCreated;
     public static event System.Action<GameStateMachine> OnGameStateMachineCreated;
+    public static event System.Action<DataPersistenceManager> OnDataPersistenceManagerCreated;
     /// <summary>
     /// Heard by UIRecipes, calls SetupRecipeSlots. 
     /// </summary>
@@ -69,6 +70,7 @@ public class GameManager : MonoBehaviour
         OnGameStateMachineCreated?.Invoke(GameStateMachine);
         SceneTransitionManager = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
         DataPersistenceManager = new(this, GameDataSO.SaveSystemDataSO);
+        OnDataPersistenceManagerCreated?.Invoke(DataPersistenceManager);
 
         InventoryManager.OnInventoryChanged += GetPossibleRecipes;
         PCStatManager.OnStatsChanged += GetPossibleRecipes;

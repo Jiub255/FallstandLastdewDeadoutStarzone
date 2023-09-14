@@ -25,7 +25,7 @@ public class DataPersistenceManager
 
     private Coroutine AutoSaveCoroutine { get; set; }
 
-    public static DataPersistenceManager instance { get; private set; }
+//    public static DataPersistenceManager instance { get; private set; }
 
     public DataPersistenceManager(GameManager gameManager, SOSaveSystemData saveSystemDataSO)
     {
