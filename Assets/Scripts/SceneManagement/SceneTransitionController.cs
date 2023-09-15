@@ -21,11 +21,13 @@ public class SceneTransitionController
         GameManager = gameManager;
 
         BuildingButton.OnClickMapButton += LoadScavengingScene;
+        SaveSlotsMenu.OnGameSaveDataLoaded += LoadHomeScene;
     }
 
     public void OnDisable()
     {
         BuildingButton.OnClickMapButton -= LoadScavengingScene;
+        SaveSlotsMenu.OnGameSaveDataLoaded -= LoadHomeScene;
     }
 
     public void LoadHomeScene()
@@ -35,9 +37,8 @@ public class SceneTransitionController
         {
             pcDataSO.PCInstance = null;
         }
-        // TODO - Use game state machine instead. 
         GameStateMachine.ChangeGameStateTo(GameStateMachine.Home());
-        GameManager.StartCoroutine(LoadSceneCoroutine("HomeScene"));
+        GameManager.StartCoroutine(LoadSceneCoroutine("Home"));
     }
 
     /// <summary>
@@ -62,15 +63,19 @@ public class SceneTransitionController
         // Load the new scene. Do this async? Or does it matter if the frame stalls since the screen is blank by now? 
         yield return LoadScene(sceneName);
 
-        // Initialize new scene(instantiate PCs, enemies, etc.). 
-        // Some stuff happens automatically through OnEnable/Awake/Start, like PCInstantiator. 
-
-
         // Once HomeScene is loaded (and initialized? Or initialize after?), set it as the active scene. 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
-        // Unload 
-        yield return UnloadScene(currentSceneBuildIndex);
+        // Initialize new scene(instantiate PCs, enemies, etc.). 
+        // Some stuff happens automatically through OnEnable/Awake/Start, like PCs getting instantiated starting with
+        // SpawnPoint. 
+
+
+        // Unload old current scene, if not "AlwaysOpen" scene. 
+        if (currentSceneBuildIndex != SceneManager.GetSceneByName("AlwaysOpen").buildIndex)
+        {
+            yield return UnloadScene(currentSceneBuildIndex);
+        }
 
         // Fade back in from black. 
         // Send event to some fade UI object in whichever scene is open and active? 

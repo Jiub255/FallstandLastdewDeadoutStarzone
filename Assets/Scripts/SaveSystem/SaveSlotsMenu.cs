@@ -4,6 +4,11 @@ using UnityEngine.UI;
 
 public class SaveSlotsMenu : Menu
 {
+    /// <summary>
+    /// Heard by SceneTransitionManager, loads home scene. 
+    /// </summary>
+    public static event System.Action OnGameSaveDataLoaded;
+
     [Header("Menu Navigation")]
     [SerializeField]
     private MainMenu _mainMenu;
@@ -18,45 +23,60 @@ public class SaveSlotsMenu : Menu
 
     private SaveSlot[] _saveSlots;
 
-    private bool _isLoadingGame = false;
+    private bool _loadingSavedGame = false;
 
     private DataPersistenceManager DataPersistenceManager { get; set; } 
 
     private void Awake()
     {
         _saveSlots = GetComponentsInChildren<SaveSlot>();
+
+        Debug.Log($"Number of save slots: {_saveSlots.Length}");
+
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        GameManager.OnDataPersistenceManagerCreated += (dpm) => DataPersistenceManager = dpm;
+        
+        GameManager.OnDataPersistenceManagerCreated += InitializeMenu; 
     }
 
-    private void OnDisable()
+    // Using OnDestroy instead of OnDisable because event subscription happens in Awake instead of OnEnable 
+    // (since save slots menu is disabled when script loads, but not main/start menu). 
+    // TODO - Not sure if this is the best idea, figure it out. 
+        private void OnDestroy()
     {
-        GameManager.OnDataPersistenceManagerCreated -= (dpm) => DataPersistenceManager = dpm;
+        GameManager.OnDataPersistenceManagerCreated -= InitializeMenu;
+    }
+
+    private void InitializeMenu(DataPersistenceManager dataPersistenceManager)
+    {
+        DataPersistenceManager = dataPersistenceManager;
+        
+        Debug.Log($"DataPersistenceManager reference assigned");
+
+        gameObject.SetActive(false);
     }
 
     public void OnSaveSlotClicked(SaveSlot saveSlot)
     {
-        // Disable all buttons
+        // Disable all buttons. 
         DisableMenuButtons();
 
-        // Case: loading game
-        if (_isLoadingGame)
+        // Case: Loading saved game. 
+        if (_loadingSavedGame)
         {
             DataPersistenceManager.ChangeSelectedProfileID(saveSlot.GetProfileID());
             SaveGameAndLoadScene();
         }
-        // Case: new game, but the save slot has data
+        // Case: New game, but the save slot has data.
         else if (saveSlot.HasData)
         {
             _confirmationPopupMenu.ActivateMenu(
                 "Starting a New Game with this slot will override the currently saved data. " +
                 "Are you sure?",
-                // Function to execute if we select "yes"
+                // Function to execute if "yes" selected.
                 () =>
                 {
                     Debug.Log("yes new clear clicked");
@@ -65,15 +85,15 @@ public class SaveSlotsMenu : Menu
                     DataPersistenceManager.NewGame();
                     SaveGameAndLoadScene();
                 },
-                // Function to execute if we select "cancel"
+                // Function to execute if "cancel" selected.
                 () =>
                 {
                     Debug.Log("cancel new clear clicked");
-                    ActivateMenu(_isLoadingGame);
+                    ActivateMenu(_loadingSavedGame);
                 }
             );
         }
-        // Case: new game, and the save slot has no data
+        // Case: New game, and the save slot has no data. 
         else
         {
             DataPersistenceManager.ChangeSelectedProfileID(saveSlot.GetProfileID());
@@ -103,6 +123,7 @@ public class SaveSlotsMenu : Menu
         // Load the scene
         // Could load whichever scene the last save was in, instead of always FirstScene
         // TODO - Which scene to load here? And how to load it? Need to make SceneTransitionManager first. 
+        OnGameSaveDataLoaded?.Invoke(); 
  //       MasterSingleton.Instance.SceneTransitionManager.ChangeScene("FirstScene", Vector2.zero);
     }
 
@@ -117,14 +138,14 @@ public class SaveSlotsMenu : Menu
             {
                 Debug.Log("yes clear clicked");
                 DataPersistenceManager.DeleteProfileData(saveSlot.GetProfileID());
-                ActivateMenu(_isLoadingGame);
+                ActivateMenu(_loadingSavedGame);
             },
             // Function to execute if we select "cancel"
             () =>
             {
                 // Clearing save data even when clicking cancel
                 Debug.Log("cancel clear clicked");
-                ActivateMenu(_isLoadingGame);
+                ActivateMenu(_loadingSavedGame);
             }
         );
     }
@@ -135,29 +156,28 @@ public class SaveSlotsMenu : Menu
         DeactivateMenu();
     }
 
-    public void ActivateMenu(bool isLoadingGame)
+    public void ActivateMenu(bool loadingSavedGame)
     {
-        // Set this menu to be active
+        // Set this menu to be active. 
         gameObject.SetActive(true);
 
-        // Set mode
-        this._isLoadingGame = isLoadingGame;
+        // Set mode. 
+        _loadingSavedGame = loadingSavedGame;
 
-        // Load all of the profiles that exist
-        Dictionary<string, GameSaveData> profilesGameData = 
-            DataPersistenceManager.GetAllProfilesGameData();
+        // Load all of the profiles that exist. 
+        Dictionary<string, GameSaveData> profilesGameData = DataPersistenceManager.GetAllProfilesGameData();
 
-        // Ensure that the back button is enabled when we activate the menu
+        // Ensure that the back button is enabled and selected when the menu is activated. 
         _backButton.interactable = true;
-
-        // Loop through each save slot and set the content appropriately
         GameObject firstSelected = _backButton.gameObject;
+
+        // Loop through each save slot and set the content appropriately. 
         foreach (SaveSlot saveSlot in _saveSlots)
         {
             GameSaveData profileData = null;
             profilesGameData.TryGetValue(saveSlot.GetProfileID(), out profileData);
             saveSlot.SetData(profileData);
-            if (profileData == null && isLoadingGame)
+            if (profileData == null && loadingSavedGame)
             {
                 saveSlot.SetInteractable(false);
             }
@@ -171,7 +191,7 @@ public class SaveSlotsMenu : Menu
             }
         }
 
-        // Set the first selected button
+        // Set the first selected button. 
         Button firstSelectedButton = firstSelected.GetComponent<Button>();
         SetFirstSelected(firstSelectedButton);
     }

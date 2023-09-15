@@ -31,7 +31,7 @@ public class SaveSlot : MonoBehaviour
 
     public void SetData(GameSaveData data)
     {
-        // There's no data for this profileID
+        // There's no data for this profileID. 
         if (data == null)
         {
             HasData = false;
@@ -39,7 +39,7 @@ public class SaveSlot : MonoBehaviour
             _dataGO.SetActive(false);
             _clearButton.gameObject.SetActive(false);
         }
-        // There is data for this profileID
+        // There is data for this profileID. 
         else
         {
             HasData = true;

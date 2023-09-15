@@ -18,4 +18,5 @@ MonoBehaviour:
   _scavengingPCs:
   - {fileID: 11400000, guid: 9c860815b163c114c8cefbe770b7902f, type: 2}
   - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
-  _pcDatabase: {fileID: 11400000, guid: 794fd8a4164690142ae6f0ceb8583967, type: 2}
+  _pcDatabaseSO: {fileID: 11400000, guid: 794fd8a4164690142ae6f0ceb8583967, type: 2}
+  _itemDatabaseSO: {fileID: 11400000, guid: c12f5a7b35860d84bbc927b066012712, type: 2}

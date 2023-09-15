@@ -17,21 +17,26 @@ public class MainMenu : Menu
 
     private DataPersistenceManager DataPersistenceManager { get; set; } 
 
-    private void Start()
-    {
-        DisableButtonsDependingOnData();
-    }
-
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        GameManager.OnDataPersistenceManagerCreated += (dpm) => DataPersistenceManager = dpm;
+        GameManager.OnDataPersistenceManagerCreated += InitializeMenu;
     }
 
     protected void OnDisable()
     {
-        GameManager.OnDataPersistenceManagerCreated -= (dpm) => DataPersistenceManager = dpm;
+        GameManager.OnDataPersistenceManagerCreated -= InitializeMenu;
+    }
+
+    private void InitializeMenu(DataPersistenceManager dataPersistenceManager)
+    {
+        DataPersistenceManager = dataPersistenceManager;
+
+        // This method needs DataPersistenceManager. 
+        DisableButtonsDependingOnData();
+
+        Debug.Log($"InitializeMenu called from MainMenu. DataPersistenceManager == null: {DataPersistenceManager == null}");
     }
 
     private void DisableButtonsDependingOnData()

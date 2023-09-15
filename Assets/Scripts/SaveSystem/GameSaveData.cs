@@ -27,5 +27,19 @@ public class GameSaveData
         BuildingIDsAndLocations = new List<BuildingLocation>();
         HomePCs = new List<PCSaveData>();
         ScavengingPCIDs = new List<int>();
+
+        // TODO - Just for testing. Do it betterly eventually. 
+        // Set up stats. 
+        List<(StatType, int)> startingStats = new();
+        startingStats.Add((StatType.Farming, 0));
+        startingStats.Add((StatType.Scavenging, 0));
+        startingStats.Add((StatType.Engineering, 0));
+        startingStats.Add((StatType.Medical, 0));
+        startingStats.Add((StatType.Attack, 0));
+        startingStats.Add((StatType.Defense, 0));
+
+        // Add starting PC to HomePCs list.
+        PCSaveData pcSaveData = new(0, 0, startingStats, new List<int>());
+        HomePCs.Add(pcSaveData);
     }
 }

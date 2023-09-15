@@ -2804,7 +2804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7470892573900664807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2916,9 +2916,9 @@ RectTransform:
   m_Father: {fileID: 804629739781783192}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 653.0829, y: -426.21326}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 713.064, y: 81.6193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3420743224519749272
@@ -3002,19 +3002,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3914447126300104559}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIStartMenu, Assembly-CSharp
-        m_MethodName: OnExitPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &2815744657268918826
 GameObject:
   m_ObjectHideFlags: 0
@@ -3651,7 +3639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 55}
+  m_AnchoredPosition: {x: 0, y: 8.686279}
   m_SizeDelta: {x: -573.8342, y: -206.098}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4748203378753490855
@@ -8629,9 +8617,9 @@ RectTransform:
   m_Father: {fileID: 804629739781783192}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 653.0829, y: -311.5809}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 713.064, y: 81.6193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6659658193293748999
@@ -8716,9 +8704,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIStartMenu, Assembly-CSharp
-        m_MethodName: OnNewPressed
+      - m_Target: {fileID: 7802174363328929751}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: OnNewGameClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8938,9 +8926,9 @@ RectTransform:
   m_Father: {fileID: 804629739781783192}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 653.0829, y: -196.94853}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 713.064, y: 81.6193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6140944417232316097
@@ -9025,9 +9013,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIStartMenu, Assembly-CSharp
-        m_MethodName: OnLoadPressed
+      - m_Target: {fileID: 7802174363328929751}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: OnLoadGameClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9945,9 +9933,9 @@ RectTransform:
   m_Father: {fileID: 804629739781783192}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 653.0829, y: -82.31618}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 713.064, y: 81.6193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4081630078604319372
@@ -10032,9 +10020,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIStartMenu, Assembly-CSharp
-        m_MethodName: OnContinuePressed
+      - m_Target: {fileID: 7802174363328929751}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: OnContinueClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10899,6 +10887,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 2583745279543113904, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3756278037678654503, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_Name
       value: Save Slot 2
@@ -10934,6 +10926,10 @@ PrefabInstance:
     - target: {fileID: 3923438101532967487, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335104421863766174, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7701995850809319126, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: _profileID
@@ -11332,6 +11328,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 2583745279543113904, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3756278037678654503, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_Name
       value: Save Slot 3
@@ -11367,6 +11367,10 @@ PrefabInstance:
     - target: {fileID: 3923438101532967487, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335104421863766174, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7701995850809319126, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: _profileID
@@ -11513,6 +11517,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 2583745279543113904, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3756278037678654503, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_Name
       value: Save Slot 1
@@ -11548,6 +11556,10 @@ PrefabInstance:
     - target: {fileID: 3923438101532967487, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: SaveSlot, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335104421863766174, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7701995850809319126, guid: 8c544965f8be23847b5f66e815ad20e8, type: 3}
       propertyPath: _profileID

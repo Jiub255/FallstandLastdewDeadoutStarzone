@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ScavengingScene.unity
     guid: 034b1035e4132784a8e00fafa186c546
+  - enabled: 1
+    path: Assets/Scenes/Home.unity
+    guid: 1a0615d6fb7aa10468f42f9f7baca2d0
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c09f927aa27ee2746a8cc9e5253373a2, type: 2}

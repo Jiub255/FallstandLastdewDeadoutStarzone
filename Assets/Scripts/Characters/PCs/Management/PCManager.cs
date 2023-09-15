@@ -37,6 +37,10 @@ public class PCManager
     private GameManager GameManager { get; set; }
 //    private Vector3 SpawnPosition { get; set; }
 
+    /// <summary>
+    /// TODO - Delay calling this until new/load/continue game is chosen from menu and data is loaded? <br/>
+    /// Similarly for inventory, building managers. Any in-game, save-dependent stuff really. 
+    /// </summary>
     public PCManager(SOTeamData teamDataSO, InputManager inputManager, GameManager gameManager)
     {
         TeamDataSO = teamDataSO;
@@ -45,6 +49,7 @@ public class PCManager
 
         // TODO - Will this work? Passing the reference to SOPCData here? What if it gets changed to refer to another SOPCData?
         // Will PCItemUseManager keep the reference to the old one? 
+        // Use PCDatabase instead? Probably, then just store index/ID. 
         PCItemUseManager = new(/*TeamDataSO.PCControllerDict, */ref _currentMenuPC);
 
         // Set menu PC to first on list to start, so it's never null.

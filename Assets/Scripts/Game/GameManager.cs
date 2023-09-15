@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     private BuildingManager BuildingManager { get; set; }
     private GameStateMachine GameStateMachine { get; set; }
     private InputManager InputManager { get; set; }
-    private SceneTransitionController SceneTransitionManager { get; set; }
+    private SceneTransitionController SceneTransitionController { get; set; }
     private DataPersistenceManager DataPersistenceManager { get; set; }
 
     // Data
@@ -55,6 +55,17 @@ public class GameManager : MonoBehaviour
         BuildingManager.LoadData(gameData);
     }
 
+    /// <summary>
+    /// Just for testing. <br/>
+    /// Populate all the databases. Will only work in Unity editor pretty sure, so change eventually (TODO). 
+    /// </summary>
+    private void Awake()
+    {
+        GameDataSO.BuildingDataSO.BuildingDatabaseSO.GetAllBuildings();
+        GameDataSO.InventoryDataSO.ItemDatabaseSO.GetAllItems();
+        GameDataSO.TeamDataSO.PCDatabaseSO.GetAllPCs();
+    }
+
     // Why not in subscribe to events in OnEnable and new stuff up in Awake? 
     // So that stuff that needs the InputManager reference event can subscribe to it in OnEnable. 
     private void Start()
@@ -68,9 +79,10 @@ public class GameManager : MonoBehaviour
         BuildingManager = new(GameDataSO.BuildingDataSO, InputManager);
         GameStateMachine = new(InputManager, PCManager, BuildingManager);
         OnGameStateMachineCreated?.Invoke(GameStateMachine);
-        SceneTransitionManager = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
+        SceneTransitionController = new(GameDataSO.TeamDataSO, GameDataSO.SceneTransitionFadeTime, GameStateMachine, this);
         DataPersistenceManager = new(this, GameDataSO.SaveSystemDataSO);
         OnDataPersistenceManagerCreated?.Invoke(DataPersistenceManager);
+        Debug.Log("OnDataPersistenceManagerCreated invoked");
 
         InventoryManager.OnInventoryChanged += GetPossibleRecipes;
         PCStatManager.OnStatsChanged += GetPossibleRecipes;
@@ -88,7 +100,7 @@ public class GameManager : MonoBehaviour
         PCManager.OnDisable();
         BuildingManager.OnDisable();
         InputManager.OnDisable();
-        SceneTransitionManager.OnDisable();
+        SceneTransitionController.OnDisable();
         DataPersistenceManager.OnDisable();
         foreach (SOPCData pcDataSO in GameDataSO.TeamDataSO.HomePCs)
         {
