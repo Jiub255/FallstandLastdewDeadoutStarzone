@@ -36,13 +36,13 @@ public class SOItemDatabaseEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
+
         SOItemDatabase database = (SOItemDatabase)target;
 
         if (GUILayout.Button("Get Items"))
         {
             database.GetAllItems();
         }
-
-        DrawDefaultInspector();
     }
 }

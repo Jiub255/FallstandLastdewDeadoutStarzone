@@ -67,7 +67,7 @@ public class PainInjuryController
     /// <param name="healingRate">Injury points healed per second. </param>
     public void StartHealing()
     {
-        PCDataSO.Healing = true;
+        PCDataSO.CurrentlyHealing = true;
 
         GameManager.StartCoroutine(HealingCoroutine(CurrentTeamSO.HealingRate));
     }
@@ -77,12 +77,12 @@ public class PainInjuryController
     /// </summary>
     public void StopHealing()
     {
-        if (PCDataSO.Healing) PCDataSO.Healing = false;
+        if (PCDataSO.CurrentlyHealing) PCDataSO.CurrentlyHealing = false;
     }
 
     private IEnumerator HealingCoroutine(float healingRate)
     {
-        while (PCDataSO.Healing)
+        while (PCDataSO.CurrentlyHealing)
         {
             yield return HealCoroutine(healingRate);
         }

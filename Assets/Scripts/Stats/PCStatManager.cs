@@ -31,7 +31,7 @@ public class PCStatManager
 
     private void SubscribeToStatEvents()
     {
-        foreach (Stat stat in PCDataSO.Stats.StatList)
+        foreach (Stat stat in PCDataSO.Stats)
         {
             stat.OnBaseValueChanged += CalculateStatModifiers;
         }
@@ -39,7 +39,7 @@ public class PCStatManager
 
     public void OnDisable()
     {
-        foreach (Stat stat in PCDataSO.Stats.StatList)
+        foreach (Stat stat in PCDataSO.Stats)
         {
             stat.OnBaseValueChanged -= CalculateStatModifiers;
         }
@@ -66,7 +66,7 @@ public class PCStatManager
     {
         // Keep the bonuses dictionary in EquipmentManager, and change it every time
         // equipment is changed. Then it's just ready and you can grab it whenever. 
-        foreach (Stat stat in PCDataSO.Stats.StatList)
+        foreach (Stat stat in PCDataSO.Stats)
         {
             stat.ClearModifiers();
 

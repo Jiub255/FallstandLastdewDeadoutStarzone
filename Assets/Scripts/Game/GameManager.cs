@@ -13,7 +13,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     /// <summary>
-    /// Any class that needs InputManager but isn't created by GameManager gets the reference through this. 
+    /// Any class that needs InputManager but isn't created by GameManager gets the reference through this (ie, camera and UI scripts). 
     /// </summary>
     public static event System.Action<InputManager> OnInputManagerCreated;
     public static event System.Action<GameStateMachine> OnGameStateMachineCreated;
@@ -59,12 +59,12 @@ public class GameManager : MonoBehaviour
     /// Just for testing. <br/>
     /// Populate all the databases. Will only work in Unity editor pretty sure, so change eventually (TODO). 
     /// </summary>
-    private void Awake()
+/*    private void Awake()
     {
         GameDataSO.BuildingDataSO.BuildingDatabaseSO.GetAllBuildings();
         GameDataSO.InventoryDataSO.ItemDatabaseSO.GetAllItems();
         GameDataSO.TeamDataSO.PCDatabaseSO.GetAllPCs();
-    }
+    }*/
 
     // Why not in subscribe to events in OnEnable and new stuff up in Awake? 
     // So that stuff that needs the InputManager reference event can subscribe to it in OnEnable. 
@@ -111,6 +111,11 @@ public class GameManager : MonoBehaviour
         PCStatManager.OnStatsChanged -= GetPossibleRecipes;
         DataPersistenceManager.OnSave -= SaveData;
         DataPersistenceManager.OnLoad -= LoadData;
+    }
+
+    private void SetupManagers()
+    {
+
     }
 
     /// <summary>

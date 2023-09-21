@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// TODO - Combine with CharacterState, rename whole thing PCState. 
 /// </summary>
+[System.Serializable]
 public abstract class PCState/* : CharacterState<PCStateMachine>*/
 {
     protected PCStateMachine StateMachine { get; }

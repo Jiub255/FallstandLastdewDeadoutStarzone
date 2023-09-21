@@ -55,7 +55,7 @@ public class SOTeamData : ScriptableObject
 			float totalMedicalSkill = 0;
 			foreach (SOPCData pcSO in HomePCs)
 			{
-				totalMedicalSkill += pcSO.Stats[StatType.Medical].ModdedValue;
+				totalMedicalSkill += pcSO.Stats.Medical.ModdedValue;
 			}
 			return totalMedicalSkill / 1000f;
 		}
@@ -70,18 +70,22 @@ public class SOTeamData : ScriptableObject
 			// Save individual PC's data.
 			int id = PCDatabaseSO.PCDataSOs.IndexOf(pcDataSO);
 
-			int injury = pcDataSO.Injury;
-
-			List<(StatType, int)> stats = pcDataSO.Stats.StatList
-				.Select(x => (x.StatType, x.BaseValue))
-				.ToList();
-
 			// To load equipment, just get all the items from database, and have EquipmentManager equip them. 
 			List<int> equipmentIDs = pcDataSO.Equipment.EquipmentItems
 				.Select(x => ItemDatabaseSO.Items.IndexOf(x))
 				.ToList();
 
-			PCSaveData pcSaveData = new(id, injury, stats, equipmentIDs);
+			PCSaveData pcSaveData = new(
+				id,
+				pcDataSO.Injury,
+				// Save stats' base values because the bonuses get recalculated after loading. 
+				pcDataSO.Stats.Attack.BaseValue,
+				pcDataSO.Stats.Defense.BaseValue,
+				pcDataSO.Stats.Engineering.BaseValue,
+				pcDataSO.Stats.Farming.BaseValue,
+				pcDataSO.Stats.Medical.BaseValue,
+				pcDataSO.Stats.Scavenging.BaseValue,
+				equipmentIDs);
 
 			gameData.HomePCs.Add(pcSaveData);
         }
@@ -105,11 +109,18 @@ public class SOTeamData : ScriptableObject
 			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Injury = pcSaveData.Injury;
 
 			// Stats
-			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Clear();
+			Stats freshPCsStats = PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats;
+			freshPCsStats.Attack = new(StatType.Attack, pcSaveData.Attack);
+			freshPCsStats.Defense = new(StatType.Defense, pcSaveData.Defense);
+			freshPCsStats.Engineering = new(StatType.Engineering, pcSaveData.Engineering);
+			freshPCsStats.Farming = new(StatType.Farming, pcSaveData.Farming);
+			freshPCsStats.Medical = new(StatType.Medical, pcSaveData.Medical);
+			freshPCsStats.Scavenging = new(StatType.Scavenging, pcSaveData.Scavenging);
+/*			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Clear();
 			foreach ((StatType, int) tuple in pcSaveData.Stats)
             {
 				PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Stats.StatList.Add(new Stat(tuple.Item1, tuple.Item2));
-			}
+			}*/
 
 			// Equipment
 			PCDatabaseSO.PCDataSOs[pcSaveData.PCID].Equipment.EquipmentItems.Clear();

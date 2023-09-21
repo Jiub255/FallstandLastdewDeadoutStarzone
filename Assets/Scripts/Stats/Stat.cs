@@ -5,13 +5,17 @@ using UnityEngine;
 public enum StatType
 {
     Attack,
-    Defense, 
-    Scavenging, 
-    Medical, 
-    Engineering, 
+    Defense,
+    Scavenging,
+    Medical,
+    Engineering,
     Farming
 }
 
+/// <summary>
+/// TODO - How to rework this without StatType enum so that EquipmentBonus and other stuff still works? <br/>
+/// Have Stats class split up into individual Stat references instead of a list, so want to get rid of the enum. 
+/// </summary>
 [Serializable]
 public class Stat
 {

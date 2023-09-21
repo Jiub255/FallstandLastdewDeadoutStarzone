@@ -15,7 +15,7 @@ public class PCLootState : PCState
         LootContainer = lootContainer;
 
         // (For now) Scavenging skill goes from 1 to 5, longest loot duration is 5 seconds, fastest is 1 second. So 6 - skill = duration. 
-        LootDuration = 6 - pcStateMachine.PCDataSO.Stats[StatType.Scavenging].ModdedValue;
+        LootDuration = 6 - pcStateMachine.PCDataSO.Stats.Scavenging.ModdedValue;
 
         LootTimer = pcStateMachine.PCDataSO.PCInstance.GetComponentInChildren<LootTimer>();
 

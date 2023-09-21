@@ -39,25 +39,25 @@ public class SOInventoryData : ScriptableObject
 
         foreach (ItemAmount itemAmount in UsableItemsInventorySO.ItemAmounts)
         {
-            gameData.ItemIDAmountTuples.Add(
+            gameData.ItemIDAmountTuples.Add(new SerializableDouble<int, int>
                 (ItemDatabaseSO.Items.IndexOf(itemAmount.ItemSO),
                 itemAmount.Amount));
         }
         foreach (ItemAmount itemAmount in EquipmentInventorySO.ItemAmounts)
         {
-            gameData.ItemIDAmountTuples.Add(
+            gameData.ItemIDAmountTuples.Add(new SerializableDouble<int, int>
                 (ItemDatabaseSO.Items.IndexOf(itemAmount.ItemSO),
                 itemAmount.Amount));
         }
         foreach (ItemAmount itemAmount in CraftingInventorySO.ItemAmounts)
         {
-            gameData.ItemIDAmountTuples.Add(
+            gameData.ItemIDAmountTuples.Add(new SerializableDouble<int, int>
                 (ItemDatabaseSO.Items.IndexOf(itemAmount.ItemSO),
                 itemAmount.Amount));
         }
         foreach (ItemAmount itemAmount in ToolInventorySO.ItemAmounts)
         {
-            gameData.ItemIDAmountTuples.Add(
+            gameData.ItemIDAmountTuples.Add(new SerializableDouble<int, int>
                 (ItemDatabaseSO.Items.IndexOf(itemAmount.ItemSO),
                 itemAmount.Amount));
         }

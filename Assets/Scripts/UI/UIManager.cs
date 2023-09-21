@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     private GameObject _mapCanvas;
     [SerializeField]
     private GameObject _hUDCanvas;
+    [SerializeField]
+    private GameObject _startMenuCanvas;
 
     // TODO - Handle this differently. Put GameState in SOGameData, and use events to call upwards. 
     private GameStateMachine _gameStateMachine;
@@ -29,6 +31,8 @@ public class UIManager : MonoBehaviour
     {
         GameManager.OnInputManagerCreated += SetupInput;
         GameManager.OnGameStateMachineCreated += (gameStateMachine) => _gameStateMachine = gameStateMachine;
+
+        SaveSlotsMenu.OnGameSaveDataLoaded += () => OpenMenu(_hUDCanvas);
     }
 
     private void SetupInput(InputManager inputManager)
@@ -68,9 +72,11 @@ public class UIManager : MonoBehaviour
         InputManager.PC.NonCombatMenus.ToggleMapMenu.started -= ToggleMapMenu;
         InputManager.PC.NonCombatMenus.CloseMenus.started -= CloseUI;
 
-/*//        InputManager.PC.NonCombatMenus.ToggleBuildMenu.started -= (c) => Debug.Log("started");
-        InputManager.PC.NonCombatMenus.ToggleBuildMenu.performed -= (c) => Debug.Log("performed");
-        InputManager.PC.NonCombatMenus.ToggleBuildMenu.canceled -= (c) => Debug.Log("canceled");*/
+        SaveSlotsMenu.OnGameSaveDataLoaded -= () => OpenMenu(_hUDCanvas);
+
+        /*//        InputManager.PC.NonCombatMenus.ToggleBuildMenu.started -= (c) => Debug.Log("started");
+                InputManager.PC.NonCombatMenus.ToggleBuildMenu.performed -= (c) => Debug.Log("performed");
+                InputManager.PC.NonCombatMenus.ToggleBuildMenu.canceled -= (c) => Debug.Log("canceled");*/
 
         /*        InputManager.PC.InventoryMenu.OpenInventory.started -= OpenInventory;
                 InputManager.PC.InventoryMenu.CloseInventory.started -= CloseUI;
@@ -206,6 +212,7 @@ public class UIManager : MonoBehaviour
         if (_craftingCanvas.activeInHierarchy) _craftingCanvas.SetActive(false);
         if (_mapCanvas.activeInHierarchy) _mapCanvas.SetActive(false);
         if (_hUDCanvas.activeInHierarchy) _hUDCanvas.SetActive(false);
+        if (_startMenuCanvas.activeInHierarchy) _startMenuCanvas.SetActive(false);
         if (!canvas.activeInHierarchy) canvas.SetActive(true);
     }
 }

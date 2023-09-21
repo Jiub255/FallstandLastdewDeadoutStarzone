@@ -51,11 +51,11 @@ public class InventoryManager
     public void LoadData(GameSaveData gameData)
     {
         // Use AddItems here and have it do the sorting. Can't see any reason not to. 
-        // Maybe later to preserve sorting order or whatever, but it's fine for now. 
-        foreach ((int, int) tuple in gameData.ItemIDAmountTuples)
+        // Maybe do it differently later to preserve sorting order or whatever, but it's fine for now. 
+        foreach (SerializableDouble<int, int> serializableDouble in gameData.ItemIDAmountTuples)
         {
-            SOItem itemSO = InventoryDataSO.ItemDatabaseSO.Items[tuple.Item1];
-            int amount = tuple.Item2;
+            SOItem itemSO = InventoryDataSO.ItemDatabaseSO.Items[serializableDouble.Item1];
+            int amount = serializableDouble.Item2;
             AddItems(itemSO, amount);
         }
     }

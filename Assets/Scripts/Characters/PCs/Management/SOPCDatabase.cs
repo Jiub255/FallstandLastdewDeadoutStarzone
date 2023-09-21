@@ -36,13 +36,13 @@ public class SOPCDatabaseEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
+
         SOPCDatabase database = (SOPCDatabase)target;
 
         if (GUILayout.Button("Get PCs"))
         {
             database.GetAllPCs();
         }
-
-        DrawDefaultInspector();
     }
 }

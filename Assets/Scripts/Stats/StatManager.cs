@@ -73,7 +73,7 @@ public class StatManager
     {
 		foreach (SOPCData pcSO in TeamDataSO.HomePCs)
         {
-            foreach (Stat stat in pcSO.Stats.StatList)
+            foreach (Stat stat in pcSO.Stats)
             {
                 // Update _combinedStatTotals dictionary. 
 /*                if (_combinedStatTotals.ContainsKey(stat.StatTypeSO))

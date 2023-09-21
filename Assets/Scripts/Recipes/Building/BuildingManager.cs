@@ -241,7 +241,8 @@ public class BuildingManager
             .Where(buildingLocation => (BuildingDataSO.BuildingDatabaseSO.Buildings[buildingLocation.BuildingID] == requiredBuildingSO))
             .ToList().Count /*>*/== 0)
             .ToList().Count /*>*/== 0)
-            // There are NO required buildings which are NOT on the building locations list. 
+            // There are NO required buildings which are NOT on the building locations list, or, 
+            // all required buildings are on the building locations list, ie, the player has built all required buildings. 
             .ToList();
 
         /*        // TODO - Change this to use List<BuildingLocation> in BuildingDataSO instead. 
@@ -364,10 +365,10 @@ public class BuildingManager
         }
         else
         {
-            foreach (Collider collider in collidersList)
+/*            foreach (Collider collider in collidersList)
             {
                 Debug.Log($"Building touching {collider.gameObject.name}");
-            }
+            }*/
 
             return false;
         }

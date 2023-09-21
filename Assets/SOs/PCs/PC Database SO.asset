@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdac4e5ab8f109b4eaaaf965083a4e54, type: 3}
   m_Name: PC Database SO
   m_EditorClassIdentifier: 
-  _pcDataSOs: []
+  _pcDataSOs:
+  - {fileID: 11400000, guid: 2dd3045916528cb41821a504ff789775, type: 2}
+  - {fileID: 11400000, guid: 9c860815b163c114c8cefbe770b7902f, type: 2}

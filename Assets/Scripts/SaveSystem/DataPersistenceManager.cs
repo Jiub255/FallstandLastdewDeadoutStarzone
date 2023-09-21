@@ -10,12 +10,18 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class DataPersistenceManager
 {
+    /// <summary>
+    /// Heard by GameManager, starts the saving chain through managers/data SOs. 
+    /// </summary>
     public event System.Action<GameSaveData> OnSave;
+    /// /// <summary>
+    /// Heard by GameManager, starts the loading chain through managers/data SOs. 
+    /// </summary>
     public event System.Action<GameSaveData> OnLoad;
 
     private SOSaveSystemData SaveSystemDataSO { get; }
 
-    private GameSaveData GameData { get; set; }
+    private GameSaveData GameSaveData { get; set; }
 
     private GameManager GameManager { get; }
 
@@ -72,13 +78,13 @@ public class DataPersistenceManager
 
     public GameSaveData NewGame()
     {
-        GameData = new GameSaveData();
+        GameSaveData = new GameSaveData();
 
         // Push the loaded data to all other scripts that need it.
 //        GameManager.LoadData(GameData);
-        OnLoad?.Invoke(GameData);
+        OnLoad?.Invoke(GameSaveData);
 
-        return GameData;
+        return GameSaveData;
     }
 
     // Have this return loaded SaveData so SaveSlotsMenu and MainMenu can load the 
@@ -86,10 +92,10 @@ public class DataPersistenceManager
     public GameSaveData LoadGame()
     {
         // Load any saved data from a file using the data handler.
-        GameData = FileDataHandler.Load(SelectedProfileID);
+        GameSaveData = FileDataHandler.Load(SelectedProfileID);
 
         // If no data can be loaded, warn player.
-        if (GameData == null)
+        if (GameSaveData == null)
         {
             Debug.Log("No data was found. Start a new game.");
             return null;
@@ -97,15 +103,15 @@ public class DataPersistenceManager
 
         // Push the loaded data to all other scripts that need it.
 //        GameManager.LoadData(GameData);
-        OnLoad?.Invoke(GameData);
+        OnLoad?.Invoke(GameSaveData);
 
-        return GameData;
+        return GameSaveData;
     }
 
     public void SaveGame()
     {
         // If no data can be saved, warn player.
-        if (GameData == null)
+        if (GameSaveData == null)
         {
             Debug.Log("No data was found. Start a new game.");
             return;
@@ -115,13 +121,19 @@ public class DataPersistenceManager
         // TODO - Just run the SaveData method on GameManager and have it chain through its children saving all their data? Same for loading. 
         // Won't have to find all ISaveables then either, not sure how to do it without them inheriting Unity.Object. 
 //        GameManager.SaveData(GameData);
-        OnSave?.Invoke(GameData);
+        OnSave?.Invoke(GameSaveData);
 
         // Timestamp the data so we know when it was last saved
-        GameData.LastUpdated = System.DateTime.Now.ToBinary();
+        GameSaveData.LastUpdated = System.DateTime.Now.ToBinary();
+
+        Debug.Log($"GameSaveData:\n" +
+            $"Last updated: {GameSaveData.LastUpdated}\n" +
+            $"Number of items saved: {GameSaveData.ItemIDAmountTuples.Count}\n" +
+            $"Number of buildings saved: {GameSaveData.BuildingIDsAndLocations.Count}\n" +
+            $"Number of PCs saved: {GameSaveData.HomePCs.Count}");
 
         // Save that data to a file using the data handler.
-        FileDataHandler.Save(GameData, SelectedProfileID);
+        FileDataHandler.Save(GameSaveData, SelectedProfileID);
     }
 
     // Maybe implement an "on quit" save later (in a separate slot). 
@@ -141,11 +153,11 @@ public class DataPersistenceManager
 
     public bool HasGameData()
     {
-        GameData = FileDataHandler.Load(SelectedProfileID);
+        GameSaveData = FileDataHandler.Load(SelectedProfileID);
 
-        Debug.Log("Save data exists: " + (GameData != null).ToString());
+        Debug.Log("Save data exists: " + (GameSaveData != null).ToString());
 
-        return (GameData != null);
+        return (GameSaveData != null);
     }
 
     public Dictionary<string, GameSaveData> GetAllProfilesGameData()

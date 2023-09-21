@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Save System Data SO
   m_EditorClassIdentifier: 
   _fileName: data.game
-  _autoSaveTimeSeconds: 60
+  _autoSaveTimeSeconds: 5

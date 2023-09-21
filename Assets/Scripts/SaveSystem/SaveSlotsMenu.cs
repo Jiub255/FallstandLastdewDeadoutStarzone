@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class SaveSlotsMenu : Menu
 {
     /// <summary>
-    /// Heard by SceneTransitionManager, loads home scene. 
+    /// Heard by SceneTransitionManager, loads home scene. <br/>
+    /// Heard by UIManager, closes save slots menu and opens HUD UI. 
     /// </summary>
     public static event System.Action OnGameSaveDataLoaded;
 

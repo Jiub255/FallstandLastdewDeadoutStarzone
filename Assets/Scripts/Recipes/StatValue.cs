@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Using this struct instead of an (StatType, int) tuple so it can be shown in Unity inspector. <br/>
+/// Using this struct instead of a (StatType, int) tuple so it can be shown in Unity inspector. <br/>
 /// </summary>
 [System.Serializable]
 public struct StatValue

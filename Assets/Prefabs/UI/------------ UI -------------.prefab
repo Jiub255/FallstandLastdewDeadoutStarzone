@@ -2516,7 +2516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1035.9575, y: -625.6273}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1535960738112082024
@@ -5528,6 +5528,7 @@ MonoBehaviour:
   _craftingCanvas: {fileID: 5290609741861204813}
   _mapCanvas: {fileID: 5634059733192307266}
   _hUDCanvas: {fileID: 1881279619}
+  _startMenuCanvas: {fileID: 4595375966469576871}
 --- !u!1 &4314923721231603553
 GameObject:
   m_ObjectHideFlags: 0

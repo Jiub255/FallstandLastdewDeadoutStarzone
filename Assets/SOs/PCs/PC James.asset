@@ -18,6 +18,18 @@ MonoBehaviour:
   _pcMovementStateSO: {fileID: 11400000, guid: a01066a920e9f554f8152487eab83ebf, type: 2}
   _pcSharedDataSO: {fileID: 11400000, guid: 6e1272701015d7541ae9a73271d28b3c, type: 2}
   _stats:
-    _statList: []
+    _statList:
+    - _statType: 0
+      _baseValue: 0
+    - _statType: 1
+      _baseValue: 0
+    - _statType: 2
+      _baseValue: 0
+    - _statType: 3
+      _baseValue: 0
+    - _statType: 4
+      _baseValue: 0
+    - _statType: 5
+      _baseValue: 0
   _equipment:
     _equipmentItems: []

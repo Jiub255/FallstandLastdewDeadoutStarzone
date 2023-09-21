@@ -36,13 +36,13 @@ public class SOBuildingDatabaseEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
+
         SOBuildingDatabase database = (SOBuildingDatabase)target;
 
         if (GUILayout.Button("Get Buildings"))
         {
             database.GetAllBuildings();
         }
-
-        DrawDefaultInspector();
     }
 }

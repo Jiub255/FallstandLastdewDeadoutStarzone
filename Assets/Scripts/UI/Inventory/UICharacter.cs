@@ -132,7 +132,7 @@ public class UICharacter : MonoBehaviour
 
 		// Set stats. 
 		Stats stats = CurrentMenuSOPCData.Stats;
-		foreach (Stat stat in stats.StatList)
+		foreach (Stat stat in stats)
         {
 			StatTextBox statTextBox = Instantiate(StatTextPrefab, StatsParent).GetComponent<StatTextBox>();
             statTextBox.SetupText(stat.StatType.ToString() + ": " + stat.ModdedValue);

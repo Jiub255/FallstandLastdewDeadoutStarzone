@@ -34,17 +34,22 @@ public class SOPCData : ScriptableObject
     public SOPCSharedData PCSharedDataSO { get { return _pcSharedDataSO; } }
 
     // These do change during runtime. 
-    public int Injury { get; set; }
     public int Relief { get; set; }
     public int Pain { get; set; }
-    public bool Healing { get; set; }
-    public Stats Stats { get { return _stats; } }
-    public Equipment Equipment { get { return _equipment; } }
-    public GameObject PCInstance { get; set; }
+    public bool CurrentlyHealing { get; set; }
     public PCState ActiveState { get; set; }
     public bool Selected { get; set; }
+
+    // These get set upon PC instantiation, after loading or starting a new game. 
+    public GameObject PCInstance { get; set; }
+    [field: NonSerialized]
     public PCController PCController { get; set; }
     public SelectedPCIcon SelectedPCIcon { get; set; }
+
+    // Saveable data 
+    public int Injury { get; set; }
+    public Stats Stats { get { return _stats; } }
+    public Equipment Equipment { get { return _equipment; } }
 
     // Handle this from SOTeamData using PCSaveData constructor? 
     public void SaveData(GameSaveData gameData)
@@ -65,7 +70,7 @@ public class SOPCData : ScriptableObject
     public int WeaponDamage()
     {
         int weaponAttack = Equipment.Weapon().WeaponDamage;
-        int attackStat = Stats[StatType.Attack].ModdedValue;
+        int attackStat = Stats.Attack.ModdedValue;
         // TODO - Probably use different formula eventually. 
         return weaponAttack + attackStat;
     }
