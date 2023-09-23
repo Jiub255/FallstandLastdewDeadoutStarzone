@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// Have to use public fields instead of properties so that they can be serialized into JSON. 
+/// Have to use public fields instead of properties so that they can be serialized into JSON. <br/>
+/// Would [SerializeField] private and public properties work? Does ToJson work with serialize field private fields? 
 /// </summary>
 [System.Serializable]
 public class GameSaveData

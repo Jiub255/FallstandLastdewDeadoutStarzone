@@ -7,6 +7,7 @@ using UnityEngine;
 /// Might be easier to save/load, and just keep track of in general. Do Stats.Attack instead of using this weird search index thing. <br/>
 /// Plus the stats are already hard coded in the enum. Just hard code them here instead. 
 /// </summary>
+// Only serializable to show up in editor. 
 [System.Serializable]
 public class Stats : IEnumerable<Stat>
 {

@@ -30,6 +30,11 @@ public class SOInventoryData : ScriptableObject
     public List<SOItem> PossibleCraftingRecipes { get; set; }
     public List<SOBuilding> PossibleBuildingRecipes { get; set; }
 
+    /// <summary>
+    /// IndexOf not working here, returning -1. <br/>
+    /// Instead of inventory and equipment holding references to the actual items, have them hold the database ID only,
+    /// then do everything through the database. 
+    /// </summary>
     public void SaveData(GameSaveData gameData)
     {
         // Go through all the inventories and just save all the ItemAmounts onto one big list. 

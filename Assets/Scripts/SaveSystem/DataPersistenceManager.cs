@@ -102,7 +102,6 @@ public class DataPersistenceManager
         }
 
         // Push the loaded data to all other scripts that need it.
-//        GameManager.LoadData(GameData);
         OnLoad?.Invoke(GameSaveData);
 
         return GameSaveData;

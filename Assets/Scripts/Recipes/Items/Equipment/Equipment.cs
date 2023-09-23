@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Only serializable to show up in editor. 
 [System.Serializable]
 public class Equipment
 {
